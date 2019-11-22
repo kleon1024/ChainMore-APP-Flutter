@@ -4,7 +4,7 @@ import 'package:chainmore/route/routes.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:chainmore/model/user.dart';
+import 'package:chainmore/models/user.dart';
 import 'package:chainmore/route/navigate_service.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/loading.dart';

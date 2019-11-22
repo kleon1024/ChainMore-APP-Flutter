@@ -1,11 +1,14 @@
-import 'package:chainmore/provider/user_model.dart';
+import 'package:chainmore/pages/login_page.dart';
+import 'package:chainmore/pages/splash_page.dart';
+import 'package:chainmore/providers/user_model.dart';
+import 'package:chainmore/route/navigate_service.dart';
 import 'package:chainmore/route/routes.dart';
-import 'package:common_utils/common_utils.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'application.dart';
+import 'utils/log_util.dart';
 
 void main() {
   Router router = Router();
@@ -31,31 +34,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ChainMore',
+      navigatorKey: Application.getIt<NavigateService>().key,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'ChainMore'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+          brightness: Brightness.light,
+          primaryColor: Colors.white,
+          splashColor: Colors.transparent,
+          tooltipTheme: TooltipThemeData(verticalOffset: -100000)),
+      home: SplashPage(),
+      onGenerateRoute: Application.router.generator,
     );
   }
 }
