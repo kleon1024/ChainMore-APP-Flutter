@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:chainmore/application.dart';
-import 'package:chainmore/model/user.dart';
+import 'package:chainmore/models/user.dart';
 import 'package:chainmore/utils/net_utils.dart';
 import 'package:chainmore/utils/utils.dart';
 
