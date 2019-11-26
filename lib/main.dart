@@ -1,3 +1,4 @@
+import 'package:chainmore/pages/home/home_page.dart';
 import 'package:chainmore/pages/login_page.dart';
 import 'package:chainmore/pages/splash_page.dart';
 import 'package:chainmore/providers/user_model.dart';

@@ -19,7 +19,7 @@ class Routes {
     });
     router.define(root, handler: splashHandler);
     router.define(login, handler: loginHandler);
-//    router.define(home, handler: homeHandler);
+    router.define(home, handler: homeHandler);
 //    router.define(search, handler: searchHandler);
   }
 }

@@ -9,6 +9,7 @@ class User {
   String nickname;
   String username;
   String accessToken;
+  String refreshToken;
 
   User({
     this.loginType,
@@ -16,6 +17,7 @@ class User {
     this.nickname,
     this.username,
     this.accessToken,
+    this.refreshToken,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

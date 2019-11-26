@@ -57,7 +57,7 @@ class __LoginWidgetState extends State<_LoginWidget> {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: ThemeData(primaryColor: Colors.red),
+      data: ThemeData(primaryColor: CMColors.blueLonely),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -100,8 +100,8 @@ class __LoginWidgetState extends State<_LoginWidget> {
               return CommonButton(
                 color: CMColors.blueLonely ,
                 callback: () {
-                  String username = _usernameController.text;
-                  String pwd = _pwdController.text;
+                  String username = _usernameController.text.trim();
+                  String pwd = _pwdController.text.trim();
                   if (username.isEmpty || pwd.isEmpty) {
                     Utils.showToast('请输入账号或者密码');
                     return;
@@ -111,6 +111,9 @@ class __LoginWidgetState extends State<_LoginWidget> {
                     username,
                     pwd,
                   ).then((value){
+                    if(value != null) {
+                      NavigatorUtil.goHomePage(context);
+                    }
                   });
                 },
                 content: '登录',

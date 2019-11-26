@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:chainmore/network/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:chainmore/application.dart';
 import 'package:chainmore/models/user.dart';
-import 'package:chainmore/utils/net_utils.dart';
+import 'package:chainmore/network/net_utils.dart';
 import 'package:chainmore/utils/utils.dart';
 
 class UserModel with ChangeNotifier {
@@ -20,7 +21,10 @@ class UserModel with ChangeNotifier {
 
   Future<User> login(BuildContext context, String username, String pwd) async {
 
-    User user = await NetUtils.login(context, username, pwd);
+    var user = await API.login(context, username, pwd);
+    if (user == null) {
+      return null;
+    }
     if (user.code > 299) {
       Utils.showToast('登录失败，请检查账号密码');
       return null;
@@ -32,7 +36,7 @@ class UserModel with ChangeNotifier {
 
   logout(BuildContext context) async {
     _deleteUserInfo();
-    await NetUtils.logout(context);
+    await API.logout(context);
   }
 
   _saveUserInfo(User user) {
