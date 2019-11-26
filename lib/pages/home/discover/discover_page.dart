@@ -1,3 +1,5 @@
+import 'package:chainmore/models/post.dart';
+import 'package:chainmore/network/apis.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
@@ -9,24 +11,40 @@ class DiscoverPage extends StatefulWidget {
 }
 
 class _DiscoverPageState extends State<DiscoverPage> {
-  List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
+  List items = [];
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
+  @override
+  void initState() {
+    super.initState();
+    _onRefresh();
+  }
+
   void _onRefresh() async {
     // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
+    List posts = await API.getTrendingPosts();
+    print(posts);
+    if (posts.isNotEmpty) {
+      items = posts;
+    }
     // if failed,use refreshFailed()
+    if (mounted) setState(() {});
     _refreshController.refreshCompleted();
   }
 
   void _onLoading() async {
     // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-    items.add((items.length + 1).toString());
+    List posts = await API.getTrendingPosts();
+    if (posts.isNotEmpty) {
+      items.addAll(posts);
+
+      _refreshController.loadComplete();
+    } else {
+      _refreshController.loadNoData();
+    }
+
     if (mounted) setState(() {});
-    _refreshController.loadComplete();
   }
 
   @override
@@ -87,8 +105,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
             onRefresh: _onRefresh,
             onLoading: _onLoading,
             child: ListView.builder(
-              itemBuilder: (c, i) => Card(child: Center(child: Text(items[i]))),
-              itemExtent: 100.0,
+              itemBuilder: (c, i) => Card(child: Text(items[i].title)),
               itemCount: items.length,
             ),
           ),

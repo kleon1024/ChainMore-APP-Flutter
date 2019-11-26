@@ -32,13 +32,13 @@ class NetUtils {
           .add(CustomLogInterceptor(responseBody: true, requestBody: true));
   }
 
-  static Future<Response> request(
-      String method, BuildContext context, String url,
+  static Future<Response> request(String method, String url,
       {Map<String, dynamic> params,
       Map<String, dynamic> data,
       Map<String, dynamic> headers,
-      bool isShowLoading = true}) async {
-    if (isShowLoading) Loading.showLoading(context);
+      bool isShowLoading = true,
+      BuildContext context}) async {
+    if (context != null && isShowLoading) Loading.showLoading(context);
     Response response;
     Options options = Options(method: method);
     if (headers != null) {
@@ -63,7 +63,9 @@ class NetUtils {
         return Future.error(Response(data: -1));
       }
     } finally {
-      Loading.hideLoading(context);
+      if (context != null && isShowLoading) {
+        Loading.hideLoading(context);
+      }
     }
 
     return response;
