@@ -3,6 +3,8 @@ import 'package:chainmore/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class BottomBarView extends StatefulWidget {
   final Function(int index) changeIndex;
   final Function addClick;
@@ -26,7 +28,7 @@ class _BottomBarViewState extends State<BottomBarView>
         PhysicalShape(
           color: Colors.white,
           elevation: 16.0,
-          clipper: TabClipper(radius: 38.0),
+          clipper: TabClipper(radius: ScreenUtil().setWidth(120)),
           child: Column(
             children: <Widget>[
               SizedBox(

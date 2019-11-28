@@ -1,4 +1,5 @@
 import 'package:chainmore/pages/home/discover/discover_page.dart';
+import 'package:chainmore/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
@@ -41,12 +42,15 @@ class _HomePageState extends State<HomePage>
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(150)),
+                          horizontal: ScreenUtil().setWidth(300)),
                       child: TabBar(
                         labelStyle: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                        unselectedLabelStyle: TextStyle(fontSize: 16),
-                        indicator: UnderlineTabIndicator(),
+                            fontSize: ScreenUtil().setSp(52),
+                            fontWeight: FontWeight.bold),
+                        unselectedLabelStyle: TextStyle(fontSize: ScreenUtil().setSp(48)),
+                        indicator: UnderlineTabIndicator(
+                          borderSide: BorderSide(width: 2.0, color: CMColors.blueLonely)
+                        ),
                         controller: _tabController,
                         tabs: [
                           Tab(
@@ -59,11 +63,11 @@ class _HomePageState extends State<HomePage>
                       ),
                     ),
                     Positioned(
-                      right: ScreenUtil().setWidth(20),
+                      right: ScreenUtil().setWidth(0),
                       child: IconButton(
                         icon: Icon(
                           Icons.search,
-                          size: ScreenUtil().setWidth(50),
+                          size: ScreenUtil().setWidth(70),
                           color: Colors.black87,
                         ),
                         onPressed: () {
@@ -73,7 +77,6 @@ class _HomePageState extends State<HomePage>
                     ),
                   ],
                 ),
-                VEmptyView(20),
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,

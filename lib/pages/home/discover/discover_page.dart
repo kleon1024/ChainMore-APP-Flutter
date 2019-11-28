@@ -75,7 +75,7 @@ class _DiscoverPageState extends State<DiscoverPage>
       child: Scaffold(
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: Scrollbar(
               child: SmartRefresher(
                 enablePullDown: true,
@@ -104,10 +104,7 @@ class _DiscoverPageState extends State<DiscoverPage>
                 controller: _refreshController,
                 onRefresh: _onRefresh,
                 onLoading: _onLoading,
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => Divider(
-                    color: Colors.black54,
-                  ),
+                child: ListView.builder(
                   itemBuilder: (c, i) => PostItem(item: items[i]),
                   itemCount: items.length,
                 ),
