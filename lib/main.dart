@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
       title: 'ChainMore',
       navigatorKey: Application.getIt<NavigateService>().key,
       theme: ThemeData(
+          fontFamily: 'SourceHanSans',
           brightness: Brightness.light,
           primaryColor: Colors.white,
           splashColor: Colors.transparent,

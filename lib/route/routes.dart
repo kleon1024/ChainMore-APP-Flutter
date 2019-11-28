@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 class Routes {
   static String root = "/";
+  static String main = "/main";
   static String home = "/home";
   static String login = "/login";
   static String search = "/search";
@@ -19,6 +20,7 @@ class Routes {
     });
     router.define(root, handler: splashHandler);
     router.define(login, handler: loginHandler);
+    router.define(main, handler: mainHandler);
     router.define(home, handler: homeHandler);
 //    router.define(search, handler: searchHandler);
   }

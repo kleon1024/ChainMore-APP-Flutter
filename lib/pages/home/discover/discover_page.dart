@@ -1,5 +1,6 @@
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/network/apis.dart';
+import 'package:chainmore/widgets/post_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
@@ -10,7 +11,8 @@ class DiscoverPage extends StatefulWidget {
   _DiscoverPageState createState() => _DiscoverPageState();
 }
 
-class _DiscoverPageState extends State<DiscoverPage> {
+class _DiscoverPageState extends State<DiscoverPage>
+    with AutomaticKeepAliveClientMixin {
   List items = [];
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -24,7 +26,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
   void _onRefresh() async {
     // monitor network fetch
     List posts = await API.getTrendingPosts();
-    print(posts);
     if (posts.isNotEmpty) {
       items = posts;
     }
@@ -72,45 +73,52 @@ class _DiscoverPageState extends State<DiscoverPage> {
       enableBallisticLoad: true,
       // trigger load more by BallisticScrollActivity
       child: Scaffold(
-        body: Scrollbar(
-          child: SmartRefresher(
-            enablePullDown: true,
-            enablePullUp: true,
-            header: WaterDropHeader(),
-            footer: CustomFooter(
-              builder: (BuildContext context,LoadStatus mode){
-                Widget body ;
-                if(mode==LoadStatus.idle){
-                  body =  Text("上拉加载");
-                }
-                else if(mode==LoadStatus.loading){
-                  body =  CupertinoActivityIndicator();
-                }
-                else if(mode == LoadStatus.failed){
-                  body = Text("加载失败！点击重试！");
-                }
-                else if(mode == LoadStatus.canLoading){
-                  body = Text("松手,加载更多!");
-                }
-                else{
-                  body = Text("没有更多数据了!");
-                }
-                return Container(
-                  height: 55.0,
-                  child: Center(child:body),
-                );
-              },
-            ),
-            controller: _refreshController,
-            onRefresh: _onRefresh,
-            onLoading: _onLoading,
-            child: ListView.builder(
-              itemBuilder: (c, i) => Card(child: Text(items[i].title)),
-              itemCount: items.length,
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+            child: Scrollbar(
+              child: SmartRefresher(
+                enablePullDown: true,
+                enablePullUp: true,
+                header: WaterDropHeader(),
+                footer: CustomFooter(
+                  builder: (BuildContext context, LoadStatus mode) {
+                    Widget body;
+                    if (mode == LoadStatus.idle) {
+                      body = Text("上拉加载");
+                    } else if (mode == LoadStatus.loading) {
+                      body = CupertinoActivityIndicator();
+                    } else if (mode == LoadStatus.failed) {
+                      body = Text("加载失败！点击重试！");
+                    } else if (mode == LoadStatus.canLoading) {
+                      body = Text("松手,加载更多!");
+                    } else {
+                      body = Text("没有更多数据了!");
+                    }
+                    return Container(
+                      height: 100.0,
+                      child: Center(child: body),
+                    );
+                  },
+                ),
+                controller: _refreshController,
+                onRefresh: _onRefresh,
+                onLoading: _onLoading,
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => Divider(
+                    color: Colors.black54,
+                  ),
+                  itemBuilder: (c, i) => PostItem(item: items[i]),
+                  itemCount: items.length,
+                ),
+              ),
             ),
           ),
         ),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

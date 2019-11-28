@@ -37,7 +37,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 //    } else {
 //      NavigatorUtil.goLoginPage(context);
 //    }
-  NavigatorUtil.goHomePage(context);
+  NavigatorUtil.goMainPage(context);
   }
 
   @override
