@@ -1,5 +1,6 @@
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter/material.dart';
@@ -29,13 +30,13 @@ class PostItem extends StatelessWidget {
                 topRight: Radius.circular(ScreenUtil().setWidth(50))),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                  color: Color(0x0b000000),
-                  offset: Offset(0, -5),
-                  blurRadius: 3),
+                  color: Color(0x0f000000),
+                  offset: Offset(0, -4),
+                  blurRadius: 4),
             ],
           ),
           padding: EdgeInsets.only(
-              top: ScreenUtil().setHeight(40),
+              top: ScreenUtil().setHeight(20),
               bottom: ScreenUtil().setHeight(20),
               left: ScreenUtil().setWidth(30),
               right: ScreenUtil().setWidth(30)),
@@ -51,13 +52,13 @@ class PostItem extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.black87,
                             fontWeight: FontWeight.w400,
-                            fontSize: ScreenUtil().setSp(40),
+                            fontSize: ScreenUtil().setSp(38),
                           )),
                       HEmptyView(5),
                       Text(item.domain.watchers.toString() + item.domain.bio,
                           style: TextStyle(
                               color: Colors.grey,
-                              fontSize: ScreenUtil().setSp(40)))
+                              fontSize: ScreenUtil().setSp(38)))
                     ],
                   ),
                 ),
@@ -82,9 +83,9 @@ class PostItem extends StatelessWidget {
                     child: Text(
                       item.category,
                       style: TextStyle(
-                          fontSize: ScreenUtil().setSp(30),
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
+                        fontSize: ScreenUtil().setSp(30),
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
                       ),
                     ),
                   )
@@ -101,7 +102,9 @@ class PostItem extends StatelessWidget {
               ),
               VEmptyView(5),
               Text(
-                item.author.nickname,
+                item.author.nickname +
+                    "  " +
+                    Utils.readableTimeStamp(item.timestamp),
                 style: TextStyle(
                   color: Colors.black87,
                   fontWeight: FontWeight.w600,
@@ -109,17 +112,19 @@ class PostItem extends StatelessWidget {
                 ),
               ),
               VEmptyView(5),
-              item.description != "" ? Text(
-                item.description,
-                style: TextStyle(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w400,
-                  fontSize: ScreenUtil().setSp(42),
-                ),
-                softWrap: true,
-                maxLines: 3,
-                textAlign: TextAlign.justify,
-              ) : VEmptyView(0),
+              item.description != ""
+                  ? Text(
+                      item.description,
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w400,
+                        fontSize: ScreenUtil().setSp(42),
+                      ),
+                      softWrap: true,
+                      maxLines: 3,
+                      textAlign: TextAlign.justify,
+                    )
+                  : VEmptyView(0),
               VEmptyView(20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -127,28 +132,28 @@ class PostItem extends StatelessWidget {
                   Text(
                     "看过 " + item.comments.toString(),
                     style: TextStyle(
-                        fontSize: ScreenUtil().setSp(40),
+                        fontSize: ScreenUtil().setSp(38),
                         fontWeight: FontWeight.w500,
                         color: Colors.black54),
                   ),
                   Text(
                     "力荐 " + item.votes.toString(),
                     style: TextStyle(
-                        fontSize: ScreenUtil().setSp(40),
+                        fontSize: ScreenUtil().setSp(38),
                         fontWeight: FontWeight.w500,
                         color: Colors.black54),
                   ),
                   Text(
                     "评论 " + item.comments.toString(),
                     style: TextStyle(
-                        fontSize: ScreenUtil().setSp(40),
+                        fontSize: ScreenUtil().setSp(38),
                         fontWeight: FontWeight.w500,
                         color: Colors.black54),
                   ),
                   Text(
                     "收藏 " + item.collects.toString(),
                     style: TextStyle(
-                        fontSize: ScreenUtil().setSp(40),
+                        fontSize: ScreenUtil().setSp(38),
                         fontWeight: FontWeight.w500,
                         color: Colors.black54),
                   ),
