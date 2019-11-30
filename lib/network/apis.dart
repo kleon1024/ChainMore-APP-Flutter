@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chainmore/application.dart';
+import 'package:chainmore/models/comment.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/models/user.dart';
 import 'package:chainmore/network/net_utils.dart';
@@ -61,7 +62,8 @@ class API {
     }
   }
 
-  static Future<Post> getPost(BuildContext context, {Map<String, dynamic> params}) async {
+  static Future<Post> getPost(BuildContext context,
+      {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/post", params: params)
         .catchError((e) {
       Utils.showToast('网络错误！');
@@ -71,5 +73,23 @@ class API {
       return Post.fromJson(response.data['item']);
     }
     return Post();
+  }
+
+  static Future<List<Comment>> getPostComments(BuildContext context,
+      {Map<String, dynamic> params}) async {
+    var response =
+        await NetUtils.request("get", "/v1/post/comment", params: params)
+            .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    print(response);
+
+    if (response != null) {
+      return List<Comment>.from(response.data["items"]
+          .map((item) => Comment.fromJson(item)));
+    } else {
+      return List<Comment>();
+    }
   }
 }

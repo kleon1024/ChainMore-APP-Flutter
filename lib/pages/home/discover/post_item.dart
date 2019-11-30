@@ -48,13 +48,10 @@ class PostItem extends StatelessWidget {
             children: <Widget>[
               Row(children: <Widget>[CategoryTag(text: item.category)]),
               VEmptyView(10),
-              Hero(
-                tag: 'post_title_' + item.id.toString(),
-                child: Text(
+              Text(
                   item.title,
                   style: w600_16TextStyle
                 ),
-              ),
               VEmptyView(5),
               Row(
                 children: <Widget>[

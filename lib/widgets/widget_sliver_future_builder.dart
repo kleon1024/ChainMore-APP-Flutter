@@ -73,6 +73,7 @@ class _CustomFutureBuilderState<T> extends State<CustomSliverFutureBuilder<T>> {
                   if (snapshot.hasData) {
                     return widget.builder(context, snapshot.data);
                   } else if (snapshot.hasError) {
+                    print(snapshot);
                     return SliverToBoxAdapter(
                       child: NetErrorWidget(
                         callback: () {
