@@ -1,8 +1,11 @@
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
+import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
+import 'package:chainmore/widgets/widget_category_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -17,7 +20,7 @@ class PostItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("A");
+        NavigatorUtil.goPostPage(context, data: item);
       },
       child: Container(
         color: Colors.white,
@@ -43,75 +46,37 @@ class PostItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                  child: Row(
-                    children: <Widget>[
-                      Text(item.domain.title,
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontWeight: FontWeight.w400,
-                            fontSize: ScreenUtil().setSp(38),
-                          )),
-                      HEmptyView(5),
-                      Text(item.domain.watchers.toString() + item.domain.bio,
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: ScreenUtil().setSp(38)))
-                    ],
-                  ),
+              Row(children: <Widget>[CategoryTag(text: item.category)]),
+              VEmptyView(10),
+              Hero(
+                tag: 'post_title_' + item.id.toString(),
+                child: Text(
+                  item.title,
+                  style: w600_16TextStyle
                 ),
               ),
-              VEmptyView(10),
+              VEmptyView(5),
               Row(
                 children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.fromLTRB(
-                        ScreenUtil().setWidth(5),
-                        ScreenUtil().setWidth(0),
-                        ScreenUtil().setWidth(5),
-                        ScreenUtil().setWidth(0)),
-                    decoration: BoxDecoration(
-                        color: CMColors.blueLonely,
-                        border: Border.all(
-                            color: CMColors.blueLonely,
-                            width: 1.0,
-                            style: BorderStyle.solid),
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(ScreenUtil().setWidth(15)))),
-                    child: Text(
-                      item.category,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(30),
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                      ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text(item.author.nickname,
+                        style: w400_13TextStyle,
                     ),
-                  )
+                  ),
+                  Text("  @",
+                  style: w400_13TextStyle
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text(
+                      item.domain.title,
+                      style: w400_13TextStyle,
+                    ),
+                  ),
                 ],
               ),
               VEmptyView(10),
-              Text(
-                item.title,
-                style: TextStyle(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w600,
-                  fontSize: ScreenUtil().setSp(48),
-                ),
-              ),
-              VEmptyView(5),
-              Text(
-                item.author.nickname +
-                    "  " +
-                    Utils.readableTimeStamp(item.timestamp),
-                style: TextStyle(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w600,
-                  fontSize: ScreenUtil().setSp(38),
-                ),
-              ),
-              VEmptyView(5),
               item.description != ""
                   ? Text(
                       item.description,

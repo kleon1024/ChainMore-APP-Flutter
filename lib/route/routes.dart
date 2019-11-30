@@ -1,4 +1,5 @@
 import 'package:chainmore/pages/login_page.dart';
+import 'package:chainmore/pages/main_page.dart';
 import 'package:chainmore/route/route_handles.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -11,17 +12,19 @@ class Routes {
   static String home = "/home";
   static String login = "/login";
   static String search = "/search";
+  static String post = "/post";
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
       print("ROUTE WAS NOT FOUND !!!");
-      return LoginPage();
+      return MainPage();
     });
     router.define(root, handler: splashHandler);
     router.define(login, handler: loginHandler);
     router.define(main, handler: mainHandler);
     router.define(home, handler: homeHandler);
-//    router.define(search, handler: searchHandler);
+    router.define(search, handler: searchHandler);
+    router.define(post, handler: postHandler);
   }
 }

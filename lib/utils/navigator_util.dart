@@ -1,3 +1,4 @@
+import 'package:chainmore/models/post.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:chainmore/route/routes.dart';
@@ -33,6 +34,12 @@ class NavigatorUtil {
 
   static void goSearchPage(BuildContext context) {
     _navigateTo(context, Routes.search);
+  }
+
+  static void goPostPage(BuildContext context,
+  {@required Post data}) {
+    _navigateTo(context,
+      "${Routes.post}?data=${FluroConvertUtils.object2string(data)}");
   }
 
 }

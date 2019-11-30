@@ -18,12 +18,13 @@ class API {
     });
   }
 
-  static login(
-      BuildContext context, String username, String password) async {
+  static login(BuildContext context, String username, String password) async {
     String payload = base64.encode(utf8.encode(username + ":" + password));
-    var response = await NetUtils.request("post", '/v1/auth/signin', context: context, data: {
-      'payload': payload,
-    }).catchError((e) {
+    var response = await NetUtils.request("post", '/v1/auth/signin',
+        context: context,
+        data: {
+          'payload': payload,
+        }).catchError((e) {
       Utils.showToast('网络错误！');
     });
 
@@ -39,17 +40,18 @@ class API {
     });
   }
 
-  static Future<Response> refreshLogin(BuildContext context) async {
-    return await NetUtils.request("get", '/v1/auth/signin/refresh', context: context, isShowLoading: false)
+  static refreshLogin(BuildContext context) async {
+    return await NetUtils.request("get", '/v1/auth/signin/refresh',
+            context: context, isShowLoading: false)
         .catchError((e) {
       Utils.showToast('网络错误！');
     });
   }
 
   static getTrendingPosts() async {
-    var response =  await NetUtils.request("get", '/v1/post/trendings')
-        .catchError((e) {
-          Utils.showToast('网络错误，加载失败！');
+    var response =
+        await NetUtils.request("get", '/v1/post/trendings').catchError((e) {
+      Utils.showToast('网络错误，加载失败！');
     });
 
     if (response != null) {
@@ -57,5 +59,17 @@ class API {
     } else {
       return List();
     }
+  }
+
+  static Future<Post> getPost(BuildContext context, {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/post", params: params)
+        .catchError((e) {
+      Utils.showToast('网络错误！');
+    });
+
+    if (response != null) {
+      return Post.fromJson(response.data['item']);
+    }
+    return Post();
   }
 }

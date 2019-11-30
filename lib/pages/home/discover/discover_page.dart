@@ -1,6 +1,6 @@
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/network/apis.dart';
-import 'package:chainmore/widgets/post_item.dart';
+import 'package:chainmore/pages/home/discover/post_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';

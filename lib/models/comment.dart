@@ -15,7 +15,14 @@ class Comment {
   int     replies;
 
   Comment({
-
+    this.id,
+    this.body,
+    this.timestamp,
+    this.replied,
+    this.author,
+    this.post,
+    this.votes,
+    this.replies,
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) => _$CommentFromJson(json);

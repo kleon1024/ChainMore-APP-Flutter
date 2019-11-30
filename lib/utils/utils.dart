@@ -21,7 +21,6 @@ class Utils {
   };
 
   static String readableTimeStamp(String timestamp) {
-    print(timestamp);
     List res = timestamp.split(" ");
     assert(res.length == 6);
     var datetimeStr = res[3] + monthMap[res[2]] + res[1] + " " + res[4];
