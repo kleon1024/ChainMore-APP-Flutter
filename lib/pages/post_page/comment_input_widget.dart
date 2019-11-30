@@ -1,10 +1,13 @@
+import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:chainmore/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 typedef CommentCallback = void Function(String content);
 
@@ -17,6 +20,8 @@ class CommentInputWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserModel userModel = Provider.of<UserModel>(context);
+    print("Rebuild");
     return Container(
       height: ScreenUtil().setWidth(120),
       color: Colors.white,
@@ -39,10 +44,11 @@ class CommentInputWidget extends StatelessWidget {
                       controller: _editingController,
                       style: common14TextStyle,
                       textInputAction: TextInputAction.send,
+                      keyboardType: TextInputType.text,
                       onEditingComplete: sendComment,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "一起参与讨论吧",
+                        hintText: userModel.isLoggedIn() ? "一起参与讨论吧" : "登录后一起讨论吧",
                         hintStyle: common14GrayTextStyle,
                       ),
                     ),
@@ -51,7 +57,9 @@ class CommentInputWidget extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(ScreenUtil().setWidth(15)),
                 child: GestureDetector(
-                  onTap: sendComment,
+                  onTap: userModel.isLoggedIn() ? sendComment : () {
+                    NavigatorUtil.goLoginPage(context, clearStack: true);
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                       color: CMColors.blueLonely,
@@ -65,7 +73,7 @@ class CommentInputWidget extends StatelessWidget {
                         ScreenUtil().setWidth(5),
                     ),
                     alignment: Alignment.center,
-                    child: Text("发送",
+                    child: Text(userModel.isLoggedIn() ? "发送" : "登录",
                             style: TextUtil.style(14, 600, color: Colors.white)),
                   ),
                 ),
@@ -87,4 +95,5 @@ class CommentInputWidget extends StatelessWidget {
     }
     onTapComment(_editingController.text);
   }
+
 }

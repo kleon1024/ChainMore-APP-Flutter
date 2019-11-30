@@ -20,8 +20,8 @@ class NavigatorUtil {
         transition: TransitionType.material);
   }
 
-  static void goLoginPage(BuildContext context) {
-    _navigateTo(context, Routes.login, clearStack: true);
+  static void goLoginPage(BuildContext context, {bool clearStack = true}) {
+    _navigateTo(context, Routes.login, clearStack: clearStack);
   }
 
   static void goHomePage(BuildContext context) {

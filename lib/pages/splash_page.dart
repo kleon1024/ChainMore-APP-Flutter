@@ -25,19 +25,19 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   }
 
   void goPage() async {
+    print("******************initializing*************************");
     await Application.initSp();
     UserModel userModel = Provider.of<UserModel>(context);
     userModel.initUser();
-//    if (userModel.user != null) {
-//      await API.refreshLogin(context).then((value) {
-//        if (value.data != -1) {
-//          NavigatorUtil.goHomePage(context);
-//        }
-//      });
-//    } else {
-//      NavigatorUtil.goLoginPage(context);
-//    }
-  NavigatorUtil.goMainPage(context);
+    if (userModel.user != null) {
+      await API.refreshLogin(context).then((value) {
+        if (value.data != -1) {
+          NavigatorUtil.goMainPage(context);
+        }
+      });
+    } else {
+      NavigatorUtil.goLoginPage(context);
+    }
   }
 
   @override

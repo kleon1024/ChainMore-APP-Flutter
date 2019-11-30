@@ -43,7 +43,7 @@ class API {
 
   static refreshLogin(BuildContext context) async {
     return await NetUtils.request("get", '/v1/auth/signin/refresh',
-            context: context, isShowLoading: false)
+            context: context, isShowLoading: false, refresh: true)
         .catchError((e) {
       Utils.showToast('网络错误！');
     });
@@ -64,11 +64,12 @@ class API {
 
   static Future<Post> getPost(BuildContext context,
       {Map<String, dynamic> params}) async {
-    var response = await NetUtils.request("get", "/v1/post", params: params)
+    var response = await NetUtils.request("get", "/v1/post", params: params, context: context)
         .catchError((e) {
       Utils.showToast('网络错误！');
     });
 
+    print("Get Post");
     if (response != null) {
       return Post.fromJson(response.data['item']);
     }
@@ -78,18 +79,35 @@ class API {
   static Future<List<Comment>> getPostComments(BuildContext context,
       {Map<String, dynamic> params}) async {
     var response =
-        await NetUtils.request("get", "/v1/post/comment", params: params)
+        await NetUtils.request("get", "/v1/post/comment", params: params, context: context)
             .catchError((e) {
       Utils.showToast(e.toString());
     });
 
-    print(response);
-
     if (response != null) {
-      return List<Comment>.from(response.data["items"]
-          .map((item) => Comment.fromJson(item)));
+      return List<Comment>.from(
+          response.data["items"].map((item) => Comment.fromJson(item)));
     } else {
       return List<Comment>();
+    }
+  }
+
+  static postComment(BuildContext context, String content,
+      {Map<String, dynamic> params}) async {
+    Map<String, dynamic> data = {"comment": content};
+
+    var response = await NetUtils.request('post', '/v1/post/comment',
+            data: data, params: params, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      if (response.data["code"] == 20000) {
+        return Comment.fromJson(response.data["item"]);
+      } else {
+        Utils.showToast(response.data["msg"]);
+      }
     }
   }
 }

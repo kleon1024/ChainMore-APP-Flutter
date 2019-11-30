@@ -25,7 +25,23 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CMColors.yellowHand,
+      floatingActionButton: Container(
+        padding: EdgeInsets.only(
+            right: ScreenUtil().setWidth(10)),
+        child: Container(
+          height: ScreenUtil().setHeight(80),
+          width: ScreenUtil().setWidth(80),
+          child: FloatingActionButton(
+            elevation: 0,
+            backgroundColor: Colors.black87,
+            child: Icon(Icons.close),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+      ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.only(
@@ -112,7 +128,7 @@ class __LoginWidgetState extends State<_LoginWidget> {
                     pwd,
                   ).then((value){
                     if(value != null) {
-                      NavigatorUtil.goHomePage(context);
+                      Navigator.pop(context);
                     }
                   });
                 },

@@ -50,6 +50,7 @@ class _DiscoverPageState extends State<DiscoverPage>
 
   @override
   Widget build(BuildContext context) {
+    print("rebuild discover page");
     return RefreshConfiguration(
       headerBuilder: () => WaterDropHeader(),
       // Configure the default header indicator. If you have the same header indicator for each page, you need to set this

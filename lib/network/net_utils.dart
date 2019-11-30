@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/network/interceptors/error.dart';
 import 'package:chainmore/network/interceptors/response.dart';
+import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/route/routes.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -13,6 +14,7 @@ import 'package:chainmore/route/navigate_service.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/loading.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../application.dart';
 import '../utils/custom_log_interceptor.dart';
@@ -37,12 +39,27 @@ class NetUtils {
       Map<String, dynamic> data,
       Map<String, dynamic> headers,
       bool isShowLoading = true,
+        bool refresh = false,
       BuildContext context}) async {
     if (context != null && isShowLoading) Loading.showLoading(context);
+    String accessToken = "";
+    if (context != null) {
+      UserModel userModel = Provider.of<UserModel>(context);
+      if (refresh) {
+        accessToken = userModel.getRefreshToken();
+      } else {
+        accessToken = userModel.getAccessToken();
+      }
+    }
+
     Response response;
     Options options = Options(method: method);
     if (headers != null) {
       options.headers = headers;
+    }
+
+    if (accessToken != "") {
+      options.headers["Authorization"] = "Bearer " + accessToken;
     }
 
     try {

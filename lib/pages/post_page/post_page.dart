@@ -140,7 +140,7 @@ class _PostPageState extends State<PostPage> {
                         futureFunc: API.getPost,
                         params: {'id': widget.item.id},
                         builder: (context, data) {
-                          setData(data);
+                          _data = data;
                           String description = "";
                           String url = "";
                           if (_data != null) {
@@ -246,22 +246,23 @@ class _PostPageState extends State<PostPage> {
                 ),
               ),
               Align(
-                child: CommentInputWidget(null),
+                child: CommentInputWidget((content) {
+                  API.postComment(context, content, params: {
+                    'id': widget.item.id,
+                  }).then((r) {
+                    if (r != null) {
+                      Utils.showToast('评论成功！');
+                      setState(() {
+                        _comments.insert(0, r);
+                      });
+                    }
+                  });
+                }),
                 alignment: Alignment.bottomCenter,
-              )
+              ),
             ],
           ),
         ));
-  }
-
-  void setData(Post data) {
-    Future.delayed(Duration(milliseconds: 20), () {
-      if (mounted) {
-        setState(() {
-          _data = data;
-        });
-      }
-    });
   }
 }
 

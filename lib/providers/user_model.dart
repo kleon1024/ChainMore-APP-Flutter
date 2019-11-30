@@ -10,22 +10,26 @@ import 'package:chainmore/utils/utils.dart';
 class UserModel with ChangeNotifier {
   User _user;
 
+  bool _loggedIn;
+
   User get user => _user;
 
   void initUser() {
+    _loggedIn = false;
     if (Application.sp.containsKey('user')) {
       String s = Application.sp.getString('user');
       _user = User.fromJson(json.decode(s));
+      _loggedIn = true;
     }
   }
 
   Future<User> login(BuildContext context, String username, String pwd) async {
-
+    _loggedIn = false;
     var user = await API.login(context, username, pwd);
     if (user == null) {
       return null;
     }
-    if (user.code > 299) {
+    if (user.code != 20000) {
       Utils.showToast('登录失败，请检查账号密码');
       return null;
     }
@@ -40,11 +44,33 @@ class UserModel with ChangeNotifier {
   }
 
   _saveUserInfo(User user) {
+    _loggedIn = true;
     _user = user;
     Application.sp.setString('user', json.encode(user.toJson()));
   }
 
   _deleteUserInfo() {
+    _loggedIn = false;
     Application.sp.remove('user');
+  }
+
+  getRefreshToken() {
+    if (_user != null) {
+      return _user.refreshToken;
+    } else {
+      return "";
+    }
+  }
+
+  getAccessToken() {
+    if (_user != null) {
+      return _user.accessToken;
+    } else {
+      return "";
+    }
+  }
+
+  isLoggedIn() {
+    return _loggedIn;
   }
 }
