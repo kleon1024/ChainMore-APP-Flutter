@@ -10,11 +10,11 @@ class RoundHeader extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.vertical(
-          top: Radius.circular(ScreenUtil().setWidth(30))),
+          top: Radius.circular(ScreenUtil().setWidth(50))),
       child: child
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(ScreenUtil().setWidth(100));
+  Size get preferredSize => Size.fromHeight(ScreenUtil().setWidth(120));
 }

@@ -38,6 +38,17 @@ class UserModel with ChangeNotifier {
     return user;
   }
 
+  refreshLogin(BuildContext context) async {
+    _loggedIn = false;
+    var response = await API.refreshLogin(context);
+    if (response != null) {
+      _user.accessToken = response.data["accessToken"];
+      _loggedIn = true;
+      _saveUserInfo(_user);
+      return _user;
+    }
+  }
+
   logout(BuildContext context) async {
     _deleteUserInfo();
     await API.logout(context);

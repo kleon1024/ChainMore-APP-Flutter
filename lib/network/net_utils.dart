@@ -39,12 +39,13 @@ class NetUtils {
       Map<String, dynamic> data,
       Map<String, dynamic> headers,
       bool isShowLoading = true,
-        bool refresh = false,
+      bool refresh = false,
       BuildContext context}) async {
     if (context != null && isShowLoading) Loading.showLoading(context);
     String accessToken = "";
+    UserModel userModel;
     if (context != null) {
-      UserModel userModel = Provider.of<UserModel>(context);
+      userModel = Provider.of<UserModel>(context);
       if (refresh) {
         accessToken = userModel.getRefreshToken();
       } else {
@@ -62,6 +63,8 @@ class NetUtils {
       options.headers["Authorization"] = "Bearer " + accessToken;
     }
 
+    bool relogin = false;
+
     try {
       response = await _dio.request(url,
           queryParameters: params, data: data, options: options);
@@ -69,13 +72,8 @@ class NetUtils {
       print(e);
       if (e == null) {
         return Future.error(Response(data: -1));
-      } else if (e.response != null) {
-        if (e.response.statusCode >= 300 && e.response.statusCode < 400) {
-          API.reLogin();
-          return Future.error(Response(data: -1));
-        } else {
-          return Future.error(Response(data: -1));
-        }
+      } else if (e.response.statusCode == 403) {
+        relogin = true;
       } else {
         return Future.error(Response(data: -1));
       }
@@ -85,6 +83,20 @@ class NetUtils {
       }
     }
 
+    if (context != null && relogin) {
+      var res = await userModel.refreshLogin(context);
+      if (res == null) {
+        _reLogin();
+        return Future.error(Response(data: -1));
+      }
+    }
     return response;
+  }
+
+  static void _reLogin() {
+    Future.delayed(Duration(milliseconds: 200), () {
+      Application.getIt<NavigateService>().popAndPushNamed(Routes.login);
+      Utils.showToast('登录失效，请重新登录');
+    });
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:chainmore/application.dart';
 import 'package:chainmore/models/comment.dart';
+import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/models/user.dart';
 import 'package:chainmore/network/net_utils.dart';
@@ -108,6 +109,30 @@ class API {
       } else {
         Utils.showToast(response.data["msg"]);
       }
+    }
+  }
+
+  static Future<Domain> getDomain(BuildContext context, {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/domain", params: params, context: context)
+        .catchError((e) {
+          Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      return Domain.fromJson(response.data["item"]);
+    }
+    return Domain();
+  }
+
+  static Future<List<Post>> getDomainPosts(BuildContext context, {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/domain/post", params: params, context: context).catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      return List<Post>.from(response.data["items"].map((item) => Post.fromJson(item)));
+    } else {
+      return List<Post>();
     }
   }
 }

@@ -30,8 +30,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     UserModel userModel = Provider.of<UserModel>(context);
     userModel.initUser();
     if (userModel.user != null) {
-      await API.refreshLogin(context).then((value) {
-        if (value.data != -1) {
+      await userModel.refreshLogin(context).then((value) {
+        if (value != null) {
           NavigatorUtil.goMainPage(context);
         }
       });

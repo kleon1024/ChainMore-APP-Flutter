@@ -14,6 +14,7 @@ Domain _$DomainFromJson(Map<String, dynamic> json) {
     watchers: json['watchers'] as int,
     bio: json['bio'] as String,
     posts: json['posts'] as int,
+    description: json['description'] as String,
   );
 }
 
@@ -24,4 +25,5 @@ Map<String, dynamic> _$DomainToJson(Domain instance) => <String, dynamic>{
       'watchers': instance.watchers,
       'bio': instance.bio,
       'posts': instance.posts,
+      'description': instance.description,
     };

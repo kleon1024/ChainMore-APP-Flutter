@@ -2,9 +2,10 @@ import 'package:chainmore/models/comment.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/network/net_utils.dart';
-import 'package:chainmore/pages/post_page/comment_input_widget.dart';
-import 'package:chainmore/pages/post_page/comment_item.dart';
+import 'package:chainmore/pages/post/comment_input_widget.dart';
+import 'package:chainmore/pages/post/comment_item.dart';
 import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
@@ -81,7 +82,9 @@ class _PostPageState extends State<PostPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    NavigatorUtil.goDomainPage(context, data: widget.item.domain);
+                                  },
                                   child: Container(
                                     child: Row(
                                       crossAxisAlignment:

@@ -9,10 +9,10 @@ import 'package:chainmore/widgets/widget_category_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class PostItem extends StatelessWidget {
+class DomainPostItem extends StatelessWidget {
   final Post item;
 
-  PostItem({
+  DomainPostItem({
     @required this.item,
   });
 
@@ -53,27 +53,11 @@ class PostItem extends StatelessWidget {
                   style: w600_16TextStyle
                 ),
               VEmptyView(5),
-              Row(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {},
-                    child: Text(item.author.nickname,
-                        style: w400_13TextStyle,
-                    ),
-                  ),
-                  Text("  @",
-                  style: w400_13TextStyle
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      NavigatorUtil.goDomainPage(context, data: item.domain);
-                    },
-                    child: Text(
-                      item.domain.title,
-                      style: w400_13TextStyle,
-                    ),
-                  ),
-                ],
+              GestureDetector(
+                onTap: () {},
+                child: Text(item.author.nickname,
+                  style: w400_13TextStyle,
+                ),
               ),
               VEmptyView(10),
               item.description != ""

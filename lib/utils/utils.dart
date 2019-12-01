@@ -23,9 +23,9 @@ class Utils {
   static String readableTimeStamp(String timestamp) {
     List res = timestamp.split(" ");
     assert(res.length == 6);
-    var datetimeStr = res[3] + monthMap[res[2]] + res[1] + " " + res[4];
+    var datetimeStr = res[3] + monthMap[res[2]] + res[1] + " " + res[4] + "Z";
     var datetime = DateTime.parse(datetimeStr);
-    var currentDatetime = DateTime.now();
+    var currentDatetime = DateTime.now().toUtc();
     var ms = currentDatetime.millisecondsSinceEpoch -
         datetime.millisecondsSinceEpoch;
     var second = ms / 1000;

@@ -1,6 +1,7 @@
 import 'package:chainmore/models/tab_icon_data.dart';
 import 'package:chainmore/pages/home/home_page.dart';
 import 'package:chainmore/pages/login_page.dart';
+import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -66,7 +67,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         ),
         BottomBarView(
           tabIconsList: tabIconsList,
-          addClick: () {},
+          addClick: () {
+            NavigatorUtil.goEditPage(context);
+          },
           changeIndex: (index) {
             pageController.jumpToPage(index);
           },

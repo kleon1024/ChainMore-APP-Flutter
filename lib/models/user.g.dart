@@ -14,6 +14,8 @@ User _$UserFromJson(Map<String, dynamic> json) {
     username: json['username'] as String,
     accessToken: json['accessToken'] as String,
     refreshToken: json['refreshToken'] as String,
+    accessTokenExpireTime: json['accessTokenExpireTime'] as int,
+    refreshTokenExpireTime: json['refreshTokenExpireTime'] as int,
   );
 }
 
@@ -24,4 +26,6 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'username': instance.username,
       'accessToken': instance.accessToken,
       'refreshToken': instance.refreshToken,
+      'accessTokenExpireTime': instance.accessTokenExpireTime,
+      'refreshTokenExpireTime': instance.refreshTokenExpireTime,
     };

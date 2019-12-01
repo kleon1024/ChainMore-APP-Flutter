@@ -1,3 +1,4 @@
+import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -42,4 +43,13 @@ class NavigatorUtil {
       "${Routes.post}?data=${FluroConvertUtils.object2string(data)}");
   }
 
+  static void goDomainPage(BuildContext context,
+      {@required Domain data}) {
+    _navigateTo(context,
+        "${Routes.domain}?data=${FluroConvertUtils.object2string(data)}");
+  }
+
+  static void goEditPage(BuildContext context) {
+    _navigateTo(context, Routes.edit);
+  }
 }

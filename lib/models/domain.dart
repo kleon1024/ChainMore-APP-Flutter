@@ -10,6 +10,7 @@ class Domain {
   int     watchers;
   String  bio;
   int     posts;
+  String  description;
 
   Domain({
     this.id,
@@ -18,6 +19,7 @@ class Domain {
     this.watchers,
     this.bio,
     this.posts,
+    this.description,
   });
 
   factory Domain.fromJson(Map<String, dynamic> json) => _$DomainFromJson(json);
