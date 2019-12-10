@@ -6,6 +6,7 @@ import 'package:chainmore/pages/home/home_page.dart';
 import 'package:chainmore/pages/login_page.dart';
 import 'package:chainmore/pages/main_page.dart';
 import 'package:chainmore/pages/post/post_page.dart';
+import 'package:chainmore/pages/search/search_page.dart';
 import 'package:chainmore/pages/splash_page.dart';
 import 'package:chainmore/utils/fluro_convert_utils.dart';
 import 'package:fluro/fluro.dart';
@@ -33,7 +34,7 @@ var homeHandler = Handler(
 
 var searchHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
-      return HomePage();
+      return SearchPage();
     });
 
 var postHandler = Handler(

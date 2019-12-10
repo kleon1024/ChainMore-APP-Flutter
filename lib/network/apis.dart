@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chainmore/application.dart';
 import 'package:chainmore/models/comment.dart';
 import 'package:chainmore/models/domain.dart';
+import 'package:chainmore/models/hot_search_data.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/models/user.dart';
 import 'package:chainmore/network/net_utils.dart';
@@ -133,6 +134,18 @@ class API {
       return List<Post>.from(response.data["items"].map((item) => Post.fromJson(item)));
     } else {
       return List<Post>();
+    }
+  }
+
+  static Future<HotSearchData> getHotSearchData(BuildContext context, {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/search/hot", params: params, context: context).catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      return HotSearchData.fromJson(response.data["item"]);
+    } else {
+      return HotSearchData();
     }
   }
 }

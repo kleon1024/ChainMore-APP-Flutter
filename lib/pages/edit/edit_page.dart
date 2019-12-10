@@ -1,6 +1,7 @@
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
+import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,6 +16,7 @@ class _EditPageState extends State<EditPage>
   String title;
 
   final TextEditingController _editController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
 
   @override
   void initState() {
@@ -70,7 +72,9 @@ class _EditPageState extends State<EditPage>
                         style: TextUtil.style(15, 700,
                             color: CMColors.blueLonely)),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    if (title == "文章") {}
+                  },
                 ),
               ),
             ],
@@ -80,48 +84,89 @@ class _EditPageState extends State<EditPage>
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.fromLTRB(
-              ScreenUtil().setWidth(30),
+              ScreenUtil().setWidth(60),
               ScreenUtil().setWidth(0),
-              ScreenUtil().setWidth(30),
+              ScreenUtil().setWidth(60),
               ScreenUtil().setWidth(30)),
-          child: Container(
-            height: ScreenUtil().setHeight(800),
-            child: SingleChildScrollView(
-                child: Column(
-              children: <Widget>[
-                title == "文章" ? TextField(
-                  decoration: InputDecoration(
-                    hintText: "请输入标题(20字)",
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: ScreenUtil().setHeight(800),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      title == "文章"
+                          ? TextField(
+                              controller: _titleController,
+                              decoration: InputDecoration(
+                                hintText: "请输入标题(20字)",
+                              ),
+                              onChanged: (text) {
+                                if (text.isEmpty &&
+                                    _editController.text.isEmpty) {
+                                  setState(() {
+                                    title = "灵感";
+                                  });
+                                }
+                              },
+                            )
+                          : VEmptyView(0),
+                      VEmptyView(20),
+                      TextField(
+                        controller: _editController,
+                        maxLines: 300,
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration.collapsed(
+                          hintText: title == "文章" ? "尽情抒发你的想法吧" : "灵光一现(20字)",
+                          hintStyle:
+                              TextUtil.style(15, 400, color: Colors.grey),
+                        ),
+                        onChanged: (text) {
+                          if (_titleController.text.isEmpty) {
+                            if (text.contains('\n') || text.length > 20) {
+                              if (title != "文章") {
+                                setState(() {
+                                  title = "文章";
+                                  _titleController.text = text.split('\n')[0];
+                                  _editController.text = "";
+                                });
+                              }
+                            } else {
+                              if (title != "灵感") {
+                                setState(() {
+                                  title = "灵感";
+                                });
+                              }
+                            }
+                          }
+                        },
+                      ),
+                    ],
                   ),
-                ) : VEmptyView(0),
-                VEmptyView(20),
-                TextField(
-                  controller: _editController,
-                  maxLines: 300,
-                  keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration.collapsed(
-                    hintText: "灵光一现(20字)",
-                    hintStyle: TextUtil.style(15, 400, color: Colors.grey),
-                  ),
-                  onChanged: (text) {
-                    if (text.contains('\n') || text.length > 20) {
-                      print(title);
-                      if (title != "文章") {
-                        setState(() {
-                          title = "文章";
-                        });
-                      }
-                    } else {
-                      if (title != "灵感") {
-                        setState(() {
-                          title = "灵感";
-                        });
-                      }
-                    }
-                  },
                 ),
-              ],
-            )),
+              ),
+              InkWell(
+                onTap: () {
+
+                },
+                child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Icon(Icons.add),
+                          HEmptyView(10),
+                          Text("添加话题",
+                              style: TextUtil.style(15, 400)),
+                        ],
+                      ),
+                      Icon(Icons.chevron_right),
+                    ],
+                  )
+                ),
+              )
+            ],
           ),
         ),
       ),
