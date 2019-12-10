@@ -1,5 +1,6 @@
 import 'package:chainmore/models/hot_search_data.dart';
 import 'package:chainmore/network/apis.dart';
+import 'package:chainmore/pages/search/search_other_result_page.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,17 +18,17 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   List<String> historySearchList;
   TextEditingController _searchController = TextEditingController();
-  FocusNode _blankNode = FocusNode();
+  FocusNode _searchFocusNode = FocusNode();
   bool _isSearching = false; // 是否正在搜索，改变布局
-  Map<String, int> _searchingTabMap = {
-    '领域': 1,
-    '文章': 10,
-    '用户': 100,
-    '用户': 1002,
+  Map<String, String> _searchingTabMap = {
+    '领域': 'domain',
+    '文章': 'article',
+    '用户': 'user',
   };
-  List<String> _searchingTabKeys = ['综合'];
+  List<String> _searchingTabKeys = [];
   TabController _searchingTabController;
-  String searchText;
+  String searchText = "";
+  String lastSearchText = "";
 
   @override
   void initState() {
@@ -147,10 +148,10 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                     child: Row(
                       children: <Widget>[
                         Text(
-                          '${index + 1}',
-                          style: index < 3
-                              ? TextUtil.style(18, 500, color: CMColors.blueLonely)
-                              : TextUtil.style(18, 500, color: Colors.grey)
+                            '${index + 1}',
+                            style: index < 3
+                                ? TextUtil.style(18, 500, color: CMColors.blueLonely)
+                                : TextUtil.style(18, 500, color: Colors.grey)
                         ),
                         HEmptyView(20),
                         Expanded(
@@ -191,7 +192,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
 
   // 搜索
   void _search() {
-    FocusScope.of(context).requestFocus(_blankNode);
+    FocusScope.of(context).unfocus();
     setState(() {
       if (historySearchList.contains(searchText))
         historySearchList.remove(searchText);
@@ -223,8 +224,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     return Column(
       children: <Widget>[
         TabBar(
-          indicatorColor: Colors.red,
-          labelColor: Colors.red,
+          indicatorColor: CMColors.blueLonely,
+          labelColor: CMColors.blueLonely,
           unselectedLabelColor: Colors.black87,
           isScrollable: true,
           indicatorSize: TabBarIndicatorSize.label,
@@ -239,7 +240,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
           child: TabBarView(
             children: [
               ..._searchingTabKeys
-                  .map((key) => Text("ABC"))
+                  .map((key) =>
+                      SearchOtherResultPage(_searchingTabMap[key], searchText))
                   .toList()
             ],
             controller: _searchingTabController,
@@ -267,8 +269,10 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
               child: Icon(Icons.close),
               onPressed: () {
                 if (_isSearching) {
+                  Future.delayed(Duration(milliseconds: 50)).then((_) {
+                    _searchController.clear();
+                  });
                   setState(() {
-                    _searchController.text = "";
                     _isSearching = false;
                   });
                 } else {
@@ -283,14 +287,26 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
           elevation: 0,
           title: Theme(
             child: TextField(
+              focusNode: _searchFocusNode,
               controller: _searchController,
-              cursorColor: Colors.red,
+              cursorColor: CMColors.blueLonely,
               textInputAction: TextInputAction.search,
               onEditingComplete: () {
-                searchText = _searchController.text.isEmpty
-                    ? '特种车司机'
-                    : _searchController.text;
+                  searchText = _searchController.text.isEmpty
+                      ? '特种车司机'
+                      : _searchController.text;
                 _search();
+              },
+              onChanged: (text) {
+                if (text.isEmpty) {
+                  setState(() {
+                    _isSearching = false;
+                  });
+                  Future.delayed(Duration(milliseconds: 50)).then((_) {
+                    _searchController.clear();
+                    FocusScope.of(context).requestFocus(_searchFocusNode);
+                  });
+                }
               },
               textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
@@ -303,10 +319,13 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                       color: Colors.black87,
                     ),
                     onPressed: () {
-                      if (_searchController.text.isNotEmpty)
-                        setState(() {
-                          _searchController.text = "";
-                        });
+                      setState(() {
+                        _isSearching = false;
+                      });
+                      Future.delayed(Duration(milliseconds: 50)).then((_) {
+                        _searchController.clear();
+                        FocusScope.of(context).requestFocus(_searchFocusNode);
+                      });
                     }),
               ),
             ),
@@ -315,24 +334,13 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
         ),
         body: Listener(
           onPointerDown: (d) {
-            FocusScope.of(context).requestFocus(_blankNode);
+            FocusScope.of(context).unfocus();
           },
           child: _isSearching
               ? _buildSearchingLayout()
               : _buildUnSearchingLayout(),
         ),
       ),
-      onWillPop: () async {
-        if (_isSearching) {
-          // 如果是搜索的状态，则不返回，并且清空输入框
-          setState(() {
-            _searchController.text = "";
-            _isSearching = false;
-          });
-          return false;
-        }
-        return true;
-      },
     );
   }
 }

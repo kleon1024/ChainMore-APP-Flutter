@@ -132,9 +132,9 @@ class API {
 
     if (response != null) {
       return List<Post>.from(response.data["items"].map((item) => Post.fromJson(item)));
-    } else {
-      return List<Post>();
     }
+
+    return List<Post>();
   }
 
   static Future<HotSearchData> getHotSearchData(BuildContext context, {Map<String, dynamic> params}) async {
@@ -144,8 +144,22 @@ class API {
 
     if (response != null) {
       return HotSearchData.fromJson(response.data["item"]);
-    } else {
-      return HotSearchData();
     }
+
+    return HotSearchData(queries: []);
+  }
+
+  static Future<List> getSearch(BuildContext context, {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/search", params: params, context: context, isShowLoading: false).catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      if (response.data["type"] == "domain") {
+        return List<Domain>.from(response.data["items"].map((item) => Domain.fromJson(item)));
+      }
+    }
+
+    return List();
   }
 }

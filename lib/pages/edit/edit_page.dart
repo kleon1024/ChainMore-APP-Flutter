@@ -145,7 +145,7 @@ class _EditPageState extends State<EditPage>
                   ),
                 ),
               ),
-              InkWell(
+              title == "文章" ? InkWell(
                 onTap: () {
 
                 },
@@ -165,7 +165,7 @@ class _EditPageState extends State<EditPage>
                     ],
                   )
                 ),
-              )
+              ) : VEmptyView(0),
             ],
           ),
         ),
