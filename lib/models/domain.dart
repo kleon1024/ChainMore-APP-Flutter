@@ -11,6 +11,13 @@ class Domain {
   String  bio;
   int     posts;
   String  description;
+  List<Domain> aggregators;
+  List<Domain> aggregateds;
+  List<Domain> dependeds;
+  List<Domain> dependants;
+
+  bool certified;
+  bool depended;
 
   Domain({
     this.id,
@@ -20,6 +27,12 @@ class Domain {
     this.bio,
     this.posts,
     this.description,
+    this.aggregators,
+    this.aggregateds,
+    this.dependeds,
+    this.dependants,
+    this.certified,
+    this.depended,
   });
 
   factory Domain.fromJson(Map<String, dynamic> json) => _$DomainFromJson(json);

@@ -37,6 +37,10 @@ class NavigatorUtil {
     _navigateTo(context, Routes.search);
   }
 
+  static void goDomainSearchPage(BuildContext context) {
+    _navigateTo(context, Routes.domainSearch);
+  }
+
   static void goPostPage(BuildContext context,
   {@required Post data}) {
     _navigateTo(context,

@@ -6,6 +6,7 @@ import 'package:chainmore/pages/home/home_page.dart';
 import 'package:chainmore/pages/login_page.dart';
 import 'package:chainmore/pages/main_page.dart';
 import 'package:chainmore/pages/post/post_page.dart';
+import 'package:chainmore/pages/search/domain_search_page.dart';
 import 'package:chainmore/pages/search/search_page.dart';
 import 'package:chainmore/pages/splash_page.dart';
 import 'package:chainmore/utils/fluro_convert_utils.dart';
@@ -36,6 +37,11 @@ var searchHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
       return SearchPage();
     });
+
+var domainSearchHandler = Handler(
+  handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+    return DomainSearchPage();
+});
 
 var postHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {

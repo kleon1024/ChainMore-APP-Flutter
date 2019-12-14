@@ -13,8 +13,9 @@ typedef LoadMoreWidgetBuilder<T> = Widget Function(T data);
 class SearchOtherResultPage extends StatefulWidget {
   final String type;
   final String query;
+  final bool login;
 
-  SearchOtherResultPage(this.type, this.query);
+  SearchOtherResultPage(this.type, this.query, {this.login = false});
 
   @override
   _SearchOtherResultPageState createState() => _SearchOtherResultPageState();
@@ -38,16 +39,28 @@ class _SearchOtherResultPageState extends State<SearchOtherResultPage>
   }
 
   void _request() async {
-    List r = await API.getSearch(context, params: _params);
-    if (mounted) {
-      setState(() {
-        if (widget.type == "domain") {
-          _count = r.length;
-          _domains.addAll(r as List<Domain>);
-        } else {
-          _count = r.length;
+    if (widget.login) {
+      if (widget.type == "domain") {
+        List<Domain> domains =  await API.searchDomain(context, params: _params);
+        if (mounted) {
+          setState(() {
+            _count = domains.length;
+            _domains.addAll(domains);
+          });
         }
-      });
+      }
+    } else {
+      List r = await API.getSearch(context, params: _params);
+      if (mounted) {
+        setState(() {
+          if (widget.type == "domain") {
+            _count = r.length;
+            _domains.addAll(r as List<Domain>);
+          } else {
+            _count = r.length;
+          }
+        });
+      }
     }
   }
 
@@ -56,6 +69,7 @@ class _SearchOtherResultPageState extends State<SearchOtherResultPage>
     return _buildLoadMoreWidget<Domain>(_domains, (curData) {
       return SearchDomainWidget(
         domain: curData,
+        login: widget.login,
       );
     });
   }
@@ -106,7 +120,7 @@ class _SearchOtherResultPageState extends State<SearchOtherResultPage>
 
     return Padding(
       padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(20),
+          horizontal: ScreenUtil().setWidth(50),
           vertical: ScreenUtil().setWidth(20)),
       child: result,
     );

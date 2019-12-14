@@ -1,7 +1,10 @@
+import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/hot_search_data.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/pages/search/search_other_result_page.dart';
+import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/widgets/widget_category_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:chainmore/application.dart';
@@ -9,21 +12,21 @@ import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:chainmore/widgets/widget_future_builder.dart';
+import 'package:provider/provider.dart';
 
-class SearchPage extends StatefulWidget {
+class DomainSearchPage extends StatefulWidget {
   @override
-  _SearchPageState createState() => _SearchPageState();
+  _DomainSearchPageState createState() => _DomainSearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
+class _DomainSearchPageState extends State<DomainSearchPage>
+    with TickerProviderStateMixin {
   List<String> historySearchList;
   TextEditingController _searchController = TextEditingController();
   FocusNode _searchFocusNode = FocusNode();
   bool _isSearching = false; // 是否正在搜索，改变布局
   Map<String, String> _searchingTabMap = {
     '领域': 'domain',
-    '文章': 'article',
-    '用户': 'user',
   };
   List<String> _searchingTabKeys = [];
   TabController _searchingTabController;
@@ -33,7 +36,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    historySearchList = Application.sp.getStringList("search_history") ?? [];
+    historySearchList = Application.sp.getStringList("search_domain_history") ?? [];
     _searchingTabKeys.addAll(_searchingTabMap.keys.toList());
     _searchingTabController =
         TabController(length: _searchingTabKeys.length, vsync: this);
@@ -81,7 +84,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                               onPressed: () {
                                 setState(() {
                                   historySearchList.clear();
-                                  Application.sp.remove("search_history");
+                                  Application.sp.remove("search_domain_history");
                                 });
                                 Navigator.of(context).pop();
                               },
@@ -126,33 +129,29 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          '热门搜索',
+          '热门领域',
           style: bold18TextStyle,
         ),
         VEmptyView(15),
-        CustomFutureBuilder<HotSearchData>(
-          futureFunc: API.getHotSearchData,
+        CustomFutureBuilder<List<Domain>>(
+          futureFunc: API.getHotDomainData,
           builder: (context, data) {
             return ListView.builder(
               itemBuilder: (context, index) {
-                var curQuery = data.queries[index];
+                var curDomain = data[index];
                 return GestureDetector(
                   behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    searchText = curQuery;
-                    _search();
-                  },
+                  onTap: () {},
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                         vertical: ScreenUtil().setWidth(10)),
                     child: Row(
                       children: <Widget>[
-                        Text(
-                            '${index + 1}',
+                        Text('${index + 1}',
                             style: index < 3
-                                ? TextUtil.style(18, 500, color: CMColors.blueLonely)
-                                : TextUtil.style(18, 500, color: Colors.grey)
-                        ),
+                                ? TextUtil.style(18, 500,
+                                    color: CMColors.blueLonely)
+                                : TextUtil.style(18, 500, color: Colors.grey)),
                         HEmptyView(20),
                         Expanded(
                           child: Column(
@@ -162,13 +161,23 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                 padding: EdgeInsets.symmetric(
                                     vertical: ScreenUtil().setWidth(5)),
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
-                                      curQuery,
+                                      curDomain.title,
                                       style: index < 3
                                           ? w500_16TextStyle
                                           : common16TextStyle,
                                     ),
+                                    curDomain.depended
+                                        ? HEmptyView(0)
+                                        : Container(
+                                            child: CategoryTag(
+                                              text: "前置未认证",
+                                              color: Colors.transparent,
+                                              textColor: CMColors.blueLonely,
+                                            ),
+                                          ),
                                   ],
                                 ),
                               ),
@@ -180,7 +189,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                   ),
                 );
               },
-              itemCount: data.queries.length,
+              itemCount: data.length,
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
             );
@@ -203,7 +212,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
       _isSearching = true;
       _searchController.text = searchText;
     });
-    Application.sp.setStringList("search_history", historySearchList);
+    Application.sp.setStringList("search_domain_history", historySearchList);
   }
 
   // 构建未搜索时的布局
@@ -221,34 +230,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
 
   // 构建搜索中的布局
   Widget _buildSearchingLayout() {
-    return Column(
-      children: <Widget>[
-        TabBar(
-          indicatorColor: CMColors.blueLonely,
-          labelColor: CMColors.blueLonely,
-          unselectedLabelColor: Colors.black87,
-          isScrollable: true,
-          indicatorSize: TabBarIndicatorSize.label,
-          tabs: _searchingTabKeys
-              .map((key) => Tab(
-                    text: key,
-                  ))
-              .toList(),
-          controller: _searchingTabController,
-        ),
-        Expanded(
-          child: TabBarView(
-            children: [
-              ..._searchingTabKeys
-                  .map((key) =>
-                      SearchOtherResultPage(_searchingTabMap[key], searchText))
-                  .toList()
-            ],
-            controller: _searchingTabController,
-          ),
-        ),
-      ],
-    );
+    UserModel userModel = Provider.of<UserModel>(context);
+    return SearchOtherResultPage("domain", searchText, login: userModel.isLoggedIn());
   }
 
   @override
@@ -292,9 +275,9 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
               cursorColor: CMColors.blueLonely,
               textInputAction: TextInputAction.search,
               onEditingComplete: () {
-                  searchText = _searchController.text.isEmpty
-                      ? '阡陌'
-                      : _searchController.text;
+                searchText = _searchController.text.isEmpty
+                    ? '阡陌'
+                    : _searchController.text;
                 _search();
               },
               onChanged: (text) {

@@ -66,7 +66,8 @@ class API {
 
   static Future<Post> getPost(BuildContext context,
       {Map<String, dynamic> params}) async {
-    var response = await NetUtils.request("get", "/v1/post", params: params, context: context)
+    var response = await NetUtils.request("get", "/v1/post",
+            params: params, context: context)
         .catchError((e) {
       Utils.showToast('网络错误！');
     });
@@ -80,9 +81,9 @@ class API {
 
   static Future<List<Comment>> getPostComments(BuildContext context,
       {Map<String, dynamic> params}) async {
-    var response =
-        await NetUtils.request("get", "/v1/post/comment", params: params, context: context)
-            .catchError((e) {
+    var response = await NetUtils.request("get", "/v1/post/comment",
+            params: params, context: context)
+        .catchError((e) {
       Utils.showToast(e.toString());
     });
 
@@ -113,10 +114,12 @@ class API {
     }
   }
 
-  static Future<Domain> getDomain(BuildContext context, {Map<String, dynamic> params}) async {
-    var response = await NetUtils.request("get", "/v1/domain", params: params, context: context)
+  static Future<Domain> getDomain(BuildContext context,
+      {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/domain",
+            params: params, context: context)
         .catchError((e) {
-          Utils.showToast(e.toString());
+      Utils.showToast(e.toString());
     });
 
     if (response != null) {
@@ -125,20 +128,27 @@ class API {
     return Domain();
   }
 
-  static Future<List<Post>> getDomainPosts(BuildContext context, {Map<String, dynamic> params}) async {
-    var response = await NetUtils.request("get", "/v1/domain/post", params: params, context: context).catchError((e) {
+  static Future<List<Post>> getDomainPosts(BuildContext context,
+      {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/domain/post",
+            params: params, context: context)
+        .catchError((e) {
       Utils.showToast(e.toString());
     });
 
     if (response != null) {
-      return List<Post>.from(response.data["items"].map((item) => Post.fromJson(item)));
+      return List<Post>.from(
+          response.data["items"].map((item) => Post.fromJson(item)));
     }
 
     return List<Post>();
   }
 
-  static Future<HotSearchData> getHotSearchData(BuildContext context, {Map<String, dynamic> params}) async {
-    var response = await NetUtils.request("get", "/v1/search/hot", params: params, context: context).catchError((e) {
+  static Future<HotSearchData> getHotSearchData(BuildContext context,
+      {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/search/hot",
+            params: params, context: context)
+        .catchError((e) {
       Utils.showToast(e.toString());
     });
 
@@ -149,17 +159,51 @@ class API {
     return HotSearchData(queries: []);
   }
 
-  static Future<List> getSearch(BuildContext context, {Map<String, dynamic> params}) async {
-    var response = await NetUtils.request("get", "/v1/search", params: params, context: context, isShowLoading: false).catchError((e) {
+  static Future<List> getSearch(BuildContext context,
+      {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/search",
+            params: params, context: context, isShowLoading: false)
+        .catchError((e) {
       Utils.showToast(e.toString());
     });
 
     if (response != null) {
       if (response.data["type"] == "domain") {
-        return List<Domain>.from(response.data["items"].map((item) => Domain.fromJson(item)));
+        return List<Domain>.from(
+            response.data["items"].map((item) => Domain.fromJson(item)));
       }
     }
 
     return List();
+  }
+
+  static Future<List<Domain>> getHotDomainData(BuildContext context,
+      {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/domain/hot",
+            params: params, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      return List<Domain>.from(
+          response.data["items"].map((item) => Domain.fromJson(item)));
+    }
+    return List<Domain>();
+  }
+
+  static Future<List<Domain>> searchDomain(BuildContext context,
+      {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/search/domain",
+        params: params, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      return List<Domain>.from(
+          response.data["items"].map((item) => Domain.fromJson(item)));
+    }
+    return List<Domain>();
   }
 }

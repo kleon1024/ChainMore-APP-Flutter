@@ -72,7 +72,7 @@ class NetUtils {
       print(e);
       if (e == null) {
         return Future.error(Response(data: -1));
-      } else if (e.response.statusCode == 403) {
+      } else if (e.response.statusCode > 400 && e.response.statusCode < 404) {
         relogin = true;
       } else {
         return Future.error(Response(data: -1));
@@ -89,6 +89,14 @@ class NetUtils {
         _reLogin();
         return Future.error(Response(data: -1));
       }
+
+      response = await request(method, url,
+          params: params,
+          data: data,
+          headers: headers,
+          context: context,
+          refresh: refresh,
+          isShowLoading: isShowLoading);
     }
     return response;
   }

@@ -15,6 +15,24 @@ Domain _$DomainFromJson(Map<String, dynamic> json) {
     bio: json['bio'] as String,
     posts: json['posts'] as int,
     description: json['description'] as String,
+    aggregators: (json['aggregators'] as List)
+        ?.map((e) =>
+            e == null ? null : Domain.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    aggregateds: (json['aggregateds'] as List)
+        ?.map((e) =>
+            e == null ? null : Domain.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    dependeds: (json['dependeds'] as List)
+        ?.map((e) =>
+            e == null ? null : Domain.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    dependants: (json['dependants'] as List)
+        ?.map((e) =>
+            e == null ? null : Domain.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    certified: json['certified'] as bool,
+    depended: json['depended'] as bool,
   );
 }
 
@@ -26,4 +44,10 @@ Map<String, dynamic> _$DomainToJson(Domain instance) => <String, dynamic>{
       'bio': instance.bio,
       'posts': instance.posts,
       'description': instance.description,
+      'aggregators': instance.aggregators,
+      'aggregateds': instance.aggregateds,
+      'dependeds': instance.dependeds,
+      'dependants': instance.dependants,
+      'certified': instance.certified,
+      'depended': instance.depended,
     };

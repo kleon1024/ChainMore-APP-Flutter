@@ -1,6 +1,7 @@
 import 'package:chainmore/pages/home/home_page.dart';
 import 'package:chainmore/pages/login_page.dart';
 import 'package:chainmore/pages/splash_page.dart';
+import 'package:chainmore/providers/edit_model.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/route/navigate_service.dart';
 import 'package:chainmore/route/routes.dart';
@@ -22,6 +23,9 @@ void main() {
     providers: [
       ChangeNotifierProvider<UserModel>.value(
         value: UserModel(),
+      ),
+      ChangeNotifierProvider<EditModel>.value(
+        value: EditModel(),
       )
     ],
     child: MyApp(),

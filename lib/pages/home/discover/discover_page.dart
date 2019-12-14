@@ -4,6 +4,7 @@ import 'package:chainmore/pages/home/discover/post_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DiscoverPage extends StatefulWidget {
@@ -106,8 +107,24 @@ class _DiscoverPageState extends State<DiscoverPage>
                 onRefresh: _onRefresh,
                 onLoading: _onLoading,
                 child: ListView.builder(
-                  itemBuilder: (c, i) => PostItem(item: items[i]),
-                  itemCount: items.length,
+                  itemBuilder: (c, i) {
+                    if (items.length == 0) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: ScreenUtil().setHeight(50)),
+                        child: Center(
+                          child: Text("还没有什么内容"),
+                        ),
+                      );
+                    }
+                    if (i == items.length + 1) {
+                      return Container(
+                        child: Text("触碰到底线"),
+                      );
+                    }
+                    return PostItem(item: items[i]);
+                  },
+                  itemCount: items.length + 1,
                 ),
               ),
             ),

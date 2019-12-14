@@ -147,7 +147,7 @@ class _EditPageState extends State<EditPage>
               ),
               title == "文章" ? InkWell(
                 onTap: () {
-
+                   NavigatorUtil.goDomainSearchPage(context);
                 },
                 child: Container(
                   child: Row(
