@@ -1,4 +1,13 @@
+import 'package:chainmore/providers/edit_model.dart';
+import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/utils/navigator_util.dart';
+import 'package:chainmore/widgets/common_text_style.dart';
+import 'package:chainmore/widgets/v_empty_view.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class Utils {
   static void showToast(String msg) {
@@ -57,5 +66,65 @@ class Utils {
       return minute.floor().toString() + "分钟" + prefix;
     }
     return "1分钟内";
+  }
+
+  static String lastUrl = "";
+
+  static checkClipBoard({BuildContext context}) async {
+    ClipboardData clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+    if (clipboardData != null && clipboardData.text.trim() != '') {
+      String _name = clipboardData.text.trim();
+
+      String url = RegExp(
+              r'(https?)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]')
+          .stringMatch(_name);
+
+      if (url != "" && lastUrl != url) {
+        lastUrl = url;
+
+        showDialog<Null>(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext context) {
+            return CupertinoAlertDialog(
+                title: Text('分享链接'),
+                content: Column(
+                  children: <Widget>[
+                    VEmptyView(20),
+                    Text(url),
+                    VEmptyView(50),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(0),
+                            child: Text('取消分享', style: TextUtil.style(16, 600, color: Colors.grey)),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            EditModel editModel =
+                                Provider.of<EditModel>(context);
+                            editModel.setUrl(url);
+                            Navigator.of(context).pop();
+                            NavigatorUtil.goEditPage(context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(0),
+                            child: Text('前往分享', style: TextUtil.style(16, 600, color: CMColors.blueLonely)),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ));
+          },
+        );
+      }
+    }
   }
 }

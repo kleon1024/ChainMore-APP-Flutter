@@ -2,6 +2,7 @@ import 'package:chainmore/models/tab_icon_data.dart';
 import 'package:chainmore/pages/home/home_page.dart';
 import 'package:chainmore/pages/login_page.dart';
 import 'package:chainmore/utils/navigator_util.dart';
+import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -10,8 +11,8 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
-
+class _MainPageState extends State<MainPage>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
   final pageController = PageController();
 
@@ -25,12 +26,20 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       tab.isSelected = false;
     });
     tabIconsList[0].isSelected = true;
-
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // 当App生命周期状态为恢复时。
+    if (state == AppLifecycleState.resumed) {
+      Utils.checkClipBoard(context: context);
+    }
+  }
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -39,22 +48,22 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     return Container(
       color: Colors.white,
       child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Stack(
-            children: <Widget>[
-              PageView(
-                children: [
-                  HomePage(),
-                  LoginPage(),
-                  HomePage(),
-                  LoginPage(),
-                ],
-                controller: pageController,
-                onPageChanged: (index) => {},
-              ),
-              bottomBar(),
-            ],
-          ),
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          children: <Widget>[
+            PageView(
+              children: [
+                HomePage(),
+                LoginPage(),
+                HomePage(),
+                LoginPage(),
+              ],
+              controller: pageController,
+              onPageChanged: (index) => {},
+            ),
+            bottomBar(),
+          ],
+        ),
       ),
     );
   }

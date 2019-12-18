@@ -7,12 +7,14 @@ import 'package:chainmore/application.dart';
 class EditModel with ChangeNotifier {
   String _title;
   String _body;
+  String _url;
 
   Domain _domain;
 
   Domain get domain => _domain;
   String get title => _title;
   String get body => _body;
+  String get url => _url;
 
   initState() {
     if (Application.sp.containsKey('edit_state')) {
@@ -20,6 +22,7 @@ class EditModel with ChangeNotifier {
       _title = state['title'];
       _body = state['body'];
       _domain = state['domain'];
+      _url = state['url'];
     }
   }
 
@@ -35,9 +38,14 @@ class EditModel with ChangeNotifier {
     _body = body;
   }
 
+  setUrl(String url) {
+    _url = url;
+  }
+
   reset() {
     _title = "";
     _body = "";
+    _url = "";
   }
 
   saveEditState() {
@@ -45,6 +53,7 @@ class EditModel with ChangeNotifier {
       "title" : _title,
       "body" : _body,
       "domain" : _domain,
+      "url" : _url,
     };
 
     Application.sp.setString('edit_state', json.encode(state));
