@@ -5,6 +5,7 @@ import 'package:chainmore/models/comment.dart';
 import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/hot_search_data.dart';
 import 'package:chainmore/models/post.dart';
+import 'package:chainmore/models/sparkle.dart';
 import 'package:chainmore/models/user.dart';
 import 'package:chainmore/network/net_utils.dart';
 import 'package:chainmore/route/routes.dart';
@@ -51,9 +52,10 @@ class API {
     });
   }
 
-  static getTrendingPosts() async {
+  static getTrendingPosts({Map<String, dynamic> params}) async {
     var response =
-        await NetUtils.request("get", '/v1/post/trendings').catchError((e) {
+        await NetUtils.request("get", '/v1/post/trendings', params: params)
+            .catchError((e) {
       Utils.showToast('网络错误，加载失败！');
     });
 
@@ -195,7 +197,7 @@ class API {
   static Future<List<Domain>> searchDomain(BuildContext context,
       {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/search/domain",
-        params: params, context: context)
+            params: params, context: context)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
@@ -205,5 +207,40 @@ class API {
           response.data["items"].map((item) => Domain.fromJson(item)));
     }
     return List<Domain>();
+  }
+
+  static postSparkle(BuildContext context, {Map<String, dynamic> data}) async {
+    var response = await NetUtils.request("post", "/v1/sparkle",
+            data: data, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    return response;
+  }
+
+  static postPost(BuildContext context, {Map<String, dynamic> data}) async {
+    var response =
+        await NetUtils.request("post", "/v1/post", data: data, context: context)
+            .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    return response;
+  }
+
+  static Future<List<Sparkle>> getTrendingSparkles(
+      {Map<String, dynamic> params}) async {
+    var response =
+        await NetUtils.request("get", "/v1/sparkle/trendings", params: params)
+            .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      return List<Sparkle>.from(
+          response.data["items"].map((item) => Sparkle.fromJson(item)));
+    }
+    return List<Sparkle>();
   }
 }

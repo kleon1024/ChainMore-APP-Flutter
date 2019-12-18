@@ -1,10 +1,14 @@
+import 'package:chainmore/network/apis.dart';
+import 'package:chainmore/providers/edit_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
+import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class EditPage extends StatefulWidget {
   @override
@@ -14,9 +18,13 @@ class EditPage extends StatefulWidget {
 class _EditPageState extends State<EditPage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   String title;
+  bool posting = false;
+
+  bool init = false;
 
   final TextEditingController _editController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _urlController = TextEditingController();
 
   @override
   void initState() {
@@ -25,6 +33,17 @@ class _EditPageState extends State<EditPage>
 
   @override
   Widget build(BuildContext context) {
+    EditModel editModel = Provider.of<EditModel>(context);
+    if (!init) {
+      if (editModel.title != null && editModel.title != "") {
+        _titleController.text = editModel.title;
+        title = "文章";
+      }
+      if (editModel.body != null) {
+        _editController.text = editModel.body;
+      }
+      init = true;
+    }
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(ScreenUtil().setHeight(120)),
@@ -54,6 +73,8 @@ class _EditPageState extends State<EditPage>
                         style: TextUtil.style(15, 400, color: Colors.black38)),
                   ),
                   onTap: () {
+                    editModel.setTitle(_titleController.text);
+                    editModel.setBody(_editController.text);
                     Navigator.pop(context);
                   },
                 ),
@@ -72,8 +93,57 @@ class _EditPageState extends State<EditPage>
                         style: TextUtil.style(15, 700,
                             color: CMColors.blueLonely)),
                   ),
-                  onTap: () {
-                    if (title == "文章") {}
+                  onTap: () async {
+                    if (title == "文章") {
+                      if (_editController.text.trim().isEmpty) {
+                        Utils.showToast("除了标题，再分享点什么吧");
+                      } else if (editModel.domain == null) {
+                        Utils.showToast("请选择发表领域");
+                      } else {
+                        var data = {
+                          "title": _titleController.text,
+                          "description": _editController.text,
+                          "url": _urlController.text,
+                          "domain": editModel.domain.id,
+                          "categories": [],
+                        };
+                        if (!posting) {
+                          posting = true;
+                          await API.postPost(context, data: data).then((res){
+                            if (res != null) {
+                              Utils.showToast("领域接收成功...");
+                              editModel.reset();
+                              Navigator.pop(context);
+                            } else {
+                              Utils.showToast("领域接收失败...");
+                            }
+                          });
+                        }
+                      }
+                    } else if (title == "灵感") {
+                      if (_editController.text.trim().isEmpty) {
+                        Utils.showToast("灵感还没诞生！");
+                      } else {
+                        var data = {
+                          "body": _editController.text,
+                        };
+                        if (!posting) {
+                          posting = true;
+                          await API
+                              .postSparkle(context, data: data)
+                              .then((res) {
+                            if (res != null) {
+                              Utils.showToast("灵感已经广播...");
+                              editModel.reset();
+                              Navigator.pop(context);
+                            } else {
+                              Utils.showToast("灵感未能同步...");
+                            }
+                            posting = false;
+                          });
+                        }
+                      }
+                    }
                   },
                 ),
               ),
@@ -145,27 +215,33 @@ class _EditPageState extends State<EditPage>
                   ),
                 ),
               ),
-              title == "文章" ? InkWell(
-                onTap: () {
-                   NavigatorUtil.goDomainSearchPage(context);
-                },
-                child: Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
+              title == "文章"
+                  ? InkWell(
+                      onTap: () {
+                        NavigatorUtil.goDomainSearchPage(context);
+                      },
+                      child: Container(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Icon(Icons.add),
-                          HEmptyView(10),
-                          Text("添加话题",
-                              style: TextUtil.style(15, 400)),
+                          Row(
+                            children: <Widget>[
+                              Icon(editModel.domain != null
+                                  ? Icons.chevron_right
+                                  : Icons.add),
+                              HEmptyView(10),
+                              Text(
+                                  editModel.domain != null
+                                      ? editModel.domain.title
+                                      : "添加话题",
+                                  style: TextUtil.style(15, 400)),
+                            ],
+                          ),
+                          Icon(Icons.chevron_right),
                         ],
-                      ),
-                      Icon(Icons.chevron_right),
-                    ],
-                  )
-                ),
-              ) : VEmptyView(0),
+                      )),
+                    )
+                  : VEmptyView(0),
             ],
           ),
         ),

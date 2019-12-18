@@ -8,12 +8,14 @@ class CategoryTag extends StatelessWidget {
   final Color color;
   final Color borderColor;
   final Color textColor;
+  final double textSize;
 
   CategoryTag(
       {this.text,
       this.color = CMColors.blueLonely,
       this.borderColor = CMColors.blueLonely,
-      this.textColor = Colors.white});
+      this.textColor = Colors.white,
+      this.textSize = 11});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class CategoryTag extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          fontSize: 11,
+          fontSize: textSize,
           fontWeight: FontWeight.w400,
           color: textColor,
         ),

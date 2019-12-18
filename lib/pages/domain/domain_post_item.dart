@@ -46,7 +46,7 @@ class DomainPostItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Row(children: <Widget>[CategoryTag(text: item.category)]),
+//              Row(children: <Widget>[CategoryTag(text: item.category)]),
               VEmptyView(10),
               Text(
                   item.title,

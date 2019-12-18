@@ -153,7 +153,7 @@ class _DomainPageState extends State<DomainPage> {
                                           ),
                                           child: Center(
                                             child: Text(
-                                            "获取认证",
+                                            "获得认证",
                                             style: TextUtil.style(14, 300,
                                                 color: Colors.white),
                                             ),
@@ -184,7 +184,7 @@ class _DomainPageState extends State<DomainPage> {
                                         ),
                                         child: Center(
                                           child: Text(
-                                            "关注节点",
+                                            "关注领域",
                                             style: TextUtil.style(14, 300,
                                                 color: Colors.white),
                                           ),

@@ -106,10 +106,10 @@ class _PostPageState extends State<PostPage> {
                                   ),
                                 ),
                                 VEmptyView(30),
-                                Row(children: <Widget>[
-                                  CategoryTag(text: widget.item.category),
-                                ]),
-                                VEmptyView(20),
+//                                Row(children: <Widget>[
+//                                  CategoryTag(text: widget.item.category),
+//                                ]),
+//                                VEmptyView(20),
                                 Hero(
                                   tag:
                                       'post_title_' + widget.item.id.toString(),
@@ -150,7 +150,7 @@ class _PostPageState extends State<PostPage> {
                             if (_data.description != null) {
                               description = _data.description;
                             }
-                            if (_data.url != null) {
+                            if (_data.url != null && _data.url != "") {
                               url = _data.url.split("/")[2];
                             }
                           }
@@ -167,12 +167,12 @@ class _PostPageState extends State<PostPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    GestureDetector(
+                                    url != null && url != "" ? GestureDetector(
                                       child: CategoryTag(
                                           text: url,
                                           textColor: CMColors.blueLonely,
                                           color: Colors.white),
-                                    ),
+                                    ) : VEmptyView(0),
                                     VEmptyView(15),
                                     description != ""
                                         ? Text(
@@ -182,6 +182,7 @@ class _PostPageState extends State<PostPage> {
                                             textAlign: TextAlign.justify,
                                           )
                                         : VEmptyView(0),
+                                    VEmptyView(30),
                                   ],
                                 ),
                               )

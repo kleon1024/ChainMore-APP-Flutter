@@ -2,8 +2,11 @@ import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/hot_search_data.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/pages/search/search_other_result_page.dart';
+import 'package:chainmore/providers/edit_model.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/utils/navigator_util.dart';
+import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/widget_category_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -141,7 +144,15 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                 var curDomain = data[index];
                 return GestureDetector(
                   behavior: HitTestBehavior.translucent,
-                  onTap: () {},
+                  onTap: () {
+                    if (curDomain.depended) {
+                      EditModel editModel = Provider.of<EditModel>(context);
+                      editModel.setDomain(curDomain);
+                      Navigator.pop(context);
+                    } else {
+                      Utils.showToast("需要认证前置领域");
+                    }
+                  },
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                         vertical: ScreenUtil().setWidth(10)),
@@ -171,11 +182,15 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                                     ),
                                     curDomain.depended
                                         ? HEmptyView(0)
-                                        : Container(
+                                        : GestureDetector(
+                                            onTap: () {
+
+                                            },
                                             child: CategoryTag(
                                               text: "前置未认证",
                                               color: Colors.transparent,
                                               textColor: CMColors.blueLonely,
+                                              textSize: 13,
                                             ),
                                           ),
                                   ],

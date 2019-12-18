@@ -1,4 +1,5 @@
 import 'package:chainmore/models/post.dart';
+import 'package:chainmore/models/sparkle.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
@@ -9,10 +10,10 @@ import 'package:chainmore/widgets/widget_category_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class PostItem extends StatelessWidget {
-  final Post item;
+class SparkleItem extends StatelessWidget {
+  final Sparkle item;
 
-  PostItem({
+  SparkleItem({
     @required this.item,
   });
 
@@ -20,7 +21,7 @@ class PostItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        NavigatorUtil.goPostPage(context, data: item);
+
       },
       child: Container(
         color: Colors.white,
@@ -46,13 +47,6 @@ class PostItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-//              Row(children: <Widget>[CategoryTag(text: item.category)]),
-              VEmptyView(10),
-              Text(
-                  item.title,
-                  style: w600_16TextStyle
-                ),
-              VEmptyView(5),
               Row(
                 children: <Widget>[
                   GestureDetector(
@@ -61,24 +55,12 @@ class PostItem extends StatelessWidget {
                         style: w400_13TextStyle,
                     ),
                   ),
-                  Text("  @",
-                  style: w400_13TextStyle
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      NavigatorUtil.goDomainPage(context, data: item.domain);
-                    },
-                    child: Text(
-                      item.domain.title,
-                      style: w400_13TextStyle,
-                    ),
-                  ),
                 ],
               ),
               VEmptyView(10),
-              item.description != ""
+              item.body != null && item.body != ""
                   ? Text(
-                      item.description,
+                      item.body,
                       style: TextStyle(
                         color: Colors.black87,
                         fontWeight: FontWeight.w400,
@@ -94,28 +76,7 @@ class PostItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    "看过 " + item.comments.toString(),
-                    style: TextStyle(
-                        fontSize: ScreenUtil().setSp(38),
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
-                  Text(
-                    "力荐 " + item.votes.toString(),
-                    style: TextStyle(
-                        fontSize: ScreenUtil().setSp(38),
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
-                  Text(
-                    "评论 " + item.comments.toString(),
-                    style: TextStyle(
-                        fontSize: ScreenUtil().setSp(38),
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
-                  Text(
-                    "收藏 " + item.collects.toString(),
+                    "共鸣 " + item.votes.toString(),
                     style: TextStyle(
                         fontSize: ScreenUtil().setSp(38),
                         fontWeight: FontWeight.w500,

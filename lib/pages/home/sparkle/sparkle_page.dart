@@ -1,6 +1,7 @@
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/pages/home/discover/post_item.dart';
+import 'package:chainmore/pages/home/sparkle/sparkle_item.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +9,12 @@ import 'package:flutter/physics.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class DiscoverPage extends StatefulWidget {
+class SparklePage extends StatefulWidget {
   @override
-  _DiscoverPageState createState() => _DiscoverPageState();
+  _SparklePageState createState() => _SparklePageState();
 }
 
-class _DiscoverPageState extends State<DiscoverPage>
+class _SparklePageState extends State<SparklePage>
     with AutomaticKeepAliveClientMixin {
   List items = [];
   RefreshController _refreshController =
@@ -30,10 +31,12 @@ class _DiscoverPageState extends State<DiscoverPage>
 
   void _onRefresh() async {
     // monitor network fetch
-    List posts = await API.getTrendingPosts(params: {"offset": offset, "limit": limit});
-    if (posts.isNotEmpty) {
-      items = posts;
-      if (posts.length < limit) {
+    offset = 1;
+    List sparkles = await API
+        .getTrendingSparkles(params: {"offset": offset, "limit": limit});
+    if (sparkles.isNotEmpty) {
+      items = sparkles;
+      if (sparkles.length < limit) {
         _refreshController.loadNoData();
       }
       offset += 1;
@@ -45,11 +48,11 @@ class _DiscoverPageState extends State<DiscoverPage>
 
   void _onLoading() async {
     // monitor network fetch
-    List posts = await API.getTrendingPosts(params: {"offset": offset, "limit": limit});
-    if (posts.isNotEmpty) {
-      items.addAll(posts);
-      items = posts;
-      if (posts.length < limit) {
+    List sparkles = await API
+        .getTrendingSparkles(params: {"offset": offset, "limit": limit});
+    if (sparkles.isNotEmpty) {
+      items.addAll(sparkles);
+      if (sparkles.length < limit) {
         _refreshController.loadNoData();
       }
       offset += 1;
@@ -63,7 +66,6 @@ class _DiscoverPageState extends State<DiscoverPage>
 
   @override
   Widget build(BuildContext context) {
-    print("rebuild discover page");
     return RefreshConfiguration(
       headerBuilder: () => WaterDropHeader(),
       // Configure the default header indicator. If you have the same header indicator for each page, you need to set this
@@ -110,7 +112,7 @@ class _DiscoverPageState extends State<DiscoverPage>
                       body = Text("");
                     }
                     return Container(
-                      height: 150.0,
+                      height: 100.0,
                       child: Center(child: body),
                     );
                   },
@@ -154,7 +156,7 @@ class _DiscoverPageState extends State<DiscoverPage>
                         ],
                       );
                     }
-                    return PostItem(item: items[i]);
+                    return SparkleItem(item: items[i]);
                   },
                   itemCount: items.length + 1,
                 ),

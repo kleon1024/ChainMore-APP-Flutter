@@ -10,6 +10,10 @@ class EditModel with ChangeNotifier {
 
   Domain _domain;
 
+  Domain get domain => _domain;
+  String get title => _title;
+  String get body => _body;
+
   initState() {
     if (Application.sp.containsKey('edit_state')) {
       var state = json.decode(Application.sp.getString('edit_state'));
@@ -21,6 +25,19 @@ class EditModel with ChangeNotifier {
 
   setDomain(Domain domain) {
     _domain = domain;
+  }
+
+  setTitle(String title) {
+    _title = title;
+  }
+
+  setBody(String body) {
+    _body = body;
+  }
+
+  reset() {
+    _title = "";
+    _body = "";
   }
 
   saveEditState() {

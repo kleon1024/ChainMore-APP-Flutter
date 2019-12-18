@@ -1,4 +1,5 @@
 import 'package:chainmore/pages/home/discover/discover_page.dart';
+import 'package:chainmore/pages/home/sparkle/sparkle_page.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:chainmore/utils/navigator_util.dart';
@@ -54,10 +55,10 @@ class _HomePageState extends State<HomePage>
                         controller: _tabController,
                         tabs: [
                           Tab(
-                            text: '关注',
+                            text: '分享',
                           ),
                           Tab(
-                            text: '热门',
+                            text: '灵感',
                           ),
                         ],
                       ),
@@ -82,7 +83,7 @@ class _HomePageState extends State<HomePage>
                     controller: _tabController,
                     children: [
                       DiscoverPage(),
-                      DiscoverPage(),
+                      SparklePage(),
                     ],
                   ),
                 ),
