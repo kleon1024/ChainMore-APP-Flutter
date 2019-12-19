@@ -1,4 +1,5 @@
 import 'package:chainmore/models/domain.dart';
+import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +22,8 @@ class NavigatorUtil {
         transition: TransitionType.material);
   }
 
-  static void goLoginPage(BuildContext context, {bool clearStack = true}) {
-    _navigateTo(context, Routes.login, clearStack: clearStack);
+  static void goLoginPage(BuildContext context, {@required LoginConfig data, bool clearStack = true}) {
+    _navigateTo(context, "${Routes.login}?data=${FluroConvertUtils.object2string(data)}", clearStack: clearStack);
   }
 
   static void goHomePage(BuildContext context) {

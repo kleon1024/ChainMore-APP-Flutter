@@ -37,7 +37,7 @@ class _EditPageState extends State<EditPage>
     if (!init) {
       if (editModel.title != null && editModel.title != "") {
         _titleController.text = editModel.title;
-        title = "文章";
+        title = "分享";
       }
       if (editModel.body != null) {
         _editController.text = editModel.body;
@@ -94,7 +94,7 @@ class _EditPageState extends State<EditPage>
                             color: CMColors.blueLonely)),
                   ),
                   onTap: () async {
-                    if (title == "文章") {
+                    if (title == "分享") {
                       if (_editController.text.trim().isEmpty) {
                         Utils.showToast("除了标题，再分享点什么吧");
                       } else if (editModel.domain == null) {
@@ -165,7 +165,7 @@ class _EditPageState extends State<EditPage>
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      title == "文章"
+                      title == "分享"
                           ? TextField(
                               controller: _titleController,
                               decoration: InputDecoration(
@@ -187,16 +187,16 @@ class _EditPageState extends State<EditPage>
                         maxLines: 300,
                         keyboardType: TextInputType.multiline,
                         decoration: InputDecoration.collapsed(
-                          hintText: title == "文章" ? "尽情抒发你的想法吧" : "灵光一现(20字)",
+                          hintText: title == "分享" ? "尽情抒发你的想法吧" : "灵光一现(20字)",
                           hintStyle:
                               TextUtil.style(15, 400, color: Colors.grey),
                         ),
                         onChanged: (text) {
                           if (_titleController.text.isEmpty) {
                             if (text.contains('\n') || text.length > 20) {
-                              if (title != "文章") {
+                              if (title != "分享") {
                                 setState(() {
-                                  title = "文章";
+                                  title = "分享";
                                   _titleController.text = text.split('\n')[0];
                                   _editController.text = "";
                                 });
@@ -215,7 +215,7 @@ class _EditPageState extends State<EditPage>
                   ),
                 ),
               ),
-              title == "文章"
+              title == "分享"
                   ? InkWell(
                       onTap: () {
                         NavigatorUtil.goDomainSearchPage(context);

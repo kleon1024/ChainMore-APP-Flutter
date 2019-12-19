@@ -127,4 +127,20 @@ class Utils {
       }
     }
   }
+
+  static bool isEmail(String input) {
+    if (input == null || input.isEmpty) return false;
+    return new RegExp(r"^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*\$").hasMatch(input);
+  }
+
+  static bool isLoginPassword(String input) {
+    RegExp mobile = new RegExp(r"(?![0-9$%^&*]+$)(?![a-zA-Z]+$)[0-9A-Za-z$%^&*]{6,16}$");
+    return mobile.hasMatch(input);
+  }
+
+  static bool isUserName(String input) {
+    RegExp mobile = new RegExp(r"[0-9A-Za-z_]{6,16}$");
+    return mobile.hasMatch(input);
+  }
+
 }

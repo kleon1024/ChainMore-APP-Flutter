@@ -1,4 +1,5 @@
 import 'package:chainmore/models/domain.dart';
+import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/pages/domain/domain_page.dart';
 import 'package:chainmore/pages/edit/edit_page.dart';
@@ -20,7 +21,8 @@ var splashHandler = Handler(
 
 var loginHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
-      return LoginPage();
+      String data = params['data'].first;
+      return LoginPage(LoginConfig.fromJson(FluroConvertUtils.string2map(data)));
     });
 
 var mainHandler = Handler(

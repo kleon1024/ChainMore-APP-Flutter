@@ -22,12 +22,12 @@ class API {
     });
   }
 
-  static login(BuildContext context, String username, String password) async {
-    String payload = base64.encode(utf8.encode(username + ":" + password));
+  static login(BuildContext context, {String username, String password}) async {
     var response = await NetUtils.request("post", '/v1/auth/signin',
         context: context,
         data: {
-          'payload': payload,
+          'username': username,
+          'password': password,
         }).catchError((e) {
       Utils.showToast('网络错误！');
     });
@@ -35,6 +35,21 @@ class API {
     if (response != null) {
       return User.fromJson(response.data);
     }
+  }
+
+  static signup(BuildContext context,
+      {String username, String password, String email}) async {
+    var response = await NetUtils.request("post", '/v1/auth/signup',
+        context: context,
+        data: {
+          'username': username,
+          'password': password,
+          'email': email,
+        }).catchError((e) {
+      Utils.showToast('网络错误！');
+    });
+
+    return response;
   }
 
   static logout(BuildContext context) async {

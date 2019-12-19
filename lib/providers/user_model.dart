@@ -25,7 +25,7 @@ class UserModel with ChangeNotifier {
 
   Future<User> login(BuildContext context, String username, String pwd) async {
     _loggedIn = false;
-    var user = await API.login(context, username, pwd);
+    var user = await API.login(context, username: username, password: pwd);
     if (user == null) {
       return null;
     }
@@ -36,6 +36,18 @@ class UserModel with ChangeNotifier {
     Utils.showToast('登录成功');
     _saveUserInfo(user);
     return user;
+  }
+
+  signup(BuildContext context, String username, String email, String pwd) async {
+    _loggedIn = false;
+    await API.signup(context, username: username, password: pwd, email: email).then((res) {
+      if (res != null && res.data["code"] == 20000) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+
   }
 
   refreshLogin(BuildContext context) async {

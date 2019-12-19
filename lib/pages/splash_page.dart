@@ -1,3 +1,4 @@
+import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/providers/edit_model.dart';
 import 'package:chainmore/utils/colors.dart';
@@ -39,7 +40,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
         }
       });
     } else {
-      NavigatorUtil.goLoginPage(context);
+      NavigatorUtil.goLoginPage(context, data: LoginConfig(initial: true));
     }
   }
 
