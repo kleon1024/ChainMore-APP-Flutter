@@ -9,34 +9,39 @@ class CategoryTag extends StatelessWidget {
   final Color borderColor;
   final Color textColor;
   final double textSize;
+  final onTap;
 
   CategoryTag(
       {this.text,
       this.color = CMColors.blueLonely,
       this.borderColor = CMColors.blueLonely,
       this.textColor = Colors.white,
-      this.textSize = 11});
+      this.textSize = 11,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(
-          ScreenUtil().setWidth(10),
-          ScreenUtil().setWidth(0),
-          ScreenUtil().setWidth(10),
-          ScreenUtil().setWidth(0)),
-      decoration: BoxDecoration(
-          color: color,
-          border: Border.all(
-              color: borderColor, width: 1.0, style: BorderStyle.solid),
-          borderRadius:
-              BorderRadius.all(Radius.circular(ScreenUtil().setWidth(15)))),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: textSize,
-          fontWeight: FontWeight.w400,
-          color: textColor,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.fromLTRB(
+            ScreenUtil().setWidth(10),
+            ScreenUtil().setWidth(0),
+            ScreenUtil().setWidth(10),
+            ScreenUtil().setWidth(0)),
+        decoration: BoxDecoration(
+            color: color,
+            border: Border.all(
+                color: borderColor, width: 1.0, style: BorderStyle.solid),
+            borderRadius:
+                BorderRadius.all(Radius.circular(ScreenUtil().setWidth(15)))),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: textSize,
+            fontWeight: FontWeight.w400,
+            color: textColor,
+          ),
         ),
       ),
     );

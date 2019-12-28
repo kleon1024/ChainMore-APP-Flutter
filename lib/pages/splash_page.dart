@@ -1,5 +1,8 @@
+import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/network/apis.dart';
+import 'package:chainmore/providers/certify_model.dart';
+import 'package:chainmore/providers/domain_create_model.dart';
 import 'package:chainmore/providers/edit_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -27,19 +30,24 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   }
 
   void goPage() async {
-    print("******************initializing*************************");
     await Application.initSp();
     UserModel userModel = Provider.of<UserModel>(context);
     EditModel editModel = Provider.of<EditModel>(context);
+    DomainCreateModel domainCreateModel = Provider.of<DomainCreateModel>(context);
+    CertifyModel certifyModel = Provider.of<CertifyModel>(context);
     userModel.initUser();
     editModel.initState();
+    domainCreateModel.initState();
+    certifyModel.initState();
     if (userModel.user != null) {
       await userModel.refreshLogin(context).then((value) {
         if (value != null) {
           NavigatorUtil.goMainPage(context);
         }
       });
-    } else {
+    }
+    if (userModel.getRefreshToken() == "" || userModel.getAccessToken() == "") {
+      userModel.reset();
       NavigatorUtil.goLoginPage(context, data: LoginConfig(initial: true));
     }
   }

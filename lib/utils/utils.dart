@@ -11,7 +11,10 @@ import 'package:provider/provider.dart';
 
 class Utils {
   static void showToast(String msg) {
-    Fluttertoast.showToast(msg: msg, gravity: ToastGravity.CENTER);
+    Fluttertoast.showToast(
+        msg: msg,
+        gravity: ToastGravity.CENTER,
+        toastLength: Toast.LENGTH_SHORT);
   }
 
   static Map<String, String> monthMap = {
@@ -76,71 +79,104 @@ class Utils {
       String _name = clipboardData.text.trim();
 
       String url = RegExp(
-              r'(https?)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]')
+          r'(https?)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]')
           .stringMatch(_name);
 
-      if (url != "" && lastUrl != url) {
+      if (url != null && url != "" && lastUrl != url) {
         lastUrl = url;
 
-        showDialog<Null>(
-          context: context,
-          barrierDismissible: true,
-          builder: (BuildContext context) {
-            return CupertinoAlertDialog(
-                title: Text('分享链接'),
-                content: Column(
-                  children: <Widget>[
-                    VEmptyView(20),
-                    Text(url),
-                    VEmptyView(50),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(0),
-                            child: Text('取消分享', style: TextUtil.style(16, 600, color: Colors.grey)),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            EditModel editModel =
-                                Provider.of<EditModel>(context);
-                            editModel.setUrl(url);
-                            Navigator.of(context).pop();
-                            NavigatorUtil.goEditPage(context);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(0),
-                            child: Text('前往分享', style: TextUtil.style(16, 600, color: CMColors.blueLonely)),
-                          ),
-                        )
-                      ],
-                    )
-                  ],
-                ));
+        showDoubleChoiceDialog(
+          context,
+          title: '检测到链接',
+          body: url,
+          leftText: '取消',
+          rightText: '分享',
+          leftFunc: () {
+            Navigator.of(context).pop();
+          },
+          rightFunc: () {
+            EditModel editModel = Provider.of<EditModel>(context);
+            if (url != _name) {
+              editModel.setBody(_name);
+            }
+            editModel.setUrl(url);
+            Navigator.of(context).pop();
+            NavigatorUtil.goEditPage(context);
           },
         );
       }
     }
-  }
-
-  static bool isEmail(String input) {
-    if (input == null || input.isEmpty) return false;
-    return new RegExp(r"^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*\$").hasMatch(input);
-  }
-
-  static bool isLoginPassword(String input) {
-    RegExp mobile = new RegExp(r"(?![0-9$%^&*]+$)(?![a-zA-Z]+$)[0-9A-Za-z$%^&*]{6,16}$");
-    return mobile.hasMatch(input);
-  }
-
-  static bool isUserName(String input) {
-    RegExp mobile = new RegExp(r"[0-9A-Za-z_]{6,16}$");
-    return mobile.hasMatch(input);
-  }
-
 }
+
+static bool isEmail
+(
+
+String input
+) {
+if (input == null || input.isEmpty) return false;
+return new RegExp(r"^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*\$")
+    .hasMatch(input);
+}
+
+static bool isLoginPassword
+(
+
+String input
+) {
+RegExp mobile = new RegExp(r"(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$");
+return mobile.hasMatch(input);
+}
+
+static bool isUserName
+(
+
+String input
+) {
+RegExp mobile = new RegExp(r"[0-9A-Za-z_]{6,16}$");
+return mobile.hasMatch(input);
+}
+
+static showDoubleChoiceDialog(BuildContext context, {
+  String title = "",
+  String body = "",
+  String leftText = "取消",
+  Function leftFunc,
+  Color leftColor = CMColors.blueLonely,
+  String rightText = "确认",
+  Function rightFunc,
+  Color rightColor = CMColors.blueLonely,
+}) {
+  showDialog<Null>(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: Text(title),
+        content: body != "" ? Padding(
+          padding: EdgeInsets.all(0),
+          child: Text(body),
+        ) : Container(),
+        actions: <Widget>[
+          CupertinoButton(
+            child: Text(leftText,
+                style: TextUtil.style(16, 600, color: leftColor)),
+            onPressed: () {
+              if (leftFunc != null) {
+                leftFunc();
+              }
+            },
+          ),
+          CupertinoButton(
+            child: Text(rightText,
+                style: TextUtil.style(16, 600, color: rightColor)),
+            onPressed: () {
+              if (rightFunc != null) {
+                rightFunc();
+              }
+            },
+          ),
+        ],
+      );
+    },
+  );
+}}

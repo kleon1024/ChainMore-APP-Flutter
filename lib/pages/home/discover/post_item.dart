@@ -48,22 +48,28 @@ class PostItem extends StatelessWidget {
             children: <Widget>[
 //              Row(children: <Widget>[CategoryTag(text: item.category)]),
               VEmptyView(10),
-              Text(
-                  item.title,
-                  style: w600_16TextStyle
-                ),
+              Text(item.title, style: w600_16TextStyle),
               VEmptyView(5),
+              item.url != ""
+                  ? CategoryTag(
+                      text: item.url.split("/")[2],
+                      color: Colors.white,
+                      textColor: CMColors.blueLonely,
+                      onTap: () {
+                        NavigatorUtil.goWebViewPage(context, url: item.url);
+                      },
+                    )
+                  : VEmptyView(5),
               Row(
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {},
-                    child: Text(item.author.nickname,
-                        style: w400_13TextStyle,
+                    child: Text(
+                      item.author.nickname,
+                      style: w400_13TextStyle,
                     ),
                   ),
-                  Text("  @",
-                  style: w400_13TextStyle
-                  ),
+                  Text("  @", style: w400_13TextStyle),
                   GestureDetector(
                     onTap: () {
                       NavigatorUtil.goDomainPage(context, data: item.domain);
@@ -93,20 +99,20 @@ class PostItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
-                    "看过 " + item.comments.toString(),
-                    style: TextStyle(
-                        fontSize: ScreenUtil().setSp(38),
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
-                  Text(
-                    "力荐 " + item.votes.toString(),
-                    style: TextStyle(
-                        fontSize: ScreenUtil().setSp(38),
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
+//                  Text(
+//                    "看过 " + item.comments.toString(),
+//                    style: TextStyle(
+//                        fontSize: ScreenUtil().setSp(38),
+//                        fontWeight: FontWeight.w500,
+//                        color: Colors.black54),
+//                  ),
+//                  Text(
+//                    "力荐 " + item.votes.toString(),
+//                    style: TextStyle(
+//                        fontSize: ScreenUtil().setSp(38),
+//                        fontWeight: FontWeight.w500,
+//                        color: Colors.black54),
+//                  ),
                   Text(
                     "评论 " + item.comments.toString(),
                     style: TextStyle(
@@ -114,13 +120,13 @@ class PostItem extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         color: Colors.black54),
                   ),
-                  Text(
-                    "收藏 " + item.collects.toString(),
-                    style: TextStyle(
-                        fontSize: ScreenUtil().setSp(38),
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
+//                  Text(
+//                    "收藏 " + item.collects.toString(),
+//                    style: TextStyle(
+//                        fontSize: ScreenUtil().setSp(38),
+//                        fontWeight: FontWeight.w500,
+//                        color: Colors.black54),
+//                  ),
                   Icon(Icons.more_horiz,
                       color: Colors.black54, size: ScreenUtil().setSp(60))
                 ],

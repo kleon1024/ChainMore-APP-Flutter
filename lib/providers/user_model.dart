@@ -40,14 +40,14 @@ class UserModel with ChangeNotifier {
 
   signup(BuildContext context, String username, String email, String pwd) async {
     _loggedIn = false;
-    await API.signup(context, username: username, password: pwd, email: email).then((res) {
-      if (res != null && res.data["code"] == 20000) {
-        return true;
-      } else {
-        return false;
-      }
-    });
+    var response = await API.signup(context, username: username, password: pwd, email: email);
 
+    if (response != null) {
+      if (response.data["code"] == 20000) {
+        return true;
+      }
+    }
+    return null;
   }
 
   refreshLogin(BuildContext context) async {
@@ -55,6 +55,7 @@ class UserModel with ChangeNotifier {
     var response = await API.refreshLogin(context);
     if (response != null) {
       _user.accessToken = response.data["accessToken"];
+      _user.refreshToken = response.data["refreshToken"];
       _loggedIn = true;
       _saveUserInfo(_user);
       return _user;
@@ -78,7 +79,7 @@ class UserModel with ChangeNotifier {
   }
 
   getRefreshToken() {
-    if (_user != null) {
+    if (_user != null && _user.refreshToken != null) {
       return _user.refreshToken;
     } else {
       return "";
@@ -86,7 +87,7 @@ class UserModel with ChangeNotifier {
   }
 
   getAccessToken() {
-    if (_user != null) {
+    if (_user != null && _user.accessToken != null) {
       return _user.accessToken;
     } else {
       return "";
@@ -96,4 +97,10 @@ class UserModel with ChangeNotifier {
   isLoggedIn() {
     return _loggedIn;
   }
+
+  reset() {
+    _user = null;
+    _deleteUserInfo();
+  }
+
 }

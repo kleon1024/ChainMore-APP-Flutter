@@ -52,7 +52,6 @@ class _CustomFutureBuilderState<T> extends State<CustomFutureBuilder<T>> {
         _future = widget.futureFunc(context, params: widget.params);
         oldParams = widget.params.values.join();
       }
-      print("***********************");
       print(_future);
     });
   }
@@ -89,6 +88,7 @@ class _CustomFutureBuilderState<T> extends State<CustomFutureBuilder<T>> {
         : FutureBuilder(
             future: _future,
             builder: (context, snapshot) {
+              print(snapshot.connectionState);
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:

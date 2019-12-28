@@ -1,6 +1,8 @@
 import 'package:chainmore/pages/home/home_page.dart';
 import 'package:chainmore/pages/login_page.dart';
 import 'package:chainmore/pages/splash_page.dart';
+import 'package:chainmore/providers/certify_model.dart';
+import 'package:chainmore/providers/domain_create_model.dart';
 import 'package:chainmore/providers/edit_model.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/route/navigate_service.dart';
@@ -26,6 +28,12 @@ void main() {
       ),
       ChangeNotifierProvider<EditModel>.value(
         value: EditModel(),
+      ),
+      ChangeNotifierProvider<DomainCreateModel>.value(
+        value: DomainCreateModel(),
+      ),
+      ChangeNotifierProvider<CertifyModel>.value(
+        value: CertifyModel(),
       )
     ],
     child: MyApp(),

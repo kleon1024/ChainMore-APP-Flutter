@@ -21,7 +21,7 @@ class EditModel with ChangeNotifier {
       var state = json.decode(Application.sp.getString('edit_state'));
       _title = state['title'];
       _body = state['body'];
-      _domain = state['domain'];
+      _domain = Domain.fromJson(state['domain']);
       _url = state['url'];
     }
   }
@@ -46,6 +46,8 @@ class EditModel with ChangeNotifier {
     _title = "";
     _body = "";
     _url = "";
+    _domain = null;
+    deleteEditState();
   }
 
   saveEditState() {
@@ -59,7 +61,7 @@ class EditModel with ChangeNotifier {
     Application.sp.setString('edit_state', json.encode(state));
   }
 
-  deleteUserInfo() {
+  deleteEditState() {
     Application.sp.remove('edit_state');
   }
 

@@ -1,4 +1,5 @@
 import 'package:chainmore/models/domain.dart';
+import 'package:chainmore/models/domain_search.dart';
 import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:fluro/fluro.dart';
@@ -14,7 +15,7 @@ class NavigatorUtil {
       bool clearStack = false,
       Duration transitionDuration = const Duration(milliseconds: 250),
       RouteTransitionsBuilder transitionBuilder}) {
-    Application.router.navigateTo(context, path,
+    return Application.router.navigateTo(context, path,
         replace: replace,
         clearStack: clearStack,
         transitionDuration: transitionDuration,
@@ -22,8 +23,11 @@ class NavigatorUtil {
         transition: TransitionType.material);
   }
 
-  static void goLoginPage(BuildContext context, {@required LoginConfig data, bool clearStack = true}) {
-    _navigateTo(context, "${Routes.login}?data=${FluroConvertUtils.object2string(data)}", clearStack: clearStack);
+  static void goLoginPage(BuildContext context,
+      {@required LoginConfig data, bool clearStack = true}) {
+    _navigateTo(context,
+        "${Routes.login}?data=${FluroConvertUtils.object2string(data)}",
+        clearStack: clearStack);
   }
 
   static void goHomePage(BuildContext context) {
@@ -38,23 +42,37 @@ class NavigatorUtil {
     _navigateTo(context, Routes.search);
   }
 
-  static void goDomainSearchPage(BuildContext context) {
-    _navigateTo(context, Routes.domainSearch);
-  }
-
-  static void goPostPage(BuildContext context,
-  {@required Post data}) {
+  static void goDomainSearchPage(BuildContext context,
+      {@required DomainSearchData data}) {
     _navigateTo(context,
-      "${Routes.post}?data=${FluroConvertUtils.object2string(data)}");
+        "${Routes.domainSearch}?data=${FluroConvertUtils.object2string(data)}");
   }
 
-  static void goDomainPage(BuildContext context,
+  static goDomainCertifyPage(BuildContext context,
       {@required Domain data}) {
+    return _navigateTo(context,
+        "${Routes.domainCertify}?data=${FluroConvertUtils.object2string(data)}");
+  }
+
+  static goDomainCreatePage(BuildContext context) {
+    return _navigateTo(context, Routes.domainCreate);
+  }
+
+  static void goPostPage(BuildContext context, {@required Post data}) {
+    _navigateTo(context,
+        "${Routes.post}?data=${FluroConvertUtils.object2string(data)}");
+  }
+
+  static void goDomainPage(BuildContext context, {@required Domain data}) {
     _navigateTo(context,
         "${Routes.domain}?data=${FluroConvertUtils.object2string(data)}");
   }
 
   static void goEditPage(BuildContext context) {
     _navigateTo(context, Routes.edit);
+  }
+
+  static goWebViewPage(BuildContext context, {@required String url}) {
+    return _navigateTo(context, "${Routes.web}?data=$url}");
   }
 }

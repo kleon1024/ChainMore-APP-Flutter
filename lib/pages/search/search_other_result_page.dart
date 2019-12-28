@@ -1,5 +1,7 @@
 import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/network/apis.dart';
+import 'package:chainmore/providers/domain_create_model.dart';
+import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/widget_search_domain.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:chainmore/widgets/widget_load_footer.dart';
+import 'package:provider/provider.dart';
 
 typedef LoadMoreWidgetBuilder<T> = Widget Function(T data);
 
@@ -14,8 +17,9 @@ class SearchOtherResultPage extends StatefulWidget {
   final String type;
   final String query;
   final bool login;
+  final String state;
 
-  SearchOtherResultPage(this.type, this.query, {this.login = false});
+  SearchOtherResultPage(this.type, this.query, {this.login = false, this.state = "certified"});
 
   @override
   _SearchOtherResultPageState createState() => _SearchOtherResultPageState();
@@ -41,7 +45,7 @@ class _SearchOtherResultPageState extends State<SearchOtherResultPage>
   void _request() async {
     if (widget.login) {
       if (widget.type == "domain") {
-        List<Domain> domains =  await API.searchDomain(context, params: _params);
+        List<Domain> domains = await API.searchDomain(context, params: _params);
         if (mounted) {
           setState(() {
             _count = domains.length;
@@ -70,6 +74,7 @@ class _SearchOtherResultPageState extends State<SearchOtherResultPage>
       return SearchDomainWidget(
         domain: curData,
         login: widget.login,
+        state: widget.state
       );
     });
   }
@@ -102,12 +107,31 @@ class _SearchOtherResultPageState extends State<SearchOtherResultPage>
     }
 
     if (_count == 0) {
-      return Center(
-        child: Text(
-          "没有找到相关结果",
-          style: TextUtil.style(16, 500),
-        ),
-      );
+      if (widget.type == "domain") {
+        return GestureDetector(
+          onTap: () {
+            DomainCreateModel domainCreateModel =
+            Provider.of<DomainCreateModel>(context);
+            domainCreateModel.setTitle(widget.query);
+            NavigatorUtil.goDomainCreatePage(context).then((res) {
+              _request();
+            });
+          },
+          child: Center(
+            child: Text(
+              "创建领域",
+              style: TextUtil.style(18, 600),
+            ),
+          ),
+        );
+      } else {
+        return Center(
+          child: Text(
+            "没有找到相关结果",
+            style: TextUtil.style(16, 500),
+          ),
+        );
+      }
     }
 
     Widget result;

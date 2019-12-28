@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
+import 'package:common_utils/common_utils.dart' as prefix0;
 import 'package:flutter/material.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/navigator_util.dart';
@@ -180,8 +181,9 @@ class __LoginWidgetState extends State<_LoginWidget> {
                       if (value != null) {
                         if (widget.initial) {
                           NavigatorUtil.goMainPage(context);
+                        } else {
+                          Navigator.pop(context);
                         }
-                        Navigator.pop(context);
                       }
                     });
                   } else {
@@ -205,7 +207,7 @@ class __LoginWidgetState extends State<_LoginWidget> {
                       return;
                     }
 
-                    if (!Utils.isEmail(email)) {
+                    if (!prefix0.RegexUtil.isEmail(email)) {
                       Utils.showToast('请输入有效邮箱');
                       return;
                     }
@@ -231,7 +233,7 @@ class __LoginWidgetState extends State<_LoginWidget> {
                     }
 
                     value.signup(context, username, email, pwd).then((res) {
-                      if (res) {
+                      if (res != null) {
                         value
                             .login(
                           context,
@@ -242,8 +244,9 @@ class __LoginWidgetState extends State<_LoginWidget> {
                           if (value != null) {
                             if (widget.initial) {
                               NavigatorUtil.goMainPage(context);
+                            } else {
+                              Navigator.pop(context);
                             }
-                            Navigator.pop(context);
                           }
                         });
                       } else {
@@ -292,7 +295,7 @@ class __LoginWidgetState extends State<_LoginWidget> {
                     GestureDetector(
                       onTap: () {},
                       child: Text("找回密码",
-                          style: TextUtil.style(13, 400,
+                          style: TextUtil.style(15, 400,
                               color: CMColors.blueLonely)),
                     ),
                     GestureDetector(
@@ -302,7 +305,7 @@ class __LoginWidgetState extends State<_LoginWidget> {
                         });
                       },
                       child: Text("注册账号",
-                          style: TextUtil.style(13, 400,
+                          style: TextUtil.style(15, 400,
                               color: CMColors.blueLonely)),
                     ),
                   ],

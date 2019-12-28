@@ -1,3 +1,4 @@
+import 'package:chainmore/models/domain_search.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/providers/edit_model.dart';
 import 'package:chainmore/utils/colors.dart';
@@ -9,6 +10,7 @@ import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:common_utils/common_utils.dart' as CommonUtils;
 
 class EditPage extends StatefulWidget {
   @override
@@ -34,6 +36,7 @@ class _EditPageState extends State<EditPage>
   @override
   Widget build(BuildContext context) {
     EditModel editModel = Provider.of<EditModel>(context);
+
     if (!init) {
       if (editModel.title != null && editModel.title != "") {
         _titleController.text = editModel.title;
@@ -41,6 +44,10 @@ class _EditPageState extends State<EditPage>
       }
       if (editModel.body != null) {
         _editController.text = editModel.body;
+      }
+      if (editModel.url != null && editModel.url != "") {
+        _urlController.text = editModel.url;
+        title = "分享";
       }
       init = true;
     }
@@ -73,9 +80,25 @@ class _EditPageState extends State<EditPage>
                         style: TextUtil.style(15, 400, color: Colors.black38)),
                   ),
                   onTap: () {
-                    editModel.setTitle(_titleController.text);
-                    editModel.setBody(_editController.text);
-                    Navigator.pop(context);
+
+                    Utils.showDoubleChoiceDialog(
+                      context,
+                      title: "保留本次编辑？",
+                      leftText: '不保留',
+                      rightText: '保留',
+                      leftFunc: () {
+                        editModel.reset();
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      rightFunc: () {
+                        editModel.setTitle(_titleController.text);
+                        editModel.setBody(_editController.text);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      }
+                    );
+
                   },
                 ),
               ),
@@ -95,6 +118,18 @@ class _EditPageState extends State<EditPage>
                   ),
                   onTap: () async {
                     if (title == "分享") {
+
+                      String url = _urlController.text.trim();
+                      if (url != "") {
+                        if (!CommonUtils.RegexUtil.isURL(url)) {
+                          url = "http://" + url;
+                          if (!CommonUtils.RegexUtil.isURL(url)) {
+                            Utils.showToast("请输入正确格式的URL");
+                            return;
+                          }
+                        }
+                      }
+
                       if (_editController.text.trim().isEmpty) {
                         Utils.showToast("除了标题，再分享点什么吧");
                       } else if (editModel.domain == null) {
@@ -103,13 +138,13 @@ class _EditPageState extends State<EditPage>
                         var data = {
                           "title": _titleController.text,
                           "description": _editController.text,
-                          "url": _urlController.text,
+                          "url": url,
                           "domain": editModel.domain.id,
                           "categories": [],
                         };
                         if (!posting) {
                           posting = true;
-                          await API.postPost(context, data: data).then((res){
+                          await API.postPost(context, data: data).then((res) {
                             if (res != null) {
                               Utils.showToast("领域接收成功...");
                               editModel.reset();
@@ -165,11 +200,16 @@ class _EditPageState extends State<EditPage>
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
+                      VEmptyView(50),
                       title == "分享"
                           ? TextField(
                               controller: _titleController,
+                              style: TextUtil.style(18, 500),
                               decoration: InputDecoration(
-                                hintText: "请输入标题(20字)",
+                                contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                hintText: "标题",
+                                hintStyle:
+                                    TextUtil.style(18, 500, color: Colors.grey),
                               ),
                               onChanged: (text) {
                                 if (text.isEmpty &&
@@ -181,13 +221,24 @@ class _EditPageState extends State<EditPage>
                               },
                             )
                           : VEmptyView(0),
-                      VEmptyView(20),
+                      title == "分享"
+                          ? TextField(
+                              controller: _urlController,
+                              style: TextUtil.style(15, 400),
+                              decoration: InputDecoration(
+                                  hintText: "链接URL",
+                                  hintStyle: TextUtil.style(15, 400,
+                                      color: Colors.grey),
+                                  border: InputBorder.none),
+                            )
+                          : VEmptyView(10),
                       TextField(
                         controller: _editController,
-                        maxLines: 300,
+                        maxLines: 10,
+                        style: TextUtil.style(15, 400),
                         keyboardType: TextInputType.multiline,
                         decoration: InputDecoration.collapsed(
-                          hintText: title == "分享" ? "尽情抒发你的想法吧" : "灵光一现(20字)",
+                          hintText: title == "分享" ? "尽情抒发你的想法吧" : "灵光一现",
                           hintStyle:
                               TextUtil.style(15, 400, color: Colors.grey),
                         ),
@@ -218,7 +269,8 @@ class _EditPageState extends State<EditPage>
               title == "分享"
                   ? InkWell(
                       onTap: () {
-                        NavigatorUtil.goDomainSearchPage(context);
+                        NavigatorUtil.goDomainSearchPage(context,
+                            data: DomainSearchData(state: "certified"));
                       },
                       child: Container(
                           child: Row(
@@ -233,7 +285,7 @@ class _EditPageState extends State<EditPage>
                               Text(
                                   editModel.domain != null
                                       ? editModel.domain.title
-                                      : "添加话题",
+                                      : "添加领域",
                                   style: TextUtil.style(15, 400)),
                             ],
                           ),

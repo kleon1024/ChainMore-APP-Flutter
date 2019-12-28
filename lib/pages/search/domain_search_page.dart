@@ -1,12 +1,15 @@
 import 'package:chainmore/models/domain.dart';
+import 'package:chainmore/models/domain_search.dart';
 import 'package:chainmore/models/hot_search_data.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/pages/search/search_other_result_page.dart';
+import 'package:chainmore/providers/domain_create_model.dart';
 import 'package:chainmore/providers/edit_model.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
+import 'package:chainmore/widgets/common_button.dart';
 import 'package:chainmore/widgets/widget_category_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +21,10 @@ import 'package:chainmore/widgets/widget_future_builder.dart';
 import 'package:provider/provider.dart';
 
 class DomainSearchPage extends StatefulWidget {
+  final DomainSearchData data;
+
+  DomainSearchPage(this.data);
+
   @override
   _DomainSearchPageState createState() => _DomainSearchPageState();
 }
@@ -28,21 +35,15 @@ class _DomainSearchPageState extends State<DomainSearchPage>
   TextEditingController _searchController = TextEditingController();
   FocusNode _searchFocusNode = FocusNode();
   bool _isSearching = false; // 是否正在搜索，改变布局
-  Map<String, String> _searchingTabMap = {
-    '领域': 'domain',
-  };
-  List<String> _searchingTabKeys = [];
-  TabController _searchingTabController;
   String searchText = "";
   String lastSearchText = "";
+  bool certifying = false;
 
   @override
   void initState() {
     super.initState();
-    historySearchList = Application.sp.getStringList("search_domain_history") ?? [];
-    _searchingTabKeys.addAll(_searchingTabMap.keys.toList());
-    _searchingTabController =
-        TabController(length: _searchingTabKeys.length, vsync: this);
+    historySearchList =
+        Application.sp.getStringList("search_domain_history") ?? [];
   }
 
   // 历史搜索
@@ -87,7 +88,8 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                               onPressed: () {
                                 setState(() {
                                   historySearchList.clear();
-                                  Application.sp.remove("search_domain_history");
+                                  Application.sp
+                                      .remove("search_domain_history");
                                 });
                                 Navigator.of(context).pop();
                               },
@@ -127,6 +129,18 @@ class _DomainSearchPageState extends State<DomainSearchPage>
 
   // 热搜
   Widget _buildHotSearch() {
+    String certifiedTagString = "前置未认证";
+    String certifiedToastString = "需要认证前置领域";
+
+    bool certified = widget.data.state == "certified";
+
+    UserModel userModel = Provider.of<UserModel>(context);
+
+    if (widget.data.state == "dependent" || widget.data.state == "aggregate") {
+      certifiedTagString = "领域未认证";
+      certifiedToastString = "需要认证领域";
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +150,7 @@ class _DomainSearchPageState extends State<DomainSearchPage>
           style: bold18TextStyle,
         ),
         VEmptyView(15),
-        CustomFutureBuilder<List<Domain>>(
+        certifying ? VEmptyView(0) : CustomFutureBuilder<List<Domain>>(
           futureFunc: API.getHotDomainData,
           builder: (context, data) {
             return ListView.builder(
@@ -145,12 +159,22 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                 return GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
-                    if (curDomain.depended) {
-                      EditModel editModel = Provider.of<EditModel>(context);
-                      editModel.setDomain(curDomain);
-                      Navigator.pop(context);
+                    if (widget.data.state == "certified" && curDomain.depended) {
+                        EditModel editModel = Provider.of<EditModel>(context);
+                        editModel.setDomain(curDomain);
+                        Navigator.pop(context);
+                    } else if (widget.data.state == "aggregate" && curDomain.certified) {
+                        DomainCreateModel domainCreateModel =
+                            Provider.of<DomainCreateModel>(context);
+                        domainCreateModel.setAggregateDomain(curDomain);
+                        Navigator.pop(context);
+                    } else if (widget.data.state == "dependent" && curDomain.certified) {
+                        DomainCreateModel domainCreateModel =
+                            Provider.of<DomainCreateModel>(context);
+                        domainCreateModel.setDependentDomain(curDomain);
+                        Navigator.pop(context);
                     } else {
-                      Utils.showToast("需要认证前置领域");
+                      Utils.showToast(certifiedToastString);
                     }
                   },
                   child: Padding(
@@ -172,7 +196,8 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                                 padding: EdgeInsets.symmetric(
                                     vertical: ScreenUtil().setWidth(5)),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
                                       curDomain.title,
@@ -180,19 +205,34 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                                           ? w500_16TextStyle
                                           : common16TextStyle,
                                     ),
-                                    curDomain.depended
+                                    (certified
+                                            ? curDomain.depended
+                                            : curDomain.certified)
                                         ? HEmptyView(0)
-                                        : GestureDetector(
-                                            onTap: () {
-
-                                            },
-                                            child: CategoryTag(
-                                              text: "前置未认证",
-                                              color: Colors.transparent,
-                                              textColor: CMColors.blueLonely,
-                                              textSize: 13,
-                                            ),
-                                          ),
+                                        : CategoryTag(
+                                                text: certifiedTagString,
+                                                color: Colors.transparent,
+                                                textColor: CMColors.blueLonely,
+                                                textSize: 13,
+                                                onTap: () {
+                                                  if (widget.data.state ==
+                                                      "certified") {
+                                                  } else {
+                                                    setState(() {
+                                                      certifying = true;
+                                                    });
+                                                    NavigatorUtil
+                                                            .goDomainCertifyPage(
+                                                                context,
+                                                                data: curDomain)
+                                                        .then((res) {
+                                                      setState(() {
+                                                        certifying = false;
+                                                      });
+                                                    });
+                                                  }
+                                                },
+                                              ),
                                   ],
                                 ),
                               ),
@@ -246,7 +286,8 @@ class _DomainSearchPageState extends State<DomainSearchPage>
   // 构建搜索中的布局
   Widget _buildSearchingLayout() {
     UserModel userModel = Provider.of<UserModel>(context);
-    return SearchOtherResultPage("domain", searchText, login: userModel.isLoggedIn());
+    return SearchOtherResultPage("domain", searchText,
+        login: userModel.isLoggedIn());
   }
 
   @override

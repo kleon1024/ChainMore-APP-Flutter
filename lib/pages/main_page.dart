@@ -54,9 +54,9 @@ class _MainPageState extends State<MainPage>
             PageView(
               children: [
                 HomePage(),
-                HomePage(),
-                HomePage(),
-                HomePage(),
+                Container(),
+                Container(),
+                Container(),
               ],
               controller: pageController,
               onPageChanged: (index) => {},

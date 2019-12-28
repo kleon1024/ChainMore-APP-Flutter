@@ -16,6 +16,9 @@ class Routes {
   static String domain = "/domain";
   static String edit = "/edit";
   static String domainSearch = "/search/domain";
+  static String domainCreate = "/domain/create";
+  static String domainCertify = "/domain/certify";
+  static String web = "/web";
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
@@ -32,5 +35,8 @@ class Routes {
     router.define(domain, handler: domainHandler);
     router.define(edit, handler: editHandler);
     router.define(domainSearch, handler: domainSearchHandler);
+    router.define(domainCreate, handler: domainCreateHandler);
+    router.define(domainCertify, handler: domainCertifyHandler);
+    router.define(web, handler: webHandler);
   }
 }

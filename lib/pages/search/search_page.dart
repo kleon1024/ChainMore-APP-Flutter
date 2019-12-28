@@ -241,7 +241,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
             children: [
               ..._searchingTabKeys
                   .map((key) =>
-                      SearchOtherResultPage(_searchingTabMap[key], searchText))
+                      SearchOtherResultPage(_searchingTabMap[key], searchText, state: ""))
                   .toList()
             ],
             controller: _searchingTabController,

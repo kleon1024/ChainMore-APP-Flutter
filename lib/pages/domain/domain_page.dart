@@ -7,6 +7,7 @@ import 'package:chainmore/pages/domain/domain_post_item.dart';
 import 'package:chainmore/pages/post/comment_input_widget.dart';
 import 'package:chainmore/pages/post/comment_item.dart';
 import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/flexible_detail_bar.dart';
@@ -49,7 +50,6 @@ class _DomainPageState extends State<DomainPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("Rebuild");
     return Scaffold(
         floatingActionButton: Container(
           padding: EdgeInsets.only(
@@ -135,6 +135,10 @@ class _DomainPageState extends State<DomainPage> {
                                 Row(
                                   children: <Widget>[
                                     Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          NavigatorUtil.goDomainCertifyPage(context, data: widget.item);
+                                        },
                                         child: Container(
                                           padding: EdgeInsets.only(
                                             bottom: ScreenUtil().setHeight(15),
@@ -159,6 +163,7 @@ class _DomainPageState extends State<DomainPage> {
                                             ),
                                           ),
                                         ),
+                                    ),
                                     ),
                                   ],
                                 ),

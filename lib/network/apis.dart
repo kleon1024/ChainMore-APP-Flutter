@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chainmore/application.dart';
+import 'package:chainmore/models/certify_rule.dart';
 import 'package:chainmore/models/comment.dart';
 import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/hot_search_data.dart';
@@ -196,12 +197,15 @@ class API {
 
   static Future<List<Domain>> getHotDomainData(BuildContext context,
       {Map<String, dynamic> params}) async {
+    print("Get Hot Domain");
     var response = await NetUtils.request("get", "/v1/domain/hot",
-            params: params, context: context)
+            params: params, context: context, isShowLoading: false)
         .catchError((e) {
+          print("error");
       Utils.showToast(e.toString());
     });
 
+    print(response);
     if (response != null) {
       return List<Domain>.from(
           response.data["items"].map((item) => Domain.fromJson(item)));
@@ -257,5 +261,41 @@ class API {
           response.data["items"].map((item) => Sparkle.fromJson(item)));
     }
     return List<Sparkle>();
+  }
+
+  static Future<List<CertifyRule>> getDomainCertify(
+      {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/domain/certify",
+            params: params)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      return List<CertifyRule>.from(
+          response.data["items"].map((item) => CertifyRule.fromJson(item)));
+    }
+
+    return List<CertifyRule>();
+  }
+
+  static postCertify(BuildContext context, {Map<String, dynamic> data}) async {
+    var response = await NetUtils.request("post", "/v1/domain/certify",
+        data: data, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    return response;
+  }
+
+  static createDomain(BuildContext context, {Map<String, dynamic> data}) async {
+    var response = await NetUtils.request("post", "/v1/domain",
+        data: data, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    return response;
   }
 }
