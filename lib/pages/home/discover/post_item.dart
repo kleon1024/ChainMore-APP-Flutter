@@ -1,4 +1,5 @@
 import 'package:chainmore/models/post.dart';
+import 'package:chainmore/models/web.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
@@ -56,7 +57,7 @@ class PostItem extends StatelessWidget {
                       color: Colors.white,
                       textColor: CMColors.blueLonely,
                       onTap: () {
-                        NavigatorUtil.goWebViewPage(context, url: item.url);
+                        NavigatorUtil.goWebViewPage(context, web: Web(url: item.url));
                       },
                     )
                   : VEmptyView(5),
@@ -114,11 +115,12 @@ class PostItem extends StatelessWidget {
 //                        color: Colors.black54),
 //                  ),
                   Text(
+                    Utils.readableTimeStamp(item.timestamp),
+                    style: TextUtil.style(14, 400, color: Colors.black54),
+                  ),
+                  Text(
                     "评论 " + item.comments.toString(),
-                    style: TextStyle(
-                        fontSize: ScreenUtil().setSp(38),
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
+                    style: TextUtil.style(14, 400, color: Colors.black54),
                   ),
 //                  Text(
 //                    "收藏 " + item.collects.toString(),

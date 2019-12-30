@@ -1,3 +1,4 @@
+import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:flutter/material.dart';
 
 class CommonButton extends StatelessWidget {
@@ -9,6 +10,9 @@ class CommonButton extends StatelessWidget {
   final Color color;
   final Color borderColor;
   final Color textColor;
+  final double borderWidth;
+  final int fontWeight;
+  final double borderRadius;
 
   CommonButton({
     @required this.callback,
@@ -19,11 +23,14 @@ class CommonButton extends StatelessWidget {
     this.color = Colors.lightBlueAccent,
     this.borderColor = Colors.transparent,
     this.textColor = Colors.white,
+    this.borderWidth = 1.0,
+    this.fontWeight = 400,
+    this.borderRadius = 25
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: callback,
       child: Container(
         width: width,
@@ -31,15 +38,15 @@ class CommonButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: color,
           border: Border.all(
-              color: borderColor, width: 1.0, style: BorderStyle.solid),
+              color: borderColor, width: borderWidth, style: BorderStyle.solid),
           borderRadius: BorderRadius.all(
-            Radius.circular(height / 2),
+            Radius.circular(borderRadius),
           ),
         ),
         child: Center(
           child: Text(
             content,
-            style: TextStyle(color: textColor, fontSize: fontSize),
+            style: TextUtil.style(fontSize, fontWeight, color: textColor),
           ),
         ),
       ),

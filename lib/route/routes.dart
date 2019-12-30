@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 class Routes {
   static String root = "/";
+  static String web = "/web";
   static String main = "/main";
   static String home = "/home";
   static String login = "/login";
@@ -18,7 +19,8 @@ class Routes {
   static String domainSearch = "/search/domain";
   static String domainCreate = "/domain/create";
   static String domainCertify = "/domain/certify";
-  static String web = "/web";
+  static String domainMap = "/domain/map";
+
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
@@ -27,6 +29,7 @@ class Routes {
       return MainPage();
     });
     router.define(root, handler: splashHandler);
+    router.define(web, handler: webHandler);
     router.define(login, handler: loginHandler);
     router.define(main, handler: mainHandler);
     router.define(home, handler: homeHandler);
@@ -37,6 +40,6 @@ class Routes {
     router.define(domainSearch, handler: domainSearchHandler);
     router.define(domainCreate, handler: domainCreateHandler);
     router.define(domainCertify, handler: domainCertifyHandler);
-    router.define(web, handler: webHandler);
+    router.define(domainMap, handler: domainMapHandler);
   }
 }

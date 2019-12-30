@@ -30,7 +30,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.config.initial);
     return Scaffold(
       floatingActionButton: widget.config.initial
           ? null

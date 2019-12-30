@@ -30,6 +30,10 @@ class EditModel with ChangeNotifier {
     _domain = domain;
   }
 
+  clearDomain() {
+    _domain = null;
+  }
+
   setTitle(String title) {
     _title = title;
   }
@@ -63,6 +67,10 @@ class EditModel with ChangeNotifier {
 
   deleteEditState() {
     Application.sp.remove('edit_state');
+  }
+
+  hasHistory() {
+    return Application.sp.containsKey('edit_state');
   }
 
 }

@@ -84,21 +84,26 @@ class NetUtils {
     }
 
     if (context != null && relogin) {
-      var res = await userModel.refreshLogin(context);
-      if (res == null) {
-        _reLogin();
-        return Future.error(Response(data: -1));
-      }
+      UserModel userModel = Provider.of<UserModel>(context);
+      if (userModel.isLoggedIn()) {
+        var res = await userModel.refreshLogin(context: context);
+        if (res == null) {
+          _reLogin();
+          return Future.error(Response(data: -1));
+        }
 
-      response = await request(method, url,
-          params: params,
-          data: data,
-          headers: headers,
-          context: context,
-          refresh: refresh,
-          isShowLoading: isShowLoading);
+        response = await request(method, url,
+            params: params,
+            data: data,
+            headers: headers,
+            context: context,
+            refresh: refresh,
+            isShowLoading: isShowLoading);
+      }
+      return response;
+    } else {
+      return response;
     }
-    return response;
   }
 
   static void _reLogin() {

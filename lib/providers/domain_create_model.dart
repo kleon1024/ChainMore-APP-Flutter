@@ -93,6 +93,8 @@ class DomainCreateModel with ChangeNotifier {
     _title = "";
     _bio = "";
     _description = "";
+    _aggregateDomain = null;
+    _dependentDomain = null;
     deleteState();
   }
 

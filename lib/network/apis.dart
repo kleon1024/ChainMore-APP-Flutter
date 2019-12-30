@@ -8,6 +8,7 @@ import 'package:chainmore/models/hot_search_data.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/models/sparkle.dart';
 import 'package:chainmore/models/user.dart';
+import 'package:chainmore/models/user_info.dart';
 import 'package:chainmore/network/net_utils.dart';
 import 'package:chainmore/route/routes.dart';
 import 'package:chainmore/route/navigate_service.dart';
@@ -54,13 +55,13 @@ class API {
   }
 
   static logout(BuildContext context) async {
-    return await NetUtils.request("get", '/v1/auth/signout', context: context)
+    return await NetUtils.request("delete", '/v1/auth/signout', context: context)
         .catchError((e) {
       Utils.showToast('登出失败');
     });
   }
 
-  static refreshLogin(BuildContext context) async {
+  static refreshLogin({BuildContext context}) async {
     return await NetUtils.request("get", '/v1/auth/signin/refresh',
             context: context, isShowLoading: false, refresh: true)
         .catchError((e) {
@@ -132,7 +133,7 @@ class API {
     }
   }
 
-  static Future<Domain> getDomain(BuildContext context,
+  static getDomain(BuildContext context,
       {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/domain",
             params: params, context: context)
@@ -143,11 +144,23 @@ class API {
     if (response != null) {
       return Domain.fromJson(response.data["item"]);
     }
-    return Domain();
   }
 
-  static Future<List<Post>> getDomainPosts(BuildContext context,
+  static getDomainUnSign(BuildContext context,
       {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/domain/unsign",
+        params: params, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      return Domain.fromJson(response.data["item"]);
+    }
+  }
+
+  static Future<List<Post>> getDomainPosts({BuildContext context,
+      Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/domain/post",
             params: params, context: context)
         .catchError((e) {
@@ -263,10 +276,10 @@ class API {
     return List<Sparkle>();
   }
 
-  static Future<List<CertifyRule>> getDomainCertify(
+  static Future<List<CertifyRule>> getDomainCertify(BuildContext context,
       {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/domain/certify",
-            params: params)
+            params: params, context: context)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
@@ -297,5 +310,15 @@ class API {
     });
 
     return response;
+  }
+
+  static getUserInfo(BuildContext context, {@required String username, Map<String, dynamic> data}) async {
+    var response =
+    await NetUtils.request("get", "/v1/user/" + username, data: data, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    return UserInfo.fromJson(response.data["user"]);
   }
 }

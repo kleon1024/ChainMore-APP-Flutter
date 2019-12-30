@@ -1,15 +1,20 @@
 import 'package:chainmore/models/comment.dart';
+import 'package:chainmore/models/domain.dart';
+import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/models/post.dart';
+import 'package:chainmore/models/web.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/network/net_utils.dart';
 import 'package:chainmore/pages/post/comment_input_widget.dart';
 import 'package:chainmore/pages/post/comment_item.dart';
+import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
+import 'package:chainmore/widgets/widget_button_thin_border.dart';
 import 'package:chainmore/widgets/widget_category_tag.dart';
 import 'package:chainmore/widgets/widget_round_header.dart';
 import 'package:chainmore/widgets/widget_sliver_future_builder.dart';
@@ -32,14 +37,28 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   Post _data;
   List<Comment> _comments;
+  Domain _domain;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((d) async {
+      if (mounted) {
+        var response =
+            await API.getDomain(context, params: {"id": widget.item.domain.id});
+        setState(() {
+          _domain = response;
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    UserModel userModel = Provider.of<UserModel>(context);
+
+    bool login = userModel.isLoggedIn();
+
     return Scaffold(
         floatingActionButton: Container(
           padding: EdgeInsets.only(
@@ -83,7 +102,8 @@ class _PostPageState extends State<PostPage> {
                               children: <Widget>[
                                 GestureDetector(
                                   onTap: () {
-                                    NavigatorUtil.goDomainPage(context, data: widget.item.domain);
+                                    NavigatorUtil.goDomainPage(context,
+                                        data: widget.item.domain);
                                   },
                                   child: Container(
                                     child: Row(
@@ -167,22 +187,28 @@ class _PostPageState extends State<PostPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    url != null && url != "" ? GestureDetector(
-                                      child: CategoryTag(
-                                          text: url,
-                                          textColor: CMColors.blueLonely,
-                                          color: Colors.white),
-                                    ) : VEmptyView(0),
+                                    url != null && url != ""
+                                        ? CategoryTag(
+                                            text: url,
+                                            textColor: CMColors.blueLonely,
+                                            color: Colors.white,
+                                            onTap: () {
+                                              NavigatorUtil.goWebViewPage(
+                                                  context,
+                                                  web: Web(url: _data.url));
+                                            },
+                                          )
+                                        : VEmptyView(0),
                                     VEmptyView(15),
                                     description != ""
                                         ? Text(
                                             description,
                                             style: w400_15TextStyle,
                                             softWrap: true,
-                                            textAlign: TextAlign.justify,
+                                            textAlign: TextAlign.start,
                                           )
                                         : VEmptyView(0),
-                                    VEmptyView(30),
+                                    VEmptyView(15),
                                   ],
                                 ),
                               )
@@ -250,18 +276,39 @@ class _PostPageState extends State<PostPage> {
                 ),
               ),
               Align(
-                child: CommentInputWidget((content) {
-                  API.postComment(context, content, params: {
-                    'id': widget.item.id,
-                  }).then((r) {
-                    if (r != null) {
-                      Utils.showToast('评论成功！');
-                      setState(() {
-                        _comments.insert(0, r);
-                      });
-                    }
-                  });
-                }),
+                child: login
+                    ? (_domain != null && _domain.depended
+                        ? CommentInputWidget((content) {
+                            API.postComment(context, content, params: {
+                              'id': widget.item.id,
+                            }).then((r) {
+                              if (r != null) {
+                                Utils.showToast('评论成功！');
+                                setState(() {
+                                  _comments.insert(0, r);
+                                });
+                              }
+                            });
+                          })
+                        : Padding(
+                            padding: EdgeInsets.all(ScreenUtil().setHeight(30)),
+                            child: ThinBorderButton(
+                              text: "认证前置领域后评论",
+                              onTap: () {
+//                    NavigatorUtil.goLoginPage(context, data: LoginConfig(initial: false));
+                              },
+                              color: CMColors.blueLonely,
+                            )))
+                    : Padding(
+                        padding: EdgeInsets.all(ScreenUtil().setHeight(30)),
+                        child: ThinBorderButton(
+                          text: "登录后评论",
+                          onTap: () {
+                            NavigatorUtil.goLoginPage(context,
+                                data: LoginConfig(initial: false));
+                          },
+                          color: CMColors.blueLonely,
+                        )),
                 alignment: Alignment.bottomCenter,
               ),
             ],

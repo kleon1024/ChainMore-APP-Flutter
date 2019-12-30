@@ -2,6 +2,7 @@ import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/domain_search.dart';
 import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/models/post.dart';
+import 'package:chainmore/models/web.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:chainmore/route/routes.dart';
@@ -24,7 +25,7 @@ class NavigatorUtil {
   }
 
   static void goLoginPage(BuildContext context,
-      {@required LoginConfig data, bool clearStack = true}) {
+      {@required LoginConfig data, bool clearStack = false}) {
     _navigateTo(context,
         "${Routes.login}?data=${FluroConvertUtils.object2string(data)}",
         clearStack: clearStack);
@@ -68,11 +69,16 @@ class NavigatorUtil {
         "${Routes.domain}?data=${FluroConvertUtils.object2string(data)}");
   }
 
-  static void goEditPage(BuildContext context) {
-    _navigateTo(context, Routes.edit);
+  static goEditPage(BuildContext context) {
+    return _navigateTo(context, Routes.edit);
   }
 
-  static goWebViewPage(BuildContext context, {@required String url}) {
-    return _navigateTo(context, "${Routes.web}?data=$url}");
+  static goWebViewPage(BuildContext context, {@required Web web}) {
+    return _navigateTo(context, "${Routes.web}?data=${FluroConvertUtils.object2string(web)}");
+  }
+
+  static goDomainMapPage(BuildContext context, {@required Domain data}) {
+    return _navigateTo(context,
+        "${Routes.domainMap}?data=${FluroConvertUtils.object2string(data)}");
   }
 }

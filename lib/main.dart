@@ -40,11 +40,25 @@ void main() {
   ));
 }
 
+class ScrollBehaviorNoGlow extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+}
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: (context, child) {
+        return ScrollConfiguration(
+          behavior: ScrollBehaviorNoGlow(),
+          child: child,
+        );
+      },
       debugShowCheckedModeBanner: false,
       title: 'ChainMore',
       navigatorKey: Application.getIt<NavigateService>().key,

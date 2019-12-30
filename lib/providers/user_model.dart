@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chainmore/models/user_info.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:chainmore/application.dart';
@@ -9,16 +10,19 @@ import 'package:chainmore/utils/utils.dart';
 
 class UserModel with ChangeNotifier {
   User _user;
+  UserInfo _userInfo;
 
   bool _loggedIn;
 
   User get user => _user;
+  UserInfo get userInfo => _userInfo;
 
   void initUser() {
     _loggedIn = false;
     if (Application.sp.containsKey('user')) {
-      String s = Application.sp.getString('user');
-      _user = User.fromJson(json.decode(s));
+      var state = json.decode(Application.sp.getString('user'));
+      _user = User.fromJson(state['user']);
+      _userInfo = UserInfo.fromJson(state['user_info']);
       _loggedIn = true;
     }
   }
@@ -33,8 +37,16 @@ class UserModel with ChangeNotifier {
       Utils.showToast('登录失败，请检查账号密码');
       return null;
     }
+    var userInfo = await API.getUserInfo(context, username: username);
+    if (userInfo == null) {
+      Utils.showToast('登录失败，未能获取用户信息');
+      return null;
+    }
     Utils.showToast('登录成功');
-    _saveUserInfo(user);
+    _loggedIn = true;
+    _user = user;
+    _userInfo = userInfo;
+    _saveUserInfo();
     return user;
   }
 
@@ -50,27 +62,29 @@ class UserModel with ChangeNotifier {
     return null;
   }
 
-  refreshLogin(BuildContext context) async {
+  refreshLogin({BuildContext context}) async {
     _loggedIn = false;
-    var response = await API.refreshLogin(context);
+    var response = await API.refreshLogin(context : context);
     if (response != null) {
       _user.accessToken = response.data["accessToken"];
       _user.refreshToken = response.data["refreshToken"];
       _loggedIn = true;
-      _saveUserInfo(_user);
+      _saveUserInfo();
       return _user;
     }
   }
 
   logout(BuildContext context) async {
-    _deleteUserInfo();
+    reset();
     await API.logout(context);
   }
 
-  _saveUserInfo(User user) {
-    _loggedIn = true;
-    _user = user;
-    Application.sp.setString('user', json.encode(user.toJson()));
+  _saveUserInfo() {
+    var state = {
+      'user' : _user,
+      'user_info' : _userInfo,
+    };
+    Application.sp.setString('user', json.encode(state));
   }
 
   _deleteUserInfo() {
@@ -99,7 +113,9 @@ class UserModel with ChangeNotifier {
   }
 
   reset() {
+    _loggedIn = false;
     _user = null;
+    _userInfo = null;
     _deleteUserInfo();
   }
 

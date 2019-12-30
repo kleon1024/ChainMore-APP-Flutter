@@ -40,7 +40,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     domainCreateModel.initState();
     certifyModel.initState();
     if (userModel.user != null) {
-      await userModel.refreshLogin(context).then((value) {
+      userModel.refreshLogin(context : context).then((value) {
         if (value != null) {
           NavigatorUtil.goMainPage(context);
         }

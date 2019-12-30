@@ -1,3 +1,4 @@
+import 'package:chainmore/application.dart';
 import 'package:chainmore/providers/edit_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
@@ -71,19 +72,21 @@ class Utils {
     return "1分钟内";
   }
 
-  static String lastUrl = "";
-
   static checkClipBoard({BuildContext context}) async {
     ClipboardData clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
     if (clipboardData != null && clipboardData.text.trim() != '') {
       String _name = clipboardData.text.trim();
+      String lastUrl = "";
+      if (Application.sp.containsKey('last_url')) {
+        lastUrl = Application.sp.getString('last_url');
+      }
 
       String url = RegExp(
           r'(https?)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]')
           .stringMatch(_name);
 
       if (url != null && url != "" && lastUrl != url) {
-        lastUrl = url;
+         Application.sp.setString('last_url', url);
 
         showDoubleChoiceDialog(
           context,

@@ -40,14 +40,48 @@ class _DomainCertifyPageState extends State<DomainCertifyPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((d){
+      if(mounted) {
+        initialize(context);
+      }
+    });
   }
 
-  Future<List<Widget>> getAndCreateWidgets() async {
+  initialize(context) {
+    CertifyModel certifyModel = Provider.of<CertifyModel>(context);
+
+    if (certifyModel.hasRules() && certifyModel.domain != null) {
+      Utils.showDoubleChoiceDialog(context,
+        title : "历史认证",
+        body: "你还有未完成的领域认证：" + certifyModel.domain.title +  "，是否恢复？",
+        rightText: "恢复",
+        leftText: "丢弃",
+        rightFunc: () {
+          _rules = certifyModel.rules;
+          Navigator.of(context).pop();
+          _pages = getAndCreateWidgets(context);
+        },
+        leftFunc: () {
+          certifyModel.reset();
+          certifyModel.setDomain(widget.domain);
+          Navigator.of(context).pop();
+          _pages = getAndCreateWidgets(context);
+        },
+      );
+    } else {
+        certifyModel.setDomain(widget.domain);
+        _pages = getAndCreateWidgets(context);
+    }
+  }
+
+  Future<List<Widget>> getAndCreateWidgets(BuildContext context) async {
     if (_rules == null) {
-      _rules = await API.getDomainCertify(params: {"id": widget.domain.id});
+      _rules = await API.getDomainCertify(context, params: {"id": widget.domain.id});
       setState(() {
         loaded = true;
       });
+      CertifyModel certifyModel = Provider.of<CertifyModel>(context);
+      certifyModel.setRules(_rules);
     }
 
     List<Widget> pages = List<Widget>();
@@ -73,29 +107,6 @@ class _DomainCertifyPageState extends State<DomainCertifyPage> {
   @override
   Widget build(BuildContext context) {
     CertifyModel certifyModel = Provider.of<CertifyModel>(context);
-    if (!init) {
-      if (certifyModel.hasRules() && certifyModel.domain != null) {
-        // TODO Pop Up Dialog Wheather To Discard Last Certification Or Restore
-        if (certifyModel.domain.id == widget.domain.id) {
-          print("reuse old certify");
-          _rules = certifyModel.rules;
-          _pages = getAndCreateWidgets();
-          init = true;
-        } else {
-          print("domain ID not equal");
-          certifyModel.reset();
-          _pages = getAndCreateWidgets();
-        }
-      } else {
-        if (loaded) {
-          certifyModel.setRules(_rules);
-          certifyModel.setDomain(widget.domain);
-          init = true;
-        } else {
-          _pages = getAndCreateWidgets();
-        }
-      }
-    }
 
     return Scaffold(
       floatingActionButton: Container(

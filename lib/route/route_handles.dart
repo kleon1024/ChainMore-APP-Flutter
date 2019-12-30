@@ -2,8 +2,10 @@ import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/domain_search.dart';
 import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/models/post.dart';
+import 'package:chainmore/models/web.dart';
 import 'package:chainmore/pages/domain/create_domain_page.dart';
 import 'package:chainmore/pages/domain/domain_certify_page.dart';
+import 'package:chainmore/pages/domain/domain_map_page.dart';
 import 'package:chainmore/pages/domain/domain_page.dart';
 import 'package:chainmore/pages/edit/edit_page.dart';
 import 'package:chainmore/pages/home/home_page.dart';
@@ -74,10 +76,16 @@ var domainHandler = Handler(
   return DomainPage(Domain.fromJson(FluroConvertUtils.string2map(data)));
 });
 
+var domainMapHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+      String data = params['data'].first;
+      return DomainMapPage(Domain.fromJson(FluroConvertUtils.string2map(data)));
+    });
+
 var webHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
       String data = params['data'].first;
-      return WebViewPage(url: data);
+      return WebViewPage(web: Web.fromJson(FluroConvertUtils.string2map(data)));
     });
 
 var editHandler = Handler(

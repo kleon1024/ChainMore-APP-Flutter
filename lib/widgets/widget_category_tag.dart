@@ -1,4 +1,5 @@
 import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +10,8 @@ class CategoryTag extends StatelessWidget {
   final Color borderColor;
   final Color textColor;
   final double textSize;
+  final double borderWidth;
+  final int textWeight;
   final onTap;
 
   CategoryTag(
@@ -17,6 +20,8 @@ class CategoryTag extends StatelessWidget {
       this.borderColor = CMColors.blueLonely,
       this.textColor = Colors.white,
       this.textSize = 11,
+      this.textWeight = 400,
+      this.borderWidth = 1.0,
       this.onTap});
 
   @override
@@ -32,16 +37,14 @@ class CategoryTag extends StatelessWidget {
         decoration: BoxDecoration(
             color: color,
             border: Border.all(
-                color: borderColor, width: 1.0, style: BorderStyle.solid),
+                color: borderColor,
+                width: borderWidth,
+                style: BorderStyle.solid),
             borderRadius:
                 BorderRadius.all(Radius.circular(ScreenUtil().setWidth(15)))),
         child: Text(
           text,
-          style: TextStyle(
-            fontSize: textSize,
-            fontWeight: FontWeight.w400,
-            color: textColor,
-          ),
+          style: TextUtil.style(textSize, textWeight, color: textColor),
         ),
       ),
     );

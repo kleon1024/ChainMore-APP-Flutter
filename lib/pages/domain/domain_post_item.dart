@@ -1,4 +1,6 @@
+import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/post.dart';
+import 'package:chainmore/models/web.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
@@ -11,9 +13,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DomainPostItem extends StatelessWidget {
   final Post item;
+  final Domain domain;
 
   DomainPostItem({
     @required this.item,
+    @required this.domain,
   });
 
   @override
@@ -48,16 +52,44 @@ class DomainPostItem extends StatelessWidget {
             children: <Widget>[
 //              Row(children: <Widget>[CategoryTag(text: item.category)]),
               VEmptyView(10),
-              Text(
-                  item.title,
-                  style: w600_16TextStyle
-                ),
+              Text(item.title, style: w600_16TextStyle),
               VEmptyView(5),
-              GestureDetector(
-                onTap: () {},
-                child: Text(item.author.nickname,
-                  style: w400_13TextStyle,
-                ),
+              item.url != ""
+                  ? CategoryTag(
+                      text: item.url.split("/")[2],
+                      color: Colors.white,
+                      textColor: CMColors.blueLonely,
+                      onTap: () {
+                        NavigatorUtil.goWebViewPage(context,
+                            web: Web(url: item.url));
+                      },
+                    )
+                  : VEmptyView(5),
+              Row(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text(
+                      item.author.nickname,
+                      style: w400_13TextStyle,
+                    ),
+                  ),
+                  domain.id != item.domain.id
+                      ? Text("  @", style: w400_13TextStyle)
+                      : VEmptyView(0),
+                  domain.id != item.domain.id
+                      ? GestureDetector(
+                          onTap: () {
+                            NavigatorUtil.goDomainPage(context,
+                                data: item.domain);
+                          },
+                          child: Text(
+                            item.domain.title,
+                            style: w400_13TextStyle,
+                          ),
+                        )
+                      : VEmptyView(0),
+                ],
               ),
               VEmptyView(10),
               item.description != ""
@@ -77,34 +109,35 @@ class DomainPostItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+//                  Text(
+//                    "看过 " + item.comments.toString(),
+//                    style: TextStyle(
+//                        fontSize: ScreenUtil().setSp(38),
+//                        fontWeight: FontWeight.w500,
+//                        color: Colors.black54),
+//                  ),
+//                  Text(
+//                    "力荐 " + item.votes.toString(),
+//                    style: TextStyle(
+//                        fontSize: ScreenUtil().setSp(38),
+//                        fontWeight: FontWeight.w500,
+//                        color: Colors.black54),
+//                  ),
                   Text(
-                    "看过 " + item.comments.toString(),
-                    style: TextStyle(
-                        fontSize: ScreenUtil().setSp(38),
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
-                  Text(
-                    "力荐 " + item.votes.toString(),
-                    style: TextStyle(
-                        fontSize: ScreenUtil().setSp(38),
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
+                    Utils.readableTimeStamp(item.timestamp),
+                    style: TextUtil.style(14, 400, color: Colors.black54),
                   ),
                   Text(
                     "评论 " + item.comments.toString(),
-                    style: TextStyle(
-                        fontSize: ScreenUtil().setSp(38),
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
+                    style: TextUtil.style(14, 400, color: Colors.black54),
                   ),
-                  Text(
-                    "收藏 " + item.collects.toString(),
-                    style: TextStyle(
-                        fontSize: ScreenUtil().setSp(38),
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
+//                  Text(
+//                    "收藏 " + item.collects.toString(),
+//                    style: TextStyle(
+//                        fontSize: ScreenUtil().setSp(38),
+//                        fontWeight: FontWeight.w500,
+//                        color: Colors.black54),
+//                  ),
                   Icon(Icons.more_horiz,
                       color: Colors.black54, size: ScreenUtil().setSp(60))
                 ],

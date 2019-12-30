@@ -1,6 +1,7 @@
 import 'package:chainmore/models/tab_icon_data.dart';
 import 'package:chainmore/pages/home/home_page.dart';
 import 'package:chainmore/pages/login_page.dart';
+import 'package:chainmore/pages/user/mine_page.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/bottom_bar.dart';
@@ -56,7 +57,7 @@ class _MainPageState extends State<MainPage>
                 HomePage(),
                 Container(),
                 Container(),
-                Container(),
+                MinePage(),
               ],
               controller: pageController,
               onPageChanged: (index) => {},

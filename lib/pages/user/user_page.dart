@@ -16,7 +16,6 @@ import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/flexible_detail_bar.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
-import 'package:chainmore/widgets/widget_button_thin_border.dart';
 import 'package:chainmore/widgets/widget_category_tag.dart';
 import 'package:chainmore/widgets/widget_load_footer.dart';
 import 'package:chainmore/widgets/widget_load_header.dart';
@@ -33,18 +32,18 @@ import 'dart:ui';
 
 import 'package:provider/provider.dart';
 
-class DomainPage extends StatefulWidget {
+class UserPage extends StatefulWidget {
   final Domain item;
 
 //  final BuildContext buildContext;
 
-  DomainPage(this.item) : assert(item != null);
+  UserPage(this.item) : assert(item != null);
 
   @override
-  _DomainPageState createState() => _DomainPageState();
+  _UserPageState createState() => _UserPageState();
 }
 
-class _DomainPageState extends State<DomainPage> {
+class _UserPageState extends State<UserPage> {
   Domain _data;
   List<Post> _posts = List<Post>();
 
@@ -127,13 +126,11 @@ class _DomainPageState extends State<DomainPage> {
                           rightText: "丢弃",
                           leftFunc: () {
                             editModel.initState();
-                            Navigator.of(context).pop();
                             NavigatorUtil.goEditPage(context);
                           },
                           rightFunc: () {
                             editModel.reset();
                             editModel.setDomain(widget.item);
-                            Navigator.of(context).pop();
                             NavigatorUtil.goEditPage(context);
                           },
                         );
@@ -173,9 +170,7 @@ class _DomainPageState extends State<DomainPage> {
                     footer: LoadFooter(),
                     controller: _controller,
                     onRefresh: () async {
-                      setState(() {
-                        postOffset = 1;
-                      });
+                      postOffset = 1;
                       request();
                     },
                     onLoad: () async {
@@ -227,7 +222,7 @@ class _DomainPageState extends State<DomainPage> {
                               ScreenUtil().setWidth(20),
                             ),
                             child: Column(
-//                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 _data != null
                                     ? Text(
@@ -238,49 +233,136 @@ class _DomainPageState extends State<DomainPage> {
                                             color: Colors.white),
                                       )
                                     : VEmptyView(0),
-                                VEmptyView(30),
-                                ThinBorderButton(
-                                  text: certifyString,
-                                  onTap: () {
-                                    if (userModel.isLoggedIn()) {
-                                      if (allowCertify) {
-                                        NavigatorUtil.goDomainCertifyPage(
-                                            context,
-                                            data: widget.item);
-                                      } else {
-                                        Utils.showToast("无需重复认证");
-                                      }
-                                    } else {
-                                      NavigatorUtil.goLoginPage(context,
-                                          data: LoginConfig(
-                                              initial: false));
-                                    }
-                                  },
+                                VEmptyView(50),
+                                Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          if (userModel.isLoggedIn()) {
+                                            if (allowCertify) {
+                                              NavigatorUtil.goDomainCertifyPage(
+                                                  context,
+                                                  data: widget.item);
+                                            } else {
+                                              Utils.showToast("无需重复认证");
+                                            }
+                                          } else {
+                                            NavigatorUtil.goLoginPage(context,
+                                                data: LoginConfig(
+                                                    initial: false));
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                            bottom: ScreenUtil().setHeight(15),
+                                            top: ScreenUtil().setHeight(15),
+                                          ),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.white,
+                                                width: 0.5,
+                                                style: BorderStyle.solid),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(
+                                                ScreenUtil().setWidth(20),
+                                              ),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              certifyString,
+                                              style: TextUtil.style(14, 300,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 VEmptyView(30),
-                                ThinBorderButton(
-                                  text: "关注领域",
-                                  onTap: () {
-                                    if (userModel.isLoggedIn()) {
-                                    } else {
-                                      NavigatorUtil.goLoginPage(context,
-                                          data: LoginConfig(
-                                              initial: false));
-                                    }
-                                  },
+                                Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          if (userModel.isLoggedIn()) {
+                                          } else {
+                                            NavigatorUtil.goLoginPage(context,
+                                                data: LoginConfig(
+                                                    initial: false));
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                            bottom: ScreenUtil().setHeight(15),
+                                            top: ScreenUtil().setHeight(15),
+                                          ),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.white,
+                                                width: 0.5,
+                                                style: BorderStyle.solid),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(
+                                                ScreenUtil().setWidth(20),
+                                              ),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              watchString,
+                                              style: TextUtil.style(14, 300,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 VEmptyView(30),
-                                ThinBorderButton(
-                                  text: "领域结构",
-                                  onTap: () {
-                                    if (userModel.isLoggedIn()) {
+                                Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          if (userModel.isLoggedIn()) {
 //                                            NavigatorUtil.goDomainMapPage(context, data: _data);
-                                    } else {
-                                      NavigatorUtil.goLoginPage(context,
-                                          data: LoginConfig(
-                                              initial: false));
-                                    }
-                                  },
+                                          } else {
+                                            NavigatorUtil.goLoginPage(context,
+                                                data: LoginConfig(
+                                                    initial: false));
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                            bottom: ScreenUtil().setHeight(15),
+                                            top: ScreenUtil().setHeight(15),
+                                          ),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.white,
+                                                width: 0.5,
+                                                style: BorderStyle.solid),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(
+                                                ScreenUtil().setWidth(20),
+                                              ),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "领域结构",
+                                              style: TextUtil.style(14, 300,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

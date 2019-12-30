@@ -1,10 +1,13 @@
+import 'package:chainmore/models/web.dart';
+import 'package:chainmore/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatefulWidget {
-  final String url;
+  final Web web;
 
-  WebViewPage({Key key, this.url}) : super(key : key);
+  WebViewPage({Key key, this.web}) : super(key: key);
 
   @override
   _WebViewPageState createState() => _WebViewPageState();
@@ -15,18 +18,46 @@ class _WebViewPageState extends State<WebViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("Initial url...${widget.url}");
     return Scaffold(
 //      appBar: AppBar(
 //        title: Text(widget.title),
 //      ),
-      body: Container(
-        child: WebView(
-          initialUrl: widget.url,
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (WebViewController c) {
-            _controller = c;
-          },
+      floatingActionButton: Container(
+        padding: EdgeInsets.only(
+            bottom: ScreenUtil().setHeight(150),
+            right: ScreenUtil().setWidth(10)),
+        child: Container(
+          height: ScreenUtil().setHeight(360),
+          width: ScreenUtil().setWidth(80),
+          child: Column(
+            children: <Widget>[
+              FloatingActionButton(
+                heroTag: "collect",
+                elevation: 0,
+                backgroundColor: CMColors.blueLonely,
+                child: Icon(Icons.star_border),
+                onPressed: () {},
+              ),
+              FloatingActionButton(
+                elevation: 0,
+                backgroundColor: Colors.black87,
+                child: Icon(Icons.close),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Container(
+          child: WebView(
+            initialUrl: widget.web.url,
+            javascriptMode: JavascriptMode.unrestricted,
+            onWebViewCreated: (WebViewController c) {
+              _controller = c;
+            },
 //          navigationDelegate: (NavigationRequest request) {
 //            print("Loading... ${request.url}");
 //            if(request.url.startsWith("http")) {
@@ -35,6 +66,7 @@ class _WebViewPageState extends State<WebViewPage> {
 //              return NavigationDecision.prevent;
 //            }
 //          },
+          ),
         ),
       ),
     );

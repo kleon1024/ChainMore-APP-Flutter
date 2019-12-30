@@ -49,6 +49,9 @@ class _EditPageState extends State<EditPage>
         _urlController.text = editModel.url;
         title = "分享";
       }
+      if (editModel.domain != null) {
+        title = "分享";
+      }
       init = true;
     }
     return Scaffold(
@@ -80,25 +83,19 @@ class _EditPageState extends State<EditPage>
                         style: TextUtil.style(15, 400, color: Colors.black38)),
                   ),
                   onTap: () {
-
-                    Utils.showDoubleChoiceDialog(
-                      context,
-                      title: "保留本次编辑？",
-                      leftText: '不保留',
-                      rightText: '保留',
-                      leftFunc: () {
-                        editModel.reset();
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                      rightFunc: () {
-                        editModel.setTitle(_titleController.text);
-                        editModel.setBody(_editController.text);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      }
-                    );
-
+                    Utils.showDoubleChoiceDialog(context,
+                        title: "保留本次编辑？",
+                        leftText: '不保留',
+                        rightText: '保留', leftFunc: () {
+                      editModel.reset();
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    }, rightFunc: () {
+                      editModel.setTitle(_titleController.text);
+                      editModel.setBody(_editController.text);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    });
                   },
                 ),
               ),
@@ -118,7 +115,6 @@ class _EditPageState extends State<EditPage>
                   ),
                   onTap: () async {
                     if (title == "分享") {
-
                       String url = _urlController.text.trim();
                       if (url != "") {
                         if (!CommonUtils.RegexUtil.isURL(url)) {
@@ -206,14 +202,17 @@ class _EditPageState extends State<EditPage>
                               controller: _titleController,
                               style: TextUtil.style(18, 500),
                               decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 0),
                                 hintText: "标题",
                                 hintStyle:
                                     TextUtil.style(18, 500, color: Colors.grey),
                               ),
                               onChanged: (text) {
                                 if (text.isEmpty &&
-                                    _editController.text.isEmpty) {
+                                    _editController.text.isEmpty &&
+                                    editModel.domain == null &&
+                                    _urlController.text.isEmpty) {
                                   setState(() {
                                     title = "灵感";
                                   });
@@ -244,12 +243,18 @@ class _EditPageState extends State<EditPage>
                         ),
                         onChanged: (text) {
                           if (_titleController.text.isEmpty) {
-                            if (text.contains('\n') || text.length > 20) {
+                            if (text.contains('\n')) {
                               if (title != "分享") {
                                 setState(() {
                                   title = "分享";
-                                  _titleController.text = text.split('\n')[0];
-                                  _editController.text = "";
+                                });
+                                _titleController.text = text.split('\n')[0];
+                                _editController.text = "";
+                              }
+                            } else if (text.length > 20) {
+                              if (title != "分享") {
+                                setState(() {
+                                  title = "分享";
                                 });
                               }
                             } else {
@@ -278,9 +283,23 @@ class _EditPageState extends State<EditPage>
                         children: <Widget>[
                           Row(
                             children: <Widget>[
-                              Icon(editModel.domain != null
-                                  ? Icons.chevron_right
-                                  : Icons.add),
+                              InkWell(
+                                onTap: () {
+                                  if (editModel.domain != null) {
+                                    editModel.clearDomain();
+                                    setState(() {
+                                      title = title;
+                                    });
+                                  } else {
+                                    NavigatorUtil.goDomainSearchPage(context,
+                                        data: DomainSearchData(
+                                            state: "certified"));
+                                  }
+                                },
+                                child: Icon(editModel.domain != null
+                                    ? Icons.clear
+                                    : Icons.add),
+                              ),
                               HEmptyView(10),
                               Text(
                                   editModel.domain != null
