@@ -37,6 +37,7 @@ class UserModel with ChangeNotifier {
       Utils.showToast('登录失败，请检查账号密码');
       return null;
     }
+    _user = user;
     var userInfo = await API.getUserInfo(context, username: username);
     if (userInfo == null) {
       Utils.showToast('登录失败，未能获取用户信息');
@@ -44,7 +45,6 @@ class UserModel with ChangeNotifier {
     }
     Utils.showToast('登录成功');
     _loggedIn = true;
-    _user = user;
     _userInfo = userInfo;
     _saveUserInfo();
     return user;
@@ -65,6 +65,14 @@ class UserModel with ChangeNotifier {
   refreshLogin({BuildContext context}) async {
     _loggedIn = false;
     var response = await API.refreshLogin(context : context);
+    if (response != null) {
+      _user.accessToken = response.data["accessToken"];
+      _user.refreshToken = response.data["refreshToken"];
+      _loggedIn = true;
+      _saveUserInfo();
+    } else {
+      return;
+    }
 
     var userInfo = await API.getUserInfo(context, username: _user.username);
     if (userInfo == null) {
@@ -73,13 +81,7 @@ class UserModel with ChangeNotifier {
     }
     _userInfo = userInfo;
 
-    if (response != null) {
-      _user.accessToken = response.data["accessToken"];
-      _user.refreshToken = response.data["refreshToken"];
-      _loggedIn = true;
-      _saveUserInfo();
-      return _user;
-    }
+    return _user;
   }
 
   logout(BuildContext context) async {

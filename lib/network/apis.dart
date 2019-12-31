@@ -83,7 +83,7 @@ class API {
     }
   }
 
-  static Future<Post> getPost(BuildContext context,
+  static getPost(BuildContext context,
       {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/post",
             params: params, context: context)
@@ -91,11 +91,22 @@ class API {
       Utils.showToast('网络错误！');
     });
 
-    print("Get Post");
     if (response != null) {
       return Post.fromJson(response.data['item']);
     }
-    return Post();
+  }
+
+  static getPostUnSign(BuildContext context,
+      {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/post",
+        params: params, context: context)
+        .catchError((e) {
+      Utils.showToast('网络错误！');
+    });
+
+    if (response != null) {
+      return Post.fromJson(response.data['item']);
+    }
   }
 
   static Future<List<Comment>> getPostComments(BuildContext context,
@@ -339,12 +350,14 @@ class API {
       username = params["username"];
     }
     var response =
-    await NetUtils.request("get", "/v1/user/" + username, context: context)
+    await NetUtils.request("get", "/v1/user/" + username, context: context, isShowLoading: false)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
 
-    return UserInfo.fromJson(response.data["user"]);
+    if (response != null) {
+      return UserInfo.fromJson(response.data["user"]);
+    }
   }
 
   static getUserInfoUnSign(BuildContext context, {String username, Map<String, dynamic> params}) async {
@@ -373,6 +386,26 @@ class API {
   static unFollowUser(BuildContext context, {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("delete", "/v1/domain/follow",
         params: params, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    return response;
+  }
+
+  static collectPost(BuildContext context, {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("post", "/v1/post/collect",
+        params: params, context: context, isShowLoading: false)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    return response;
+  }
+
+  static unCollectPost(BuildContext context, {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("delete", "/v1/post/collect",
+        params: params, context: context, isShowLoading: false)
         .catchError((e) {
       Utils.showToast(e.toString());
     });

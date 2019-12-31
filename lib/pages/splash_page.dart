@@ -64,7 +64,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        child: Image.asset('assets/images/logo.png'),
+        child: Image.asset('assets/images/logo.png', scale: 2),
       ),
     );
   }

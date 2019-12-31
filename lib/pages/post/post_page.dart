@@ -35,9 +35,14 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
-  Post _data;
+  Post _post;
   List<Comment> _comments;
   Domain _domain;
+
+  bool collected = false;
+  bool collecting = false;
+
+  bool _forceUpdate = true;
 
   @override
   void initState() {
@@ -56,7 +61,6 @@ class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     UserModel userModel = Provider.of<UserModel>(context);
-
     bool login = userModel.isLoggedIn();
 
     return Scaffold(
@@ -65,16 +69,62 @@ class _PostPageState extends State<PostPage> {
               bottom: ScreenUtil().setHeight(150),
               right: ScreenUtil().setWidth(10)),
           child: Container(
-            height: ScreenUtil().setHeight(80),
+            height: ScreenUtil().setHeight(360),
             width: ScreenUtil().setWidth(80),
-            child: FloatingActionButton(
-              heroTag: "close",
-              elevation: 0,
-              backgroundColor: Colors.black87,
-              child: Icon(Icons.close),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+            child: Column(
+              children: <Widget>[
+                FloatingActionButton(
+                  heroTag: "collect",
+                  elevation: 0,
+                  backgroundColor: CMColors.blueLonely,
+                  child: Icon(collected ? Icons.star : Icons.star_border),
+                  onPressed: () {
+                    if (_post == null) {
+                      return;
+                    }
+                    if (login) {
+                      if (!collecting) {
+                        collecting = true;
+                        if (collected) {
+                          API.unCollectPost(context, params: {
+                            'id': widget.item.id
+                          }).then((res) {
+                            if (res != null) {
+                              setState(() {
+                                collected = !collected;
+                              });
+                            }
+                            collecting = false;
+                          });
+                        } else {
+                          API.collectPost(context, params: {
+                            'id': widget.item.id
+                          }).then((res) {
+                            if (res != null) {
+                              setState(() {
+                                collected = !collected;
+                              });
+                            }
+                            collecting = false;
+                          });
+                        }
+                      }
+                    } else {
+                      NavigatorUtil.goLoginPage(context,
+                          data: LoginConfig(initial: false));
+                    }
+                  },
+                ),
+                FloatingActionButton(
+                  heroTag: "close",
+                  elevation: 0,
+                  backgroundColor: Colors.black87,
+                  child: Icon(Icons.close),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
             ),
           ),
         ),
@@ -140,7 +190,8 @@ class _PostPageState extends State<PostPage> {
                                 VEmptyView(5),
                                 GestureDetector(
                                   onTap: () {
-                                    NavigatorUtil.goUserPage(context, data: widget.item.author);
+                                    NavigatorUtil.goUserPage(context,
+                                        data: widget.item.author);
                                   },
                                   child: Row(
                                     children: <Widget>[
@@ -154,20 +205,23 @@ class _PostPageState extends State<PostPage> {
                           ),
                         ],
                       )),
-                      CustomSliverFutureBuilder<Post>(
-                        futureFunc: API.getPost,
+                      CustomSliverFutureBuilder(
+                        futureFunc: login ? API.getPost : API.getPostUnSign,
                         params: {'id': widget.item.id},
-                        builder: (context, data) {
-                          _data = data;
+                        forceUpdate : _forceUpdate,
+                        builder: (context, post) {
+                          setData(post);
+
                           String description = "";
                           String url = "";
-                          if (_data != null) {
-                            if (_data.description != null) {
-                              description = _data.description;
+                          if (post != null) {
+                            description = post.description;
+                            if (post.url != "") {
+                              url = post.url.split("/")[2];
                             }
-                            if (_data.url != null && _data.url != "") {
-                              url = _data.url.split("/")[2];
-                            }
+                            collected = post.collected;
+                          } else {
+                            return Center(child: Text("加载失败"));
                           }
 
                           return SliverList(
@@ -190,7 +244,9 @@ class _PostPageState extends State<PostPage> {
                                             onTap: () {
                                               NavigatorUtil.goWebViewPage(
                                                   context,
-                                                  web: Web(url: _data.url));
+                                                  web: Web(
+                                                      url: post.url,
+                                                      post: post));
                                             },
                                           )
                                         : VEmptyView(0),
@@ -309,6 +365,17 @@ class _PostPageState extends State<PostPage> {
             ],
           ),
         ));
+  }
+
+  void setData(Post data) {
+    Future.delayed(Duration(milliseconds: 50), () {
+      if (mounted && _forceUpdate) {
+        setState(() {
+          _forceUpdate = false;
+          _post = data;
+        });
+      }
+    });
   }
 }
 

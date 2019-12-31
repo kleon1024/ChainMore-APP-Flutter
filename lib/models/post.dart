@@ -18,6 +18,8 @@ class Post {
   int comments;
   int collects;
 
+  bool collected;
+
   Post({
     this.id,
     this.title,
@@ -30,6 +32,8 @@ class Post {
     this.votes,
     this.comments,
     this.collects,
+
+    this.collected,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);

@@ -23,6 +23,7 @@ Post _$PostFromJson(Map<String, dynamic> json) {
     votes: json['votes'] as int,
     comments: json['comments'] as int,
     collects: json['collects'] as int,
+    collected: json['collected'] as bool,
   );
 }
 
@@ -38,4 +39,5 @@ Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
       'votes': instance.votes,
       'comments': instance.comments,
       'collects': instance.collects,
+      'collected': instance.collected,
     };

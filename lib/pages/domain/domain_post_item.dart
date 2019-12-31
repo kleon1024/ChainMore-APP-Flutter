@@ -48,7 +48,7 @@ class DomainPostItem extends StatelessWidget {
                       textColor: CMColors.blueLonely,
                       onTap: () {
                         NavigatorUtil.goWebViewPage(context,
-                            web: Web(url: item.url));
+                            web: Web(url: item.url, post: item));
                       },
                     )
                   : VEmptyView(5),

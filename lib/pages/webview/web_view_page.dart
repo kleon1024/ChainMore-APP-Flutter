@@ -1,7 +1,13 @@
+import 'package:chainmore/models/login_config.dart';
+import 'package:chainmore/models/post.dart';
 import 'package:chainmore/models/web.dart';
+import 'package:chainmore/network/apis.dart';
+import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/utils/navigator_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatefulWidget {
@@ -15,13 +21,34 @@ class WebViewPage extends StatefulWidget {
 
 class _WebViewPageState extends State<WebViewPage> {
   WebViewController _controller;
+  Post _post;
+
+  bool collected = false;
+  bool collecting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((d) async {
+      if (mounted) {
+        var response =
+            await API.getPost(context, params: {'id': widget.web.post.id});
+        if (response != null) {
+          _post = response;
+          setState(() {
+            collected = _post.collected;
+          });
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    UserModel userModel = Provider.of<UserModel>(context);
+    bool login = userModel.isLoggedIn();
+
     return Scaffold(
-//      appBar: AppBar(
-//        title: Text(widget.title),
-//      ),
       floatingActionButton: Container(
         padding: EdgeInsets.only(
             bottom: ScreenUtil().setHeight(150),
@@ -35,10 +62,45 @@ class _WebViewPageState extends State<WebViewPage> {
                 heroTag: "collect",
                 elevation: 0,
                 backgroundColor: CMColors.blueLonely,
-                child: Icon(Icons.star_border),
-                onPressed: () {},
+                child: Icon(collected ? Icons.star : Icons.star_border),
+                onPressed: () {
+                  if (_post == null) {
+                    return;
+                  }
+                  print(widget.web.post);
+                  if (login) {
+                    if (!collecting) {
+                      collecting = true;
+                      if (collected) {
+                        API.unCollectPost(context,
+                            params: {'id': widget.web.post.id}).then((res) {
+                          if (res != null) {
+                            setState(() {
+                              collected = !collected;
+                            });
+                          }
+                          collecting = false;
+                        });
+                      } else {
+                        API.collectPost(context,
+                            params: {'id': widget.web.post.id}).then((res) {
+                          if (res != null) {
+                            setState(() {
+                              collected = !collected;
+                            });
+                          }
+                          collecting = false;
+                        });
+                      }
+                    }
+                  } else {
+                    NavigatorUtil.goLoginPage(context,
+                        data: LoginConfig(initial: false));
+                  }
+                },
               ),
               FloatingActionButton(
+                heroTag: "close",
                 elevation: 0,
                 backgroundColor: Colors.black87,
                 child: Icon(Icons.close),

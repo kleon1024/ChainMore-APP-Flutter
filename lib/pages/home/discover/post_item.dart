@@ -44,7 +44,8 @@ class PostItem extends StatelessWidget {
                       color: Colors.white,
                       textColor: CMColors.blueLonely,
                       onTap: () {
-                        NavigatorUtil.goWebViewPage(context, web: Web(url: item.url));
+                        NavigatorUtil.goWebViewPage(context,
+                            web: Web(url: item.url, post: item));
                       },
                     )
                   : VEmptyView(5),

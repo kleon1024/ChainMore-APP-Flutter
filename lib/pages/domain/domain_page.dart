@@ -98,48 +98,49 @@ class _DomainPageState extends State<DomainPage> {
             width: ScreenUtil().setWidth(80),
             child: Column(
               children: <Widget>[
-                _domain == null
-                    ? VEmptyView(0)
-                    : FloatingActionButton(
-                        heroTag: "post",
-                        elevation: 0,
-                        backgroundColor: CMColors.blueLonely,
-                        child: Icon(Icons.add),
-                        onPressed: () {
-                          if (login) {
-                            if (_domain.depended != null && !_domain.depended) {
-                              Utils.showToast("还有未认证的前置领域");
-                            } else {
-                              if (editModel.hasHistory()) {
-                                Utils.showDoubleChoiceDialog(
-                                  context,
-                                  title: "开始分享",
-                                  body: "你还有未完成的分享，是否继续？",
-                                  leftText: "恢复",
-                                  rightText: "丢弃",
-                                  leftFunc: () {
-                                    editModel.initState();
-                                    Navigator.of(context).pop();
-                                    NavigatorUtil.goEditPage(context);
-                                  },
-                                  rightFunc: () {
-                                    editModel.reset();
-                                    editModel.setDomain(widget.item);
-                                    Navigator.of(context).pop();
-                                    NavigatorUtil.goEditPage(context);
-                                  },
-                                );
-                              } else {
-                                editModel.setDomain(widget.item);
-                                NavigatorUtil.goEditPage(context);
-                              }
-                            }
-                          } else {
-                            NavigatorUtil.goLoginPage(context,
-                                data: LoginConfig(initial: false));
-                          }
-                        },
-                      ),
+                FloatingActionButton(
+                  heroTag: "post",
+                  elevation: 0,
+                  backgroundColor: CMColors.blueLonely,
+                  child: Icon(Icons.add),
+                  onPressed: () {
+                    if (_domain == null) {
+                      return;
+                    }
+                    if (login) {
+                      if (_domain.depended != null && !_domain.depended) {
+                        Utils.showToast("还有未认证的前置领域");
+                      } else {
+                        if (editModel.hasHistory()) {
+                          Utils.showDoubleChoiceDialog(
+                            context,
+                            title: "开始分享",
+                            body: "你还有未完成的分享，是否继续？",
+                            leftText: "恢复",
+                            rightText: "丢弃",
+                            leftFunc: () {
+                              editModel.initState();
+                              Navigator.of(context).pop();
+                              NavigatorUtil.goEditPage(context);
+                            },
+                            rightFunc: () {
+                              editModel.reset();
+                              editModel.setDomain(widget.item);
+                              Navigator.of(context).pop();
+                              NavigatorUtil.goEditPage(context);
+                            },
+                          );
+                        } else {
+                          editModel.setDomain(widget.item);
+                          NavigatorUtil.goEditPage(context);
+                        }
+                      }
+                    } else {
+                      NavigatorUtil.goLoginPage(context,
+                          data: LoginConfig(initial: false));
+                    }
+                  },
+                ),
                 FloatingActionButton(
                   heroTag: "close",
                   elevation: 0,
@@ -219,10 +220,8 @@ class _DomainPageState extends State<DomainPage> {
                             params: {'id': widget.item.id},
                             forceUpdate: _forceUpdate,
                             builder: (context, domain) {
-
                               if (domain.id == null) {
-                                return Center(child:
-                                Text("加载失败"));
+                                return Center(child: Text("加载失败"));
                               }
 
                               String certifyString = "获得认证";

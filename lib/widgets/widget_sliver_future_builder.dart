@@ -14,11 +14,13 @@ class CustomSliverFutureBuilder<T> extends StatefulWidget {
   final ValueWidgetBuilder<T> builder;
   final Function futureFunc;
   final Map<String, dynamic> params;
+  final bool forceUpdate;
 
   CustomSliverFutureBuilder({
     @required this.futureFunc,
     @required this.builder,
     this.params,
+    this.forceUpdate = false,
   });
 
   @override
@@ -27,6 +29,7 @@ class CustomSliverFutureBuilder<T> extends StatefulWidget {
 
 class _CustomFutureBuilderState<T> extends State<CustomSliverFutureBuilder<T>> {
   Future<T> _future;
+  String oldParams = '';
 
   @override
   void initState() {
@@ -43,6 +46,35 @@ class _CustomFutureBuilderState<T> extends State<CustomSliverFutureBuilder<T>> {
       else
         _future = widget.futureFunc(context, params: widget.params);
     });
+  }
+
+  @override
+  void didUpdateWidget(CustomSliverFutureBuilder<T> oldWidget) {
+
+    if (widget.forceUpdate) {
+      WidgetsBinding.instance.addPostFrameCallback((call) {
+        _request();
+      });
+    }
+
+    if (oldWidget.futureFunc != widget.futureFunc) {
+      WidgetsBinding.instance.addPostFrameCallback((call) {
+        _request();
+      });
+    }
+
+    if ((oldWidget.futureFunc == widget.futureFunc) &&
+        oldWidget.params != null &&
+        widget.params != null) {
+      if (oldParams != widget.params.values.join()) {
+        oldParams = widget.params.values.join();
+        WidgetsBinding.instance.addPostFrameCallback((call) {
+          _request();
+        });
+      }
+    }
+
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
