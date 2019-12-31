@@ -33,6 +33,7 @@ Domain _$DomainFromJson(Map<String, dynamic> json) {
         ?.toList(),
     certified: json['certified'] as bool,
     depended: json['depended'] as bool,
+    watched: json['watched'] as bool,
   );
 }
 
@@ -50,4 +51,5 @@ Map<String, dynamic> _$DomainToJson(Domain instance) => <String, dynamic>{
       'dependants': instance.dependants,
       'certified': instance.certified,
       'depended': instance.depended,
+      'watched': instance.watched,
     };

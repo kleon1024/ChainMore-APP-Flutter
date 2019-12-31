@@ -150,106 +150,145 @@ class _DomainSearchPageState extends State<DomainSearchPage>
           style: bold18TextStyle,
         ),
         VEmptyView(15),
-        certifying ? VEmptyView(0) : CustomFutureBuilder<List<Domain>>(
-          futureFunc: API.getHotDomainData,
-          builder: (context, data) {
-            return ListView.builder(
-              itemBuilder: (context, index) {
-                var curDomain = data[index];
-                return GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    if (widget.data.state == "certified" && curDomain.depended) {
-                        EditModel editModel = Provider.of<EditModel>(context);
-                        editModel.setDomain(curDomain);
-                        Navigator.pop(context);
-                    } else if (widget.data.state == "aggregate" && curDomain.certified) {
-                        DomainCreateModel domainCreateModel =
-                            Provider.of<DomainCreateModel>(context);
-                        domainCreateModel.setAggregateDomain(curDomain);
-                        Navigator.pop(context);
-                    } else if (widget.data.state == "dependent" && curDomain.certified) {
-                        DomainCreateModel domainCreateModel =
-                            Provider.of<DomainCreateModel>(context);
-                        domainCreateModel.setDependentDomain(curDomain);
-                        Navigator.pop(context);
-                    } else {
-                      Utils.showToast(certifiedToastString);
-                    }
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(10)),
-                    child: Row(
-                      children: <Widget>[
-                        Text('${index + 1}',
-                            style: index < 3
-                                ? TextUtil.style(18, 500,
-                                    color: CMColors.blueLonely)
-                                : TextUtil.style(18, 500, color: Colors.grey)),
-                        HEmptyView(20),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+        certifying
+            ? VEmptyView(0)
+            : CustomFutureBuilder<List<Domain>>(
+                futureFunc: API.getHotDomainData,
+                builder: (context, data) {
+                  return ListView.builder(
+                    itemBuilder: (context, index) {
+                      var curDomain = data[index];
+                      return GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          if (widget.data.state == "certified" &&
+                              curDomain.depended) {
+                            EditModel editModel =
+                                Provider.of<EditModel>(context);
+                            editModel.setDomain(curDomain);
+                            Navigator.pop(context);
+                          } else if (widget.data.state == "aggregate" &&
+                              curDomain.certified) {
+                            DomainCreateModel domainCreateModel =
+                                Provider.of<DomainCreateModel>(context);
+                            domainCreateModel.setAggregateDomain(curDomain);
+                            Navigator.pop(context);
+                          } else if (widget.data.state == "dependent" &&
+                              curDomain.certified) {
+                            DomainCreateModel domainCreateModel =
+                                Provider.of<DomainCreateModel>(context);
+                            domainCreateModel.setDependentDomain(curDomain);
+                            Navigator.pop(context);
+                          } else {
+                            Utils.showToast(certifiedToastString);
+                          }
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: ScreenUtil().setWidth(10)),
+                          child: Row(
                             children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: ScreenUtil().setWidth(5)),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                              Text('${index + 1}',
+                                  style: index < 3
+                                      ? TextUtil.style(18, 500,
+                                          color: CMColors.blueLonely)
+                                      : TextUtil.style(18, 500,
+                                          color: Colors.grey)),
+                              HEmptyView(20),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(
-                                      curDomain.title,
-                                      style: index < 3
-                                          ? w500_16TextStyle
-                                          : common16TextStyle,
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: ScreenUtil().setWidth(5)),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(
+                                            curDomain.title,
+                                            style: index < 3
+                                                ? w500_16TextStyle
+                                                : common16TextStyle,
+                                          ),
+                                          (certified
+                                                  ? curDomain.depended
+                                                  : curDomain.certified)
+                                              ? HEmptyView(0)
+                                              : CategoryTag(
+                                                  text: certifiedTagString,
+                                                  color: Colors.transparent,
+                                                  textColor:
+                                                      CMColors.blueLonely,
+                                                  textSize: 13,
+                                                  onTap: () {
+                                                    UserModel userModel =
+                                                        Provider.of<UserModel>(
+                                                            context);
+                                                    if (widget.data.state ==
+                                                        "certified") {
+                                                      //TODO Pre-Request Certification
+                                                    } else {
+                                                      if (!userModel.userInfo
+                                                          .rootCertified) {
+                                                        Utils
+                                                            .showDoubleChoiceDialog(
+                                                          context,
+                                                          title: "认证系统",
+                                                          body:
+                                                              "在开始任意领域的认证前，\n需要获得顶级领域<阡陌>的认证。",
+                                                          leftText: "放弃认证",
+                                                          rightText: "开始认证",
+                                                          leftFunc: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          rightFunc: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            NavigatorUtil
+                                                                .goDomainCertifyPage(
+                                                              context,
+                                                              data:
+                                                                  Domain(id: 1),
+                                                            ).then((res) {
+                                                              setState(() {});
+                                                            });
+                                                          },
+                                                        );
+                                                      } else {
+                                                        NavigatorUtil
+                                                                .goDomainCertifyPage(
+                                                                    context,
+                                                                    data:
+                                                                        curDomain)
+                                                            .then((res) {
+                                                          setState(() {});
+                                                        });
+                                                      }
+                                                    }
+                                                  },
+                                                ),
+                                        ],
+                                      ),
                                     ),
-                                    (certified
-                                            ? curDomain.depended
-                                            : curDomain.certified)
-                                        ? HEmptyView(0)
-                                        : CategoryTag(
-                                                text: certifiedTagString,
-                                                color: Colors.transparent,
-                                                textColor: CMColors.blueLonely,
-                                                textSize: 13,
-                                                onTap: () {
-                                                  if (widget.data.state ==
-                                                      "certified") {
-                                                  } else {
-                                                    setState(() {
-                                                      certifying = true;
-                                                    });
-                                                    NavigatorUtil
-                                                            .goDomainCertifyPage(
-                                                                context,
-                                                                data: curDomain)
-                                                        .then((res) {
-                                                      setState(() {
-                                                        certifying = false;
-                                                      });
-                                                    });
-                                                  }
-                                                },
-                                              ),
                                   ],
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-              itemCount: data.length,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-            );
-          },
-        )
+                      );
+                    },
+                    itemCount: data.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                  );
+                },
+              )
       ],
     );
   }

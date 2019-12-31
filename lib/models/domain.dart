@@ -18,6 +18,7 @@ class Domain {
 
   bool certified;
   bool depended;
+  bool watched;
 
   Domain({
     this.id,
@@ -33,6 +34,7 @@ class Domain {
     this.dependants,
     this.certified,
     this.depended,
+    this.watched,
   });
 
   factory Domain.fromJson(Map<String, dynamic> json) => _$DomainFromJson(json);

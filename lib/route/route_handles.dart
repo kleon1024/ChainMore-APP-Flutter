@@ -1,3 +1,4 @@
+import 'package:chainmore/models/author.dart';
 import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/domain_search.dart';
 import 'package:chainmore/models/login_config.dart';
@@ -15,6 +16,7 @@ import 'package:chainmore/pages/post/post_page.dart';
 import 'package:chainmore/pages/search/domain_search_page.dart';
 import 'package:chainmore/pages/search/search_page.dart';
 import 'package:chainmore/pages/splash_page.dart';
+import 'package:chainmore/pages/user/user_page.dart';
 import 'package:chainmore/pages/webview/web_view_page.dart';
 import 'package:chainmore/utils/fluro_convert_utils.dart';
 import 'package:fluro/fluro.dart';
@@ -92,3 +94,9 @@ var editHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
   return EditPage();
 });
+
+var userHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+      String data = params['data'].first;
+      return UserPage(Author.fromJson(FluroConvertUtils.string2map(data)));
+    });

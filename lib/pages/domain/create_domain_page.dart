@@ -55,6 +55,7 @@ class _CreateDomainPageState extends State<CreateDomainPage> {
           height: ScreenUtil().setHeight(80),
           width: ScreenUtil().setWidth(80),
           child: FloatingActionButton(
+            heroTag: "close",
             elevation: 0,
             backgroundColor: Colors.black87,
             child: Icon(Icons.close),

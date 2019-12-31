@@ -15,12 +15,14 @@ class CustomFutureBuilder<T> extends StatefulWidget {
   final Function futureFunc;
   final Map<String, dynamic> params;
   final Widget loadingWidget;
+  final bool forceUpdate;
 
   CustomFutureBuilder({
     @required this.futureFunc,
     @required this.builder,
     this.params,
     Widget loadingWidget,
+    this.forceUpdate = false,
   }) : loadingWidget = loadingWidget ??
             Container(
               alignment: Alignment.center,
@@ -52,32 +54,35 @@ class _CustomFutureBuilderState<T> extends State<CustomFutureBuilder<T>> {
         _future = widget.futureFunc(context, params: widget.params);
         oldParams = widget.params.values.join();
       }
-      print(_future);
     });
   }
 
   @override
   void didUpdateWidget(CustomFutureBuilder<T> oldWidget) {
-    // 如果方法不一样了，那么则重新请求
-    if (oldWidget.futureFunc != widget.futureFunc) {
-      print('func not');
+
+    if (widget.forceUpdate) {
       WidgetsBinding.instance.addPostFrameCallback((call) {
         _request();
       });
     }
 
-    // 如果方法还一样，但是参数不一样了，则重新请求
+    if (oldWidget.futureFunc != widget.futureFunc) {
+      WidgetsBinding.instance.addPostFrameCallback((call) {
+        _request();
+      });
+    }
+
     if ((oldWidget.futureFunc == widget.futureFunc) &&
         oldWidget.params != null &&
         widget.params != null) {
       if (oldParams != widget.params.values.join()) {
-        print('params not');
         oldParams = widget.params.values.join();
         WidgetsBinding.instance.addPostFrameCallback((call) {
           _request();
         });
       }
     }
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -88,7 +93,6 @@ class _CustomFutureBuilderState<T> extends State<CustomFutureBuilder<T>> {
         : FutureBuilder(
             future: _future,
             builder: (context, snapshot) {
-              print(snapshot.connectionState);
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:

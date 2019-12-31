@@ -82,11 +82,11 @@ class Utils {
       }
 
       String url = RegExp(
-          r'(https?)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]')
+              r'(https?)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]')
           .stringMatch(_name);
 
       if (url != null && url != "" && lastUrl != url) {
-         Application.sp.setString('last_url', url);
+        Application.sp.setString('last_url', url);
 
         showDoubleChoiceDialog(
           context,
@@ -109,77 +109,74 @@ class Utils {
         );
       }
     }
+  }
+
+  static bool isEmail(String input) {
+    if (input == null || input.isEmpty) return false;
+    return new RegExp(r"^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*\$")
+        .hasMatch(input);
+  }
+
+  static bool isLoginPassword(String input) {
+    RegExp mobile = new RegExp(r"(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$");
+    return mobile.hasMatch(input);
+  }
+
+  static bool isUserName(String input) {
+    RegExp mobile = new RegExp(r"[0-9A-Za-z_]{6,16}$");
+    return mobile.hasMatch(input);
+  }
+
+  static showDoubleChoiceDialog(
+    BuildContext context, {
+    String title = "",
+    String body = "",
+    String leftText = "取消",
+    Function leftFunc,
+    Color leftColor = CMColors.blueLonely,
+    String rightText = "确认",
+    Function rightFunc,
+    Color rightColor = CMColors.blueLonely,
+  }) {
+    showDialog<Null>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text(title),
+          content: body != ""
+              ? Padding(
+                  padding: EdgeInsets.all(0),
+                  child: Text(body,
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          height: 1.5,
+                          wordSpacing: 1.2)),
+                )
+              : Container(),
+          actions: <Widget>[
+            CupertinoButton(
+              child: Text(leftText,
+                  style: TextUtil.style(16, 600, color: leftColor)),
+              onPressed: () {
+                if (leftFunc != null) {
+                  leftFunc();
+                }
+              },
+            ),
+            CupertinoButton(
+              child: Text(rightText,
+                  style: TextUtil.style(16, 600, color: rightColor)),
+              onPressed: () {
+                if (rightFunc != null) {
+                  rightFunc();
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
-
-static bool isEmail
-(
-
-String input
-) {
-if (input == null || input.isEmpty) return false;
-return new RegExp(r"^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*\$")
-    .hasMatch(input);
-}
-
-static bool isLoginPassword
-(
-
-String input
-) {
-RegExp mobile = new RegExp(r"(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$");
-return mobile.hasMatch(input);
-}
-
-static bool isUserName
-(
-
-String input
-) {
-RegExp mobile = new RegExp(r"[0-9A-Za-z_]{6,16}$");
-return mobile.hasMatch(input);
-}
-
-static showDoubleChoiceDialog(BuildContext context, {
-  String title = "",
-  String body = "",
-  String leftText = "取消",
-  Function leftFunc,
-  Color leftColor = CMColors.blueLonely,
-  String rightText = "确认",
-  Function rightFunc,
-  Color rightColor = CMColors.blueLonely,
-}) {
-  showDialog<Null>(
-    context: context,
-    barrierDismissible: true,
-    builder: (BuildContext context) {
-      return CupertinoAlertDialog(
-        title: Text(title),
-        content: body != "" ? Padding(
-          padding: EdgeInsets.all(0),
-          child: Text(body),
-        ) : Container(),
-        actions: <Widget>[
-          CupertinoButton(
-            child: Text(leftText,
-                style: TextUtil.style(16, 600, color: leftColor)),
-            onPressed: () {
-              if (leftFunc != null) {
-                leftFunc();
-              }
-            },
-          ),
-          CupertinoButton(
-            child: Text(rightText,
-                style: TextUtil.style(16, 600, color: rightColor)),
-            onPressed: () {
-              if (rightFunc != null) {
-                rightFunc();
-              }
-            },
-          ),
-        ],
-      );
-    },
-  );
-}}

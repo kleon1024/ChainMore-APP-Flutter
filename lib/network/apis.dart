@@ -133,7 +133,7 @@ class API {
     }
   }
 
-  static getDomain(BuildContext context,
+  static Future<Domain> getDomain(BuildContext context,
       {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/domain",
             params: params, context: context)
@@ -144,9 +144,10 @@ class API {
     if (response != null) {
       return Domain.fromJson(response.data["item"]);
     }
+    return Domain();
   }
 
-  static getDomainUnSign(BuildContext context,
+  static Future<Domain> getDomainUnSign(BuildContext context,
       {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/domain/unsign",
         params: params, context: context)
@@ -157,6 +158,7 @@ class API {
     if (response != null) {
       return Domain.fromJson(response.data["item"]);
     }
+    return Domain();
   }
 
   static Future<List<Post>> getDomainPosts({BuildContext context,
@@ -312,13 +314,69 @@ class API {
     return response;
   }
 
-  static getUserInfo(BuildContext context, {@required String username, Map<String, dynamic> data}) async {
+  static watchDomain(BuildContext context, {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("post", "/v1/domain/watch",
+        params: params, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    return response;
+  }
+
+  static unwatchDomain(BuildContext context, {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("delete", "/v1/domain/watch",
+        params: params, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    return response;
+  }
+
+  static getUserInfo(BuildContext context, {String username, Map<String, dynamic> params}) async {
+    if (username == null) {
+      username = params["username"];
+    }
     var response =
-    await NetUtils.request("get", "/v1/user/" + username, data: data, context: context)
+    await NetUtils.request("get", "/v1/user/" + username, context: context)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
 
     return UserInfo.fromJson(response.data["user"]);
+  }
+
+  static getUserInfoUnSign(BuildContext context, {String username, Map<String, dynamic> params}) async {
+    if (username == null) {
+      username = params["username"];
+    }
+    var response =
+    await NetUtils.request("get", "/v1/user/unsign" + username, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    return UserInfo.fromJson(response.data["user"]);
+  }
+
+  static followUser(BuildContext context, {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("post", "/v1/user/follow",
+        params: params, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    return response;
+  }
+
+  static unFollowUser(BuildContext context, {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("delete", "/v1/domain/follow",
+        params: params, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    return response;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:chainmore/models/author.dart';
 import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/domain_search.dart';
 import 'package:chainmore/models/login_config.dart';
@@ -67,6 +68,11 @@ class NavigatorUtil {
   static void goDomainPage(BuildContext context, {@required Domain data}) {
     _navigateTo(context,
         "${Routes.domain}?data=${FluroConvertUtils.object2string(data)}");
+  }
+
+  static goUserPage(BuildContext context, {@required Author data}) {
+    _navigateTo(context,
+        "${Routes.user}?data=${FluroConvertUtils.object2string(data)}");
   }
 
   static goEditPage(BuildContext context) {

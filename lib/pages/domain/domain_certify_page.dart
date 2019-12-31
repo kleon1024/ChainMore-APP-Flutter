@@ -1,10 +1,13 @@
 import 'package:chainmore/models/certify_rule.dart';
 import 'package:chainmore/models/domain.dart';
+import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/pages/domain/choiceproblem_page.dart';
 import 'package:chainmore/pages/domain/empty_certify_page.dart';
 import 'package:chainmore/providers/certify_model.dart';
+import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
@@ -40,8 +43,8 @@ class _DomainCertifyPageState extends State<DomainCertifyPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((d){
-      if(mounted) {
+    WidgetsBinding.instance.addPostFrameCallback((d) {
+      if (mounted) {
         initialize(context);
       }
     });
@@ -50,10 +53,13 @@ class _DomainCertifyPageState extends State<DomainCertifyPage> {
   initialize(context) {
     CertifyModel certifyModel = Provider.of<CertifyModel>(context);
 
-    if (certifyModel.hasRules() && certifyModel.domain != null) {
-      Utils.showDoubleChoiceDialog(context,
-        title : "历史认证",
-        body: "你还有未完成的领域认证：" + certifyModel.domain.title +  "，是否恢复？",
+    if (certifyModel.hasRules() &&
+        certifyModel.domain != null &&
+        certifyModel.domain.id != 1) {
+      Utils.showDoubleChoiceDialog(
+        context,
+        title: "历史认证",
+        body: "你还有未完成的领域认证：" + certifyModel.domain.title + "，是否恢复？",
         rightText: "恢复",
         leftText: "丢弃",
         rightFunc: () {
@@ -69,14 +75,17 @@ class _DomainCertifyPageState extends State<DomainCertifyPage> {
         },
       );
     } else {
-        certifyModel.setDomain(widget.domain);
-        _pages = getAndCreateWidgets(context);
+      certifyModel.setDomain(widget.domain);
+      _pages = getAndCreateWidgets(context);
     }
   }
 
   Future<List<Widget>> getAndCreateWidgets(BuildContext context) async {
+    List<Widget> pages = List<Widget>();
+
     if (_rules == null) {
-      _rules = await API.getDomainCertify(context, params: {"id": widget.domain.id});
+      _rules =
+          await API.getDomainCertify(context, params: {"id": widget.domain.id});
       setState(() {
         loaded = true;
       });
@@ -84,7 +93,6 @@ class _DomainCertifyPageState extends State<DomainCertifyPage> {
       certifyModel.setRules(_rules);
     }
 
-    List<Widget> pages = List<Widget>();
     _rules.forEach((rule) => {
           if (rule.type == "choiceproblem")
             {
@@ -125,28 +133,29 @@ class _DomainCertifyPageState extends State<DomainCertifyPage> {
                 child: Icon(Icons.done),
                 onPressed: () {
                   Utils.showDoubleChoiceDialog(context,
-                  title: "完成认证",
-                    body: "如果认证不通过，将清空本次认证状态，确认提交？",
-                    leftText: '不提交',
-                    rightText: '提交',
-                    leftFunc: () {
-                      Navigator.of(context).pop();
-                    },
-                    rightFunc: () {
-                      certifyModel.certify(context).then((res) {
-                        if (res) {
-                          Utils.showToast("认证成功");
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                        } else {
-                          Utils.showToast("认证失败");
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
+                      title: "完成认证",
+                      body: "如果认证不通过，将清空本次认证状态，确认提交？",
+                      leftText: '不提交',
+                      rightText: '提交', leftFunc: () {
+                    Navigator.of(context).pop();
+                  }, rightFunc: () {
+                    certifyModel.certify(context).then((res) {
+                      if (res) {
+                        if (widget.domain.id == 1) {
+                          UserModel userModel = Provider.of<UserModel>(context);
+                          userModel.userInfo.rootCertified = true;
                         }
-                        certifyModel.reset();
-                      });
-                    }
-                  );
+                        Utils.showToast("认证成功");
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      } else {
+                        Utils.showToast("认证失败");
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      }
+                      certifyModel.reset();
+                    });
+                  });
                 },
               ),
               FloatingActionButton(
@@ -159,18 +168,15 @@ class _DomainCertifyPageState extends State<DomainCertifyPage> {
                       title: "放弃认证",
                       body: "是否保存本次认证状态？",
                       leftText: '不保存',
-                      rightText: '保存',
-                      leftFunc: () {
-                        certifyModel.reset();
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                      },
-                      rightFunc: () {
-                        certifyModel.saveState();
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                      }
-                  );
+                      rightText: '保存', leftFunc: () {
+                    certifyModel.reset();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  }, rightFunc: () {
+                    certifyModel.saveState();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  });
                 },
               ),
             ],

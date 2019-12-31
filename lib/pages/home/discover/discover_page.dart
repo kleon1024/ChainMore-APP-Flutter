@@ -118,7 +118,7 @@ class _DiscoverPageState extends State<DiscoverPage>
                 controller: _refreshController,
                 onRefresh: _onRefresh,
                 onLoading: _onLoading,
-                child: ListView.builder(
+                child: ListView.separated(
                   itemBuilder: (c, i) {
                     if (items.length == 0) {
                       return Padding(
@@ -133,28 +133,19 @@ class _DiscoverPageState extends State<DiscoverPage>
                       return Column(
                         children: <Widget>[
                           Container(
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft:
-                                  Radius.circular(ScreenUtil().setWidth(50)),
-                                  bottomRight:
-                                  Radius.circular(ScreenUtil().setWidth(50))),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Color(0x0f000000),
-                                    offset: Offset(0, 4),
-                                    blurRadius: 4),
-                              ],
-                            ),
-                            child: Center(child: Text("顺颂时祺")),
+                            padding: EdgeInsets.all(100),
                           ),
                           VEmptyView(500),
                         ],
                       );
                     }
                     return PostItem(item: items[i]);
+                  },
+                  separatorBuilder: (context, index) {
+                    return Container(
+                      color: Colors.grey,
+                      height: ScreenUtil().setWidth(0),
+                    );
                   },
                   itemCount: items.length + 1,
                 ),

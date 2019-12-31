@@ -28,20 +28,7 @@ class DomainPostItem extends StatelessWidget {
       },
       child: Container(
         color: Colors.white,
-        padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(40)),
         child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(ScreenUtil().setWidth(50)),
-                topRight: Radius.circular(ScreenUtil().setWidth(50))),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Color(0x0f000000),
-                  offset: Offset(0, -4),
-                  blurRadius: 4),
-            ],
-          ),
           padding: EdgeInsets.only(
               top: ScreenUtil().setHeight(20),
               bottom: ScreenUtil().setHeight(20),
@@ -68,7 +55,9 @@ class DomainPostItem extends StatelessWidget {
               Row(
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      NavigatorUtil.goUserPage(context, data: item.author);
+                    },
                     child: Text(
                       item.author.nickname,
                       style: w400_13TextStyle,

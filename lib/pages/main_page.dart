@@ -49,6 +49,7 @@ class _MainPageState extends State<MainPage>
     return Container(
       color: Colors.white,
       child: Scaffold(
+        resizeToAvoidBottomInset : false,
         backgroundColor: Colors.transparent,
         body: Stack(
           children: <Widget>[

@@ -19,6 +19,8 @@ UserInfo _$UserInfoFromJson(Map<String, dynamic> json) {
     domains: json['domains'] as int,
     comments: json['comments'] as int,
     certifieds: json['certifieds'] as int,
+    rootCertified: json['rootCertified'] as bool,
+    following: json['following'] as bool,
   );
 }
 
@@ -34,4 +36,6 @@ Map<String, dynamic> _$UserInfoToJson(UserInfo instance) => <String, dynamic>{
       'domains': instance.domains,
       'comments': instance.comments,
       'certifieds': instance.certifieds,
+      'rootCertified': instance.rootCertified,
+      'following': instance.following,
     };

@@ -15,6 +15,9 @@ class UserInfo {
   int domains;
   int comments;
   int certifieds;
+  bool rootCertified;
+
+  bool following;
 
   UserInfo({
     this.nickname,
@@ -28,6 +31,8 @@ class UserInfo {
     this.domains,
     this.comments,
     this.certifieds,
+    this.rootCertified,
+    this.following,
   });
 
   factory UserInfo.fromJson(Map<String, dynamic> json) => _$UserInfoFromJson(json);

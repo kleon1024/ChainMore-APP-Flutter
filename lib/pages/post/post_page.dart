@@ -68,6 +68,7 @@ class _PostPageState extends State<PostPage> {
             height: ScreenUtil().setHeight(80),
             width: ScreenUtil().setWidth(80),
             child: FloatingActionButton(
+              heroTag: "close",
               elevation: 0,
               backgroundColor: Colors.black87,
               child: Icon(Icons.close),
@@ -138,19 +139,13 @@ class _PostPageState extends State<PostPage> {
                                 ),
                                 VEmptyView(5),
                                 GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    NavigatorUtil.goUserPage(context, data: widget.item.author);
+                                  },
                                   child: Row(
                                     children: <Widget>[
                                       Text(widget.item.author.nickname,
                                           style: w400_13TextStyle),
-                                      HEmptyView(5),
-                                      Text(
-                                          // TODO: Change to bio
-                                          widget.item.author.username,
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize:
-                                                  ScreenUtil().setSp(38))),
                                     ],
                                   ),
                                 ),
@@ -295,7 +290,7 @@ class _PostPageState extends State<PostPage> {
                             child: ThinBorderButton(
                               text: "认证前置领域后评论",
                               onTap: () {
-//                    NavigatorUtil.goLoginPage(context, data: LoginConfig(initial: false));
+                                // TODO Show Pre-Request Domain
                               },
                               color: CMColors.blueLonely,
                             )))

@@ -25,20 +25,7 @@ class SparkleItem extends StatelessWidget {
       },
       child: Container(
         color: Colors.white,
-        padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(40)),
         child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(ScreenUtil().setWidth(50)),
-                topRight: Radius.circular(ScreenUtil().setWidth(50))),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Color(0x0f000000),
-                  offset: Offset(0, -4),
-                  blurRadius: 4),
-            ],
-          ),
           padding: EdgeInsets.only(
               top: ScreenUtil().setHeight(20),
               bottom: ScreenUtil().setHeight(20),
@@ -52,7 +39,7 @@ class SparkleItem extends StatelessWidget {
                   GestureDetector(
                     onTap: () {},
                     child: Text(item.author.nickname,
-                        style: w400_13TextStyle,
+                        style: TextUtil.style(14, 700),
                     ),
                   ),
                 ],
@@ -61,11 +48,7 @@ class SparkleItem extends StatelessWidget {
               item.body != null && item.body != ""
                   ? Text(
                       item.body,
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w400,
-                        fontSize: ScreenUtil().setSp(42),
-                      ),
+                      style: TextUtil.style(14, 400, color: Colors.black87),
                       softWrap: true,
                       maxLines: 3,
                       textAlign: TextAlign.justify,
@@ -75,6 +58,10 @@ class SparkleItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  Text(
+                    Utils.readableTimeStamp(item.timestamp),
+                    style: TextUtil.style(14, 400, color: Colors.black54),
+                  ),
                   Text(
                     "共鸣 " + item.votes.toString(),
                     style: TextStyle(

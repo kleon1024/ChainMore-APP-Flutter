@@ -65,6 +65,14 @@ class UserModel with ChangeNotifier {
   refreshLogin({BuildContext context}) async {
     _loggedIn = false;
     var response = await API.refreshLogin(context : context);
+
+    var userInfo = await API.getUserInfo(context, username: _user.username);
+    if (userInfo == null) {
+      Utils.showToast('未能获取用户信息');
+      return null;
+    }
+    _userInfo = userInfo;
+
     if (response != null) {
       _user.accessToken = response.data["accessToken"];
       _user.refreshToken = response.data["refreshToken"];
