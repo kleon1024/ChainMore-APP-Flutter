@@ -45,12 +45,12 @@ class _DomainCertifyPageState extends State<DomainCertifyPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((d) {
       if (mounted) {
-        initialize(context);
+        initialize();
       }
     });
   }
 
-  initialize(context) {
+  initialize() {
     CertifyModel certifyModel = Provider.of<CertifyModel>(context);
 
     if (certifyModel.hasRules() &&

@@ -36,7 +36,6 @@ class CustomFutureBuilder<T> extends StatefulWidget {
 
 class _CustomFutureBuilderState<T> extends State<CustomFutureBuilder<T>> {
   Future<T> _future;
-  String oldParams = '';
 
   @override
   void initState() {
@@ -52,7 +51,6 @@ class _CustomFutureBuilderState<T> extends State<CustomFutureBuilder<T>> {
         _future = widget.futureFunc(context);
       else {
         _future = widget.futureFunc(context, params: widget.params);
-        oldParams = widget.params.values.join();
       }
     });
   }
@@ -70,17 +68,10 @@ class _CustomFutureBuilderState<T> extends State<CustomFutureBuilder<T>> {
       WidgetsBinding.instance.addPostFrameCallback((call) {
         _request();
       });
-    }
-
-    if ((oldWidget.futureFunc == widget.futureFunc) &&
-        oldWidget.params != null &&
-        widget.params != null) {
-      if (oldParams != widget.params.values.join()) {
-        oldParams = widget.params.values.join();
-        WidgetsBinding.instance.addPostFrameCallback((call) {
-          _request();
-        });
-      }
+    } else if (oldWidget.params.toString() != widget.params.toString()) {
+      WidgetsBinding.instance.addPostFrameCallback((call) {
+        _request();
+      });
     }
 
     super.didUpdateWidget(oldWidget);

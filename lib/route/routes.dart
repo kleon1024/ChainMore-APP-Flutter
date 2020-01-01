@@ -16,7 +16,8 @@ class Routes {
   static String post = "/post";
   static String domain = "/domain";
   static String edit = "/edit";
-  static String user= "/user";
+  static String user = "/user";
+  static String sparkle = "/sparkle";
   static String domainSearch = "/search/domain";
   static String domainCreate = "/domain/create";
   static String domainCertify = "/domain/certify";
@@ -43,5 +44,6 @@ class Routes {
     router.define(domainCertify, handler: domainCertifyHandler);
     router.define(domainMap, handler: domainMapHandler);
     router.define(user, handler: userHandler);
+    router.define(sparkle, handler: sparkleHandler);
   }
 }

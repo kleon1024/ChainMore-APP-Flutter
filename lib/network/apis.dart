@@ -4,6 +4,7 @@ import 'package:chainmore/application.dart';
 import 'package:chainmore/models/certify_rule.dart';
 import 'package:chainmore/models/comment.dart';
 import 'package:chainmore/models/domain.dart';
+import 'package:chainmore/models/domain_tree.dart';
 import 'package:chainmore/models/hot_search_data.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/models/sparkle.dart';
@@ -55,7 +56,8 @@ class API {
   }
 
   static logout(BuildContext context) async {
-    return await NetUtils.request("delete", '/v1/auth/signout', context: context)
+    return await NetUtils.request("delete", '/v1/auth/signout',
+            context: context)
         .catchError((e) {
       Utils.showToast('登出失败');
     });
@@ -83,10 +85,9 @@ class API {
     }
   }
 
-  static getPost(BuildContext context,
-      {Map<String, dynamic> params}) async {
+  static getPost(BuildContext context, {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/post",
-            params: params, context: context)
+            params: params, context: context, isShowLoading: false)
         .catchError((e) {
       Utils.showToast('网络错误！');
     });
@@ -99,7 +100,7 @@ class API {
   static getPostUnSign(BuildContext context,
       {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/post",
-        params: params, context: context)
+            params: params, context: context, isShowLoading: false)
         .catchError((e) {
       Utils.showToast('网络错误！');
     });
@@ -112,7 +113,7 @@ class API {
   static Future<List<Comment>> getPostComments(BuildContext context,
       {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/post/comment",
-            params: params, context: context)
+            params: params, context: context, isShowLoading: false)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
@@ -161,7 +162,7 @@ class API {
   static Future<Domain> getDomainUnSign(BuildContext context,
       {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/domain/unsign",
-        params: params, context: context)
+            params: params, context: context)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
@@ -172,10 +173,10 @@ class API {
     return Domain();
   }
 
-  static Future<List<Post>> getDomainPosts({BuildContext context,
-      Map<String, dynamic> params}) async {
+  static Future<List<Post>> getDomainPosts(
+      BuildContext context, {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/domain/post",
-            params: params, context: context)
+            params: params, context: context, isShowLoading: false)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
@@ -227,7 +228,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/domain/hot",
             params: params, context: context, isShowLoading: false)
         .catchError((e) {
-          print("error");
+      print("error");
       Utils.showToast(e.toString());
     });
 
@@ -262,6 +263,18 @@ class API {
     });
 
     return response;
+  }
+
+  static replySparkle(BuildContext context, {Map<String, dynamic> data}) async {
+    var response = await NetUtils.request("post", "/v1/sparkle/reply",
+        data: data, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response!=null) {
+      return Sparkle.fromJson(response.data["item"]);
+    }
   }
 
   static postPost(BuildContext context, {Map<String, dynamic> data}) async {
@@ -307,7 +320,7 @@ class API {
 
   static postCertify(BuildContext context, {Map<String, dynamic> data}) async {
     var response = await NetUtils.request("post", "/v1/domain/certify",
-        data: data, context: context)
+            data: data, context: context)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
@@ -317,7 +330,7 @@ class API {
 
   static createDomain(BuildContext context, {Map<String, dynamic> data}) async {
     var response = await NetUtils.request("post", "/v1/domain",
-        data: data, context: context)
+            data: data, context: context)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
@@ -325,9 +338,10 @@ class API {
     return response;
   }
 
-  static watchDomain(BuildContext context, {Map<String, dynamic> params}) async {
+  static watchDomain(BuildContext context,
+      {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("post", "/v1/domain/watch",
-        params: params, context: context)
+            params: params, context: context)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
@@ -335,9 +349,10 @@ class API {
     return response;
   }
 
-  static unwatchDomain(BuildContext context, {Map<String, dynamic> params}) async {
+  static unwatchDomain(BuildContext context,
+      {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("delete", "/v1/domain/watch",
-        params: params, context: context)
+            params: params, context: context)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
@@ -345,12 +360,13 @@ class API {
     return response;
   }
 
-  static getUserInfo(BuildContext context, {String username, Map<String, dynamic> params}) async {
+  static getUserInfo(BuildContext context,
+      {String username, Map<String, dynamic> params}) async {
     if (username == null) {
       username = params["username"];
     }
-    var response =
-    await NetUtils.request("get", "/v1/user/" + username, context: context, isShowLoading: false)
+    var response = await NetUtils.request("get", "/v1/user/" + username,
+            context: context, isShowLoading: false)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
@@ -360,12 +376,13 @@ class API {
     }
   }
 
-  static getUserInfoUnSign(BuildContext context, {String username, Map<String, dynamic> params}) async {
+  static getUserInfoUnSign(BuildContext context,
+      {String username, Map<String, dynamic> params}) async {
     if (username == null) {
       username = params["username"];
     }
-    var response =
-    await NetUtils.request("get", "/v1/user/unsign" + username, context: context)
+    var response = await NetUtils.request("get", "/v1/user/unsign" + username,
+            context: context)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
@@ -375,7 +392,7 @@ class API {
 
   static followUser(BuildContext context, {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("post", "/v1/user/follow",
-        params: params, context: context)
+            params: params, context: context)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
@@ -383,9 +400,10 @@ class API {
     return response;
   }
 
-  static unFollowUser(BuildContext context, {Map<String, dynamic> params}) async {
+  static unFollowUser(BuildContext context,
+      {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("delete", "/v1/domain/follow",
-        params: params, context: context)
+            params: params, context: context)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
@@ -393,9 +411,10 @@ class API {
     return response;
   }
 
-  static collectPost(BuildContext context, {Map<String, dynamic> params}) async {
+  static collectPost(BuildContext context,
+      {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("post", "/v1/post/collect",
-        params: params, context: context, isShowLoading: false)
+            params: params, context: context, isShowLoading: false)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
@@ -403,13 +422,40 @@ class API {
     return response;
   }
 
-  static unCollectPost(BuildContext context, {Map<String, dynamic> params}) async {
+  static unCollectPost(BuildContext context,
+      {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("delete", "/v1/post/collect",
-        params: params, context: context, isShowLoading: false)
+            params: params, context: context, isShowLoading: false)
         .catchError((e) {
       Utils.showToast(e.toString());
     });
 
     return response;
+  }
+
+  static getDomainTree(BuildContext context,
+      {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/domain/aggregate",
+            params: params, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      return DomainTree.fromJson(response.data["aggregate"]);
+    }
+  }
+
+  static getSparkleReplies(BuildContext context,
+      {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/sparkle/reply",
+            params: params, context: context)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      return List<Sparkle>.from(response.data["items"].map((item) => Sparkle.fromJson(item)).toList());
+    }
   }
 }

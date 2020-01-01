@@ -1,5 +1,6 @@
 import 'package:chainmore/models/certify_rule.dart';
 import 'package:chainmore/models/domain.dart';
+import 'package:chainmore/models/domain_tree.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/pages/domain/choiceproblem_page.dart';
 import 'package:chainmore/pages/domain/empty_certify_page.dart';
@@ -7,6 +8,7 @@ import 'package:chainmore/providers/certify_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
+import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:chainmore/widgets/widget_future_builder.dart';
 import 'package:chainmore/widgets/widget_simple_future_builder.dart';
@@ -28,6 +30,37 @@ class _DomainMapPageState extends State<DomainMapPage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  convertTreeToExpandableList(DomainTree tree, int depth) {
+    if (tree.subdomains.length == 0) {
+      return ListTile(
+        leading: SizedBox(
+          width: ScreenUtil().setWidth(50) * (2 + depth),
+        ),
+        title: Text(tree.domain.title, style: TextUtil.style(16, 700)),
+        subtitle: Text(tree.domain.watchers.toString() + tree.domain.bio,
+            style: TextUtil.style(14, 400, color: Colors.grey)),
+      );
+    } else {
+      return ExpansionTile(
+        leading: SizedBox(
+          child: Row(
+            children: <Widget>[
+              Icon(Icons.style),
+            ],
+          ),
+          width: ScreenUtil().setWidth(50) * (2 + depth),
+        ),
+        title: Text(tree.domain.title, style: TextUtil.style(16, 700)),
+        subtitle: Text(tree.domain.watchers.toString() + tree.domain.bio,
+            style: TextUtil.style(14, 400, color: Colors.grey)),
+        children: List<Widget>.from(tree.subdomains
+            .map((domain) => convertTreeToExpandableList(domain, depth + 1))
+            .toList()),
+        initiallyExpanded: tree.expanded,
+      );
+    }
   }
 
   @override
@@ -56,46 +89,20 @@ class _DomainMapPageState extends State<DomainMapPage> {
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
-          child: Row(
-        children: <Widget>[
-          Flexible(
-            child: Container(
-              color: Colors.grey,
-              child: PageView(
-                scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  PageView(
-                    scrollDirection: Axis.vertical,
-                    children: <Widget>[
-                      Text("计算机"),
-                      Text("计算机-1"),
-                    ],
-                  ),
-                  PageView(
-                    scrollDirection: Axis.vertical,
-                    children: <Widget>[
-                      Text("软件"),
-                      Text("软件-1"),
-                    ],
-                  ),
-                ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              CustomFutureBuilder(
+                futureFunc: API.getDomainTree,
+                params: {'id': widget.domain.id},
+                builder: (context, tree) {
+                  return convertTreeToExpandableList(tree, 0);
+                },
               ),
-            ),
+            ],
           ),
-          Flexible(
-            child: Container(
-              color: Colors.blue,
-              child: PageView(
-                scrollDirection: Axis.vertical,
-                children: <Widget>[
-                  Text("计算机-程序语言"),
-                  Text("计算机-编译"),
-                ],
-              ),
-            ),
-          ),
-        ],
-      )),
+        ),
+      ),
     );
   }
 }

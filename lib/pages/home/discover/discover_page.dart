@@ -132,10 +132,7 @@ class _DiscoverPageState extends State<DiscoverPage>
                     if (i == items.length) {
                       return Column(
                         children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.all(100),
-                          ),
-                          VEmptyView(500),
+                          VEmptyView(300),
                         ],
                       );
                     }

@@ -3,6 +3,7 @@ import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/domain_search.dart';
 import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/models/post.dart';
+import 'package:chainmore/models/sparkle.dart';
 import 'package:chainmore/models/web.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -86,5 +87,10 @@ class NavigatorUtil {
   static goDomainMapPage(BuildContext context, {@required Domain data}) {
     return _navigateTo(context,
         "${Routes.domainMap}?data=${FluroConvertUtils.object2string(data)}");
+  }
+
+  static goSparkleDetailPage(BuildContext context, {@required Sparkle data}) {
+    return _navigateTo(context,
+        "${Routes.sparkle}?data=${FluroConvertUtils.object2string(data)}");
   }
 }

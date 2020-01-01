@@ -15,13 +15,12 @@ class CommentInputWidget extends StatelessWidget {
   final TextEditingController _editingController = TextEditingController();
 
   final CommentCallback onTapComment;
+  final String hintText;
 
-  CommentInputWidget(this.onTapComment);
+  CommentInputWidget(this.onTapComment, {this.hintText = "参与讨论"});
 
   @override
   Widget build(BuildContext context) {
-    UserModel userModel = Provider.of<UserModel>(context);
-    print("Rebuild");
     return Container(
       height: ScreenUtil().setWidth(120),
       color: Colors.white,
@@ -48,7 +47,7 @@ class CommentInputWidget extends StatelessWidget {
                       onEditingComplete: sendComment,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: userModel.isLoggedIn() ? "一起参与讨论吧" : "登录后一起讨论吧",
+                        hintText: hintText,
                         hintStyle: common14GrayTextStyle,
                       ),
                     ),
@@ -57,9 +56,7 @@ class CommentInputWidget extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(ScreenUtil().setWidth(15)),
                 child: GestureDetector(
-                  onTap: userModel.isLoggedIn() ? sendComment : () {
-                    NavigatorUtil.goLoginPage(context, clearStack: true);
-                  },
+                  onTap: sendComment,
                   child: Container(
                     decoration: BoxDecoration(
                       color: CMColors.blueLonely,
@@ -73,8 +70,7 @@ class CommentInputWidget extends StatelessWidget {
                         ScreenUtil().setWidth(5),
                     ),
                     alignment: Alignment.center,
-                    child: Text(userModel.isLoggedIn() ? "发送" : "登录",
-                            style: TextUtil.style(14, 600, color: Colors.white)),
+                    child: Text("发送", style: TextUtil.style(14, 600, color: Colors.white)),
                   ),
                 ),
                 ),

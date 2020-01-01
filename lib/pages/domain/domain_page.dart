@@ -58,12 +58,16 @@ class _DomainPageState extends State<DomainPage> {
 
   @override
   void initState() {
-    request();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((d) {
+      if (mounted) {
+        request();
+      }
+    });
   }
 
   Future<bool> request() async {
-    var response = await API.getDomainPosts(params: {
+    var response = await API.getDomainPosts(context, params: {
       "id": widget.item.id,
       "offset": postOffset,
       "limit": postLimit,
@@ -320,7 +324,7 @@ class _DomainPageState extends State<DomainPage> {
                                       text: "领域结构",
                                       onTap: () {
                                         if (userModel.isLoggedIn()) {
-//                                            NavigatorUtil.goDomainMapPage(context, data: _domain);
+                                            NavigatorUtil.goDomainMapPage(context, data: _domain);
                                         } else {
                                           NavigatorUtil.goLoginPage(context,
                                               data:

@@ -21,7 +21,7 @@ class SparkleItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-
+        NavigatorUtil.goSparkleDetailPage(context, data: item);
       },
       child: Container(
         color: Colors.white,
@@ -37,7 +37,9 @@ class SparkleItem extends StatelessWidget {
               Row(
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      NavigatorUtil.goUserPage(context, data: item.author);
+                    },
                     child: Text(item.author.nickname,
                         style: TextUtil.style(14, 700),
                     ),

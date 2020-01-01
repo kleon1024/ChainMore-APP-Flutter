@@ -134,25 +134,7 @@ class _SparklePageState extends State<SparklePage>
                     if (i == items.length) {
                       return Column(
                         children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft:
-                                  Radius.circular(ScreenUtil().setWidth(50)),
-                                  bottomRight:
-                                  Radius.circular(ScreenUtil().setWidth(50))),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Color(0x0f000000),
-                                    offset: Offset(0, 4),
-                                    blurRadius: 4),
-                              ],
-                            ),
-                            child: Center(child: Text("顺颂时祺")),
-                          ),
-                          VEmptyView(500),
+                          VEmptyView(300),
                         ],
                       );
                     }

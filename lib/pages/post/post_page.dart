@@ -37,25 +37,15 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   Post _post;
   List<Comment> _comments;
-  Domain _domain;
 
   bool collected = false;
   bool collecting = false;
 
-  bool _forceUpdate = true;
+  bool _launched = true;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((d) async {
-      if (mounted) {
-        var response =
-            await API.getDomain(context, params: {"id": widget.item.domain.id});
-        setState(() {
-          _domain = response;
-        });
-      }
-    });
   }
 
   @override
@@ -85,24 +75,25 @@ class _PostPageState extends State<PostPage> {
                     if (login) {
                       if (!collecting) {
                         collecting = true;
-                        if (collected) {
-                          API.unCollectPost(context, params: {
-                            'id': widget.item.id
-                          }).then((res) {
+                        setState(() {
+                          collected = !collected;
+                        });
+                        if (!collected) {
+                          API.unCollectPost(context,
+                              params: {'id': widget.item.id}).then((res) {
                             if (res != null) {
                               setState(() {
-                                collected = !collected;
+                                collected = false;
                               });
                             }
                             collecting = false;
                           });
                         } else {
-                          API.collectPost(context, params: {
-                            'id': widget.item.id
-                          }).then((res) {
+                          API.collectPost(context,
+                              params: {'id': widget.item.id}).then((res) {
                             if (res != null) {
                               setState(() {
-                                collected = !collected;
+                                collected = true;
                               });
                             }
                             collecting = false;
@@ -208,10 +199,8 @@ class _PostPageState extends State<PostPage> {
                       CustomSliverFutureBuilder(
                         futureFunc: login ? API.getPost : API.getPostUnSign,
                         params: {'id': widget.item.id},
-                        forceUpdate : _forceUpdate,
                         builder: (context, post) {
                           setData(post);
-
                           String description = "";
                           String url = "";
                           if (post != null) {
@@ -328,7 +317,7 @@ class _PostPageState extends State<PostPage> {
               ),
               Align(
                 child: login
-                    ? (_domain != null && _domain.depended
+                    ? (_post != null && _post.domain.depended
                         ? CommentInputWidget((content) {
                             API.postComment(context, content, params: {
                               'id': widget.item.id,
@@ -338,10 +327,12 @@ class _PostPageState extends State<PostPage> {
                                 setState(() {
                                   _comments.insert(0, r);
                                 });
+                                FocusScope.of(context).requestFocus(new FocusNode());
                               }
                             });
                           })
-                        : Padding(
+                        : Container(
+                            color: Colors.white,
                             padding: EdgeInsets.all(ScreenUtil().setHeight(30)),
                             child: ThinBorderButton(
                               text: "认证前置领域后评论",
@@ -350,7 +341,8 @@ class _PostPageState extends State<PostPage> {
                               },
                               color: CMColors.blueLonely,
                             )))
-                    : Padding(
+                    : Container(
+                        color: Colors.white,
                         padding: EdgeInsets.all(ScreenUtil().setHeight(30)),
                         child: ThinBorderButton(
                           text: "登录后评论",
@@ -369,14 +361,15 @@ class _PostPageState extends State<PostPage> {
 
   void setData(Post data) {
     Future.delayed(Duration(milliseconds: 50), () {
-      if (mounted && _forceUpdate) {
+      if (mounted && _launched) {
         setState(() {
-          _forceUpdate = false;
           _post = data;
+          _launched = false;
         });
       }
     });
   }
+
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
