@@ -2,10 +2,12 @@ import 'package:chainmore/models/tab_icon_data.dart';
 import 'package:chainmore/pages/home/home_page.dart';
 import 'package:chainmore/pages/login_page.dart';
 import 'package:chainmore/pages/user/mine_page.dart';
+import 'package:chainmore/providers/update_model.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -29,6 +31,12 @@ class _MainPageState extends State<MainPage>
     tabIconsList[0].isSelected = true;
     WidgetsBinding.instance.addObserver(this);
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((d) {
+      if (mounted) {
+        UpdateModel updateModel = Provider.of<UpdateModel>(context);
+        updateModel.checkUpdate(context);
+      }
+    });
   }
 
   @override

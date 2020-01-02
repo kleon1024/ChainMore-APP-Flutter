@@ -8,6 +8,7 @@ import 'package:chainmore/models/domain_tree.dart';
 import 'package:chainmore/models/hot_search_data.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/models/sparkle.dart';
+import 'package:chainmore/models/update.dart';
 import 'package:chainmore/models/user.dart';
 import 'package:chainmore/models/user_info.dart';
 import 'package:chainmore/network/net_utils.dart';
@@ -253,6 +254,17 @@ class API {
           response.data["items"].map((item) => Domain.fromJson(item)));
     }
     return List<Domain>();
+  }
+
+  static getUpdateInfo() async {
+    var response = await NetUtils.request("get", "/v1/update")
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      return Update.fromJson(response.data["item"]);
+    }
   }
 
   static postSparkle(BuildContext context, {Map<String, dynamic> data}) async {

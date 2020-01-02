@@ -87,7 +87,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
 
     FlutterDownloader.registerCallback(downloadCallback);
 
-    final tasks = FlutterDownloader.loadTasks();
+//    final tasks = FlutterDownloader.loadTasks();
   }
 
   static void downloadCallback(String id, DownloadTaskStatus status, int progress) async {

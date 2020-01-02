@@ -4,6 +4,7 @@ import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/providers/certify_model.dart';
 import 'package:chainmore/providers/domain_create_model.dart';
 import 'package:chainmore/providers/edit_model.dart';
+import 'package:chainmore/providers/update_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:chainmore/application.dart';
@@ -36,11 +37,13 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     EditModel editModel = Provider.of<EditModel>(context);
     DomainCreateModel domainCreateModel = Provider.of<DomainCreateModel>(context);
     CertifyModel certifyModel = Provider.of<CertifyModel>(context);
+    UpdateModel updateModel = Provider.of<UpdateModel>(context);
     userModel.initUser();
     editModel.initState();
     domainCreateModel.initState();
     certifyModel.initState();
     FlutterDownloader.initialize();
+    updateModel.initState();
     if (userModel.user != null) {
       userModel.refreshLogin(context : context).then((value) {
         if (value != null) {

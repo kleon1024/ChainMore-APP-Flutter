@@ -6,6 +6,7 @@ import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
+import 'package:chainmore/widgets/update_version.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:chainmore/widgets/widget_button_thin_border.dart';
 import 'package:chainmore/widgets/widget_update_dialog.dart';
@@ -154,24 +155,18 @@ class _MinePageState extends State<MinePage>
                       )
                     : VEmptyView(0),
                 VEmptyView(60),
-                ThinBorderButton(
-                  text: "立即升级",
-                  onTap: () {
-                    showDialog<void>(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (context) {
-                          var data = Update(
-                            appStoreUrl: "",
-                            apkUrl: "192.168.3.5:5000/v1/download/apk/chainmore_version_1_0_0_201912292211.apk",
-                            version: "1.0.0",
-                            content: "船新版本",
-                          );
-                          return UpdateDialog(data: data);
-                        });
-                  },
-                  color: Colors.black,
-                ),
+//                ThinBorderButton(
+//                  text: "立即升级",
+//                  onTap: () {
+//                    showDialog<Null>(
+//                        context: context,
+//                        barrierDismissible: true,
+//                        builder: (context) {
+//                          return UpdateVersionDialog(data: data);
+//                        });
+//                  },
+//                  color: Colors.black,
+//                ),
                 VEmptyView(300),
               ],
             ),
