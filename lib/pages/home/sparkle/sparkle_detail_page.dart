@@ -197,16 +197,24 @@ class _SparkleDetailPageState extends State<SparkleDetailPage> {
                                           borderWidth: 0.5,
                                           textColor: Colors.white,
                                           borderColor: Colors.white,
+                                          onTap: () {
+                                            NavigatorUtil.goSparkleDetailPage(
+                                                context,
+                                                data: widget.sparkle.replied);
+                                          },
                                         ),
                                   VEmptyView(30),
                                   Text(
                                     widget.sparkle.author.nickname,
-                                    style: TextUtil.style(14, 400, color: Colors.white),
+                                    style: TextUtil.style(14, 400,
+                                        color: Colors.white),
                                   ),
                                   VEmptyView(10),
                                   Text(
-                                    Utils.readableTimeStamp(widget.sparkle.timestamp),
-                                    style: TextUtil.style(14, 400, color: Colors.white),
+                                    Utils.readableTimeStamp(
+                                        widget.sparkle.timestamp),
+                                    style: TextUtil.style(14, 400,
+                                        color: Colors.white),
                                   ),
                                 ],
                               )),
@@ -243,7 +251,8 @@ class _SparkleDetailPageState extends State<SparkleDetailPage> {
                               bottom: ScreenUtil().setHeight(lastPadding),
                               left: ScreenUtil().setWidth(0),
                               right: ScreenUtil().setWidth(0)),
-                          child: SparkleItem(item: _sparkles[index]),
+                          child: SparkleItem(
+                              item: _sparkles[index], showReplied: false),
                         );
                       }, childCount: _sparkles.length),
                     ),
@@ -256,15 +265,16 @@ class _SparkleDetailPageState extends State<SparkleDetailPage> {
                   ? CommentInputWidget(
                       (content) {
                         API.replySparkle(context, data: {
-                          'body' : content,
-                          'reply' : widget.sparkle.id,
+                          'body': content,
+                          'reply': widget.sparkle.id,
                         }).then((r) {
                           if (r != null) {
                             Utils.showToast('共鸣成功');
                             setState(() {
                               _sparkles.insert(0, r);
                             });
-                            FocusScope.of(context).requestFocus(new FocusNode());
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
                           }
                         });
                       },

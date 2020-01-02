@@ -12,9 +12,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SparkleItem extends StatelessWidget {
   final Sparkle item;
+  final bool showReplied;
 
   SparkleItem({
     @required this.item,
+    this.showReplied = true,
   });
 
   @override
@@ -40,8 +42,9 @@ class SparkleItem extends StatelessWidget {
                     onTap: () {
                       NavigatorUtil.goUserPage(context, data: item.author);
                     },
-                    child: Text(item.author.nickname,
-                        style: TextUtil.style(14, 700),
+                    child: Text(
+                      item.author.nickname,
+                      style: TextUtil.style(14, 700),
                     ),
                   ),
                 ],
@@ -56,7 +59,24 @@ class SparkleItem extends StatelessWidget {
                       textAlign: TextAlign.justify,
                     )
                   : VEmptyView(0),
-              VEmptyView(20),
+              VEmptyView(10),
+//              Container(
+//                child: ,
+//              ),
+              (showReplied && item.replied != null)
+                  ? CategoryTag(
+                      text: item.replied.body,
+                      color: Colors.white,
+                      textColor: CMColors.blueLonely,
+                      onTap: () {
+                        NavigatorUtil.goSparkleDetailPage(context,
+                            data: item.replied);
+                      },
+                    )
+                  : VEmptyView(0),
+              (showReplied && item.replied != null)
+                  ? VEmptyView(0)
+                  : VEmptyView(0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -74,7 +94,47 @@ class SparkleItem extends StatelessWidget {
                   Icon(Icons.more_horiz,
                       color: Colors.black54, size: ScreenUtil().setSp(60))
                 ],
-              )
+              ),
+              (item.replies.length > 0) ? VEmptyView(0) : VEmptyView(0),
+              (item.replies.length > 0)
+                  ? Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.black12,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(ScreenUtil().setWidth(20)),
+                        ),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(20),
+                          vertical: ScreenUtil().setWidth(20)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            "热门共鸣:",
+                            style: TextUtil.style(14, 700),
+                          ),
+                          VEmptyView(10),
+                          ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text(item.replies[index].author.nickname + ": ", style: TextUtil.style(14, 600),),
+                                      Text(item.replies[index].body, style: TextUtil.style(14, 400),),
+                                    ],
+                                  ),
+                                );
+                              },
+                              itemCount: item.replies.length),
+                        ],
+                      ),
+                    )
+                  : VEmptyView(0),
             ],
           ),
         ),

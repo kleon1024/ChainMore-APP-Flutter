@@ -1,4 +1,5 @@
 import 'package:chainmore/models/login_config.dart';
+import 'package:chainmore/models/update.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
@@ -7,6 +8,7 @@ import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:chainmore/widgets/widget_button_thin_border.dart';
+import 'package:chainmore/widgets/widget_update_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,8 +38,8 @@ class _MinePageState extends State<MinePage>
   void initState() {
     super.initState();
     userHistoryKeys = userHistories.keys.toList();
-    WidgetsBinding.instance.addPostFrameCallback((d){
-      if(mounted) {
+    WidgetsBinding.instance.addPostFrameCallback((d) {
+      if (mounted) {
         UserModel userModel = Provider.of<UserModel>(context);
         if (userModel.isLoggedIn()) {
           var userInfo = userModel.userInfo;
@@ -90,7 +92,8 @@ class _MinePageState extends State<MinePage>
                         text: "立即登录",
                         onTap: () {
                           NavigatorUtil.goLoginPage(context,
-                              data: LoginConfig(initial: false), clearStack: false);
+                              data: LoginConfig(initial: false),
+                              clearStack: false);
                         },
                         color: CMColors.blueLonely,
                       ),
@@ -109,7 +112,8 @@ class _MinePageState extends State<MinePage>
                             Text(userHistoryKeys[index],
                                 style: TextUtil.style(16, 500)),
                             Text(userHistories[userHistoryKeys[index]]
-                                .toString() + "    "),
+                                    .toString() +
+                                "    "),
                           ],
                         ),
                       );
@@ -149,6 +153,25 @@ class _MinePageState extends State<MinePage>
                         color: Colors.black,
                       )
                     : VEmptyView(0),
+                VEmptyView(60),
+                ThinBorderButton(
+                  text: "立即升级",
+                  onTap: () {
+                    showDialog<void>(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (context) {
+                          var data = Update(
+                            appStoreUrl: "",
+                            apkUrl: "192.168.3.5:5000/v1/download/apk/chainmore_version_1_0_0_201912292211.apk",
+                            version: "1.0.0",
+                            content: "船新版本",
+                          );
+                          return UpdateDialog(data: data);
+                        });
+                  },
+                  color: Colors.black,
+                ),
                 VEmptyView(300),
               ],
             ),

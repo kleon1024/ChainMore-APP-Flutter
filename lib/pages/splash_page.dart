@@ -10,6 +10,7 @@ import 'package:chainmore/application.dart';
 import 'package:chainmore/models/user.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/navigator_util.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:chainmore/network/net_utils.dart';
@@ -39,6 +40,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     editModel.initState();
     domainCreateModel.initState();
     certifyModel.initState();
+    FlutterDownloader.initialize();
     if (userModel.user != null) {
       userModel.refreshLogin(context : context).then((value) {
         if (value != null) {
