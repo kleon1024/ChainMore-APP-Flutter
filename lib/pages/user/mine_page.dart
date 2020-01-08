@@ -1,5 +1,6 @@
 import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/models/update.dart';
+import 'package:chainmore/providers/update_model.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
@@ -162,7 +163,8 @@ class _MinePageState extends State<MinePage>
 //                        context: context,
 //                        barrierDismissible: true,
 //                        builder: (context) {
-//                          return UpdateVersionDialog(data: data);
+//                          UpdateModel updateModel = Provider.of<UpdateModel>(context);
+//                          return UpdateVersionDialog(data: updateModel.version);
 //                        });
 //                  },
 //                  color: Colors.black,

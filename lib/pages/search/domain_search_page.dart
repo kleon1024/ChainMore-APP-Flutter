@@ -132,7 +132,7 @@ class _DomainSearchPageState extends State<DomainSearchPage>
     String certifiedTagString = "前置未认证";
     String certifiedToastString = "需要认证前置领域";
 
-    bool certified = widget.data.state == "certified";
+    bool precertified = widget.data.state == "precertified";
 
     UserModel userModel = Provider.of<UserModel>(context);
 
@@ -146,7 +146,7 @@ class _DomainSearchPageState extends State<DomainSearchPage>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          '热门领域',
+          '🔥热门领域',
           style: bold18TextStyle,
         ),
         VEmptyView(15),
@@ -161,7 +161,7 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                       return GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
-                          if (widget.data.state == "certified" &&
+                          if (widget.data.state == "precertified" &&
                               curDomain.depended) {
                             EditModel editModel =
                                 Provider.of<EditModel>(context);
@@ -212,7 +212,7 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                                                 ? w500_16TextStyle
                                                 : common16TextStyle,
                                           ),
-                                          (certified
+                                          (precertified
                                                   ? curDomain.depended
                                                   : curDomain.certified)
                                               ? HEmptyView(0)
@@ -227,7 +227,7 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                                                         Provider.of<UserModel>(
                                                             context);
                                                     if (widget.data.state ==
-                                                        "certified") {
+                                                        "precertified") {
                                                       //TODO Pre-Request Certification
                                                     } else {
                                                       if (!userModel.userInfo
@@ -235,7 +235,7 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                                                         Utils
                                                             .showDoubleChoiceDialog(
                                                           context,
-                                                          title: "认证系统",
+                                                          title: "📋认证系统",
                                                           body:
                                                               "在开始任意领域的认证前，\n需要获得顶级领域<阡陌>的认证。",
                                                           leftText: "放弃认证",
@@ -255,7 +255,9 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                                                               data:
                                                                   Domain(id: 1),
                                                             ).then((res) {
-                                                              setState(() {});
+                                                              setState(() {
+                                                                _isSearching = _isSearching;
+                                                              });
                                                             });
                                                           },
                                                         );
@@ -266,7 +268,9 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                                                                     data:
                                                                         curDomain)
                                                             .then((res) {
-                                                          setState(() {});
+                                                          setState(() {
+                                                            _isSearching = _isSearching;
+                                                          });
                                                         });
                                                       }
                                                     }
@@ -326,7 +330,7 @@ class _DomainSearchPageState extends State<DomainSearchPage>
   Widget _buildSearchingLayout() {
     UserModel userModel = Provider.of<UserModel>(context);
     return SearchOtherResultPage("domain", searchText,
-        login: userModel.isLoggedIn());
+        login: userModel.isLoggedIn(), state: widget.data.state);
   }
 
   @override

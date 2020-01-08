@@ -19,7 +19,7 @@ class SearchOtherResultPage extends StatefulWidget {
   final bool login;
   final String state;
 
-  SearchOtherResultPage(this.type, this.query, {this.login = false, this.state = "certified"});
+  SearchOtherResultPage(this.type, this.query, {this.login = false, this.state = "precertified"});
 
   @override
   _SearchOtherResultPageState createState() => _SearchOtherResultPageState();
@@ -28,7 +28,8 @@ class SearchOtherResultPage extends StatefulWidget {
 class _SearchOtherResultPageState extends State<SearchOtherResultPage>
     with AutomaticKeepAliveClientMixin {
   int _count = -1;
-  Map<String, String> _params;
+  int limit = 20;
+  Map<String, dynamic> _params;
   List<Domain> _domains = []; // 领域数据
   EasyRefreshController _controller;
 
@@ -37,7 +38,7 @@ class _SearchOtherResultPageState extends State<SearchOtherResultPage>
     super.initState();
     _controller = EasyRefreshController();
     WidgetsBinding.instance.addPostFrameCallback((d) {
-      _params = {'query': widget.query, 'offset': '1', 'type': widget.type};
+      _params = {'query': widget.query, 'offset': 1, 'limit' : limit, 'type': widget.type};
       _request();
     });
   }
@@ -91,9 +92,9 @@ class _SearchOtherResultPageState extends State<SearchOtherResultPage>
       footer: LoadFooter(),
       controller: _controller,
       onLoad: () async {
-        _params['offset'] = '${int.parse(_params['offset']) + 1}';
+        _params['offset'] = _params['offset'] + 1;
         _request();
-        _controller.finishLoad(noMore: _domains.length >= _count);
+        _controller.finishLoad(noMore: limit > _count);
       },
     );
   }

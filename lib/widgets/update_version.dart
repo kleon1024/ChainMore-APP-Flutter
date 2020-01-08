@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:chainmore/models/update.dart';
+import 'package:chainmore/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,7 +38,13 @@ class _UpdateVersionDialogState extends State<UpdateVersionDialog> {
         throw 'Could not launch $url';
       }
     } else if (Platform.isAndroid) {
-      androidDownloadHandle();
+//      androidDownloadHandle();
+      final url = widget.data.apkUrl;
+      if (await canLaunch(url)) {
+        await launch(url, forceSafariVC: false);
+      } else {
+        throw 'Could not launch $url';
+      }
     }
   }
 
@@ -144,7 +151,7 @@ class _UpdateVersionDialogState extends State<UpdateVersionDialog> {
                       child: Text(
                         widget.data.version,
                         style: TextStyle(
-                            color: Color(0xff3782e5),
+                            color: CMColors.blueLonely,
                             fontWeight: FontWeight.w500),
                       ),
                     ),
@@ -178,7 +185,7 @@ class _UpdateVersionDialogState extends State<UpdateVersionDialog> {
                               _getButtonText(),
                               style: TextStyle(color: Color(0xdfffffff)),
                             ),
-                            color: const Color(0xff5f9afa),
+                            color: CMColors.blueLonely,
                             onPressed: () {
                               _updateButtonTap(context);
                             },

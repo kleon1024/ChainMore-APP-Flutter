@@ -1,6 +1,8 @@
 import 'package:chainmore/models/domain.dart';
+import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/providers/domain_create_model.dart';
 import 'package:chainmore/providers/edit_model.dart';
+import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
@@ -18,11 +20,15 @@ class SearchDomainWidget extends StatelessWidget {
   final String state;
 
   SearchDomainWidget(
-      {this.domain, this.login = false, this.state = "certified"});
+      {this.domain, this.login = false, this.state = "precertified"});
 
   @override
   Widget build(BuildContext context) {
     String certifiedTagString = "前置未认证";
+
+    print("BUILDINGGGGGGG");
+    print(domain.title);
+    print(state);
 
     if (state == "dependent" || state == "aggregate") {
       certifiedTagString = "领域未认证";
@@ -38,16 +44,41 @@ class SearchDomainWidget extends StatelessWidget {
                 color: Colors.transparent,
                 textColor: CMColors.blueLonely,
                 onTap: () {
-                  if (state == "certified") {
+                  UserModel userModel = Provider.of<UserModel>(context);
+                  if (!userModel.userInfo.rootCertified) {
+                    Utils.showDoubleChoiceDialog(
+                      context,
+                      title: "📋认证系统",
+                      body: "在开始任意领域的认证前，\n需要获得顶级领域<阡陌>的认证。",
+                      leftText: "放弃认证",
+                      rightText: "开始认证",
+                      leftFunc: () {
+                        Navigator.of(context).pop();
+                      },
+                      rightFunc: () {
+                        Navigator.of(context).pop();
+                        NavigatorUtil.goDomainCertifyPage(
+                          context,
+                          data: Domain(id: 1),
+                        );
+                      },
+                    );
                   } else {
-                    NavigatorUtil.goDomainCertifyPage(context, data: domain);
+                    if (state == "precertified") {
+                      //TODO Precetified
+                    } else {
+                      NavigatorUtil.goDomainCertifyPage(context, data: domain);
+                    }
                   }
                 },
               )
         : CategoryTag(
             text: "未登录",
             color: Colors.transparent,
-            textColor: CMColors.blueLonely);
+            textColor: CMColors.blueLonely,
+            onTap: () {
+              NavigatorUtil.goLoginPage(context, data: LoginConfig(initial: false));
+            });
 
     return InkWell(
       onTap: () {
@@ -55,7 +86,7 @@ class SearchDomainWidget extends StatelessWidget {
           NavigatorUtil.goDomainPage(context, data: domain);
         } else {
           if (login) {
-            if (state == "certified") {
+            if (state == "precertified") {
               if (domain.depended) {
                 EditModel editModel = Provider.of<EditModel>(context);
                 editModel.setDomain(domain);

@@ -21,13 +21,13 @@ import '../utils/custom_log_interceptor.dart';
 
 class NetUtils {
   static Dio _dio;
-  static final String baseUrl = 'http://192.168.3.5';
+  static final String baseUrl = 'https://api.kleon.space';
 
   static void init() async {
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;
     CookieJar cj = PersistCookieJar(dir: tempPath);
-    _dio = Dio(BaseOptions(baseUrl: '$baseUrl:5000', followRedirects: false))
+    _dio = Dio(BaseOptions(baseUrl: '$baseUrl', followRedirects: false))
       ..interceptors.add(ResponseInterceptors())
       ..interceptors.add(ErrorInterceptors(_dio))
       ..interceptors

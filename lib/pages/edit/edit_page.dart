@@ -93,6 +93,7 @@ class _EditPageState extends State<EditPage>
                     }, rightFunc: () {
                       editModel.setTitle(_titleController.text);
                       editModel.setBody(_editController.text);
+                      editModel.saveEditState();
                       Navigator.pop(context);
                       Navigator.pop(context);
                     });
@@ -275,7 +276,7 @@ class _EditPageState extends State<EditPage>
                   ? InkWell(
                       onTap: () {
                         NavigatorUtil.goDomainSearchPage(context,
-                            data: DomainSearchData(state: "certified"));
+                            data: DomainSearchData(state: "precertified"));
                       },
                       child: Container(
                           child: Row(
@@ -293,7 +294,7 @@ class _EditPageState extends State<EditPage>
                                   } else {
                                     NavigatorUtil.goDomainSearchPage(context,
                                         data: DomainSearchData(
-                                            state: "certified"));
+                                            state: "precertified"));
                                   }
                                 },
                                 child: Icon(editModel.domain != null
