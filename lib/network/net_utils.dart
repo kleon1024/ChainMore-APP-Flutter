@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/network/interceptors/error.dart';
 import 'package:chainmore/network/interceptors/response.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/route/routes.dart';
+import 'package:chainmore/utils/navigator_util.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +23,8 @@ import '../utils/custom_log_interceptor.dart';
 
 class NetUtils {
   static Dio _dio;
-  static final String baseUrl = 'https://api.kleon.space';
+  
+  static final String baseUrl = 'http://192.168.3.5:5000';
 
   static void init() async {
     Directory tempDir = await getTemporaryDirectory();
@@ -74,6 +77,8 @@ class NetUtils {
         return Future.error(Response(data: -1));
       } else if (e.response.statusCode > 400 && e.response.statusCode < 404) {
         relogin = true;
+      } else if (refresh) {
+        _reLogin(context);
       } else {
         return Future.error(Response(data: -1));
       }
@@ -88,7 +93,7 @@ class NetUtils {
       if (userModel.isLoggedIn()) {
         var res = await userModel.refreshLogin(context: context);
         if (res == null) {
-          _reLogin();
+          _reLogin(context);
           return Future.error(Response(data: -1));
         }
 
@@ -106,9 +111,11 @@ class NetUtils {
     }
   }
 
-  static void _reLogin() {
+  static void _reLogin(context) {
     Future.delayed(Duration(milliseconds: 200), () {
-      Application.getIt<NavigateService>().popAndPushNamed(Routes.login);
+//      Application.getIt<NavigateService>().popAndPushNamed(Routes.login);
+      NavigatorUtil.goLoginPage(context,
+          data: LoginConfig(initial: true), clearStack: true);
       Utils.showToast('登录失效，请重新登录');
     });
   }

@@ -1,0 +1,3 @@
+[submodule "plugins/webview_flutter"]
+	path = plugins/webview_flutter
+	url = git@github.com:kleon1024/webview_flutter.git

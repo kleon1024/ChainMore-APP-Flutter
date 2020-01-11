@@ -42,11 +42,12 @@ class API {
   }
 
   static signup(BuildContext context,
-      {String username, String password, String email}) async {
+      {String username, String nickname, String password, String email}) async {
     var response = await NetUtils.request("post", '/v1/auth/signup',
         context: context,
         data: {
           'username': username,
+          'nickname': nickname,
           'password': password,
           'email': email,
         }).catchError((e) {
@@ -225,7 +226,6 @@ class API {
 
   static Future<List<Domain>> getHotDomainData(BuildContext context,
       {Map<String, dynamic> params}) async {
-    print("Get Hot Domain");
     var response = await NetUtils.request("get", "/v1/domain/hot",
             params: params, context: context, isShowLoading: false)
         .catchError((e) {
@@ -233,7 +233,6 @@ class API {
       Utils.showToast(e.toString());
     });
 
-    print(response);
     if (response != null) {
       return List<Domain>.from(
           response.data["items"].map((item) => Domain.fromJson(item)));
