@@ -11,7 +11,7 @@ description: The APP frontend of ChainMore based on Flutter.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.2
+version: 1.0.4
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -40,7 +40,9 @@ dependencies:
   json_annotation: ^3.0.0
   http: ^0.12.0+2
   pull_to_refresh: ^1.5.7
-  webview_flutter: ^0.3.18+1
+#  webview_flutter: ^0.3.19+3
+  webview_flutter:
+    path: plugins/webview_flutter
   url_launcher: ^5.2.5
   flutter_downloader: ^1.0.5
   open_file: ^2.1.1

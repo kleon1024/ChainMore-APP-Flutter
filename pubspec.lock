@@ -710,10 +710,10 @@ packages:
   webview_flutter:
     dependency: "direct main"
     description:
-      name: webview_flutter
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.3.18+1"
+      path: "plugins\\webview_flutter"
+      relative: true
+    source: path
+    version: "0.3.7+1"
   xml:
     dependency: transitive
     description:
