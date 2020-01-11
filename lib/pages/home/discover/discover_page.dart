@@ -146,8 +146,8 @@ class _DiscoverPageState extends State<DiscoverPage>
                   },
                   separatorBuilder: (context, index) {
                     return Container(
-                      color: Colors.grey,
-                      height: ScreenUtil().setWidth(0),
+                      color: Color(0x05000000),
+                      height: ScreenUtil().setWidth(30),
                     );
                   },
                   itemCount: items.length + 1,

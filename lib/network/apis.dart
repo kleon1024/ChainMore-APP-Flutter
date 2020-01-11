@@ -444,7 +444,7 @@ class API {
     return response;
   }
 
-  static getDomainTree(BuildContext context,
+  static getDomainAggregateTree(BuildContext context,
       {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/domain/aggregate",
             params: params, context: context)
@@ -457,10 +457,23 @@ class API {
     }
   }
 
+  static getDomainDependentTree(BuildContext context,
+      {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/domain/dependent",
+        params: params, context: context, isShowLoading: false)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      return DomainTree.fromJson(response.data["dependent"]);
+    }
+  }
+
   static getSparkleReplies(BuildContext context,
       {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/sparkle/reply",
-            params: params, context: context)
+            params: params, context: context, isShowLoading: false)
         .catchError((e) {
       Utils.showToast(e.toString());
     });

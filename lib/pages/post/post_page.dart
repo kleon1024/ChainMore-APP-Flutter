@@ -7,6 +7,7 @@ import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/network/net_utils.dart';
 import 'package:chainmore/pages/post/comment_input_widget.dart';
 import 'package:chainmore/pages/post/comment_item.dart';
+import 'package:chainmore/pages/post/widget_post_header.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
@@ -142,41 +143,12 @@ class _PostPageState extends State<PostPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {
-                                    NavigatorUtil.goDomainPage(context,
-                                        data: widget.item.domain);
-                                  },
-                                  child: Container(
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: <Widget>[
-                                        Text(widget.item.domain.title,
-                                            style: TextUtil.style(14, 500)),
-                                        HEmptyView(5),
-                                        Text(
-                                            widget.item.domain.watchers
-                                                    .toString() +
-                                                widget.item.domain.bio,
-                                            style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize:
-                                                    ScreenUtil().setSp(38))),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                VEmptyView(30),
-//                                Row(children: <Widget>[
-//                                  CategoryTag(text: widget.item.category),
-//                                ]),
-//                                VEmptyView(20),
                                 Hero(
-                                  tag:
-                                      'post_title_' + widget.item.id.toString(),
-                                  child: Text(widget.item.title,
-                                      style: w600_16TextStyle),
+                                  tag: "post_item_" + widget.item.id.toString(),
+                                  child: Material(
+                                    child: PostHeader(widget.item),
+                                    color: Colors.transparent,
+                                  ),
                                 ),
                                 VEmptyView(5),
                                 GestureDetector(
@@ -186,8 +158,11 @@ class _PostPageState extends State<PostPage> {
                                   },
                                   child: Row(
                                     children: <Widget>[
-                                      Text(widget.item.author.nickname,
-                                          style: w400_13TextStyle),
+                                      Text(
+                                        widget.item.author.nickname,
+                                        style: TextUtil.style(13, 500,
+                                            color: Colors.black45),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -202,12 +177,8 @@ class _PostPageState extends State<PostPage> {
                         builder: (context, post) {
                           setData(post);
                           String description = "";
-                          String url = "";
                           if (post != null) {
                             description = post.description;
-                            if (post.url != "") {
-                              url = post.url.split("/")[2];
-                            }
                             collected = post.collected;
                           } else {
                             return Center(child: Text("加载失败"));
@@ -225,21 +196,6 @@ class _PostPageState extends State<PostPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    url != null && url != ""
-                                        ? CategoryTag(
-                                            text: url,
-                                            textColor: CMColors.blueLonely,
-                                            color: Colors.white,
-                                            onTap: () {
-                                              NavigatorUtil.goWebViewPage(
-                                                  context,
-                                                  web: Web(
-                                                      url: post.url,
-                                                      post: post));
-                                            },
-                                          )
-                                        : VEmptyView(0),
-                                    VEmptyView(15),
                                     description != ""
                                         ? Text(
                                             description,

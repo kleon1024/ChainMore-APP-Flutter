@@ -3,7 +3,10 @@ import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/domain_tree.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/pages/domain/choiceproblem_page.dart';
+import 'package:chainmore/pages/domain/domain_tree_page.dart';
 import 'package:chainmore/pages/domain/empty_certify_page.dart';
+import 'package:chainmore/pages/home/discover/discover_page.dart';
+import 'package:chainmore/pages/home/sparkle/sparkle_page.dart';
 import 'package:chainmore/providers/certify_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/utils.dart';
@@ -26,45 +29,26 @@ class DomainMapPage extends StatefulWidget {
   _DomainMapPageState createState() => _DomainMapPageState();
 }
 
-class _DomainMapPageState extends State<DomainMapPage> {
+class _DomainMapPageState extends State<DomainMapPage>
+    with AutomaticKeepAliveClientMixin {
+  final _pageController = PageController();
+
+  int _currentPage = 0;
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();
   }
 
-  convertTreeToExpandableList(DomainTree tree, int depth) {
-    if (tree.subdomains.length == 0) {
-      return ListTile(
-        leading: SizedBox(
-          width: ScreenUtil().setWidth(50) * (2 + depth),
-        ),
-        title: Text(tree.domain.title, style: TextUtil.style(16, 700)),
-        subtitle: Text(tree.domain.watchers.toString() + tree.domain.bio,
-            style: TextUtil.style(14, 400, color: Colors.grey)),
-      );
-    } else {
-      return ExpansionTile(
-        leading: SizedBox(
-          child: Row(
-            children: <Widget>[
-              Icon(Icons.style),
-            ],
-          ),
-          width: ScreenUtil().setWidth(50) * (2 + depth),
-        ),
-        title: Text(tree.domain.title, style: TextUtil.style(16, 700)),
-        subtitle: Text(tree.domain.watchers.toString() + tree.domain.bio,
-            style: TextUtil.style(14, 400, color: Colors.grey)),
-        children: List<Widget>.from(tree.subdomains
-            .map((domain) => convertTreeToExpandableList(domain, depth + 1))
-            .toList()),
-        initiallyExpanded: tree.expanded,
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+
+    TextStyle selectedStyle = TextUtil.style(18, 700);
+    TextStyle unselectedStyle = TextUtil.style(16, 500);
+
     return Scaffold(
       floatingActionButton: Container(
         padding: EdgeInsets.only(
@@ -89,20 +73,55 @@ class _DomainMapPageState extends State<DomainMapPage> {
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
           child: Column(
-            children: <Widget>[
-              CustomFutureBuilder(
-                futureFunc: API.getDomainTree,
-                params: {'id': widget.domain.id},
-                builder: (context, tree) {
-                  return convertTreeToExpandableList(tree, 0);
-                },
-              ),
-            ],
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(100),
+                vertical: ScreenUtil().setHeight(30)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    _pageController.animateToPage(0,
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeInOut);
+                  },
+                  child: Text("聚合",
+                      style:
+                          _currentPage == 0 ? selectedStyle : unselectedStyle),
+                ),
+                HEmptyView(20),
+                GestureDetector(
+                  onTap: () {
+                    _pageController.animateToPage(1,
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeInOut);
+                  },
+                  child: Text("前置",
+                      style:
+                          _currentPage == 1 ? selectedStyle : unselectedStyle),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              children: [
+                DomainTreePage(widget.domain, API.getDomainAggregateTree),
+                DomainTreePage(widget.domain, API.getDomainDependentTree),
+              ],
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPage = index;
+                });
+              },
+            ),
+          ),
+        ],
+      )),
     );
   }
 }

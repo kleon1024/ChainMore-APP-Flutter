@@ -158,7 +158,7 @@ class _DomainPageState extends State<DomainPage> {
             ),
           ),
         ),
-        backgroundColor: CMColors.blueLonely,
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: Stack(
             children: <Widget>[
@@ -189,7 +189,7 @@ class _DomainPageState extends State<DomainPage> {
                         pinned: true,
                         elevation: 0,
                         floating: false,
-                        backgroundColor: Colors.grey,
+                        backgroundColor: CMColors.blueLonely,
                         brightness: Brightness.dark,
                         iconTheme: IconThemeData(color: Colors.white),
                         title: Text(

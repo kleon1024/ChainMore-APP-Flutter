@@ -120,7 +120,7 @@ class _SparklePageState extends State<SparklePage>
                 controller: _refreshController,
                 onRefresh: _onRefresh,
                 onLoading: _onLoading,
-                child: ListView.builder(
+                child: ListView.separated(
                   itemBuilder: (c, i) {
                     if (items.length == 0) {
                       return Padding(
@@ -145,6 +145,12 @@ class _SparklePageState extends State<SparklePage>
                     return SparkleItem(item: items[i]);
                   },
                   itemCount: items.length + 1,
+                  separatorBuilder: (context, index) {
+                    return Container(
+                      color: Colors.white,
+                      height: ScreenUtil().setWidth(30),
+                    );
+                  },
                 ),
               ),
             ),

@@ -24,13 +24,13 @@ class MinePage extends StatefulWidget {
 class _MinePageState extends State<MinePage>
     with AutomaticKeepAliveClientMixin {
   Map<String, int> userHistories = {
-    "发出分享": 0,
-    "发出评论": 0,
-    "创建领域": 0,
-    "认证领域": 0,
-    "关注领域": 0,
-    "关注同学": 0,
-    "追随同好": 0,
+    "你发出的分享": 0,
+    "你发出的评论": 0,
+    "你创建的领域": 0,
+    "认证你的领域": 0,
+    "你关注的领域": 0,
+    "你关注的同学": 0,
+    "追随你的同好": 0,
   };
 
   List<String> userHistoryKeys;
@@ -46,13 +46,13 @@ class _MinePageState extends State<MinePage>
         if (userModel.isLoggedIn()) {
           var userInfo = userModel.userInfo;
           var histories = {
-            "发出分享": userInfo.posts,
-            "发出评论": userInfo.comments,
-            "创建领域": userInfo.domains,
-            "认证领域": userInfo.certifieds,
-            "关注领域": userInfo.watcheds,
-            "关注同学": userInfo.followings,
-            "追随同好": userInfo.followers,
+            "你发出的分享": userInfo.posts,
+            "你发出的评论": userInfo.comments,
+            "你创建的领域": userInfo.domains,
+            "认证你的领域": userInfo.certifieds,
+            "你关注的领域": userInfo.watcheds,
+            "你关注的同学": userInfo.followings,
+            "追随你的同好": userInfo.followers,
           };
           setState(() {
             userHistories = histories;

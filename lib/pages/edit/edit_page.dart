@@ -129,13 +129,13 @@ class _EditPageState extends State<EditPage>
 
                       if (_titleController.text.trim().isEmpty) {
                         Utils.showToast("起个标题吧！");
-                      } else if (_editController.text.trim().length > 10000) {
+                      } else if (_editController.text.length > 10000) {
                         Utils.showToast("分享内容过长，最多允许10000字");
                       } else if (editModel.domain == null) {
                         Utils.showToast("请选择发表领域");
                       } else {
                         var data = {
-                          "title": _titleController.text,
+                          "title": _titleController.text.trim(),
                           "description": _editController.text,
                           "url": url,
                           "domain": editModel.domain.id,

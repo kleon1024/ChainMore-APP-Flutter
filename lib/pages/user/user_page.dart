@@ -42,16 +42,15 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   bool _forceUpdate = true;
   EasyRefreshController _controller = EasyRefreshController();
-  UserInfo _author;
 
   Map<String, int> userHistories = {
-    "发出分享": 0,
-    "发出评论": 0,
-    "创建领域": 0,
-    "认证领域": 0,
-    "关注领域": 0,
-    "关注同学": 0,
-    "追随同好": 0,
+    "发出的分享": 0,
+    "发出的评论": 0,
+    "创建的领域": 0,
+    "认证的领域": 0,
+    "关注的领域": 0,
+    "关注的同学": 0,
+    "追随的同好": 0,
   };
 
   List<String> userHistoryKeys;
@@ -153,19 +152,22 @@ class _UserPageState extends State<UserPage> {
                                 return Center(child: Text("加载失败"));
                               }
 
-                              setData(author);
+                              _forceUpdate = false;
 
                               userHistories = {
-                                "发出分享": author.posts,
-                                "发出评论": author.comments,
-                                "创建领域": author.domains,
-                                "认证领域": author.certifieds,
-                                "关注领域": author.watcheds,
-                                "关注同学": author.followings,
-                                "追随同好": author.followers,
+                                "发出的分享": author.posts,
+                                "发出的评论": author.comments,
+                                "创建的领域": author.domains,
+                                "认证的领域": author.certifieds,
+                                "关注的领域": author.watcheds,
+                                "关注的同学": author.followings,
+                                "追随的同好": author.followers,
                               };
 
                               String watchString = "关注同学";
+                              if (author.following != null && author.following) {
+                                 watchString = "已关注";
+                              }
 
                               return Padding(
                                 padding: EdgeInsets.fromLTRB(
@@ -202,6 +204,7 @@ class _UserPageState extends State<UserPage> {
                                                       setState(() {
                                                         _forceUpdate = true;
                                                       });
+                                                      Utils.showToast("关注成功");
                                                     } else {
                                                       Utils.showToast("关注失败");
                                                     }
@@ -272,15 +275,5 @@ class _UserPageState extends State<UserPage> {
             ],
           ),
         ));
-  }
-
-  void setData(UserInfo data) {
-    Future.delayed(Duration(milliseconds: 50), () {
-      if (mounted && _forceUpdate) {
-        setState(() {
-        _forceUpdate = false;
-        });
-      }
-    });
   }
 }

@@ -1,5 +1,6 @@
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/models/web.dart';
+import 'package:chainmore/pages/post/widget_post_header.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
@@ -34,59 +35,34 @@ class PostItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-//              Row(children: <Widget>[CategoryTag(text: item.category)]),
-              VEmptyView(10),
-              Text(item.title, style: TextUtil.style(16, 700)),
-              VEmptyView(5),
-              item.url != ""
-                  ? CategoryTag(
-                      text: item.url.split("/")[2],
-                      color: Colors.white,
-                      textColor: CMColors.blueLonely,
-                      onTap: () {
-                        NavigatorUtil.goWebViewPage(context,
-                            web: Web(url: item.url, post: item));
-                      },
-                    )
-                  : VEmptyView(5),
-              Row(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      NavigatorUtil.goUserPage(context, data: item.author);
-                    },
-                    child: Text(
-                      item.author.nickname,
-                      style: w400_13TextStyle,
-                    ),
-                  ),
-                  Text("  @", style: w400_13TextStyle),
-                  GestureDetector(
-                    onTap: () {
-                      NavigatorUtil.goDomainPage(context, data: item.domain);
-                    },
-                    child: Text(
-                      item.domain.title,
-                      style: w400_13TextStyle,
-                    ),
-                  ),
-                ],
+              Hero(
+                tag: "post_item_" + item.id.toString(),
+                child: Material(
+                  child: PostHeader(item),
+                  color: Colors.transparent,
+                ),
               ),
-              VEmptyView(10),
+              VEmptyView(5),
               item.description != ""
                   ? Text(
                       item.description,
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w400,
-                        fontSize: ScreenUtil().setSp(42),
-                      ),
+                      style: TextUtil.style(14, 400),
                       softWrap: true,
                       maxLines: 3,
                       textAlign: TextAlign.justify,
                     )
                   : VEmptyView(0),
-              VEmptyView(20),
+              VEmptyView(10),
+              GestureDetector(
+                onTap: () {
+                  NavigatorUtil.goUserPage(context, data: item.author);
+                },
+                child: Text(
+                  item.author.nickname,
+                  style: TextUtil.style(13, 500, color: Colors.black45),
+                ),
+              ),
+              VEmptyView(10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[

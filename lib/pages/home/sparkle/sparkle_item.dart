@@ -100,7 +100,7 @@ class SparkleItem extends StatelessWidget {
                   ? Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.black12,
+                        color: Color(0x10000000),
                         borderRadius: BorderRadius.all(
                           Radius.circular(ScreenUtil().setWidth(20)),
                         ),
@@ -123,9 +123,23 @@ class SparkleItem extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 return Container(
                                   child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Text(item.replies[index].author.nickname + ": ", style: TextUtil.style(14, 600),),
-                                      Text(item.replies[index].body, style: TextUtil.style(14, 400),),
+                                      Text(
+                                        item.replies[index].author.nickname +
+                                            ": ",
+                                        style: TextUtil.style(14, 600),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          item.replies[index].body,
+                                          style: TextUtil.style(14, 400),
+                                          softWrap: true,
+                                          maxLines: 10,
+                                          textAlign: TextAlign.justify,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 );
