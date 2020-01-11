@@ -24,20 +24,16 @@ class SearchDomainWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String certifiedTagString = "前置未认证";
-
-    print("BUILDINGGGGGGG");
-    print(domain.title);
-    print(state);
+    String certifiedTagString = "";
 
     if (state == "dependent" || state == "aggregate") {
       certifiedTagString = "领域未认证";
-    } else if (state == "") {
-      certifiedTagString = "";
+    } else if (state == "precertified") {
+      certifiedTagString = "前置未认证";
     }
 
     Widget tag = login
-        ? (state == "certified" ? domain.depended : domain.certified)
+        ? ((state == "precertified" ? domain.depended : domain.certified)
             ? HEmptyView(0)
             : CategoryTag(
                 text: certifiedTagString,
@@ -65,13 +61,13 @@ class SearchDomainWidget extends StatelessWidget {
                     );
                   } else {
                     if (state == "precertified") {
-                      //TODO Precetified
+                      NavigatorUtil.goDomainCertifyPage(context, data: domain.dependeds[0]);
                     } else {
                       NavigatorUtil.goDomainCertifyPage(context, data: domain);
                     }
                   }
                 },
-              )
+              ))
         : CategoryTag(
             text: "未登录",
             color: Colors.transparent,

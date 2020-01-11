@@ -83,13 +83,14 @@ class _DomainCertifyPageState extends State<DomainCertifyPage> {
   Future<List<Widget>> getAndCreateWidgets(BuildContext context) async {
     List<Widget> pages = List<Widget>();
 
+    CertifyModel certifyModel = Provider.of<CertifyModel>(context);
     if (_rules == null) {
       _rules =
           await API.getDomainCertify(context, params: {"id": widget.domain.id});
       setState(() {
         loaded = true;
       });
-      CertifyModel certifyModel = Provider.of<CertifyModel>(context);
+
       certifyModel.setRules(_rules);
     }
 
@@ -102,7 +103,7 @@ class _DomainCertifyPageState extends State<DomainCertifyPage> {
         });
 
     if (pages.length == 0) {
-      pages.add(EmptyCertifyPage());
+      pages.add(EmptyCertifyPage(certifyModel.domain.title));
     }
 
     setState(() {

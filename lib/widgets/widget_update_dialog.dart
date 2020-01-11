@@ -30,23 +30,36 @@ class _UpdateDialogState extends State<UpdateDialog> {
   static String taskId;
 
   _update(context) async {
+    String url;
+
     if (Platform.isIOS) {
-      final url = widget.data.appStoreUrl;
-      if (await canLaunch(url)) {
-        await launch(url, forceSafariVC: false);
-      } else {
-        throw 'Could not launch $url';
-      }
+      url = widget.data.appStoreUrl;
     } else {
-      Map<PermissionGroup, PermissionStatus> permissions =
-          await PermissionHandler()
-              .requestPermissions([PermissionGroup.storage]);
-      if (permissions[PermissionGroup.storage] == PermissionStatus.granted) {
-        _startDownload();
-      } else {
-        _showSettingDialog();
-      }
+      url = widget.data.apkUrl;
     }
+
+    if (await canLaunch(url)) {
+      await launch(url, forceSafariVC: false);
+    } else {
+      Utils.showToast("更新URL不合法");
+    }
+
+//    if (Platform.isIOS) {
+//      if (await canLaunch(url)) {
+//        await launch(url, forceSafariVC: false);
+//      } else {
+//        throw 'Could not launch $url';
+//      }
+//    } else {
+//      Map<PermissionGroup, PermissionStatus> permissions =
+//          await PermissionHandler()
+//              .requestPermissions([PermissionGroup.storage]);
+//      if (permissions[PermissionGroup.storage] == PermissionStatus.granted) {
+//        _startDownload();
+//      } else {
+//        _showSettingDialog();
+//      }
+//    }
   }
 
   _showSettingDialog() {
@@ -90,13 +103,14 @@ class _UpdateDialogState extends State<UpdateDialog> {
 //    final tasks = FlutterDownloader.loadTasks();
   }
 
-  static void downloadCallback(String id, DownloadTaskStatus status, int progress) async {
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) async {
     print("downloaded");
     print(status);
-      if (taskId == id && status == DownloadTaskStatus.complete) {
-        String path = await _apkLocalPath;
-        await OpenFile.open(path + '/' + apkName);
-      }
+    if (taskId == id && status == DownloadTaskStatus.complete) {
+      String path = await _apkLocalPath;
+      await OpenFile.open(path + '/' + apkName);
+    }
   }
 
   @override

@@ -52,7 +52,7 @@ class _DomainPageState extends State<DomainPage> {
   bool _forceUpdate = true;
 
   int postOffset = 1;
-  int postLimit = 20;
+  int postLimit = 5;
 
   EasyRefreshController _controller = EasyRefreshController();
 
@@ -158,7 +158,7 @@ class _DomainPageState extends State<DomainPage> {
             ),
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: CMColors.blueLonely,
         body: SafeArea(
           child: Stack(
             children: <Widget>[

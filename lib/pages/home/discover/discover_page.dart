@@ -20,7 +20,7 @@ class _DiscoverPageState extends State<DiscoverPage>
       RefreshController(initialRefresh: false);
 
   int offset = 1;
-  int limit = 20;
+  int limit = 5;
 
   @override
   void initState() {
@@ -30,7 +30,8 @@ class _DiscoverPageState extends State<DiscoverPage>
 
   void _onRefresh() async {
     // monitor network fetch
-    List posts = await API.getTrendingPosts(params: {"offset": offset, "limit": limit});
+    List posts =
+        await API.getTrendingPosts(params: {"offset": offset, "limit": limit});
     if (posts.isNotEmpty) {
       items = posts;
       if (posts.length < limit) {
@@ -45,7 +46,8 @@ class _DiscoverPageState extends State<DiscoverPage>
 
   void _onLoading() async {
     // monitor network fetch
-    List posts = await API.getTrendingPosts(params: {"offset": offset, "limit": limit});
+    List posts =
+        await API.getTrendingPosts(params: {"offset": offset, "limit": limit});
     if (posts.isNotEmpty) {
       items.addAll(posts);
       items = posts;
@@ -132,6 +134,10 @@ class _DiscoverPageState extends State<DiscoverPage>
                     if (i == items.length) {
                       return Column(
                         children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                              child: Text("你碰到我的底线了",
+                                  textAlign: TextAlign.center)),
                           VEmptyView(300),
                         ],
                       );

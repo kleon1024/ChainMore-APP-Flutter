@@ -13,13 +13,37 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class EmptyCertifyPage extends StatelessWidget {
+  final String title;
+
+  EmptyCertifyPage(this.title);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
-            child: Text("未设置认证标准，可以直接认证", style: TextUtil.style(18, 600))),
+          child: Container(
+            child: Stack(
+              children: <Widget>[
+                Align(
+                  child: Text(
+                    title,
+                    style: TextUtil.style(18, 700),
+                  ),
+                  alignment: Alignment.topCenter,
+                ),
+                Align(child:
+                Text(
+                  "未设置认证标准，可以直接认证",
+                  style: TextUtil.style(18, 600),
+                ),
+                  alignment: Alignment.center,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

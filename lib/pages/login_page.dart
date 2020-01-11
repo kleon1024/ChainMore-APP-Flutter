@@ -122,6 +122,19 @@ class __LoginWidgetState extends State<_LoginWidget> {
           isLogin
               ? VEmptyView(0)
               : TextField(
+            keyboardType: TextInputType.text,
+            controller: _nicknameController,
+            decoration: InputDecoration(
+                hintText: isLogin ? '' : '昵称',
+                prefixIcon: Icon(
+                  Icons.account_box,
+                  color: CMColors.blueLonely,
+                )),
+          ),
+          VEmptyView(isLogin ? 0 : 40),
+          isLogin
+              ? VEmptyView(0)
+              : TextField(
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -187,6 +200,7 @@ class __LoginWidgetState extends State<_LoginWidget> {
                     });
                   } else {
                     String username = _usernameController.text.trim();
+                    String nickname = _nicknameController.text.trim();
                     String pwd = _pwdController.text.trim();
                     String email = _emailController.text.trim();
                     String pwdConfirm = _pwdConfirmController.text.trim();
@@ -199,6 +213,10 @@ class __LoginWidgetState extends State<_LoginWidget> {
                     if (!Utils.isUserName(username)) {
                       Utils.showToast("请输入合法用户名");
                       return;
+                    }
+
+                    if (nickname.isEmpty) {
+                      Utils.showToast('请输入昵称');
                     }
 
                     if (email.isEmpty) {
@@ -231,7 +249,7 @@ class __LoginWidgetState extends State<_LoginWidget> {
                       return;
                     }
 
-                    value.signup(context, username, email, pwd).then((res) {
+                    value.signup(context, username, nickname, email, pwd).then((res) {
                       if (res != null) {
                         value
                             .login(

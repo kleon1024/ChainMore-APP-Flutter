@@ -49,7 +49,7 @@ class _SparkleDetailPageState extends State<SparkleDetailPage> {
   List<Sparkle> _sparkles = List<Sparkle>();
 
   int postOffset = 1;
-  int postLimit = 20;
+  int postLimit = 5;
 
   EasyRefreshController _controller = EasyRefreshController();
 

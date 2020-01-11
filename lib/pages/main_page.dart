@@ -35,6 +35,7 @@ class _MainPageState extends State<MainPage>
       if (mounted) {
         UpdateModel updateModel = Provider.of<UpdateModel>(context);
         updateModel.checkUpdate(context);
+        Utils.checkClipBoard(context: context);
       }
     });
   }

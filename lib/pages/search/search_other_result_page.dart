@@ -28,7 +28,7 @@ class SearchOtherResultPage extends StatefulWidget {
 class _SearchOtherResultPageState extends State<SearchOtherResultPage>
     with AutomaticKeepAliveClientMixin {
   int _count = -1;
-  int limit = 20;
+  int limit = 5;
   Map<String, dynamic> _params;
   List<Domain> _domains = []; // 领域数据
   EasyRefreshController _controller;

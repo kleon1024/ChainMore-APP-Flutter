@@ -15,6 +15,7 @@ class UserModel with ChangeNotifier {
   bool _loggedIn;
 
   User get user => _user;
+
   UserInfo get userInfo => _userInfo;
 
   void initUser() {
@@ -50,9 +51,11 @@ class UserModel with ChangeNotifier {
     return user;
   }
 
-  signup(BuildContext context, String username, String email, String pwd) async {
+  signup(BuildContext context, String username, String nickname, String email,
+      String pwd) async {
     _loggedIn = false;
-    var response = await API.signup(context, username: username, password: pwd, email: email);
+    var response = await API.signup(context,
+        username: username, nickname: nickname, password: pwd, email: email);
 
     if (response != null) {
       if (response.data["code"] == 20000) {
@@ -64,7 +67,7 @@ class UserModel with ChangeNotifier {
 
   refreshLogin({BuildContext context}) async {
     _loggedIn = false;
-    var response = await API.refreshLogin(context : context);
+    var response = await API.refreshLogin(context: context);
     if (response != null) {
       _user.accessToken = response.data["accessToken"];
       _user.refreshToken = response.data["refreshToken"];
@@ -91,8 +94,8 @@ class UserModel with ChangeNotifier {
 
   _saveUserInfo() {
     var state = {
-      'user' : _user,
-      'user_info' : _userInfo,
+      'user': _user,
+      'user_info': _userInfo,
     };
     Application.sp.setString('user', json.encode(state));
   }
@@ -128,5 +131,4 @@ class UserModel with ChangeNotifier {
     _userInfo = null;
     _deleteUserInfo();
   }
-
 }

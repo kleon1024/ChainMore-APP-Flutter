@@ -327,7 +327,8 @@ class _PostPageState extends State<PostPage> {
                                 setState(() {
                                   _comments.insert(0, r);
                                 });
-                                FocusScope.of(context).requestFocus(new FocusNode());
+                                FocusScope.of(context)
+                                    .requestFocus(new FocusNode());
                               }
                             });
                           })
@@ -337,7 +338,31 @@ class _PostPageState extends State<PostPage> {
                             child: ThinBorderButton(
                               text: "认证前置领域后评论",
                               onTap: () {
-                                // TODO Show Pre-Request Domain
+                                print("TAPPPPPP");
+                                if (!userModel.userInfo.rootCertified) {
+                                  Utils.showDoubleChoiceDialog(
+                                    context,
+                                    title: "📋认证系统",
+                                    body: "在开始任意领域的认证前，\n需要获得顶级领域<阡陌>的认证。",
+                                    leftText: "放弃认证",
+                                    rightText: "开始认证",
+                                    leftFunc: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    rightFunc: () {
+                                      Navigator.of(context).pop();
+                                      NavigatorUtil.goDomainCertifyPage(
+                                        context,
+                                        data: Domain(id: 1),
+                                      ).then((res) {
+                                        setState(() {});
+                                      });
+                                    },
+                                  );
+                                } else {
+                                  NavigatorUtil.goDomainCertifyPage(context,
+                                      data: _post.domain.dependeds[0]);
+                                }
                               },
                               color: CMColors.blueLonely,
                             )))
@@ -369,7 +394,6 @@ class _PostPageState extends State<PostPage> {
       }
     });
   }
-
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {

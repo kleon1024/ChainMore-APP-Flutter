@@ -120,14 +120,13 @@ class _WebViewPageState extends State<WebViewPage> {
             onWebViewCreated: (WebViewController c) {
               _controller = c;
             },
-//          navigationDelegate: (NavigationRequest request) {
-//            print("Loading... ${request.url}");
-//            if(request.url.startsWith("http")) {
-//              return NavigationDecision.navigate;
-//            } else {
-//              return NavigationDecision.prevent;
-//            }
-//          },
+          navigationDelegate: (NavigationRequest request) {
+            if(request.url.startsWith("http")) {
+              return NavigationDecision.navigate;
+            } else {
+              return NavigationDecision.prevent;
+            }
+          },
           ),
         ),
       ),

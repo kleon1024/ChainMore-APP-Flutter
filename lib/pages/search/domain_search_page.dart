@@ -38,6 +38,7 @@ class _DomainSearchPageState extends State<DomainSearchPage>
   String searchText = "";
   String lastSearchText = "";
   bool certifying = false;
+  bool forceReload = false;
 
   @override
   void initState() {
@@ -154,7 +155,10 @@ class _DomainSearchPageState extends State<DomainSearchPage>
             ? VEmptyView(0)
             : CustomFutureBuilder<List<Domain>>(
                 futureFunc: API.getHotDomainData,
+                forceUpdate: forceReload,
                 builder: (context, data) {
+                  forceReload = false;
+
                   return ListView.builder(
                     itemBuilder: (context, index) {
                       var curDomain = data[index];
@@ -226,42 +230,46 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                                                     UserModel userModel =
                                                         Provider.of<UserModel>(
                                                             context);
+                                                    if (!userModel.userInfo
+                                                        .rootCertified) {
+                                                      Utils
+                                                          .showDoubleChoiceDialog(
+                                                        context,
+                                                        title: "📋认证系统",
+                                                        body:
+                                                        "在开始任意领域的认证前，\n需要获得顶级领域<阡陌>的认证。",
+                                                        leftText: "放弃认证",
+                                                        rightText: "开始认证",
+                                                        leftFunc: () {
+                                                          Navigator.of(
+                                                              context)
+                                                              .pop();
+                                                        },
+                                                        rightFunc: () {
+                                                          Navigator.of(
+                                                              context)
+                                                              .pop();
+                                                          NavigatorUtil
+                                                              .goDomainCertifyPage(
+                                                            context,
+                                                            data:
+                                                            Domain(id: 1),
+                                                          ).then((res) {
+                                                            setState(() {
+                                                              forceReload = true;
+                                                            });
+                                                          });
+                                                        },
+                                                      );
+                                                    } else {
                                                     if (widget.data.state ==
                                                         "precertified") {
-                                                      //TODO Pre-Request Certification
+                                                      NavigatorUtil.goDomainCertifyPage(context, data: curDomain.dependeds[0]).then((res) {
+                                                        setState(() {
+                                                          forceReload = true;
+                                                        });
+                                                      });
                                                     } else {
-                                                      if (!userModel.userInfo
-                                                          .rootCertified) {
-                                                        Utils
-                                                            .showDoubleChoiceDialog(
-                                                          context,
-                                                          title: "📋认证系统",
-                                                          body:
-                                                              "在开始任意领域的认证前，\n需要获得顶级领域<阡陌>的认证。",
-                                                          leftText: "放弃认证",
-                                                          rightText: "开始认证",
-                                                          leftFunc: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          rightFunc: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                            NavigatorUtil
-                                                                .goDomainCertifyPage(
-                                                              context,
-                                                              data:
-                                                                  Domain(id: 1),
-                                                            ).then((res) {
-                                                              setState(() {
-                                                                _isSearching = _isSearching;
-                                                              });
-                                                            });
-                                                          },
-                                                        );
-                                                      } else {
                                                         NavigatorUtil
                                                                 .goDomainCertifyPage(
                                                                     context,
@@ -269,7 +277,7 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                                                                         curDomain)
                                                             .then((res) {
                                                           setState(() {
-                                                            _isSearching = _isSearching;
+                                                            forceReload = true;
                                                           });
                                                         });
                                                       }
