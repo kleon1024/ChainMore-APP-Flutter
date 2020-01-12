@@ -1,6 +1,7 @@
 import 'package:chainmore/models/author.dart';
 import 'package:chainmore/models/category.dart';
 import 'package:chainmore/models/domain.dart';
+import 'package:chainmore/models/emoji.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'post.g.dart';
@@ -18,6 +19,7 @@ class Post {
   int votes;
   int comments;
   int collects;
+  List<Emoji> emojis;
 
   bool collected;
 
@@ -33,6 +35,7 @@ class Post {
     this.votes,
     this.comments,
     this.collects,
+    this.emojis,
 
     this.collected,
   });

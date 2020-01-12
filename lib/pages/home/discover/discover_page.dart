@@ -51,7 +51,6 @@ class _DiscoverPageState extends State<DiscoverPage>
         await API.getTrendingPosts(params: {"offset": offset, "limit": limit});
     if (posts.isNotEmpty) {
       items.addAll(posts);
-      items = posts;
       if (posts.length < limit) {
         _refreshController.loadNoData();
       }
@@ -143,7 +142,9 @@ class _DiscoverPageState extends State<DiscoverPage>
                         ],
                       );
                     }
-                    return PostItem(item: items[i]);
+                    return PostItem(items[i], callback: (post) {
+                      items[i] = post;
+                    });
                   },
                   separatorBuilder: (context, index) {
                     return Container(

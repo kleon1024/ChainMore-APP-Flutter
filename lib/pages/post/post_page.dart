@@ -1,5 +1,6 @@
 import 'package:chainmore/models/comment.dart';
 import 'package:chainmore/models/domain.dart';
+import 'package:chainmore/models/emoji.dart';
 import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/models/web.dart';
@@ -17,6 +18,7 @@ import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:chainmore/widgets/widget_button_thin_border.dart';
 import 'package:chainmore/widgets/widget_category_tag.dart';
+import 'package:chainmore/widgets/widget_circle_button.dart';
 import 'package:chainmore/widgets/widget_round_header.dart';
 import 'package:chainmore/widgets/widget_sliver_future_builder.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,8 +30,9 @@ import 'package:provider/provider.dart';
 
 class PostPage extends StatefulWidget {
   final Post item;
+  final Function callback;
 
-  PostPage(this.item);
+  PostPage(this.item, {this.callback});
 
   @override
   _PostPageState createState() => _PostPageState();
@@ -76,9 +79,11 @@ class _PostPageState extends State<PostPage> {
                     if (login) {
                       if (!collecting) {
                         collecting = true;
+                        print(collected);
                         setState(() {
                           collected = !collected;
                         });
+                        print(collected);
                         if (!collected) {
                           API.unCollectPost(context,
                               params: {'id': widget.item.id}).then((res) {
@@ -95,6 +100,7 @@ class _PostPageState extends State<PostPage> {
                             if (res != null) {
                               setState(() {
                                 collected = true;
+                                print(collected);
                               });
                             }
                             collecting = false;
@@ -113,7 +119,7 @@ class _PostPageState extends State<PostPage> {
                   backgroundColor: Colors.black87,
                   child: Icon(Icons.close),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(_post);
                   },
                 ),
               ],
@@ -143,13 +149,7 @@ class _PostPageState extends State<PostPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Hero(
-                                  tag: "post_item_" + widget.item.id.toString(),
-                                  child: Material(
-                                    child: PostHeader(widget.item),
-                                    color: Colors.transparent,
-                                  ),
-                                ),
+                                PostHeader(widget.item),
                                 VEmptyView(5),
                                 GestureDetector(
                                   onTap: () {
@@ -166,6 +166,10 @@ class _PostPageState extends State<PostPage> {
                                     ],
                                   ),
                                 ),
+                                VEmptyView(10),
+                                _post != null
+                                    ? _buildEmojiButton()
+                                    : VEmptyView(0),
                               ],
                             ),
                           ),
@@ -179,7 +183,6 @@ class _PostPageState extends State<PostPage> {
                           String description = "";
                           if (post != null) {
                             description = post.description;
-                            collected = post.collected;
                           } else {
                             return Center(child: Text("加载失败"));
                           }
@@ -282,6 +285,7 @@ class _PostPageState extends State<PostPage> {
                                 Utils.showToast('评论成功！');
                                 setState(() {
                                   _comments.insert(0, r);
+                                  _post.comments += 1;
                                 });
                                 FocusScope.of(context)
                                     .requestFocus(new FocusNode());
@@ -338,6 +342,64 @@ class _PostPageState extends State<PostPage> {
             ],
           ),
         ));
+  }
+
+  _buildEmojiButton() {
+    _post.emojis.sort((a, b) => b.count.compareTo(a.count));
+    return Row(
+      children: <Widget>[
+        Row(
+          children: _post.emojis.map((item) {
+            if (item.count > 0) {
+              return EmojiCircleButton(emoji: item.emoji);
+            } else {
+              return HEmptyView(0);
+            }
+          }).toList(),
+        ),
+        DropdownButton<String>(
+          items: [
+            DropdownMenuItem<String>(
+              value: "add",
+              child: Icon(Icons.add_circle_outline, size: 22),
+            ),
+            DropdownMenuItem<String>(
+              value: "emoji",
+              child: Container(
+                child: Column(
+                  children: _post.emojis
+                      .map(
+                        (item) => InkWell(
+                          onTap: () {
+                            item.count += 1;
+                            if (widget.callback != null) {
+                              widget.callback(_post.emojis);
+                            }
+                            Navigator.of(context).pop();
+                            API.addEmojiReply(context,
+                                params: {'post': _post.id, 'emoji': item.id});
+                            setState(() {});
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: ScreenUtil().setHeight(10)),
+                            child: Text(item.emoji),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ),
+          ],
+          value: "add",
+          elevation: 0,
+          onChanged: (value) {},
+          underline: Container(),
+          iconSize: 0,
+        ),
+      ],
+    );
   }
 
   void setData(Post data) {

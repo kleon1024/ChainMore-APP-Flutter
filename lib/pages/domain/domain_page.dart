@@ -4,7 +4,7 @@ import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/network/net_utils.dart';
-import 'package:chainmore/pages/domain/domain_post_item.dart';
+import 'package:chainmore/pages/home/discover/post_item.dart';
 import 'package:chainmore/pages/post/comment_input_widget.dart';
 import 'package:chainmore/pages/post/comment_item.dart';
 import 'package:chainmore/providers/edit_model.dart';
@@ -386,8 +386,8 @@ class _DomainPageState extends State<DomainPage> {
                                 bottom: ScreenUtil().setHeight(lastPadding),
                                 left: ScreenUtil().setWidth(0),
                                 right: ScreenUtil().setWidth(0)),
-                            child: DomainPostItem(
-                                item: _posts[index], domain: widget.item),
+                            child: PostItem(
+                                _posts[index], domain: widget.item),
                           );
                         }, childCount: _posts.length),
                       ),

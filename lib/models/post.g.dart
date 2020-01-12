@@ -26,6 +26,10 @@ Post _$PostFromJson(Map<String, dynamic> json) {
     votes: json['votes'] as int,
     comments: json['comments'] as int,
     collects: json['collects'] as int,
+    emojis: (json['emojis'] as List)
+        ?.map(
+            (e) => e == null ? null : Emoji.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     collected: json['collected'] as bool,
   );
 }
@@ -42,5 +46,6 @@ Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
       'votes': instance.votes,
       'comments': instance.comments,
       'collects': instance.collects,
+      'emojis': instance.emojis,
       'collected': instance.collected,
     };

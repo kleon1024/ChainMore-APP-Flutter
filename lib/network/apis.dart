@@ -482,4 +482,14 @@ class API {
       return List<Sparkle>.from(response.data["items"].map((item) => Sparkle.fromJson(item)).toList());
     }
   }
+
+  static addEmojiReply(BuildContext context, {Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("post", "/v1/post/emoji",
+        params: params, context: context, isShowLoading: false)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    return response != null;
+  }
 }

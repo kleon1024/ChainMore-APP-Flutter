@@ -1,3 +1,4 @@
+import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/models/web.dart';
 import 'package:chainmore/pages/post/widget_post_header.dart';
@@ -8,21 +9,29 @@ import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:chainmore/widgets/widget_category_tag.dart';
+import 'package:chainmore/widgets/widget_circle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PostItem extends StatelessWidget {
   final Post item;
+  final Domain domain;
+  final Function callback;
 
-  PostItem({
-    @required this.item,
-  });
+  PostItem(this.item, {this.domain, this.callback});
 
   @override
   Widget build(BuildContext context) {
+
+    item.emojis.sort((a, b) => a.count.compareTo(b.count));
+
     return GestureDetector(
       onTap: () {
-        NavigatorUtil.goPostPage(context, data: item);
+        NavigatorUtil.goPostPage(context, data: item).then((res) {
+          if (res != null && callback != null) {
+            callback(res);
+          }
+        });
       },
       child: Container(
         color: Colors.white,
@@ -35,13 +44,8 @@ class PostItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Hero(
-                tag: "post_item_" + item.id.toString(),
-                child: Material(
-                  child: PostHeader(item),
-                  color: Colors.transparent,
-                ),
-              ),
+              PostHeader(item,
+                  domain: domain == null || item.domain.id != domain.id),
               VEmptyView(5),
               item.description != ""
                   ? Text(
@@ -61,6 +65,24 @@ class PostItem extends StatelessWidget {
                   item.author.nickname,
                   style: TextUtil.style(13, 500, color: Colors.black45),
                 ),
+              ),
+              VEmptyView(15),
+              Row(
+                children: item.emojis.map((item) {
+                  if (item.count > 0) {
+                    return EmojiCircleButton(emoji: item.emoji);
+                  } else {
+                    return HEmptyView(0);
+                  }
+                }).toList(),
+//                  <Widget>[
+//                  EmojiCircleButton(emoji: "🤩"), // Like It Very Much
+//                  EmojiCircleButton(emoji: "🤔"), // Confused
+//                  EmojiCircleButton(emoji: "😑"), // Dislike
+//                  EmojiCircleButton(emoji: "❤"), // Thankful
+//                  EmojiCircleButton(emoji: "🚀"), // Hot
+//                  EmojiCircleButton(emoji: "🍎"), // Inspired
+//                ],
               ),
               VEmptyView(10),
               Row(

@@ -5,7 +5,6 @@ import 'package:chainmore/models/post.dart';
 import 'package:chainmore/models/sparkle.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/network/net_utils.dart';
-import 'package:chainmore/pages/domain/domain_post_item.dart';
 import 'package:chainmore/pages/home/sparkle/sparkle_item.dart';
 import 'package:chainmore/pages/post/comment_input_widget.dart';
 import 'package:chainmore/pages/post/comment_item.dart';

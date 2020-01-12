@@ -61,8 +61,8 @@ class NavigatorUtil {
     return _navigateTo(context, Routes.domainCreate);
   }
 
-  static void goPostPage(BuildContext context, {@required Post data}) {
-    _navigateTo(context,
+  static goPostPage(BuildContext context, {@required Post data}) {
+    return _navigateTo(context,
         "${Routes.post}?data=${FluroConvertUtils.object2string(data)}");
   }
 
