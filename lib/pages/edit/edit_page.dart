@@ -1,3 +1,4 @@
+import 'package:chainmore/models/category.dart';
 import 'package:chainmore/models/domain_search.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/providers/edit_model.dart';
@@ -7,7 +8,10 @@ import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
+import 'package:chainmore/widgets/widget_category_tag.dart';
+import 'package:chainmore/widgets/widget_category_tag_selectable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:common_utils/common_utils.dart' as CommonUtils;
@@ -23,6 +27,10 @@ class _EditPageState extends State<EditPage>
   bool posting = false;
 
   bool init = false;
+
+  Category article = Category(id: 1, category: "文章");
+  Category paid = Category(id: 2, category: "付费");
+  Category ads = Category(id: 3, category: "广告");
 
   final TextEditingController _editController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
@@ -55,6 +63,7 @@ class _EditPageState extends State<EditPage>
       init = true;
     }
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(ScreenUtil().setHeight(120)),
         child: SafeArea(
@@ -139,7 +148,9 @@ class _EditPageState extends State<EditPage>
                           "description": _editController.text,
                           "url": url,
                           "domain": editModel.domain.id,
-                          "categories": [],
+                          "categories": editModel.categories
+                              .map((item) => item.id)
+                              .toList(),
                         };
                         if (!posting) {
                           posting = true;
@@ -235,6 +246,7 @@ class _EditPageState extends State<EditPage>
                             )
                           : VEmptyView(10),
                       TextField(
+                        autofocus: true,
                         controller: _editController,
                         maxLines: 10,
                         style: TextUtil.style(15, 400),
@@ -281,39 +293,95 @@ class _EditPageState extends State<EditPage>
                             data: DomainSearchData(state: "precertified"));
                       },
                       child: Container(
+                          height: ScreenUtil()
+                              .setHeight(ScreenUtil().setHeight(160)),
                           child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              InkWell(
-                                onTap: () {
-                                  if (editModel.domain != null) {
-                                    editModel.clearDomain();
-                                    setState(() {
-                                      title = title;
-                                    });
-                                  } else {
-                                    NavigatorUtil.goDomainSearchPage(context,
-                                        data: DomainSearchData(
-                                            state: "precertified"));
-                                  }
-                                },
-                                child: Icon(editModel.domain != null
-                                    ? Icons.clear
-                                    : Icons.add),
+                              Row(
+                                children: <Widget>[
+                                  InkWell(
+                                    onTap: () {
+                                      if (editModel.domain != null) {
+                                        editModel.clearDomain();
+                                        setState(() {
+                                          title = title;
+                                        });
+                                      } else {
+                                        NavigatorUtil.goDomainSearchPage(
+                                            context,
+                                            data: DomainSearchData(
+                                                state: "precertified"));
+                                      }
+                                    },
+                                    child: Icon(editModel.domain != null
+                                        ? Icons.clear
+                                        : Icons.add),
+                                  ),
+                                  HEmptyView(10),
+                                  Text(
+                                      editModel.domain != null
+                                          ? editModel.domain.title
+                                          : "添加领域",
+                                      style: TextUtil.style(15, 400)),
+                                ],
                               ),
-                              HEmptyView(10),
-                              Text(
-                                  editModel.domain != null
-                                      ? editModel.domain.title
-                                      : "添加领域",
-                                  style: TextUtil.style(15, 400)),
+                              Icon(Icons.chevron_right),
                             ],
-                          ),
-                          Icon(Icons.chevron_right),
-                        ],
-                      )),
+                          )),
+                    )
+                  : VEmptyView(0),
+              VEmptyView(20),
+              title == "分享"
+                  ? InkWell(
+                      onTap: _onSelectClassifier,
+                      child: Container(
+                        height:
+                            ScreenUtil().setHeight(ScreenUtil().setHeight(160)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                              child: Row(
+                                children: <Widget>[
+                                  InkWell(
+                                    onTap: () {
+                                      if (editModel.categories.isNotEmpty) {
+                                        editModel.clearCategory();
+                                        setState(() {
+                                          title = title;
+                                        });
+                                      } else {
+                                        NavigatorUtil.goDomainSearchPage(
+                                            context,
+                                            data: DomainSearchData(
+                                                state: "precertified"));
+                                      }
+                                    },
+                                    child: Icon(editModel.domain != null
+                                        ? Icons.clear
+                                        : Icons.add),
+                                  ),
+                                  HEmptyView(10),
+                                  editModel.categories.isNotEmpty
+                                      ? Row(children: List<Widget>.from(
+                                          editModel.categories.map((item) {
+                                          return Container(
+                                            padding: EdgeInsets.only(right: ScreenUtil().setWidth(5)),
+                                            child: CategoryTag(
+                                              text: item.category,
+                                            ),
+                                          );
+                                        })))
+                                      : Text("添加分类",
+                                          style: TextUtil.style(15, 400)),
+                                ],
+                              ),
+                            ),
+                            Icon(Icons.chevron_right),
+                          ],
+                        ),
+                      ),
                     )
                   : VEmptyView(0),
             ],
@@ -321,6 +389,117 @@ class _EditPageState extends State<EditPage>
         ),
       ),
     );
+  }
+
+  void _onSelectClassifier() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          EditModel editModel = Provider.of<EditModel>(context);
+          var initCategories = editModel.categories;
+          return Container(
+            color: Color(0xFF737373),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(ScreenUtil().setWidth(50)),
+                    topRight: Radius.circular(ScreenUtil().setWidth(50))),
+              ),
+              padding: EdgeInsets.symmetric(
+                  vertical: ScreenUtil().setWidth(50),
+                  horizontal: ScreenUtil().setHeight(50)),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "内容",
+                        style: TextUtil.style(14, 700),
+                      ),
+                      HEmptyView(20),
+                      Expanded(
+                        child: Row(
+                          children: <Widget>[
+                            CategoryTagSelectable(
+                              text: article.category,
+                              selected: initCategories.contains(article),
+                              onTap: () {
+                                if (initCategories.contains(article)) {
+                                  editModel.removeCategory(article);
+                                } else {
+                                  editModel.addCategory(article);
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  VEmptyView(20),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "付费",
+                        style: TextUtil.style(14, 700),
+                      ),
+                      HEmptyView(20),
+                      Expanded(
+                        child: Row(
+                          children: <Widget>[
+                            CategoryTagSelectable(
+                              text: paid.category,
+                              selected: initCategories.contains(paid),
+                              onTap: () {
+                                if (initCategories.contains(paid)) {
+                                  editModel.removeCategory(paid);
+                                } else {
+                                  editModel.addCategory(paid);
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  VEmptyView(20),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "广告",
+                        style: TextUtil.style(14, 700),
+                      ),
+                      HEmptyView(20),
+                      Expanded(
+                        child: Row(
+                          children: <Widget>[
+                            CategoryTagSelectable(
+                              text: ads.category,
+                              selected: initCategories.contains(ads),
+                              onTap: () {
+                                if (initCategories.contains(ads)) {
+                                  editModel.removeCategory(ads);
+                                } else {
+                                  editModel.addCategory(ads);
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        }).then((res) {
+      setState(() {
+        title = title;
+      });
+    });
   }
 
   @override

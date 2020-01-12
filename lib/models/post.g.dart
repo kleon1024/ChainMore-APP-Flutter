@@ -16,7 +16,10 @@ Post _$PostFromJson(Map<String, dynamic> json) {
     author: json['author'] == null
         ? null
         : Author.fromJson(json['author'] as Map<String, dynamic>),
-    category: json['category'] as String,
+    categories: (json['categories'] as List)
+        ?.map((e) =>
+            e == null ? null : Category.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     domain: json['domain'] == null
         ? null
         : Domain.fromJson(json['domain'] as Map<String, dynamic>),
@@ -34,7 +37,7 @@ Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
       'url': instance.url,
       'timestamp': instance.timestamp,
       'author': instance.author,
-      'category': instance.category,
+      'categories': instance.categories,
       'domain': instance.domain,
       'votes': instance.votes,
       'comments': instance.comments,

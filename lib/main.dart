@@ -8,6 +8,7 @@ import 'package:chainmore/providers/update_model.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/route/navigate_service.dart';
 import 'package:chainmore/route/routes.dart';
+import 'package:chainmore/utils/colors.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

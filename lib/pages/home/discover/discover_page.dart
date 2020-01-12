@@ -29,6 +29,7 @@ class _DiscoverPageState extends State<DiscoverPage>
   }
 
   void _onRefresh() async {
+    offset = 1;
     // monitor network fetch
     List posts =
         await API.getTrendingPosts(params: {"offset": offset, "limit": limit});

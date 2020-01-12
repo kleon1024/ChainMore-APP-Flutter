@@ -1,4 +1,5 @@
 import 'package:chainmore/models/author.dart';
+import 'package:chainmore/models/category.dart';
 import 'package:chainmore/models/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -12,7 +13,7 @@ class Post {
   String url;
   String timestamp;
   Author author;
-  String category;
+  List<Category> categories;
   Domain domain;
   int votes;
   int comments;
@@ -27,7 +28,7 @@ class Post {
     this.url,
     this.timestamp,
     this.author,
-    this.category,
+    this.categories,
     this.domain,
     this.votes,
     this.comments,

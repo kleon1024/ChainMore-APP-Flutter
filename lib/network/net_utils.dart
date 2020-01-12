@@ -26,6 +26,7 @@ class NetUtils {
   
   static final String baseUrl = 'http://192.168.3.5:5000';
 
+
   static void init() async {
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;
@@ -79,8 +80,6 @@ class NetUtils {
         relogin = true;
       } else if (refresh) {
         _reLogin(context);
-      } else {
-        return Future.error(Response(data: -1));
       }
     } finally {
       if (context != null && isShowLoading) {

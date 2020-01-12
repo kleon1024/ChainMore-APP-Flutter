@@ -45,6 +45,7 @@ class CategoryTag extends StatelessWidget {
         child: Text(
           text,
           style: TextUtil.style(textSize, textWeight, color: textColor),
+          textAlign: TextAlign.center,
         ),
       ),
     );

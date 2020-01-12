@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chainmore/models/category.dart';
 import 'package:chainmore/models/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:chainmore/application.dart';
@@ -11,10 +12,13 @@ class EditModel with ChangeNotifier {
 
   Domain _domain;
 
+  Set<Category> _categories;
+
   Domain get domain => _domain;
   String get title => _title;
   String get body => _body;
   String get url => _url;
+  Set<Category> get categories => _categories;
 
   initState() {
     if (Application.sp.containsKey('edit_state')) {
@@ -23,6 +27,10 @@ class EditModel with ChangeNotifier {
       _body = state['body'];
       _domain = Domain.fromJson(state['domain']);
       _url = state['url'];
+      _categories = state['categories'].toSet();
+    } else {
+      _url = "";
+      _categories = Set<Category>();
     }
   }
 
@@ -46,11 +54,24 @@ class EditModel with ChangeNotifier {
     _url = url;
   }
 
+  addCategory(Category category) {
+    _categories.add(category);
+  }
+
+  removeCategory(Category category) {
+    _categories.remove(category);
+  }
+
+  clearCategory() {
+    _categories.clear();
+  }
+
   reset() {
     _title = "";
     _body = "";
     _url = "";
     _domain = null;
+    _categories.clear();
     deleteEditState();
   }
 
@@ -60,6 +81,7 @@ class EditModel with ChangeNotifier {
       "body" : _body,
       "domain" : _domain,
       "url" : _url,
+      "categories" : _categories.toList(),
     };
 
     Application.sp.setString('edit_state', json.encode(state));

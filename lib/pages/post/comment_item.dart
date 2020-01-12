@@ -32,7 +32,7 @@ class CommentItem extends StatelessWidget {
                   onTap: () {},
                   child: Text(
                     item.author.nickname,
-                    style: TextUtil.style(14, 400),
+                    style: TextUtil.style(14, 600),
                   ),
                 ),
                 HEmptyView(10),

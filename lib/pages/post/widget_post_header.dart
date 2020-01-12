@@ -1,4 +1,3 @@
-
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/models/web.dart';
 import 'package:chainmore/utils/colors.dart';
@@ -12,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PostHeader extends StatelessWidget {
-
   final Post item;
 
   PostHeader(this.item);
@@ -30,7 +28,7 @@ class PostHeader extends StatelessWidget {
             child: Container(
               width: double.infinity,
               padding:
-              EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(10)),
+                  EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(10)),
               child: Row(
                 children: <Widget>[
                   Expanded(
@@ -55,20 +53,27 @@ class PostHeader extends StatelessWidget {
               ),
             ),
           ),
-//              Row(children: <Widget>[CategoryTag(text: item.category)]),
+          Row(children: List<Widget>.from(item.categories.map((item) {
+            return Container(
+              padding: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
+              child: CategoryTag(
+                text: item.category,
+              ),
+            );
+          }))),
           VEmptyView(5),
           Text(item.title, style: TextUtil.style(16, 700)),
           VEmptyView(5),
           item.url != ""
               ? CategoryTag(
-            text: item.url.split("/")[2],
-            color: Colors.white,
-            textColor: CMColors.blueLonely,
-            onTap: () {
-              NavigatorUtil.goWebViewPage(context,
-                  web: Web(url: item.url, post: item));
-            },
-          )
+                  text: item.url.split("/")[2],
+                  color: Colors.white,
+                  textColor: CMColors.blueLonely,
+                  onTap: () {
+                    NavigatorUtil.goWebViewPage(context,
+                        web: Web(url: item.url, post: item));
+                  },
+                )
               : VEmptyView(0),
         ],
       ),

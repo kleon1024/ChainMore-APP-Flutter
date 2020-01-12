@@ -59,9 +59,10 @@ class _DomainPageState extends State<DomainPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((d) {
+    WidgetsBinding.instance.addPostFrameCallback((d) async {
       if (mounted) {
-        request();
+        await request();
+        setState(() {});
       }
     });
   }
@@ -72,6 +73,7 @@ class _DomainPageState extends State<DomainPage> {
       "offset": postOffset,
       "limit": postLimit,
     });
+
     if (postOffset == 1) {
       _posts = response;
     } else {
@@ -172,14 +174,17 @@ class _DomainPageState extends State<DomainPage> {
                     footer: LoadFooter(),
                     controller: _controller,
                     onRefresh: () async {
+                      postOffset = 1;
                       setState(() {
-                        postOffset = 1;
+                        _forceUpdate = true;
                       });
                       request();
+                      setState(() {});
                     },
                     onLoad: () async {
                       var response = await request();
                       _controller.finishLoad(noMore: response, success: true);
+                      setState(() {});
                     },
                     slivers: <Widget>[
                       SliverAppBar(
@@ -231,7 +236,8 @@ class _DomainPageState extends State<DomainPage> {
                               String certifyString = "获得认证";
                               String watchString = "关注领域";
 
-                              setData(domain);
+                              _domain = domain;
+                              _forceUpdate = false;
 
                               if (domain.certified) {
                                 certifyString = "已认证";
@@ -324,7 +330,8 @@ class _DomainPageState extends State<DomainPage> {
                                       text: "领域结构",
                                       onTap: () {
                                         if (userModel.isLoggedIn()) {
-                                            NavigatorUtil.goDomainMapPage(context, data: _domain);
+                                          NavigatorUtil.goDomainMapPage(context,
+                                              data: _domain);
                                         } else {
                                           NavigatorUtil.goLoginPage(context,
                                               data:
@@ -417,14 +424,14 @@ class _DomainPageState extends State<DomainPage> {
         ));
   }
 
-  void setData(Domain data) {
-    Future.delayed(Duration(milliseconds: 50), () {
-      if (mounted && _forceUpdate) {
-        setState(() {
-          _forceUpdate = false;
-          _domain = data;
-        });
-      }
-    });
-  }
+//  void setData(Domain data) {
+//    Future.delayed(Duration(milliseconds: 50), () {
+//      if (mounted && _forceUpdate) {
+//        setState(() {
+//          _forceUpdate = false;
+//          _domain = data;
+//        });
+//      }
+//    });
+//  }
 }
