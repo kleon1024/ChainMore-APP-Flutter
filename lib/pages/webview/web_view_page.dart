@@ -5,6 +5,7 @@ import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
+import 'package:chainmore/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,7 @@ class _WebViewPageState extends State<WebViewPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((d) async {
       if (mounted) {
+        Loading.showLoading(context);
         var response =
             await API.getPost(context, params: {'id': widget.web.post.id});
         if (response != null) {
@@ -127,6 +129,9 @@ class _WebViewPageState extends State<WebViewPage> {
               return NavigationDecision.prevent;
             }
           },
+            onPageFinished: (res) {
+              Loading.hideLoading(context);
+            },
           ),
         ),
       ),
