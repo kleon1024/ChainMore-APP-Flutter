@@ -1,7 +1,12 @@
+import 'package:chainmore/models/category_group.dart';
 import 'package:chainmore/models/tab_icon_data.dart';
 import 'package:chainmore/pages/home/home_page.dart';
 import 'package:chainmore/pages/login_page.dart';
 import 'package:chainmore/pages/user/mine_page.dart';
+import 'package:chainmore/providers/certify_model.dart';
+import 'package:chainmore/providers/domain_create_model.dart';
+import 'package:chainmore/providers/edit_model.dart';
+import 'package:chainmore/providers/setting_model.dart';
 import 'package:chainmore/providers/update_model.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
@@ -31,11 +36,19 @@ class _MainPageState extends State<MainPage>
     tabIconsList[0].isSelected = true;
     WidgetsBinding.instance.addObserver(this);
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((d) {
+    WidgetsBinding.instance.addPostFrameCallback((d) async {
       if (mounted) {
+        EditModel editModel = Provider.of<EditModel>(context);
+        editModel.initState();
+        CertifyModel certifyModel = Provider.of<CertifyModel>(context);
+        certifyModel.initState();
+        DomainCreateModel domainCreateModel = Provider.of<DomainCreateModel>(context);
+        domainCreateModel.initState();
+        SettingModel settingModel = Provider.of<SettingModel>(context);
+        settingModel.initState();
+        await Utils.checkClipBoard(context: context);
         UpdateModel updateModel = Provider.of<UpdateModel>(context);
         updateModel.checkUpdate(context);
-        Utils.checkClipBoard(context: context);
       }
     });
   }

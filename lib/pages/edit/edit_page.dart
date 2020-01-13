@@ -2,6 +2,7 @@ import 'package:chainmore/models/category.dart';
 import 'package:chainmore/models/domain_search.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/providers/edit_model.dart';
+import 'package:chainmore/providers/setting_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
@@ -367,7 +368,9 @@ class _EditPageState extends State<EditPage>
                                       ? Row(children: List<Widget>.from(
                                           editModel.categories.map((item) {
                                           return Container(
-                                            padding: EdgeInsets.only(right: ScreenUtil().setWidth(5)),
+                                            padding: EdgeInsets.only(
+                                                right:
+                                                    ScreenUtil().setWidth(5)),
                                             child: CategoryTag(
                                               text: item.category,
                                             ),
@@ -391,13 +394,53 @@ class _EditPageState extends State<EditPage>
     );
   }
 
+  _buildCategoryGroups() {
+    SettingModel settingModel = Provider.of<SettingModel>(context);
+    EditModel editModel = Provider.of<EditModel>(context);
+    var initCategories = editModel.categories;
+
+    return settingModel.categoryGroups
+        .map(
+          (categoryGroup) => Container(
+            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(30)),
+            child: Row(
+              children: <Widget>[
+                Text(categoryGroup.title, style: TextUtil.style(15, 700)),
+                HEmptyView(30),
+                Row(
+                  children: categoryGroup.categories
+                      .map(
+                        (category) => Container(
+                          padding:
+                              EdgeInsets.only(right: ScreenUtil().setWidth(50)),
+                          child: CategoryTagSelectable(
+                            text: category.category,
+                            selected: initCategories.contains(category),
+                            onTap: () {
+                              if (initCategories.contains(category)) {
+                                editModel.removeCategory(category);
+                              } else {
+                                editModel.addCategory(category);
+                              }
+                            },
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ],
+            ),
+          ),
+        )
+        .toList();
+  }
+
   void _onSelectClassifier() {
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          EditModel editModel = Provider.of<EditModel>(context);
-          var initCategories = editModel.categories;
           return Container(
+            height: ScreenUtil().setHeight(650),
             color: Color(0xFF737373),
             child: Container(
               decoration: BoxDecoration(
@@ -407,92 +450,9 @@ class _EditPageState extends State<EditPage>
                     topRight: Radius.circular(ScreenUtil().setWidth(50))),
               ),
               padding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(50),
-                  horizontal: ScreenUtil().setHeight(50)),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        "内容",
-                        style: TextUtil.style(14, 700),
-                      ),
-                      HEmptyView(20),
-                      Expanded(
-                        child: Row(
-                          children: <Widget>[
-                            CategoryTagSelectable(
-                              text: article.category,
-                              selected: initCategories.contains(article),
-                              onTap: () {
-                                if (initCategories.contains(article)) {
-                                  editModel.removeCategory(article);
-                                } else {
-                                  editModel.addCategory(article);
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  VEmptyView(20),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        "付费",
-                        style: TextUtil.style(14, 700),
-                      ),
-                      HEmptyView(20),
-                      Expanded(
-                        child: Row(
-                          children: <Widget>[
-                            CategoryTagSelectable(
-                              text: paid.category,
-                              selected: initCategories.contains(paid),
-                              onTap: () {
-                                if (initCategories.contains(paid)) {
-                                  editModel.removeCategory(paid);
-                                } else {
-                                  editModel.addCategory(paid);
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  VEmptyView(20),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        "广告",
-                        style: TextUtil.style(14, 700),
-                      ),
-                      HEmptyView(20),
-                      Expanded(
-                        child: Row(
-                          children: <Widget>[
-                            CategoryTagSelectable(
-                              text: ads.category,
-                              selected: initCategories.contains(ads),
-                              onTap: () {
-                                if (initCategories.contains(ads)) {
-                                  editModel.removeCategory(ads);
-                                } else {
-                                  editModel.addCategory(ads);
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
+                  vertical: ScreenUtil().setWidth(30),
+                  horizontal: ScreenUtil().setHeight(80)),
+              child: Column(children: _buildCategoryGroups()),
             ),
           );
         }).then((res) {

@@ -4,6 +4,7 @@ import 'package:chainmore/pages/splash_page.dart';
 import 'package:chainmore/providers/certify_model.dart';
 import 'package:chainmore/providers/domain_create_model.dart';
 import 'package:chainmore/providers/edit_model.dart';
+import 'package:chainmore/providers/setting_model.dart';
 import 'package:chainmore/providers/update_model.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/route/navigate_service.dart';
@@ -40,6 +41,9 @@ void main() {
       ChangeNotifierProvider<UpdateModel>.value(
         value: UpdateModel(),
       ),
+      ChangeNotifierProvider<SettingModel>.value(
+        value: SettingModel(),
+      ),
     ],
     child: MyApp(),
   ));
@@ -68,7 +72,7 @@ class MyApp extends StatelessWidget {
       title: 'ChainMore',
       navigatorKey: Application.getIt<NavigateService>().key,
       theme: ThemeData(
-          fontFamily: 'SourceHanSans',
+//          fontFamily: 'SourceHanSans',
           brightness: Brightness.light,
           primaryColor: Colors.white,
           splashColor: Colors.transparent,

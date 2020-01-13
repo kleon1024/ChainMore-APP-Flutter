@@ -26,7 +26,7 @@ class CategoryTagSelectable extends StatefulWidget {
       this.selectedColor = CMColors.blueLonely,
       this.selectedBorderColor = CMColors.blueLonely,
       this.selectedTextColor = Colors.white,
-      this.textSize = 13,
+      this.textSize = 14,
       this.textWeight = 400,
       this.borderWidth = 1.0,
       this.selected = false,

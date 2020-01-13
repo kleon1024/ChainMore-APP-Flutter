@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:chainmore/application.dart';
+import 'package:chainmore/models/category.dart';
+import 'package:chainmore/models/category_group.dart';
 import 'package:chainmore/models/certify_rule.dart';
 import 'package:chainmore/models/comment.dart';
 import 'package:chainmore/models/domain.dart';
@@ -491,5 +493,18 @@ class API {
     });
 
     return response != null;
+  }
+
+  static getCategoryGroup({Map<String, dynamic> params}) async {
+    var response = await NetUtils.request("get", "/v1/category_groups",
+        params: params, isShowLoading: false)
+        .catchError((e) {
+      Utils.showToast(e.toString());
+    });
+
+    if (response != null) {
+      return List<CategoryGroup>.from(response.data["items"].map((item) => CategoryGroup.fromJson(item)));
+    }
+    return List<CategoryGroup>();
   }
 }

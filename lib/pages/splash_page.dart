@@ -34,16 +34,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   void goPage() async {
     await Application.initSp();
     UserModel userModel = Provider.of<UserModel>(context);
-    EditModel editModel = Provider.of<EditModel>(context);
-    DomainCreateModel domainCreateModel = Provider.of<DomainCreateModel>(context);
-    CertifyModel certifyModel = Provider.of<CertifyModel>(context);
-    UpdateModel updateModel = Provider.of<UpdateModel>(context);
     userModel.initUser();
-    editModel.initState();
-    domainCreateModel.initState();
-    certifyModel.initState();
-    FlutterDownloader.initialize();
-    updateModel.initState();
     if (userModel.user != null) {
       userModel.refreshLogin(context : context).then((value) {
         if (value != null) {

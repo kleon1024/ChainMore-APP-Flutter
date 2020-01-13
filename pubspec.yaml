@@ -11,7 +11,7 @@ description: The APP frontend of ChainMore based on Flutter.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.6
+version: 1.0.7
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -91,23 +91,6 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-     - family: SourceHanSans
-       fonts:
-         - asset: fonts/SourceHanSans/NotoSansHans-Black.otf
-           weight: 700
-         - asset: fonts/SourceHanSans/NotoSansHans-Bold.otf
-           weight: 600
-         - asset: fonts/SourceHanSans/NotoSansHans-Medium.otf
-           weight: 500
-         - asset: fonts/SourceHanSans/NotoSansHans-Regular.otf
-           weight: 400
-         - asset: fonts/SourceHanSans/NotoSansHans-DemiLight.otf
-           weight: 300
-         - asset: fonts/SourceHanSans/NotoSansHans-Light.otf
-           weight: 200
-         - asset: fonts/SourceHanSans/NotoSansHans-Thin-Windows.otf
-           weight: 100
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

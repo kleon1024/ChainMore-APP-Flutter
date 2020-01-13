@@ -59,7 +59,7 @@ class UpdateModel with ChangeNotifier {
     deleteUpdateState();
   }
 
-  saveEditState() {
+  saveUpdateState() {
     var state = {
       "version" : _version,
     };
