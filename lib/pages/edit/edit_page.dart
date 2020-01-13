@@ -46,6 +46,7 @@ class _EditPageState extends State<EditPage>
   @override
   Widget build(BuildContext context) {
     EditModel editModel = Provider.of<EditModel>(context);
+    SettingModel settingModel = Provider.of<SettingModel>(context);
 
     if (!init) {
       if (editModel.title != null && editModel.title != "") {
@@ -233,6 +234,12 @@ class _EditPageState extends State<EditPage>
                                   setState(() {
                                     title = "灵感";
                                   });
+                                } else if (!editModel.questionMarked &&
+                                    text.contains(RegExp(r'[?？吗]'))) {
+                                  editModel.addCategory(
+                                      settingModel.getCategory("提问"));
+                                  editModel.setQuestionMarked();
+                                  setState(() {});
                                 }
                               },
                             )
@@ -267,6 +274,13 @@ class _EditPageState extends State<EditPage>
                             if (_titleController.text.isEmpty) {
                               if (text.contains('\n')) {
                                 if (title != "分享") {
+                                  if (!editModel.questionMarked &&
+                                      text.contains(RegExp(r'[?？吗]'))) {
+                                    editModel.addCategory(
+                                        settingModel.getCategory("提问"));
+                                    editModel.setQuestionMarked();
+                                  }
+
                                   setState(() {
                                     title = "分享";
                                   });

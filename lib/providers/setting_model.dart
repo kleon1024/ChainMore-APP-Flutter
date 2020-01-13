@@ -19,4 +19,14 @@ class SettingModel with ChangeNotifier {
       _categoryGroups = res;
     });
   }
+
+  getCategory(String category) {
+    for (int i = 0; i < _categoryGroups.length; ++i) {
+      for (int j = 0; j < _categoryGroups[i].categories.length; ++j) {
+        if (_categoryGroups[i].categories[j].category == category) {
+          return _categoryGroups[i].categories[j];
+        }
+      }
+    }
+  }
 }

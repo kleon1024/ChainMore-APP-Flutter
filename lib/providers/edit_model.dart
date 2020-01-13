@@ -10,6 +10,8 @@ class EditModel with ChangeNotifier {
   String _body;
   String _url;
 
+  bool _questMarked = false;
+
   Domain _domain;
 
   Set<Category> _categories;
@@ -19,6 +21,7 @@ class EditModel with ChangeNotifier {
   String get body => _body;
   String get url => _url;
   Set<Category> get categories => _categories;
+  bool get questionMarked => _questMarked;
 
   initState() {
     if (Application.sp.containsKey('edit_state')) {
@@ -28,6 +31,7 @@ class EditModel with ChangeNotifier {
       _domain = Domain.fromJson(state['domain']);
       _url = state['url'];
       _categories = state['categories'].toSet();
+      _questMarked = state['question_marked'];
     } else {
       _url = "";
       _categories = Set<Category>();
@@ -44,6 +48,10 @@ class EditModel with ChangeNotifier {
 
   setTitle(String title) {
     _title = title;
+  }
+
+  setQuestionMarked() {
+    _questMarked = true;
   }
 
   setBody(String body) {
@@ -72,6 +80,7 @@ class EditModel with ChangeNotifier {
     _url = "";
     _domain = null;
     _categories.clear();
+    _questMarked = false;
     deleteEditState();
   }
 
@@ -82,6 +91,7 @@ class EditModel with ChangeNotifier {
       "domain" : _domain,
       "url" : _url,
       "categories" : _categories.toList(),
+      "question_marked" : _questMarked,
     };
 
     Application.sp.setString('edit_state', json.encode(state));
