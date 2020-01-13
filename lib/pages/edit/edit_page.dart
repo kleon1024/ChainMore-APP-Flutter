@@ -65,6 +65,29 @@ class _EditPageState extends State<EditPage>
       }
       init = true;
     }
+
+    var categoryView = editModel.categories.isNotEmpty
+        ? Expanded(
+            child: GridView.count(
+                physics: BouncingScrollPhysics(),
+                shrinkWrap: true,
+                childAspectRatio: 1.5,
+                crossAxisCount: 6,
+                children: List<Widget>.from(editModel.categories.map((item) {
+                  return Container(
+                      padding:
+                          EdgeInsets.only(right: ScreenUtil().setWidth(0)),
+                      child: CategoryTag(
+                        text: item.category,
+                        textSize: 13,
+                      ),
+                    alignment: Alignment.centerLeft,
+                  );
+                }))))
+        : Expanded(
+            child: Text("添加分类",
+                style: TextUtil.style(15, 400), textAlign: TextAlign.start));
+
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: PreferredSize(
@@ -200,69 +223,70 @@ class _EditPageState extends State<EditPage>
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-                ScreenUtil().setWidth(60),
-                ScreenUtil().setWidth(0),
-                ScreenUtil().setWidth(60),
-                ScreenUtil().setWidth(30)),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: ScreenUtil().setHeight(1000),
-                  child: Column(
-                    children: <Widget>[
-                      VEmptyView(50),
-                      title == "分享"
-                          ? TextField(
-                              controller: _titleController,
-                              style: TextUtil.style(18, 500),
-                              decoration: InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.symmetric(vertical: 0),
-                                hintText: "标题",
-                                hintStyle:
-                                    TextUtil.style(18, 500, color: Colors.grey),
-                              ),
-                              onChanged: (text) {
-                                if (text.isEmpty &&
-                                    _editController.text.isEmpty &&
-                                    editModel.domain == null &&
-                                    _urlController.text.isEmpty) {
-                                  setState(() {
-                                    title = "灵感";
-                                  });
-                                } else if (!editModel.questionMarked &&
-                                    text.contains(RegExp(r'[?？吗]'))) {
-                                  editModel.addCategory(
-                                      settingModel.getCategory("提问"));
-                                  editModel.setQuestionMarked();
-                                  setState(() {});
-                                }
-                              },
-                            )
-                          : VEmptyView(0),
-                      title == "分享"
-                          ? TextField(
-                              controller: _urlController,
-                              style: TextUtil.style(15, 400),
-                              decoration: InputDecoration(
-                                  hintText: "链接URL",
-                                  hintStyle: TextUtil.style(15, 400,
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Container(
+              color: Colors.white,
+              padding: EdgeInsets.fromLTRB(
+                  ScreenUtil().setWidth(60),
+                  ScreenUtil().setWidth(0),
+                  ScreenUtil().setWidth(60),
+                  ScreenUtil().setWidth(30)),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: ScreenUtil().setHeight(1000),
+                    child: Column(
+                      children: <Widget>[
+                        title == "分享"
+                            ? TextField(
+                                controller: _titleController,
+                                style: TextUtil.style(18, 500),
+                                decoration: InputDecoration(
+                                  contentPadding:
+                                      EdgeInsets.symmetric(vertical: 0),
+                                  hintText: "标题",
+                                  hintStyle: TextUtil.style(18, 500,
                                       color: Colors.grey),
-                                  border: InputBorder.none),
-                            )
-                          : VEmptyView(10),
-                      GestureDetector(
-                        onPanDown: (details) {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
-                        child: TextField(
+                                ),
+                                onChanged: (text) {
+                                  if (text.isEmpty &&
+                                      _editController.text.isEmpty &&
+                                      editModel.domain == null &&
+                                      _urlController.text.isEmpty) {
+                                    setState(() {
+                                      title = "灵感";
+                                    });
+                                  } else if (!editModel.questionMarked &&
+                                      text.contains(RegExp(r'[?？吗]'))) {
+                                    editModel.addCategory(
+                                        settingModel.getCategory("提问"));
+                                    editModel.setQuestionMarked();
+                                    setState(() {});
+                                  }
+                                },
+                              )
+                            : VEmptyView(0),
+                        title == "分享"
+                            ? TextField(
+                                controller: _urlController,
+                                style: TextUtil.style(15, 400),
+                                decoration: InputDecoration(
+                                    hintText: "链接URL",
+                                    hintStyle: TextUtil.style(15, 400,
+                                        color: Colors.grey),
+                                    isDense: true,
+                                    border: InputBorder.none),
+                              )
+                            : VEmptyView(10),
+                        TextField(
                           autofocus: true,
                           controller: _editController,
-                          maxLines: 10,
+                          maxLines: 8,
                           style: TextUtil.style(15, 400),
                           keyboardType: TextInputType.multiline,
                           decoration: InputDecoration.collapsed(
@@ -303,68 +327,67 @@ class _EditPageState extends State<EditPage>
                             }
                           },
                         ),
-                      ),
-                      VEmptyView(50),
-                    ],
+                        VEmptyView(50),
+                      ],
+                    ),
                   ),
-                ),
-                title == "分享"
-                    ? InkWell(
-                        onTap: () {
-                          NavigatorUtil.goDomainSearchPage(context,
-                              data: DomainSearchData(state: "precertified"));
-                        },
-                        child: Container(
+                  title == "分享"
+                      ? InkWell(
+                          onTap: () {
+                            NavigatorUtil.goDomainSearchPage(context,
+                                data: DomainSearchData(state: "precertified"));
+                          },
+                          child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: ScreenUtil().setHeight(15)),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      InkWell(
+                                        onTap: () {
+                                          if (editModel.domain != null) {
+                                            editModel.clearDomain();
+                                            setState(() {
+                                              title = title;
+                                            });
+                                          } else {
+                                            NavigatorUtil.goDomainSearchPage(
+                                                context,
+                                                data: DomainSearchData(
+                                                    state: "precertified"));
+                                          }
+                                        },
+                                        child: Icon(editModel.domain != null
+                                            ? Icons.clear
+                                            : Icons.add),
+                                      ),
+                                      HEmptyView(10),
+                                      Text(
+                                          editModel.domain != null
+                                              ? editModel.domain.title
+                                              : "添加领域",
+                                          style: TextUtil.style(15, 400)),
+                                    ],
+                                  ),
+                                  Icon(Icons.chevron_right),
+                                ],
+                              )),
+                        )
+                      : VEmptyView(0),
+                  VEmptyView(10),
+                  title == "分享"
+                      ? InkWell(
+                          onTap: _onSelectClassifier,
+                          child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: ScreenUtil().setHeight(15)),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Row(
-                                  children: <Widget>[
-                                    InkWell(
-                                      onTap: () {
-                                        if (editModel.domain != null) {
-                                          editModel.clearDomain();
-                                          setState(() {
-                                            title = title;
-                                          });
-                                        } else {
-                                          NavigatorUtil.goDomainSearchPage(
-                                              context,
-                                              data: DomainSearchData(
-                                                  state: "precertified"));
-                                        }
-                                      },
-                                      child: Icon(editModel.domain != null
-                                          ? Icons.clear
-                                          : Icons.add),
-                                    ),
-                                    HEmptyView(10),
-                                    Text(
-                                        editModel.domain != null
-                                            ? editModel.domain.title
-                                            : "添加领域",
-                                        style: TextUtil.style(15, 400)),
-                                  ],
-                                ),
-                                Icon(Icons.chevron_right),
-                              ],
-                            )),
-                      )
-                    : VEmptyView(0),
-                VEmptyView(10),
-                title == "分享"
-                    ? InkWell(
-                        onTap: _onSelectClassifier,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: ScreenUtil().setHeight(15)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Expanded(
-                                child: Row(
                                   children: <Widget>[
                                     InkWell(
                                       onTap: () {
@@ -385,32 +408,18 @@ class _EditPageState extends State<EditPage>
                                           : Icons.add),
                                     ),
                                     HEmptyView(10),
-                                    editModel.categories.isNotEmpty
-                                        ? Row(children: List<Widget>.from(
-                                            editModel.categories.map((item) {
-                                            return Container(
-                                              padding: EdgeInsets.only(
-                                                  right:
-                                                      ScreenUtil().setWidth(5)),
-                                              child: CategoryTag(
-                                                text: item.category,
-                                                textSize: 13,
-                                              ),
-                                            );
-                                          })))
-                                        : Text("添加分类",
-                                            style: TextUtil.style(15, 400)),
                                   ],
                                 ),
-                              ),
-                              Icon(Icons.chevron_right),
-                            ],
+                                categoryView,
+                                Icon(Icons.chevron_right),
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                    : VEmptyView(0),
-                VEmptyView(500),
-              ],
+                        )
+                      : VEmptyView(0),
+                  VEmptyView(500),
+                ],
+              ),
             ),
           ),
         ),

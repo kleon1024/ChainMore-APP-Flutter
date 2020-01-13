@@ -67,7 +67,7 @@ class _DiscoverPageState extends State<DiscoverPage>
   }
 
   bool _hasAnyCategory(List<Category> categories, Set<int> disabledCategories) {
-    if (disabledCategories.isEmpty) return false;
+    if (disabledCategories.isEmpty) return true;
     for (int i = 0; i < categories.length; ++i) {
       if (disabledCategories.contains(categories[i].id)) return true;
     }
@@ -82,7 +82,6 @@ class _DiscoverPageState extends State<DiscoverPage>
             _hasAnyCategory(e.categories, settingModel.disabledCategories))
         .toList());
 
-    print("rebuild discover page");
     return RefreshConfiguration(
       headerBuilder: () => WaterDropHeader(),
       // Configure the default header indicator. If you have the same header indicator for each page, you need to set this

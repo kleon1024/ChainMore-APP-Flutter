@@ -39,8 +39,7 @@ class _HomePageState extends State<HomePage>
       backgroundColor: Colors.white,
       body: SafeArea(
         bottom: false,
-        child:
-        Stack(
+        child: Stack(
           children: <Widget>[
             Column(
               children: <Widget>[
@@ -53,10 +52,11 @@ class _HomePageState extends State<HomePage>
                         labelStyle: TextStyle(
                             fontSize: ScreenUtil().setSp(52),
                             fontWeight: FontWeight.bold),
-                        unselectedLabelStyle: TextStyle(fontSize: ScreenUtil().setSp(48)),
+                        unselectedLabelStyle:
+                            TextStyle(fontSize: ScreenUtil().setSp(48)),
                         indicator: UnderlineTabIndicator(
-                          borderSide: BorderSide(width: 2.0, color: CMColors.blueLonely)
-                        ),
+                            borderSide: BorderSide(
+                                width: 2.0, color: CMColors.blueLonely)),
                         controller: _tabController,
                         tabs: [
                           Tab(
@@ -120,37 +120,40 @@ class _HomePageState extends State<HomePage>
     return settingModel.categoryGroups
         .map(
           (categoryGroup) => Container(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(30)),
-        child: Row(
-          children: <Widget>[
-            Text(categoryGroup.title, style: TextUtil.style(15, 700)),
-            HEmptyView(30),
-            Row(
-              children: categoryGroup.categories
-                  .map(
-                    (category) => Container(
-                  padding:
-                  EdgeInsets.only(right: ScreenUtil().setWidth(50)),
-                  child: CategoryTagSelectable(
-                    text: category.category,
-                    selected: settingModel.disabledCategories.contains(category.id),
-                    onTap: () {
-                      if (settingModel.disabledCategories.contains(category.id)) {
-                        settingModel.removeDisabledCategory(category.id);
-                      } else {
-                        settingModel.addDisabledCategory(category.id);
-                      }
-                      setState(() {});
-                    },
-                  ),
+            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(30)),
+            child: Row(
+              children: <Widget>[
+                Text(categoryGroup.title, style: TextUtil.style(15, 700)),
+                HEmptyView(30),
+                Row(
+                  children: categoryGroup.categories
+                      .map(
+                        (category) => Container(
+                          padding:
+                              EdgeInsets.only(right: ScreenUtil().setWidth(50)),
+                          child: CategoryTagSelectable(
+                            text: category.category,
+                            selected: settingModel.disabledCategories
+                                .contains(category.id),
+                            onTap: () {
+                              if (settingModel.disabledCategories
+                                  .contains(category.id)) {
+                                settingModel
+                                    .removeDisabledCategory(category.id);
+                              } else {
+                                settingModel.addDisabledCategory(category.id);
+                              }
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      )
+                      .toList(),
                 ),
-              )
-                  .toList(),
+              ],
             ),
-          ],
-        ),
-      ),
-    )
+          ),
+        )
         .toList();
   }
 
@@ -167,25 +170,21 @@ class _HomePageState extends State<HomePage>
         context: context,
         builder: (context) {
           return Container(
-            height: ScreenUtil().setHeight(780),
-            color: Color(0xFF737373),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(ScreenUtil().setWidth(50)),
-                    topRight: Radius.circular(ScreenUtil().setWidth(50))),
-              ),
-              padding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(30),
-                  horizontal: ScreenUtil().setHeight(80)),
-              child: Column(children: widgets))
-          );
-        }).then((res) {
-
-    });
+              height: ScreenUtil().setHeight(780),
+              color: Color(0xFF737373),
+              child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(ScreenUtil().setWidth(50)),
+                        topRight: Radius.circular(ScreenUtil().setWidth(50))),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                      vertical: ScreenUtil().setWidth(30),
+                      horizontal: ScreenUtil().setHeight(80)),
+                  child: Column(children: widgets)));
+        }).then((res) {});
   }
-
 
   @override
   bool get wantKeepAlive => true;
