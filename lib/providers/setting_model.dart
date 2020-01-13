@@ -11,8 +11,10 @@ import 'package:version/version.dart';
 
 class SettingModel with ChangeNotifier {
   List<CategoryGroup> _categoryGroups;
+  Set<int> _disabledCategories = Set<int>();
 
   List<CategoryGroup> get categoryGroups => _categoryGroups;
+  Set<int> get disabledCategories => _disabledCategories;
 
   initState() async {
     API.getCategoryGroup().then((res) {
@@ -28,5 +30,14 @@ class SettingModel with ChangeNotifier {
         }
       }
     }
+  }
+
+  addDisabledCategory(value) {
+    _disabledCategories.add(value);
+  }
+
+  removeDisabledCategory(value) {
+    _disabledCategories.remove(value);
+    print(_disabledCategories);
   }
 }

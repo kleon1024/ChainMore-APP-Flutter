@@ -75,7 +75,7 @@ class API {
     });
   }
 
-  static getTrendingPosts({Map<String, dynamic> params}) async {
+  static Future<List<Post>> getTrendingPosts({Map<String, dynamic> params}) async {
     var response =
         await NetUtils.request("get", '/v1/post/trendings', params: params)
             .catchError((e) {
@@ -83,9 +83,9 @@ class API {
     });
 
     if (response != null) {
-      return response.data["items"].map((item) => Post.fromJson(item)).toList();
+      return List<Post>.from(response.data["items"].map((item) => Post.fromJson(item)));
     } else {
-      return List();
+      return List<Post>();
     }
   }
 

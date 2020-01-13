@@ -1,11 +1,14 @@
+import 'package:chainmore/models/category.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/pages/home/discover/post_item.dart';
+import 'package:chainmore/providers/setting_model.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DiscoverPage extends StatefulWidget {
@@ -31,7 +34,7 @@ class _DiscoverPageState extends State<DiscoverPage>
   void _onRefresh() async {
     offset = 1;
     // monitor network fetch
-    List posts =
+    List<Post> posts =
         await API.getTrendingPosts(params: {"offset": offset, "limit": limit});
     if (posts.isNotEmpty) {
       items = posts;
@@ -47,7 +50,7 @@ class _DiscoverPageState extends State<DiscoverPage>
 
   void _onLoading() async {
     // monitor network fetch
-    List posts =
+    List<Post> posts =
         await API.getTrendingPosts(params: {"offset": offset, "limit": limit});
     if (posts.isNotEmpty) {
       items.addAll(posts);
@@ -63,8 +66,22 @@ class _DiscoverPageState extends State<DiscoverPage>
     if (mounted) setState(() {});
   }
 
+  bool _hasAnyCategory(List<Category> categories, Set<int> disabledCategories) {
+    if (disabledCategories.isEmpty) return false;
+    for (int i = 0; i < categories.length; ++i) {
+      if (disabledCategories.contains(categories[i].id)) return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
+    SettingModel settingModel = Provider.of<SettingModel>(context);
+    var filteredItems = List<Post>.from(items
+        .where((e) =>
+            _hasAnyCategory(e.categories, settingModel.disabledCategories))
+        .toList());
+
     print("rebuild discover page");
     return RefreshConfiguration(
       headerBuilder: () => WaterDropHeader(),
@@ -122,7 +139,7 @@ class _DiscoverPageState extends State<DiscoverPage>
                 onLoading: _onLoading,
                 child: ListView.separated(
                   itemBuilder: (c, i) {
-                    if (items.length == 0) {
+                    if (filteredItems.length == 0) {
                       return Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: ScreenUtil().setHeight(50)),
@@ -131,19 +148,20 @@ class _DiscoverPageState extends State<DiscoverPage>
                         ),
                       );
                     }
-                    if (i == items.length) {
+                    if (i == filteredItems.length) {
                       return Column(
                         children: <Widget>[
                           Container(
-                            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                              padding:
+                                  EdgeInsets.all(ScreenUtil().setWidth(30)),
                               child: Text("你碰到我的底线了",
                                   textAlign: TextAlign.center)),
                           VEmptyView(300),
                         ],
                       );
                     }
-                    return PostItem(items[i], callback: (post) {
-                      items[i] = post;
+                    return PostItem(filteredItems[i], callback: (post) {
+                      filteredItems[i] = post;
                     });
                   },
                   separatorBuilder: (context, index) {
@@ -152,7 +170,7 @@ class _DiscoverPageState extends State<DiscoverPage>
                       height: ScreenUtil().setWidth(30),
                     );
                   },
-                  itemCount: items.length + 1,
+                  itemCount: filteredItems.length + 1,
                 ),
               ),
             ),
