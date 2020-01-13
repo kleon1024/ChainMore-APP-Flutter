@@ -31,9 +31,9 @@ class CategoryTag extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.fromLTRB(
             ScreenUtil().setWidth(10),
-            ScreenUtil().setWidth(0),
+            ScreenUtil().setWidth(5),
             ScreenUtil().setWidth(10),
-            ScreenUtil().setWidth(0)),
+            ScreenUtil().setWidth(5)),
         decoration: BoxDecoration(
             color: color,
             border: Border.all(
@@ -45,7 +45,7 @@ class CategoryTag extends StatelessWidget {
         child: Text(
           text,
           style: TextUtil.style(textSize, textWeight, color: textColor),
-          textAlign: TextAlign.center,
+//          textAlign: TextAlign.center,
         ),
       ),
     );
