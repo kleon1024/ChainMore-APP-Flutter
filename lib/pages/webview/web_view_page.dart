@@ -32,7 +32,7 @@ class _WebViewPageState extends State<WebViewPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((d) async {
       if (mounted) {
-        Loading.showLoading(context);
+        Loading.showLoading(context, dismissible: true);
         var response =
             await API.getPost(context, params: {'id': widget.web.post.id});
         if (response != null) {

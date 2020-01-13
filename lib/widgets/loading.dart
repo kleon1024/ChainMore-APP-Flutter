@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 class Loading {
   static bool isLoading = false;
 
-  static void showLoading(BuildContext context) {
+  static void showLoading(BuildContext context, {dismissible = false}) {
     if (!isLoading) {
       isLoading = true;
       showGeneralDialog(
           context: context,
-          barrierDismissible: false,
+          barrierDismissible: dismissible,
           barrierLabel:
               MaterialLocalizations.of(context).modalBarrierDismissLabel,
           transitionDuration: const Duration(milliseconds: 150),
