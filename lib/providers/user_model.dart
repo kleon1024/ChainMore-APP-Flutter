@@ -35,16 +35,16 @@ class UserModel with ChangeNotifier {
       return null;
     }
     if (user.code != 20000) {
-      Utils.showToast('登录失败，请检查账号密码');
+      Utils.showToast(context, '登录失败，请检查账号密码');
       return null;
     }
     _user = user;
     var userInfo = await API.getUserInfo(context, username: username);
     if (userInfo == null) {
-      Utils.showToast('登录失败，未能获取用户信息');
+      Utils.showToast(context, '登录失败，未能获取用户信息');
       return null;
     }
-    Utils.showToast('登录成功');
+    Utils.showToast(context, '登录成功');
     _loggedIn = true;
     _userInfo = userInfo;
     _saveUserInfo();
@@ -79,7 +79,7 @@ class UserModel with ChangeNotifier {
 
     var userInfo = await API.getUserInfo(context, username: _user.username);
     if (userInfo == null) {
-      Utils.showToast('未能获取用户信息');
+      Utils.showToast(context, '未能获取用户信息');
       return null;
     }
     _userInfo = userInfo;

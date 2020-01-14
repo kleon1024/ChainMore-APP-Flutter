@@ -9,6 +9,7 @@ import 'package:chainmore/network/net_utils.dart';
 import 'package:chainmore/pages/post/comment_input_widget.dart';
 import 'package:chainmore/pages/post/comment_item.dart';
 import 'package:chainmore/pages/post/widget_post_header.dart';
+import 'package:chainmore/providers/edit_model.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
@@ -46,6 +47,7 @@ class _PostPageState extends State<PostPage> {
   bool collecting = false;
 
   bool _launched = true;
+  bool _update = true;
 
   @override
   void initState() {
@@ -79,17 +81,16 @@ class _PostPageState extends State<PostPage> {
                     if (login) {
                       if (!collecting) {
                         collecting = true;
-                        print(collected);
                         setState(() {
                           collected = !collected;
                         });
-                        print(collected);
                         if (!collected) {
                           API.unCollectPost(context,
                               params: {'id': widget.item.id}).then((res) {
                             if (res != null) {
                               setState(() {
                                 collected = false;
+                                _post.collects -= 1;
                               });
                             }
                             collecting = false;
@@ -100,7 +101,7 @@ class _PostPageState extends State<PostPage> {
                             if (res != null) {
                               setState(() {
                                 collected = true;
-                                print(collected);
+                                _post.collects += 1;
                               });
                             }
                             collecting = false;
@@ -136,6 +137,7 @@ class _PostPageState extends State<PostPage> {
                 },
                 child: Scrollbar(
                   child: CustomScrollView(
+                    physics: BouncingScrollPhysics(),
                     slivers: <Widget>[
                       SliverList(
                           delegate: SliverChildListDelegate(
@@ -149,27 +151,23 @@ class _PostPageState extends State<PostPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                PostHeader(widget.item),
+                                PostHeader(_post != null ? _post : widget.item),
                                 VEmptyView(5),
                                 GestureDetector(
                                   onTap: () {
                                     NavigatorUtil.goUserPage(context,
-                                        data: widget.item.author);
+                                        data: _post != null ? _post.author : widget.item.author);
                                   },
                                   child: Row(
                                     children: <Widget>[
                                       Text(
-                                        widget.item.author.nickname,
+                                        _post != null ? _post.author.nickname : widget.item.author.nickname,
                                         style: TextUtil.style(13, 500,
                                             color: Colors.black45),
                                       ),
                                     ],
                                   ),
                                 ),
-                                VEmptyView(10),
-                                _post != null
-                                    ? _buildEmojiButton()
-                                    : VEmptyView(0),
                               ],
                             ),
                           ),
@@ -178,8 +176,12 @@ class _PostPageState extends State<PostPage> {
                       CustomSliverFutureBuilder(
                         futureFunc: login ? API.getPost : API.getPostUnSign,
                         params: {'id': widget.item.id},
+                        forceUpdate: _update,
                         builder: (context, post) {
+
+                          _update = false;
                           setData(post);
+
                           String description = "";
                           if (post != null) {
                             description = post.description;
@@ -193,12 +195,44 @@ class _PostPageState extends State<PostPage> {
                                 padding: EdgeInsets.only(
                                   left: ScreenUtil().setHeight(40),
                                   right: ScreenUtil().setHeight(40),
-                                  top: ScreenUtil().setHeight(30),
+                                  top: ScreenUtil().setHeight(0),
                                   bottom: ScreenUtil().setHeight(80),
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
+                                    _buildEmojiButton(post),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Text(
+                                          Utils.readableTimeStamp(
+                                              post.timestamp),
+                                          style: TextUtil.style(14, 400,
+                                              color: Colors.black54),
+                                        ),
+                                        Text(
+                                          "评论 " + post.comments.toString(),
+                                          style: TextUtil.style(14, 400,
+                                              color: Colors.black54),
+                                        ),
+                                        Text(
+                                          "收藏 " + post.collects.toString(),
+                                          style: TextUtil.style(14, 400,
+                                              color: Colors.black54),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            _onSelectMore(post, userModel);
+                                          },
+                                          child: Icon(Icons.more_horiz,
+                                              color: Colors.black54,
+                                              size: ScreenUtil().setSp(60)),
+                                        ),
+                                      ],
+                                    ),
+                                    VEmptyView(20),
                                     description != ""
                                         ? Text(
                                             description,
@@ -207,7 +241,6 @@ class _PostPageState extends State<PostPage> {
                                             textAlign: TextAlign.start,
                                           )
                                         : VEmptyView(0),
-                                    VEmptyView(15),
                                   ],
                                 ),
                               )
@@ -218,7 +251,7 @@ class _PostPageState extends State<PostPage> {
                       SliverPersistentHeader(
                         pinned: true,
                         delegate: _SliverAppBarDelegate(
-                          minHeight: ScreenUtil().setHeight(120),
+                          minHeight: ScreenUtil().setHeight(90),
                           maxHeight: ScreenUtil().setHeight(120),
                           child: Container(
                             decoration: BoxDecoration(
@@ -282,7 +315,7 @@ class _PostPageState extends State<PostPage> {
                               'id': widget.item.id,
                             }).then((r) {
                               if (r != null) {
-                                Utils.showToast('评论成功！');
+                                Utils.showToast(context, '评论成功！');
                                 setState(() {
                                   _comments.insert(0, r);
                                   _post.comments += 1;
@@ -298,7 +331,6 @@ class _PostPageState extends State<PostPage> {
                             child: ThinBorderButton(
                               text: "认证前置领域后评论",
                               onTap: () {
-                                print("TAPPPPPP");
                                 if (!userModel.userInfo.rootCertified) {
                                   Utils.showDoubleChoiceDialog(
                                     context,
@@ -344,14 +376,14 @@ class _PostPageState extends State<PostPage> {
         ));
   }
 
-  _buildEmojiButton() {
-    _post.emojis.sort((a, b) => b.count.compareTo(a.count));
+  Widget _buildEmojiButton(Post post) {
+    post.emojis.sort((Emoji a, Emoji b) => b.count.compareTo(a.count));
     return Row(
       children: <Widget>[
         Row(
-          children: _post.emojis.map((item) {
+          children: post.emojis.map((item) {
             if (item.count > 0) {
-              return EmojiCircleButton(emoji: item.emoji);
+              return EmojiCircleButton(emoji: item);
             } else {
               return HEmptyView(0);
             }
@@ -367,17 +399,17 @@ class _PostPageState extends State<PostPage> {
               value: "emoji",
               child: Container(
                 child: Column(
-                  children: _post.emojis
+                  children: post.emojis
                       .map(
                         (item) => InkWell(
                           onTap: () {
                             item.count += 1;
                             if (widget.callback != null) {
-                              widget.callback(_post.emojis);
+                              widget.callback(post.emojis);
                             }
                             Navigator.of(context).pop();
                             API.addEmojiReply(context,
-                                params: {'post': _post.id, 'emoji': item.id});
+                                params: {'post': post.id, 'emoji': item.id});
                             setState(() {});
                           },
                           child: Container(
@@ -411,6 +443,114 @@ class _PostPageState extends State<PostPage> {
         });
       }
     });
+  }
+
+  void _editPost(Post post, EditModel editModel) {
+    editModel.reset();
+
+    editModel.setTitle(post.title != null ? post.title : "");
+    editModel.setBody(post.description != null ? post.description : "");
+    editModel.setUrl(post.url != null ? post.url : "");
+    editModel.setCategories(post.categories.map((category) => category.id).toList());
+    editModel.setDomain(post.domain);
+    editModel.setId(post.id);
+
+    NavigatorUtil.goEditPage(context).then((res) {
+      setState(() {
+        _launched = true;
+        _update = true;
+      });
+    });
+  }
+
+  void _onSelectMore(Post post, UserModel userModel) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            height: ScreenUtil().setHeight(450),
+            color: Color(0xFF737373),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(ScreenUtil().setWidth(50)),
+                    topRight: Radius.circular(ScreenUtil().setWidth(50))),
+              ),
+              padding: EdgeInsets.symmetric(
+                  vertical: ScreenUtil().setWidth(30),
+                  horizontal: ScreenUtil().setHeight(80)),
+              child: Column(children: <Widget>[
+                Container(
+                  padding: EdgeInsets.symmetric(
+                      vertical: ScreenUtil().setHeight(15)),
+                  child: Text("更多选项", style: TextUtil.style(14, 400)),
+                ),
+                userModel.isLoggedIn() &&
+                        post.author.username == userModel.user.username
+                    ? GestureDetector(
+                        onTap: () {
+                          EditModel editModel = Provider.of<EditModel>(context);
+                          Navigator.of(context).pop();
+                          if (editModel.hasHistory()) {
+                            Utils.showDoubleChoiceDialog(context,
+                                title: "历史编辑",
+                                body: "你还有未完成的草稿",
+                                rightText: "恢复草稿",
+                                leftText: "丢弃草稿", rightFunc: () {
+                              NavigatorUtil.goEditPage(context);
+                            }, leftFunc: () {
+                              _editPost(post, editModel);
+                            });
+                          } else {
+                            _editPost(post, editModel);
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: ScreenUtil().setHeight(30)),
+                          child: Text("编辑内容", style: TextUtil.style(16, 400)),
+                        ),
+                      )
+                    : VEmptyView(0),
+                userModel.isLoggedIn() &&
+                        post.author.username == userModel.user.username
+                    ? GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          Utils.showDoubleChoiceDialog(
+                            context,
+                            title: "⚠️危险动作",
+                            body: "删除的内容无法恢复，请谨慎操作",
+                            rightText: "取消",
+                            leftText: "确认删除",
+                            rightFunc: () {
+                              Navigator.of(context).pop();
+                            },
+                            leftFunc: () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: ScreenUtil().setHeight(30)),
+                          child: Text("删除内容", style: TextUtil.style(16, 400)),
+                        ),
+                      )
+                    : VEmptyView(0),
+                userModel.isLoggedIn() &&
+                        post.author.username != userModel.user.username
+                    ? Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: ScreenUtil().setHeight(30)),
+                        child: Text("更多选项", style: TextUtil.style(16, 400)),
+                      )
+                    : VEmptyView(0),
+              ]),
+            ),
+          );
+        });
   }
 }
 

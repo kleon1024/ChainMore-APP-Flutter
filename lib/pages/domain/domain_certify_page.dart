@@ -146,11 +146,11 @@ class _DomainCertifyPageState extends State<DomainCertifyPage> {
                           UserModel userModel = Provider.of<UserModel>(context);
                           userModel.userInfo.rootCertified = true;
                         }
-                        Utils.showToast("认证成功");
+                        Utils.showToast(context, "认证成功");
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       } else {
-                        Utils.showToast("认证失败");
+                        Utils.showToast(context, "认证失败");
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       }

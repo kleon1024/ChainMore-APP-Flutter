@@ -11,6 +11,7 @@ import 'package:chainmore/application.dart';
 import 'package:chainmore/models/user.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/navigator_util.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,7 +24,6 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
-
   @override
   void initState() {
     super.initState();
@@ -36,7 +36,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     UserModel userModel = Provider.of<UserModel>(context);
     userModel.initUser();
     if (userModel.user != null) {
-      userModel.refreshLogin(context : context).then((value) {
+      userModel.refreshLogin(context: context).then((value) {
         if (value != null) {
           NavigatorUtil.goMainPage(context);
         }
@@ -55,12 +55,17 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     Application.screenWidth = size.width;
     Application.screenHeight = size.height;
     Application.statusBarHeight = MediaQuery.of(context).padding.top;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        child: Image.asset('assets/images/logo.png', scale: 2),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Container(
+          height: double.infinity,
+          width: double.infinity,
+          child: Image.asset('assets/images/logo.png', scale: 2),
+        ),
       ),
     );
   }

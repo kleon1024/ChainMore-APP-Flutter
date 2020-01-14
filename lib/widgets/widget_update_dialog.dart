@@ -41,7 +41,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
     if (await canLaunch(url)) {
       await launch(url, forceSafariVC: false);
     } else {
-      Utils.showToast("更新URL不合法");
+      Utils.showToast(context, "更新URL不合法");
     }
 
 //    if (Platform.isIOS) {

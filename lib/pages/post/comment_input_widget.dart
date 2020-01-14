@@ -44,7 +44,14 @@ class CommentInputWidget extends StatelessWidget {
                       style: common14TextStyle,
                       textInputAction: TextInputAction.send,
                       keyboardType: TextInputType.text,
-                      onEditingComplete: sendComment,
+                      onEditingComplete: () {
+                        String text = _editingController.text;
+                        if (text.trim().isEmpty) {
+                          Utils.showToast(context, '评论内容不能为空！');
+                          return;
+                        }
+                        onTapComment(_editingController.text.trim());
+                      },
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: hintText,
@@ -55,24 +62,32 @@ class CommentInputWidget extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.all(ScreenUtil().setWidth(15)),
-                child: GestureDetector(
-                  onTap: sendComment,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: CMColors.blueLonely,
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(ScreenUtil().setWidth(20))),
-                    ),
-                    padding: EdgeInsets.fromLTRB(
+                  child: GestureDetector(
+                    onTap: () {
+                      String text = _editingController.text;
+                      if (text.trim().isEmpty) {
+                        Utils.showToast(context, '评论内容不能为空！');
+                        return;
+                      }
+                      onTapComment(_editingController.text.trim());
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: CMColors.blueLonely,
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(ScreenUtil().setWidth(20))),
+                      ),
+                      padding: EdgeInsets.fromLTRB(
                         ScreenUtil().setWidth(20),
                         ScreenUtil().setWidth(5),
                         ScreenUtil().setWidth(20),
                         ScreenUtil().setWidth(5),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text("发送",
+                          style: TextUtil.style(14, 600, color: Colors.white)),
                     ),
-                    alignment: Alignment.center,
-                    child: Text("发送", style: TextUtil.style(14, 600, color: Colors.white)),
                   ),
-                ),
                 ),
 //                HEmptyView(ScreenUtil().setWidth(30))
               ],
@@ -82,14 +97,4 @@ class CommentInputWidget extends StatelessWidget {
       ),
     );
   }
-
-  void sendComment() {
-    String text = _editingController.text;
-    if (text.isEmpty) {
-      Utils.showToast('评论内容不能为空！');
-      return;
-    }
-    onTapComment(_editingController.text);
-  }
-
 }

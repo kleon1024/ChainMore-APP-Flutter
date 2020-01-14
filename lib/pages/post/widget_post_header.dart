@@ -26,7 +26,7 @@ class PostHeader extends StatelessWidget {
             child: Container(
               child: CategoryTag(
                 text: category.category,
-                textSize: 13,
+                textSize: 11,
               ),
               alignment: Alignment.centerLeft,
             ),
@@ -86,7 +86,7 @@ class PostHeader extends StatelessWidget {
               physics: BouncingScrollPhysics(),
               shrinkWrap: true,
               childAspectRatio: 1.5,
-              crossAxisCount: 9,
+              crossAxisCount: 10,
               children: categoryList) : VEmptyView(0),
           VEmptyView(10),
           Text(item.title, style: TextUtil.style(16, 700)),

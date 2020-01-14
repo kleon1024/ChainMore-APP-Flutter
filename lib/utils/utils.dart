@@ -8,6 +8,7 @@ import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,13 +16,34 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flushbar/flushbar_route.dart' as route;
 
 class Utils {
-  static void showToast(String msg) {
-    Fluttertoast.showToast(
-        msg: msg,
-        gravity: ToastGravity.CENTER,
-        toastLength: Toast.LENGTH_SHORT);
+  static void showToast(BuildContext context, String msg) {
+//    Fluttertoast.showToast(context,
+//        msg: msg,
+//        gravity: ToastGravity.CENTER,
+//        toastLength: Toast.LENGTH_SHORT);
+
+    final flushbar = Flushbar(
+      flushbarPosition: FlushbarPosition.TOP,
+      messageText: Text(
+        msg,
+        style: TextUtil.style(14, 700, color: Colors.white),
+      ),
+      duration: Duration(seconds: 3),
+      margin: EdgeInsets.all(8),
+      borderRadius: 8,
+      backgroundColor: CMColors.blueLonely,
+      flushbarStyle: FlushbarStyle.FLOATING,
+    );
+
+    final _route = route.showFlushbar(
+      context: context,
+      flushbar: flushbar,
+    );
+
+    Navigator.of(context, rootNavigator: true).push(_route);
   }
 
   static Map<String, String> monthMap = {

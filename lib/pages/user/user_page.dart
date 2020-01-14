@@ -204,13 +204,13 @@ class _UserPageState extends State<UserPage> {
                                                       setState(() {
                                                         _forceUpdate = true;
                                                       });
-                                                      Utils.showToast("关注成功");
+                                                      Utils.showToast(context, "关注成功");
                                                     } else {
-                                                      Utils.showToast("关注失败");
+                                                      Utils.showToast(context, "关注失败");
                                                     }
                                                   });
                                                 } else {
-                                                  Utils.showToast("已关注该同学");
+                                                  Utils.showToast(context, "已关注该同学");
                                                 }
                                               } else {
                                                 NavigatorUtil.goLoginPage(

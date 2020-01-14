@@ -21,12 +21,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class API {
-  static void reLogin() {
-    Future.delayed(Duration(milliseconds: 200), () {
-      Application.getIt<NavigateService>().popAndPushNamed(Routes.login);
-      Utils.showToast('登录失效，请重新登录');
-    });
-  }
+//  static void reLogin(BuildContext context) {
+//    Future.delayed(Duration(milliseconds: 200), () {
+//      Application.getIt<NavigateService>().popAndPushNamed(Routes.login);
+//      Utils.showToast(context, '登录失效，请重新登录');
+//    });
+//  }
 
   static login(BuildContext context, {String username, String password}) async {
     var response = await NetUtils.request("post", '/v1/auth/signin',
@@ -35,7 +35,7 @@ class API {
           'username': username,
           'password': password,
         }).catchError((e) {
-      Utils.showToast('网络错误！');
+      Utils.showToast(context, '网络错误！');
     });
 
     if (response != null) {
@@ -53,7 +53,7 @@ class API {
           'password': password,
           'email': email,
         }).catchError((e) {
-      Utils.showToast('网络错误！');
+      Utils.showToast(context, '网络错误！');
     });
 
     return response;
@@ -63,7 +63,7 @@ class API {
     return await NetUtils.request("delete", '/v1/auth/signout',
             context: context)
         .catchError((e) {
-      Utils.showToast('登出失败');
+      Utils.showToast(context, '登出失败');
     });
   }
 
@@ -71,7 +71,7 @@ class API {
     return await NetUtils.request("get", '/v1/auth/signin/refresh',
             context: context, isShowLoading: false, refresh: true)
         .catchError((e) {
-      Utils.showToast('网络错误！');
+      Utils.showToast(context, '网络错误！');
     });
   }
 
@@ -79,7 +79,7 @@ class API {
     var response =
         await NetUtils.request("get", '/v1/post/trendings', params: params)
             .catchError((e) {
-      Utils.showToast('网络错误，加载失败！');
+//      Utils.showToast('网络错误，加载失败！');
     });
 
     if (response != null) {
@@ -93,7 +93,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/post",
             params: params, context: context, isShowLoading: false)
         .catchError((e) {
-      Utils.showToast('网络错误！');
+      Utils.showToast(context, '网络错误！');
     });
 
     if (response != null) {
@@ -106,7 +106,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/post",
             params: params, context: context, isShowLoading: false)
         .catchError((e) {
-      Utils.showToast('网络错误！');
+      Utils.showToast(context, '网络错误！');
     });
 
     if (response != null) {
@@ -119,7 +119,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/post/comment",
             params: params, context: context, isShowLoading: false)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -137,14 +137,14 @@ class API {
     var response = await NetUtils.request('post', '/v1/post/comment',
             data: data, params: params, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
       if (response.data["code"] == 20000) {
         return Comment.fromJson(response.data["item"]);
       } else {
-        Utils.showToast(response.data["msg"]);
+        Utils.showToast(context, response.data["msg"]);
       }
     }
   }
@@ -154,7 +154,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/domain",
             params: params, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -168,7 +168,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/domain/unsign",
             params: params, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -182,7 +182,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/domain/post",
             params: params, context: context, isShowLoading: false)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -198,7 +198,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/search/hot",
             params: params, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -213,7 +213,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/search",
             params: params, context: context, isShowLoading: false)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -232,7 +232,7 @@ class API {
             params: params, context: context, isShowLoading: false)
         .catchError((e) {
       print("error");
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -247,7 +247,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/search/domain",
             params: params, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -260,7 +260,7 @@ class API {
   static getUpdateInfo() async {
     var response = await NetUtils.request("get", "/v1/update")
         .catchError((e) {
-      Utils.showToast(e.toString());
+//      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -272,7 +272,7 @@ class API {
     var response = await NetUtils.request("post", "/v1/sparkle",
             data: data, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     return response;
@@ -282,7 +282,7 @@ class API {
     var response = await NetUtils.request("post", "/v1/sparkle/reply",
         data: data, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response!=null) {
@@ -294,7 +294,17 @@ class API {
     var response =
         await NetUtils.request("post", "/v1/post", data: data, context: context)
             .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
+    });
+
+    return response;
+  }
+
+  static putPost(BuildContext context, {Map<String, dynamic> data}) async {
+    var response =
+    await NetUtils.request("put", "/v1/post", data: data, context: context)
+        .catchError((e) {
+      Utils.showToast(context, e.toString());
     });
 
     return response;
@@ -305,7 +315,7 @@ class API {
     var response =
         await NetUtils.request("get", "/v1/sparkle/trendings", params: params)
             .catchError((e) {
-      Utils.showToast(e.toString());
+//      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -320,7 +330,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/domain/certify",
             params: params, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -335,7 +345,7 @@ class API {
     var response = await NetUtils.request("post", "/v1/domain/certify",
             data: data, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     return response;
@@ -345,7 +355,7 @@ class API {
     var response = await NetUtils.request("post", "/v1/domain",
             data: data, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     return response;
@@ -356,7 +366,7 @@ class API {
     var response = await NetUtils.request("post", "/v1/domain/watch",
             params: params, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     return response;
@@ -367,7 +377,7 @@ class API {
     var response = await NetUtils.request("delete", "/v1/domain/watch",
             params: params, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     return response;
@@ -381,7 +391,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/user/" + username,
             context: context, isShowLoading: false)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -397,7 +407,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/user/unsign" + username,
             context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     return UserInfo.fromJson(response.data["user"]);
@@ -407,7 +417,7 @@ class API {
     var response = await NetUtils.request("post", "/v1/user/follow",
             params: params, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     return response;
@@ -418,7 +428,7 @@ class API {
     var response = await NetUtils.request("delete", "/v1/domain/follow",
             params: params, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     return response;
@@ -429,7 +439,7 @@ class API {
     var response = await NetUtils.request("post", "/v1/post/collect",
             params: params, context: context, isShowLoading: false)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     return response;
@@ -440,7 +450,7 @@ class API {
     var response = await NetUtils.request("delete", "/v1/post/collect",
             params: params, context: context, isShowLoading: false)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     return response;
@@ -451,7 +461,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/domain/aggregate",
             params: params, context: context)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -464,7 +474,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/domain/dependent",
         params: params, context: context, isShowLoading: false)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -477,7 +487,7 @@ class API {
     var response = await NetUtils.request("get", "/v1/sparkle/reply",
             params: params, context: context, isShowLoading: false)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     if (response != null) {
@@ -489,7 +499,7 @@ class API {
     var response = await NetUtils.request("post", "/v1/post/emoji",
         params: params, context: context, isShowLoading: false)
         .catchError((e) {
-      Utils.showToast(e.toString());
+      Utils.showToast(context, e.toString());
     });
 
     return response != null;
@@ -497,10 +507,7 @@ class API {
 
   static getCategoryGroup({Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/category_groups",
-        params: params, isShowLoading: false)
-        .catchError((e) {
-      Utils.showToast(e.toString());
-    });
+        params: params, isShowLoading: false);
 
     if (response != null) {
       return List<CategoryGroup>.from(response.data["items"].map((item) => CategoryGroup.fromJson(item)));

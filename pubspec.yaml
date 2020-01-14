@@ -48,6 +48,7 @@ dependencies:
   open_file: ^2.1.1
   package_info: ^0.4.0+13
   version: ^1.0.3
+  flushbar: ^1.9.1
 
 dev_dependencies:
   flutter_test:

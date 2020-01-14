@@ -115,7 +115,7 @@ class _DomainPageState extends State<DomainPage> {
                     }
                     if (login) {
                       if (_domain.depended != null && !_domain.depended) {
-                        Utils.showToast("还有未认证的前置领域");
+                        Utils.showToast(context, "还有未认证的前置领域");
                       } else {
                         if (editModel.hasHistory()) {
                           Utils.showDoubleChoiceDialog(
@@ -289,7 +289,7 @@ class _DomainPageState extends State<DomainPage> {
                                                   data: widget.item);
                                             }
                                           } else {
-                                            Utils.showToast("已认证该领域");
+                                            Utils.showToast(context, "已认证该领域");
                                           }
                                         } else {
                                           NavigatorUtil.goLoginPage(context,
@@ -312,11 +312,11 @@ class _DomainPageState extends State<DomainPage> {
                                                   _forceUpdate = true;
                                                 });
                                               } else {
-                                                Utils.showToast("关注失败");
+                                                Utils.showToast(context, "关注失败");
                                               }
                                             });
                                           } else {
-                                            Utils.showToast("已关注该领域");
+                                            Utils.showToast(context, "已关注该领域");
                                           }
                                         } else {
                                           NavigatorUtil.goLoginPage(context,

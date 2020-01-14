@@ -11,14 +11,19 @@ import 'package:version/version.dart';
 
 class SettingModel with ChangeNotifier {
   List<CategoryGroup> _categoryGroups;
+  Map<int, String> _categoryMap = {};
   Set<int> _disabledCategories = Set<int>();
 
   List<CategoryGroup> get categoryGroups => _categoryGroups;
+
   Set<int> get disabledCategories => _disabledCategories;
 
   initState() async {
     API.getCategoryGroup().then((res) {
       _categoryGroups = res;
+      _categoryGroups.forEach((categoryGroup) => categoryGroup.categories
+          .forEach(
+              (category) => _categoryMap[category.id] = category.category));
     });
   }
 
@@ -32,11 +37,15 @@ class SettingModel with ChangeNotifier {
     }
   }
 
-  addDisabledCategory(value) {
+  String getCategoryString(int id) {
+    return _categoryMap[id];
+  }
+
+  addDisabledCategory(int value) {
     _disabledCategories.add(value);
   }
 
-  removeDisabledCategory(value) {
+  removeDisabledCategory(int value) {
     _disabledCategories.remove(value);
     print(_disabledCategories);
   }

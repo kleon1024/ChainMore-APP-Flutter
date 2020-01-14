@@ -179,7 +179,7 @@ class __LoginWidgetState extends State<_LoginWidget> {
                     String pwd = _pwdController.text.trim();
 
                     if (username.isEmpty || pwd.isEmpty) {
-                      Utils.showToast('请输入用户名或者密码');
+                      Utils.showToast(context, '请输入用户名或者密码');
                       return;
                     }
 
@@ -206,46 +206,46 @@ class __LoginWidgetState extends State<_LoginWidget> {
                     String pwdConfirm = _pwdConfirmController.text.trim();
 
                     if (username.isEmpty) {
-                      Utils.showToast('请输入用户名');
+                      Utils.showToast(context, '请输入用户名');
                       return;
                     }
 
                     if (!Utils.isUserName(username)) {
-                      Utils.showToast("请输入合法用户名");
+                      Utils.showToast(context, "请输入合法用户名");
                       return;
                     }
 
                     if (nickname.isEmpty) {
-                      Utils.showToast('请输入昵称');
+                      Utils.showToast(context, '请输入昵称');
                     }
 
                     if (email.isEmpty) {
-                      Utils.showToast('请输入邮箱');
+                      Utils.showToast(context, '请输入邮箱');
                       return;
                     }
 
                     if (!prefix0.RegexUtil.isEmail(email)) {
-                      Utils.showToast('请输入有效邮箱');
+                      Utils.showToast(context, '请输入有效邮箱');
                       return;
                     }
 
                     if (pwd.isEmpty) {
-                      Utils.showToast("请输入密码");
+                      Utils.showToast(context, "请输入密码");
                       return;
                     }
 
                     if (!Utils.isLoginPassword(pwd)) {
-                      Utils.showToast("请输入合法密码");
+                      Utils.showToast(context, "请输入合法密码");
                       return;
                     }
 
                     if (pwdConfirm.isEmpty) {
-                      Utils.showToast("请输入确认密码");
+                      Utils.showToast(context, "请输入确认密码");
                       return;
                     }
 
                     if (pwd != pwdConfirm) {
-                      Utils.showToast("两次密码输入不一致");
+                      Utils.showToast(context, "两次密码输入不一致");
                       return;
                     }
 
@@ -267,7 +267,7 @@ class __LoginWidgetState extends State<_LoginWidget> {
                           }
                         });
                       } else {
-                        Utils.showToast("注册失败");
+                        Utils.showToast(context, "注册失败");
                       }
                     });
                   }

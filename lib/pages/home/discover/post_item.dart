@@ -70,7 +70,7 @@ class PostItem extends StatelessWidget {
               Row(
                 children: item.emojis.map((item) {
                   if (item.count > 0) {
-                    return EmojiCircleButton(emoji: item.emoji);
+                    return EmojiCircleButton(emoji: item);
                   } else {
                     return HEmptyView(0);
                   }
@@ -110,13 +110,10 @@ class PostItem extends StatelessWidget {
                     "评论 " + item.comments.toString(),
                     style: TextUtil.style(14, 400, color: Colors.black54),
                   ),
-//                  Text(
-//                    "收藏 " + item.collects.toString(),
-//                    style: TextStyle(
-//                        fontSize: ScreenUtil().setSp(38),
-//                        fontWeight: FontWeight.w500,
-//                        color: Colors.black54),
-//                  ),
+                  Text(
+                    "收藏 " + item.collects.toString(),
+                    style: TextUtil.style(14, 400, color: Colors.black54),
+                  ),
                   Icon(Icons.more_horiz,
                       color: Colors.black54, size: ScreenUtil().setSp(60))
                 ],

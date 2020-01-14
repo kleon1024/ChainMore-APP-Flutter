@@ -12,6 +12,7 @@ import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -42,7 +43,8 @@ class _MainPageState extends State<MainPage>
         editModel.initState();
         CertifyModel certifyModel = Provider.of<CertifyModel>(context);
         certifyModel.initState();
-        DomainCreateModel domainCreateModel = Provider.of<DomainCreateModel>(context);
+        DomainCreateModel domainCreateModel =
+            Provider.of<DomainCreateModel>(context);
         domainCreateModel.initState();
         SettingModel settingModel = Provider.of<SettingModel>(context);
         settingModel.initState();
@@ -60,6 +62,7 @@ class _MainPageState extends State<MainPage>
       Utils.checkClipBoard(context: context);
     }
   }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -68,10 +71,12 @@ class _MainPageState extends State<MainPage>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
       child: Scaffold(
-        resizeToAvoidBottomInset : false,
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         body: Stack(
           children: <Widget>[

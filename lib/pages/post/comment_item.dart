@@ -51,7 +51,7 @@ class CommentItem extends StatelessWidget {
                 fontSize: ScreenUtil().setSp(42),
               ),
               softWrap: true,
-              maxLines: 3,
+              maxLines: 1000,
               textAlign: TextAlign.justify,
             ),
             VEmptyView(20),

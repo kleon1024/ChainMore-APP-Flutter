@@ -51,6 +51,7 @@ class _CustomFutureBuilderState<T> extends State<CustomSliverFutureBuilder<T>> {
   void didUpdateWidget(CustomSliverFutureBuilder<T> oldWidget) {
 
     if (widget.forceUpdate) {
+      _future = null;
       WidgetsBinding.instance.addPostFrameCallback((call) {
         _request();
       });

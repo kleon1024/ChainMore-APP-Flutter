@@ -268,7 +268,7 @@ class _SparkleDetailPageState extends State<SparkleDetailPage> {
                           'reply': widget.sparkle.id,
                         }).then((r) {
                           if (r != null) {
-                            Utils.showToast('共鸣成功');
+                            Utils.showToast(context, '共鸣成功');
                             setState(() {
                               _sparkles.insert(0, r);
                             });

@@ -77,10 +77,17 @@ class _DiscoverPageState extends State<DiscoverPage>
   @override
   Widget build(BuildContext context) {
     SettingModel settingModel = Provider.of<SettingModel>(context);
-    var filteredItems = List<Post>.from(items
-        .where((e) =>
-            _hasAnyCategory(e.categories, settingModel.disabledCategories))
-        .toList());
+//    var filteredItems = List<Post>.from(items
+////        .where((e) =>
+////            _hasAnyCategory(e.categories, settingModel.disabledCategories))
+////        .toList());
+    
+    List<int> filteredIndices = [];
+    for (int i = 0; i < items.length; ++i) {
+      if (_hasAnyCategory(items[i].categories, settingModel.disabledCategories)) {
+        filteredIndices.add(i);
+      }
+    }
 
     return RefreshConfiguration(
       headerBuilder: () => WaterDropHeader(),
@@ -138,7 +145,7 @@ class _DiscoverPageState extends State<DiscoverPage>
                 onLoading: _onLoading,
                 child: ListView.separated(
                   itemBuilder: (c, i) {
-                    if (filteredItems.length == 0) {
+                    if (filteredIndices.length == 0) {
                       return Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: ScreenUtil().setHeight(50)),
@@ -147,7 +154,7 @@ class _DiscoverPageState extends State<DiscoverPage>
                         ),
                       );
                     }
-                    if (i == filteredItems.length) {
+                    if (i == filteredIndices.length) {
                       return Column(
                         children: <Widget>[
                           Container(
@@ -159,8 +166,8 @@ class _DiscoverPageState extends State<DiscoverPage>
                         ],
                       );
                     }
-                    return PostItem(filteredItems[i], callback: (post) {
-                      filteredItems[i] = post;
+                    return PostItem(items[filteredIndices[i]], callback: (post) {
+                      items[filteredIndices[i]] = post;
                     });
                   },
                   separatorBuilder: (context, index) {
@@ -169,7 +176,7 @@ class _DiscoverPageState extends State<DiscoverPage>
                       height: ScreenUtil().setWidth(30),
                     );
                   },
-                  itemCount: filteredItems.length + 1,
+                  itemCount: filteredIndices.length + 1,
                 ),
               ),
             ),

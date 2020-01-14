@@ -9,19 +9,21 @@ class EditModel with ChangeNotifier {
   String _title;
   String _body;
   String _url;
+  int _id = 0;
 
   bool _questMarked = false;
 
   Domain _domain;
 
-  Set<Category> _categories;
+  Set<int> _categories;
 
   Domain get domain => _domain;
   String get title => _title;
   String get body => _body;
   String get url => _url;
-  Set<Category> get categories => _categories;
+  Set<int> get categories => _categories;
   bool get questionMarked => _questMarked;
+  int get id => _id;
 
   initState() {
     if (Application.sp.containsKey('edit_state')) {
@@ -32,10 +34,16 @@ class EditModel with ChangeNotifier {
       _url = state['url'];
       _categories = state['categories'].toSet();
       _questMarked = state['question_marked'];
+      _id = state['id'];
     } else {
       _url = "";
-      _categories = Set<Category>();
+      _categories = Set<int>();
     }
+  }
+
+  setId(int id) {
+    assert(id > 0);
+    _id = id;
   }
 
   setDomain(Domain domain) {
@@ -62,12 +70,16 @@ class EditModel with ChangeNotifier {
     _url = url;
   }
 
-  addCategory(Category category) {
-    _categories.add(category);
+  addCategory(int id) {
+    _categories.add(id);
   }
 
-  removeCategory(Category category) {
-    _categories.remove(category);
+  removeCategory(int id) {
+    _categories.remove(id);
+  }
+
+  setCategories(List<int> categories) {
+    _categories = categories.toSet();
   }
 
   clearCategory() {
@@ -81,6 +93,7 @@ class EditModel with ChangeNotifier {
     _domain = null;
     _categories.clear();
     _questMarked = false;
+    _id = 0;
     deleteEditState();
   }
 
@@ -92,6 +105,7 @@ class EditModel with ChangeNotifier {
       "url" : _url,
       "categories" : _categories.toList(),
       "question_marked" : _questMarked,
+      "id" : _id,
     };
 
     Application.sp.setString('edit_state', json.encode(state));

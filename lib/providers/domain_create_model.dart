@@ -34,11 +34,11 @@ class DomainCreateModel with ChangeNotifier {
   createDomain(BuildContext context) async {
 
     if (_aggregateDomain == null) {
-      Utils.showToast("请选择聚合领域");
+      Utils.showToast(context, "请选择聚合领域");
       return false;
     }
     if (_dependentDomain == null) {
-      Utils.showToast("请选择前置领域");
+      Utils.showToast(context, "请选择前置领域");
       return false;
     }
 
@@ -58,14 +58,14 @@ class DomainCreateModel with ChangeNotifier {
     var response = await API.createDomain(context, data: data);
     if (response != null) {
       if (response.data["code"] == 20000) {
-        Utils.showToast("领域创建成功");
+        Utils.showToast(context, "领域创建成功");
         return true;
       } else if (response.data["code"] == 20200) {
-        Utils.showToast("领域已存在");
+        Utils.showToast(context, "领域已存在");
         return false;
       }
     }
-    Utils.showToast("领域创建失败");
+    Utils.showToast(context, "领域创建失败");
     return false;
   }
 

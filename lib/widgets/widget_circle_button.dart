@@ -1,3 +1,4 @@
+import 'package:chainmore/models/emoji.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmojiCircleButton extends StatelessWidget {
   final Function onTap;
-  final String emoji;
+  final Emoji emoji;
   final Color color;
   final Color borderColor;
   final double borderWidth;
@@ -25,9 +26,9 @@ class EmojiCircleButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
+//        padding: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
         child: Container(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(5)),
+//          padding: EdgeInsets.all(ScreenUtil().setWidth(5)),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: color,
@@ -36,7 +37,7 @@ class EmojiCircleButton extends StatelessWidget {
                 width: borderWidth,
                 style: BorderStyle.solid),
           ),
-          child: Text(emoji, style: TextUtil.style(emojiSize, 400)),
+          child: Text(emoji.emoji + " " + emoji.count.toString(), style: TextUtil.style(emojiSize, 300, color: Colors.grey)),
         ),
       ),
     );

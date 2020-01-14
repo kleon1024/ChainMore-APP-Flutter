@@ -88,7 +88,7 @@ class SearchDomainWidget extends StatelessWidget {
                 editModel.setDomain(domain);
                 Navigator.pop(context);
               } else {
-                Utils.showToast("需要认证前置领域");
+                Utils.showToast(context, "需要认证前置领域");
               }
             } else if (state == "dependent") {
               if (domain.certified) {
@@ -97,7 +97,7 @@ class SearchDomainWidget extends StatelessWidget {
                 domainCreateModel.setDependentDomain(domain);
                 Navigator.pop(context);
               } else {
-                Utils.showToast("需要认证领域");
+                Utils.showToast(context, "需要认证领域");
               }
             } else if (state == "aggregate") {
               if (domain.certified) {
@@ -106,13 +106,13 @@ class SearchDomainWidget extends StatelessWidget {
                 domainCreateModel.setAggregateDomain(domain);
                 Navigator.pop(context);
               } else {
-                Utils.showToast("需要认证领域");
+                Utils.showToast(context, "需要认证领域");
               }
             } else {
-              Utils.showToast("领域未处理！");
+              Utils.showToast(context, "领域未处理！");
             }
           } else {
-            Utils.showToast("需要先登录！");
+            Utils.showToast(context, "需要先登录！");
           }
         }
       },

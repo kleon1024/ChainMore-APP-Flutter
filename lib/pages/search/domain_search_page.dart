@@ -184,7 +184,7 @@ class _DomainSearchPageState extends State<DomainSearchPage>
                             domainCreateModel.setDependentDomain(curDomain);
                             Navigator.pop(context);
                           } else {
-                            Utils.showToast(certifiedToastString);
+                            Utils.showToast(context, certifiedToastString);
                           }
                         },
                         child: Padding(

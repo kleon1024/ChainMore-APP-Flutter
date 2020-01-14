@@ -37,79 +37,76 @@ class _HomePageState extends State<HomePage>
         preferredSize: Size.zero,
       ),
       backgroundColor: Colors.white,
-      body: SafeArea(
-        bottom: false,
-        child: Stack(
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Stack(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(300)),
-                      child: TabBar(
-                        labelStyle: TextStyle(
-                            fontSize: ScreenUtil().setSp(52),
-                            fontWeight: FontWeight.bold),
-                        unselectedLabelStyle:
-                            TextStyle(fontSize: ScreenUtil().setSp(48)),
-                        indicator: UnderlineTabIndicator(
-                            borderSide: BorderSide(
-                                width: 2.0, color: CMColors.blueLonely)),
-                        controller: _tabController,
-                        tabs: [
-                          Tab(
-                            text: '分享',
-                          ),
-                          Tab(
-                            text: '灵感',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      right: ScreenUtil().setWidth(0),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.search,
-                          size: ScreenUtil().setWidth(70),
-                          color: Colors.black87,
+      body: Stack(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Stack(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setWidth(300)),
+                    child: TabBar(
+                      labelStyle: TextStyle(
+                          fontSize: ScreenUtil().setSp(52),
+                          fontWeight: FontWeight.bold),
+                      unselectedLabelStyle:
+                          TextStyle(fontSize: ScreenUtil().setSp(48)),
+                      indicator: UnderlineTabIndicator(
+                          borderSide: BorderSide(
+                              width: 2.0, color: CMColors.blueLonely)),
+                      controller: _tabController,
+                      tabs: [
+                        Tab(
+                          text: '分享',
                         ),
-                        onPressed: () {
-                          NavigatorUtil.goSearchPage(context);
-                        },
-                      ),
-                    ),
-                    Positioned(
-                      left: ScreenUtil().setWidth(0),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.flip,
-                          size: ScreenUtil().setWidth(70),
-                          color: Colors.black87,
+                        Tab(
+                          text: '灵感',
                         ),
-                        onPressed: () {
-                          _onSelectClassifier();
-                        },
-                      ),
+                      ],
                     ),
+                  ),
+                  Positioned(
+                    right: ScreenUtil().setWidth(0),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        size: ScreenUtil().setWidth(70),
+                        color: Colors.black87,
+                      ),
+                      onPressed: () {
+                        NavigatorUtil.goSearchPage(context);
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    left: ScreenUtil().setWidth(0),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.flip,
+                        size: ScreenUtil().setWidth(70),
+                        color: Colors.black87,
+                      ),
+                      onPressed: () {
+                        _onSelectClassifier();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    DiscoverPage(),
+                    SparklePage(),
                   ],
                 ),
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      DiscoverPage(),
-                      SparklePage(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
+          ),
 //            PlayWidget(),
-          ],
-        ),
+        ],
       ),
     );
   }

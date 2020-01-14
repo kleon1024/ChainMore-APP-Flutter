@@ -75,8 +75,8 @@ class NetUtils {
     } on DioError catch (e) {
       print(e);
       if (e == null) {
-        return Future.error(Response(data: -1));
-      } else if (e.response.statusCode > 400 && e.response.statusCode < 404) {
+
+      } else if (e.response != null && e.response.statusCode > 400 && e.response.statusCode < 404) {
         relogin = true;
       } else if (refresh) {
         _reLogin(context);
@@ -84,6 +84,18 @@ class NetUtils {
     } finally {
       if (context != null && isShowLoading) {
         Loading.hideLoading(context);
+      }
+    }
+
+    if (context != null && response != null) {
+      if (response.data["code"] == 20001) {
+        Utils.showToast(context, "用户名或密码错误");
+      } else if (response.data["code"] == 20100) {
+        Utils.showToast(context, "邮箱已存在");
+      } else if (response.data["code"] == 20101) {
+        Utils.showToast(context, "用户名已存在");
+      } else if (response.data["code"] == 20102) {
+        Utils.showToast(context, "用户名或密码错误");
       }
     }
 
@@ -115,7 +127,7 @@ class NetUtils {
 //      Application.getIt<NavigateService>().popAndPushNamed(Routes.login);
       NavigatorUtil.goLoginPage(context,
           data: LoginConfig(initial: true), clearStack: true);
-      Utils.showToast('登录失效，请重新登录');
+      Utils.showToast(context, '登录失效，请重新登录');
     });
   }
 }
