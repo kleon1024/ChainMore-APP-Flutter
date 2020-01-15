@@ -7,6 +7,7 @@ import 'package:chainmore/network/net_utils.dart';
 import 'package:chainmore/pages/home/discover/post_item.dart';
 import 'package:chainmore/pages/post/comment_input_widget.dart';
 import 'package:chainmore/pages/post/comment_item.dart';
+import 'package:chainmore/providers/domain_create_model.dart';
 import 'package:chainmore/providers/edit_model.dart';
 import 'package:chainmore/providers/setting_model.dart';
 import 'package:chainmore/providers/user_model.dart';
@@ -240,7 +241,12 @@ class _DomainPageState extends State<DomainPage> {
                             forceUpdate: _forceUpdate,
                             builder: (context, domain) {
                               if (domain.id == null) {
-                                return Center(child: Text("加载失败"));
+                                return Center(
+                                    child: Text(
+                                  "加载失败",
+                                  style: TextUtil.style(14, 400,
+                                      color: Colors.white),
+                                ));
                               }
 
                               String certifyString = "获得认证";
@@ -388,45 +394,41 @@ class _DomainPageState extends State<DomainPage> {
                       ),
                       SliverList(
                         delegate: SliverChildBuilderDelegate((context, index) {
-                          double lastPadding = index == _posts.length - 1
-                              ? ScreenUtil().setWidth(800)
-                              : ScreenUtil().setWidth(20);
+
+                          if (filteredIndices.length == 0) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: ScreenUtil().setHeight(50)),
+                              child: Center(
+                                child: Text("没什么好看的"),
+                              ),
+                            );
+                          }
+
+                          if (index == filteredIndices.length) {
+                            return Column(
+                              children: <Widget>[
+                                Container(
+                                    padding:
+                                    EdgeInsets.all(ScreenUtil().setWidth(100)),
+                                    child: Text("你碰到我的底线了",
+                                        textAlign: TextAlign.center)),
+                              ],
+                            );
+                          }
+
                           return Container(
                               padding: EdgeInsets.only(
                                   top: ScreenUtil().setHeight(20),
-                                  bottom: ScreenUtil().setHeight(lastPadding),
+                                  bottom: ScreenUtil().setHeight(20),
                                   left: ScreenUtil().setWidth(0),
                                   right: ScreenUtil().setWidth(0)),
                               child: PostItem(_posts[filteredIndices[index]],
                                   domain: widget.item, callback: (post) {
                                 _posts[filteredIndices[index]] = post;
                               }));
-                        }, childCount: filteredIndices.length),
+                        }, childCount: filteredIndices.length + 1),
                       ),
-//                      CustomSliverFutureBuilder<List>(
-//                        futureFunc: API.getDomainPosts,
-//                        params: {'id': widget.item.id},
-//                        builder: (context, data) {
-//                          _posts = data;
-//                          return SliverList(
-//                            delegate:
-//                                SliverChildBuilderDelegate((context, index) {
-//                              double lastPadding = index == _posts.length - 1
-//                                  ? ScreenUtil().setWidth(800)
-//                                  : ScreenUtil().setWidth(20);
-//                              return Container(
-//                                padding: EdgeInsets.only(
-//                                    top: ScreenUtil().setHeight(20),
-//                                    bottom: ScreenUtil().setHeight(lastPadding),
-//                                    left: ScreenUtil().setWidth(0),
-//                                    right: ScreenUtil().setWidth(0)),
-//                                child: DomainPostItem(
-//                                    item: _posts[index], domain: widget.item),
-//                              );
-//                            }, childCount: _posts.length),
-//                          );
-//                        },
-//                      ),
                     ],
                   ),
                 ),
@@ -440,13 +442,97 @@ class _DomainPageState extends State<DomainPage> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    // TODO Show Bottom
+                    if (_domain != null) {
+                      _onSelectMore(_domain, userModel);
+                    }
                   },
                 ),
               ),
             ],
           ),
         ));
+  }
+
+  void _editPost(Domain domain, DomainCreateModel domainModel) {
+    domainModel.reset();
+
+    domainModel.setTitle(domain.title != null ? domain.title : "");
+    domainModel.setId(domain.id);
+
+    domainModel
+        .setDescription(domain.description != null ? domain.description : "");
+    domainModel.setBio(domain.bio != null ? domain.bio : "");
+    domainModel.setDependentDomain(
+        domain.dependeds != null ? domain.dependeds[0] : null);
+    domainModel.setAggregateDomain(
+        domain.aggregators != null ? domain.aggregators[0] : null);
+
+    NavigatorUtil.goDomainCreatePage(context).then((res) {
+      setState(() {});
+    });
+  }
+
+  void _onSelectMore(Domain domain, UserModel userModel) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            height: ScreenUtil().setHeight(300),
+            color: Color(0xFF737373),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(ScreenUtil().setWidth(50)),
+                    topRight: Radius.circular(ScreenUtil().setWidth(50))),
+              ),
+              padding: EdgeInsets.symmetric(
+                  vertical: ScreenUtil().setWidth(30),
+                  horizontal: ScreenUtil().setHeight(80)),
+              child: Column(children: <Widget>[
+                Container(
+                  padding: EdgeInsets.symmetric(
+                      vertical: ScreenUtil().setHeight(15)),
+                  child: Text("更多选项", style: TextUtil.style(14, 400)),
+                ),
+                userModel.isLoggedIn() && domain.certified && domain.id != 1
+                    ? GestureDetector(
+                        onTap: () {
+                          DomainCreateModel domainCreateModel =
+                              Provider.of<DomainCreateModel>(context);
+                          Navigator.of(context).pop();
+                          if (domainCreateModel.hasHistory()) {
+                            Utils.showDoubleChoiceDialog(context,
+                                title: "历史编辑",
+                                body: "你还有正在创建的领域",
+                                rightText: "恢复领域",
+                                leftText: "丢弃领域", rightFunc: () {
+                              NavigatorUtil.goEditPage(context);
+                            }, leftFunc: () {
+                              _editPost(domain, domainCreateModel);
+                            });
+                          } else {
+                            _editPost(domain, domainCreateModel);
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: ScreenUtil().setHeight(30)),
+                          child: Text("修改领域", style: TextUtil.style(16, 600)),
+                        ),
+                      )
+                    : VEmptyView(0),
+                userModel.isLoggedIn() && !domain.certified
+                    ? Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: ScreenUtil().setHeight(30)),
+                        child: Text("更多选项", style: TextUtil.style(16, 600)),
+                      )
+                    : VEmptyView(0),
+              ]),
+            ),
+          );
+        });
   }
 
 //  void setData(Domain data) {

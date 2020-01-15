@@ -361,6 +361,16 @@ class API {
     return response;
   }
 
+  static updateDomain(BuildContext context, {Map<String, dynamic> data}) async {
+    var response = await NetUtils.request("put", "/v1/domain",
+        data: data, context: context)
+        .catchError((e) {
+      Utils.showToast(context, e.toString());
+    });
+
+    return response;
+  }
+
   static watchDomain(BuildContext context,
       {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("post", "/v1/domain/watch",

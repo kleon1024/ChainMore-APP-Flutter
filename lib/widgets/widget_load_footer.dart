@@ -19,11 +19,7 @@ class LoadFooter extends Footer {
       bool success,
       bool noMore) {
     if (noMore)
-      return Container(
-        height: ScreenUtil().setWidth(100),
-        alignment: Alignment.center,
-        child: Text('暂无更多数据'),
-      );
+      return Container();
     else
       return Container(
         height: ScreenUtil().setWidth(100),

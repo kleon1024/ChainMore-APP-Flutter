@@ -509,7 +509,7 @@ class _PostPageState extends State<PostPage> {
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               vertical: ScreenUtil().setHeight(30)),
-                          child: Text("编辑内容", style: TextUtil.style(16, 400)),
+                          child: Text("编辑内容", style: TextUtil.style(16, 600)),
                         ),
                       )
                     : VEmptyView(0),
@@ -535,7 +535,7 @@ class _PostPageState extends State<PostPage> {
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               vertical: ScreenUtil().setHeight(30)),
-                          child: Text("删除内容", style: TextUtil.style(16, 400)),
+                          child: Text("删除内容", style: TextUtil.style(16, 600)),
                         ),
                       )
                     : VEmptyView(0),
@@ -544,7 +544,7 @@ class _PostPageState extends State<PostPage> {
                     ? Container(
                         padding: EdgeInsets.symmetric(
                             vertical: ScreenUtil().setHeight(30)),
-                        child: Text("更多选项", style: TextUtil.style(16, 400)),
+                        child: Text("更多选项", style: TextUtil.style(16, 600)),
                       )
                     : VEmptyView(0),
               ]),

@@ -230,10 +230,10 @@ class _EditPageState extends State<EditPage>
                                 .then((res) {
                               if (res != null) {
                                 Navigator.pop(context);
-                                Utils.showToast(context, "灵感已经广播");
+                                Utils.showToast(context, "广播成功");
                                 editModel.reset();
                               } else {
-                                Utils.showToast(context, "灵感阻塞中");
+                                Utils.showToast(context, "广播失败");
                               }
                               posting = false;
                             });

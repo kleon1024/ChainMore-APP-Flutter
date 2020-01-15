@@ -60,7 +60,21 @@ class _CreateDomainPageState extends State<CreateDomainPage> {
             backgroundColor: Colors.black87,
             child: Icon(Icons.close),
             onPressed: () {
-              Navigator.pop(context);
+              Utils.showDoubleChoiceDialog(context,
+                  title: "保留创建记录？",
+                  leftText: '删除记录',
+                  rightText: '保留记录', leftFunc: () {
+                    domainCreateModel.reset();
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }, rightFunc: () {
+                    domainCreateModel.setTitle(_titleController.text.trim());
+                    domainCreateModel.setBio(_bioController.text.trim());
+                    domainCreateModel.setDescription(_descriptionController.text.trim());
+                    domainCreateModel.saveState();
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  });
             },
           ),
         ),
@@ -220,7 +234,7 @@ class _CreateDomainPageState extends State<CreateDomainPage> {
                             }
                           });
                         },
-                        content: '创建',
+                        content: domainCreateModel.domain > 0 ? '更新' : '创建',
                         width: double.infinity,
                       );
                     },
