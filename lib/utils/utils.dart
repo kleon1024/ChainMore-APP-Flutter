@@ -2,49 +2,171 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:chainmore/application.dart';
+import 'package:chainmore/models/category.dart';
 import 'package:chainmore/models/update.dart';
 import 'package:chainmore/providers/edit_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
+import 'package:chainmore/widgets/toast_animation.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flushbar/flushbar_route.dart' as route;
 
+class ToastUtils {}
+
 class Utils {
-  static void showToast(BuildContext context, String msg) {
+//  static bool isShowing = true;
+
+  static Timer toastTimer;
+  static OverlayEntry _overlayEntry;
+
+  static void showToast(BuildContext context, String message) {
+    if (toastTimer == null || !toastTimer.isActive) {
+      _overlayEntry = createOverlayEntry(context, message);
+      Overlay.of(context).insert(_overlayEntry);
+      toastTimer = Timer(Duration(milliseconds: 600), () {
+        if (_overlayEntry != null) {
+          _overlayEntry.remove();
+        }
+      });
+    }
+  }
+
+  static OverlayEntry createOverlayEntry(BuildContext context, String message) {
+    return OverlayEntry(
+      builder: (context) => Center(
+        child: Align(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              width: ScreenUtil().setHeight(350),
+              height: ScreenUtil().setHeight(350),
+              color: Colors.black12,
+              child: Material(
+                color: Colors.transparent,
+                elevation: 0,
+                child: Center(
+                  child: Text(
+                    message,
+                    style: TextUtil.style(15, 700, color: Colors.black38),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+//  static OverlayEntry createOverlayEntry(BuildContext context, String message) {
+//    return OverlayEntry(
+//        builder: (context) => Positioned(
+//          top: 50.0,
+//          width: MediaQuery.of(context).size.width - 20,
+//          left: 10,
+//          child: ToastMessageAnimation(Material(
+//            elevation: 10.0,
+//            borderRadius: BorderRadius.circular(10),
+//            child: Container(
+//              padding:
+//              EdgeInsets.only(left: 10, right: 10, top: 13, bottom: 10),
+//              decoration: BoxDecoration(
+//                  color: Color(0xffe53e3f),
+//                  borderRadius: BorderRadius.circular(10)),
+//              child: Align(
+//                alignment: Alignment.center,
+//                child: Text(
+//                  message,
+//                  textAlign: TextAlign.center,
+//                  softWrap: true,
+//                  style: TextStyle(
+//                    fontSize: 18,
+//                    color: Color(0xFFFFFFFF),
+//                  ),
+//                ),
+//              ),
+//            ),
+//          )),
+//        ));
+//  }
+
+//  static void showToast(BuildContext context, String msg) {
 //    Fluttertoast.showToast(context,
 //        msg: msg,
 //        gravity: ToastGravity.CENTER,
 //        toastLength: Toast.LENGTH_SHORT);
 
-    final flushbar = Flushbar(
-      flushbarPosition: FlushbarPosition.TOP,
-      messageText: Text(
-        msg,
-        style: TextUtil.style(14, 700, color: Colors.white),
-      ),
-      duration: Duration(seconds: 3),
-      margin: EdgeInsets.all(8),
-      borderRadius: 8,
-      backgroundColor: CMColors.blueLonely,
-      flushbarStyle: FlushbarStyle.FLOATING,
-    );
+//    final flushbar = Flushbar(
+//      flushbarPosition: FlushbarPosition.TOP,
+//      messageText: Text(
+//        msg,
+//        style: TextUtil.style(14, 700, color: Colors.white),
+//      ),
+//      duration: Duration(seconds: 3),
+//      margin: EdgeInsets.all(8),
+//      borderRadius: 8,
+//      backgroundColor: CMColors.blueLonely,
+//      flushbarStyle: FlushbarStyle.FLOATING,
+//    );
+//
+//    final _route = route.showFlushbar(
+//      context: context,
+//      flushbar: flushbar,
+//    );
+//
+//    Navigator.of(context, rootNavigator: true).push(_route);
 
-    final _route = route.showFlushbar(
-      context: context,
-      flushbar: flushbar,
-    );
+//    Future.delayed(Duration(milliseconds: 1000), () {
+//      if (isShowing) {
+//        Navigator.of(context).pop();
+//      }
+//    });
 
-    Navigator.of(context, rootNavigator: true).push(_route);
+//    showGeneralDialog(
+//        context: context,
+//        barrierDismissible: true,
+//        barrierLabel:
+//            MaterialLocalizations.of(context).modalBarrierDismissLabel,
+//        transitionDuration: const Duration(milliseconds: 150),
+//        pageBuilder: (BuildContext context, Animation animation,
+//            Animation secondaryAnimation) {
+//          return Align(
+//            child: ClipRRect(
+//              borderRadius: BorderRadius.circular(10),
+//              child: Container(
+//                width: 100,
+//                height: 100,
+//                color: Colors.black12,
+//                child: Text(
+//                  msg,
+//                  style: TextUtil.style(16, 700, color: Colors.white),
+//                ),
+//              ),
+//            ),
+//          );
+//        }).then((res) {
+//      isShowing = false;
+//    });
+//  }
+
+  static bool hasAnyCategory(List<Category> categories, Set<int> disabledCategories) {
+    if (disabledCategories.isEmpty) return true;
+    for (int i = 0; i < categories.length; ++i) {
+      if (disabledCategories.contains(categories[i].id)) return true;
+    }
+    return false;
   }
+
 
   static Map<String, String> monthMap = {
     "Jan": "01",

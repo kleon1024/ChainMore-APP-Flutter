@@ -3,6 +3,7 @@ import 'package:chainmore/models/post.dart';
 import 'package:chainmore/network/apis.dart';
 import 'package:chainmore/pages/home/discover/post_item.dart';
 import 'package:chainmore/providers/setting_model.dart';
+import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -66,25 +67,12 @@ class _DiscoverPageState extends State<DiscoverPage>
     if (mounted) setState(() {});
   }
 
-  bool _hasAnyCategory(List<Category> categories, Set<int> disabledCategories) {
-    if (disabledCategories.isEmpty) return true;
-    for (int i = 0; i < categories.length; ++i) {
-      if (disabledCategories.contains(categories[i].id)) return true;
-    }
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     SettingModel settingModel = Provider.of<SettingModel>(context);
-//    var filteredItems = List<Post>.from(items
-////        .where((e) =>
-////            _hasAnyCategory(e.categories, settingModel.disabledCategories))
-////        .toList());
-    
     List<int> filteredIndices = [];
     for (int i = 0; i < items.length; ++i) {
-      if (_hasAnyCategory(items[i].categories, settingModel.disabledCategories)) {
+      if (Utils.hasAnyCategory(items[i].categories, settingModel.disabledCategories)) {
         filteredIndices.add(i);
       }
     }

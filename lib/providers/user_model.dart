@@ -35,13 +35,13 @@ class UserModel with ChangeNotifier {
       return null;
     }
     if (user.code != 20000) {
-      Utils.showToast(context, '登录失败，请检查账号密码');
+      Utils.showToast(context, '登录失败\n请检查账号密码');
       return null;
     }
     _user = user;
     var userInfo = await API.getUserInfo(context, username: username);
     if (userInfo == null) {
-      Utils.showToast(context, '登录失败，未能获取用户信息');
+      Utils.showToast(context, '登录失败\n未能获取用户信息');
       return null;
     }
     Utils.showToast(context, '登录成功');

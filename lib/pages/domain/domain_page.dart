@@ -8,6 +8,7 @@ import 'package:chainmore/pages/home/discover/post_item.dart';
 import 'package:chainmore/pages/post/comment_input_widget.dart';
 import 'package:chainmore/pages/post/comment_item.dart';
 import 'package:chainmore/providers/edit_model.dart';
+import 'package:chainmore/providers/setting_model.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
@@ -93,6 +94,15 @@ class _DomainPageState extends State<DomainPage> {
     UserModel userModel = Provider.of<UserModel>(context);
     EditModel editModel = Provider.of<EditModel>(context);
     bool login = userModel.isLoggedIn();
+
+    SettingModel settingModel = Provider.of<SettingModel>(context);
+    List<int> filteredIndices = [];
+    for (int i = 0; i < _posts.length; ++i) {
+      if (Utils.hasAnyCategory(
+          _posts[i].categories, settingModel.disabledCategories)) {
+        filteredIndices.add(i);
+      }
+    }
 
     return Scaffold(
         floatingActionButton: Container(
@@ -312,7 +322,8 @@ class _DomainPageState extends State<DomainPage> {
                                                   _forceUpdate = true;
                                                 });
                                               } else {
-                                                Utils.showToast(context, "关注失败");
+                                                Utils.showToast(
+                                                    context, "关注失败");
                                               }
                                             });
                                           } else {
@@ -381,15 +392,16 @@ class _DomainPageState extends State<DomainPage> {
                               ? ScreenUtil().setWidth(800)
                               : ScreenUtil().setWidth(20);
                           return Container(
-                            padding: EdgeInsets.only(
-                                top: ScreenUtil().setHeight(20),
-                                bottom: ScreenUtil().setHeight(lastPadding),
-                                left: ScreenUtil().setWidth(0),
-                                right: ScreenUtil().setWidth(0)),
-                            child: PostItem(
-                                _posts[index], domain: widget.item),
-                          );
-                        }, childCount: _posts.length),
+                              padding: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(20),
+                                  bottom: ScreenUtil().setHeight(lastPadding),
+                                  left: ScreenUtil().setWidth(0),
+                                  right: ScreenUtil().setWidth(0)),
+                              child: PostItem(_posts[filteredIndices[index]],
+                                  domain: widget.item, callback: (post) {
+                                _posts[filteredIndices[index]] = post;
+                              }));
+                        }, childCount: filteredIndices.length),
                       ),
 //                      CustomSliverFutureBuilder<List>(
 //                        futureFunc: API.getDomainPosts,
@@ -417,6 +429,19 @@ class _DomainPageState extends State<DomainPage> {
 //                      ),
                     ],
                   ),
+                ),
+              ),
+              Positioned(
+                right: ScreenUtil().setWidth(10),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.more_horiz,
+                    size: ScreenUtil().setWidth(70),
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    // TODO Show Bottom
+                  },
                 ),
               ),
             ],

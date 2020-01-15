@@ -211,7 +211,7 @@ class __LoginWidgetState extends State<_LoginWidget> {
                     }
 
                     if (!Utils.isUserName(username)) {
-                      Utils.showToast(context, "请输入合法用户名");
+                      Utils.showToast(context, "请输入\n合法用户名");
                       return;
                     }
 
@@ -245,7 +245,7 @@ class __LoginWidgetState extends State<_LoginWidget> {
                     }
 
                     if (pwd != pwdConfirm) {
-                      Utils.showToast(context, "两次密码输入不一致");
+                      Utils.showToast(context, "密码不一致");
                       return;
                     }
 

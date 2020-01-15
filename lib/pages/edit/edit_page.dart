@@ -218,7 +218,7 @@ class _EditPageState extends State<EditPage>
                         }
                       } else if (title == "灵感") {
                         if (_editController.text.trim().isEmpty) {
-                          Utils.showToast(context, "灵感还没诞生！");
+                          Utils.showToast(context, "没有灵感？");
                         } else {
                           var data = {
                             "body": _editController.text.trim(),
