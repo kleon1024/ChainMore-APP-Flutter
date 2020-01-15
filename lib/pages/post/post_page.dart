@@ -156,12 +156,16 @@ class _PostPageState extends State<PostPage> {
                                 GestureDetector(
                                   onTap: () {
                                     NavigatorUtil.goUserPage(context,
-                                        data: _post != null ? _post.author : widget.item.author);
+                                        data: _post != null
+                                            ? _post.author
+                                            : widget.item.author);
                                   },
                                   child: Row(
                                     children: <Widget>[
                                       Text(
-                                        _post != null ? _post.author.nickname : widget.item.author.nickname,
+                                        _post != null
+                                            ? _post.author.nickname
+                                            : widget.item.author.nickname,
                                         style: TextUtil.style(13, 500,
                                             color: Colors.black45),
                                       ),
@@ -178,7 +182,6 @@ class _PostPageState extends State<PostPage> {
                         params: {'id': widget.item.id},
                         forceUpdate: _update,
                         builder: (context, post) {
-
                           _update = false;
                           setData(post);
 
@@ -288,18 +291,41 @@ class _PostPageState extends State<PostPage> {
                           return SliverList(
                             delegate:
                                 SliverChildBuilderDelegate((context, index) {
-                              double lastPadding = index == _comments.length - 1
-                                  ? ScreenUtil().setWidth(800)
-                                  : ScreenUtil().setWidth(20);
+                              if (_comments.length == 0) {
+                                return Container(
+                                  height: ScreenUtil().setHeight(1200),
+                                  child: Center(
+                                    child: Text(
+                                      "思想的碰撞在此处发生",
+                                      textAlign: TextAlign.center,
+                                      style: TextUtil.style(14, 400),
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              if (index == _comments.length) {
+                                return Container(
+                                  height: ScreenUtil().setHeight(1200),
+                                  child: Center(
+                                    child: Text(
+                                      "碰撞的火花在此处延续",
+                                      textAlign: TextAlign.center,
+                                      style: TextUtil.style(14, 400),
+                                    ),
+                                  ),
+                                );
+                              }
+
                               return Container(
                                 padding: EdgeInsets.only(
                                     top: ScreenUtil().setHeight(20),
-                                    bottom: ScreenUtil().setHeight(lastPadding),
+                                    bottom: ScreenUtil().setHeight(20),
                                     left: ScreenUtil().setWidth(40),
                                     right: ScreenUtil().setWidth(40)),
                                 child: CommentItem(item: _comments[index]),
                               );
-                            }, childCount: _comments.length),
+                            }, childCount: _comments.length + 1),
                           );
                         },
                       ),
@@ -451,7 +477,8 @@ class _PostPageState extends State<PostPage> {
     editModel.setTitle(post.title != null ? post.title : "");
     editModel.setBody(post.description != null ? post.description : "");
     editModel.setUrl(post.url != null ? post.url : "");
-    editModel.setCategories(post.categories.map((category) => category.id).toList());
+    editModel
+        .setCategories(post.categories.map((category) => category.id).toList());
     editModel.setDomain(post.domain);
     editModel.setId(post.id);
 
@@ -491,18 +518,22 @@ class _PostPageState extends State<PostPage> {
                     ? GestureDetector(
                         onTap: () {
                           EditModel editModel = Provider.of<EditModel>(context);
-                          Navigator.of(context).pop();
                           if (editModel.hasHistory()) {
                             Utils.showDoubleChoiceDialog(context,
                                 title: "历史编辑",
                                 body: "你还有未完成的草稿",
                                 rightText: "恢复草稿",
                                 leftText: "丢弃草稿", rightFunc: () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
                               NavigatorUtil.goEditPage(context);
                             }, leftFunc: () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
                               _editPost(post, editModel);
                             });
                           } else {
+                            Navigator.of(context).pop();
                             _editPost(post, editModel);
                           }
                         },
@@ -517,7 +548,6 @@ class _PostPageState extends State<PostPage> {
                         post.author.username == userModel.user.username
                     ? GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pop();
                           Utils.showDoubleChoiceDialog(
                             context,
                             title: "⚠️危险动作",
@@ -526,8 +556,10 @@ class _PostPageState extends State<PostPage> {
                             leftText: "确认删除",
                             rightFunc: () {
                               Navigator.of(context).pop();
+                              Navigator.of(context).pop();
                             },
                             leftFunc: () {
+                              Navigator.of(context).pop();
                               Navigator.of(context).pop();
                             },
                           );

@@ -15,7 +15,7 @@ class EditModel with ChangeNotifier {
 
   Domain _domain;
 
-  Set<int> _categories;
+  Set<int> _categories = Set<int>();
 
   Domain get domain => _domain;
   String get title => _title;
