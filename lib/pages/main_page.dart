@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chainmore/models/category_group.dart';
 import 'package:chainmore/models/tab_icon_data.dart';
 import 'package:chainmore/pages/home/home_page.dart';
@@ -8,11 +9,15 @@ import 'package:chainmore/providers/domain_create_model.dart';
 import 'package:chainmore/providers/edit_model.dart';
 import 'package:chainmore/providers/setting_model.dart';
 import 'package:chainmore/providers/update_model.dart';
+import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/bottom_bar.dart';
+import 'package:chainmore/widgets/common_text_style.dart';
+import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -24,6 +29,14 @@ class _MainPageState extends State<MainPage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
   final pageController = PageController();
+
+  int _currentIndex = 0;
+
+  List<Widget> _pages = [
+    HomePage(),
+    Scaffold(),
+    MinePage(),
+  ];
 
   Widget tabBody = Container(
     color: Colors.white,
@@ -57,7 +70,7 @@ class _MainPageState extends State<MainPage>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // 当App生命周期状态为恢复时。
+    // OnResumed
     if (state == AppLifecycleState.resumed) {
       Utils.checkClipBoard(context: context);
     }
@@ -77,42 +90,34 @@ class _MainPageState extends State<MainPage>
       ),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: <Widget>[
-            PageView(
-              children: [
-                HomePage(),
-                Container(),
-                Container(),
-                MinePage(),
-              ],
-              controller: pageController,
-              onPageChanged: (index) => {},
+        backgroundColor: Colors.white,
+        body: _pages[_currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          elevation: 0,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          currentIndex: _currentIndex,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.center_focus_weak),
+              activeIcon: Icon(Icons.center_focus_strong),
+              title: VEmptyView(0),
             ),
-            bottomBar(),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.widgets),
+              title: VEmptyView(0),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.explore),
+              title: VEmptyView(0),
+            ),
           ],
+          selectedItemColor: Colors.black87,
         ),
       ),
-    );
-  }
-
-  Widget bottomBar() {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: SizedBox(),
-        ),
-        BottomBarView(
-          tabIconsList: tabIconsList,
-          addClick: () {
-            NavigatorUtil.goEditPage(context);
-          },
-          changeIndex: (index) {
-            pageController.jumpToPage(index);
-          },
-        ),
-      ],
     );
   }
 }

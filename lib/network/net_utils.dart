@@ -23,9 +23,9 @@ import '../utils/custom_log_interceptor.dart';
 
 class NetUtils {
   static Dio _dio;
-  
-  static final String baseUrl = 'http://192.168.3.5:5000';
 
+  //static final String baseUrl = 'http://192.168.3.5:5000';
+  static final String baseUrl = 'https://api.chainmore.fun';
 
   static void init() async {
     Directory tempDir = await getTemporaryDirectory();

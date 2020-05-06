@@ -11,12 +11,10 @@ import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:chainmore/widgets/widget_category_tag.dart';
 import 'package:chainmore/widgets/widget_category_tag_selectable.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:common_utils/common_utils.dart' as CommonUtils;
 

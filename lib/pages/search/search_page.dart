@@ -147,12 +147,11 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                         vertical: ScreenUtil().setWidth(10)),
                     child: Row(
                       children: <Widget>[
-                        Text(
-                            '${index + 1}',
+                        Text('${index + 1}',
                             style: index < 3
-                                ? TextUtil.style(18, 500, color: CMColors.blueLonely)
-                                : TextUtil.style(18, 500, color: Colors.grey)
-                        ),
+                                ? TextUtil.style(18, 500,
+                                    color: CMColors.blueLonely)
+                                : TextUtil.style(18, 500, color: Colors.grey)),
                         HEmptyView(20),
                         Expanded(
                           child: Column(
@@ -240,8 +239,9 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
           child: TabBarView(
             children: [
               ..._searchingTabKeys
-                  .map((key) =>
-                      SearchOtherResultPage(_searchingTabMap[key], searchText, state: ""))
+                  .map((key) => SearchOtherResultPage(
+                      _searchingTabMap[key], searchText,
+                      state: ""))
                   .toList()
             ],
             controller: _searchingTabController,
@@ -256,32 +256,32 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     return WillPopScope(
       child: Scaffold(
         backgroundColor: Colors.white,
-        floatingActionButton: Container(
-          padding: EdgeInsets.only(
-              bottom: ScreenUtil().setHeight(150),
-              right: ScreenUtil().setWidth(10)),
-          child: Container(
-            height: ScreenUtil().setHeight(80),
-            width: ScreenUtil().setWidth(80),
-            child: FloatingActionButton(
-              elevation: 0,
-              backgroundColor: Colors.black87,
-              child: Icon(Icons.close),
-              onPressed: () {
-                if (_isSearching) {
-                  Future.delayed(Duration(milliseconds: 50)).then((_) {
-                    _searchController.clear();
-                  });
-                  setState(() {
-                    _isSearching = false;
-                  });
-                } else {
-                  Navigator.pop(context);
-                }
-              },
-            ),
-          ),
-        ),
+//        floatingActionButton: Container(
+//          padding: EdgeInsets.only(
+//              bottom: ScreenUtil().setHeight(150),
+//              right: ScreenUtil().setWidth(10)),
+//          child: Container(
+//            height: ScreenUtil().setHeight(80),
+//            width: ScreenUtil().setWidth(80),
+//            child: FloatingActionButton(
+//              elevation: 0,
+//              backgroundColor: Colors.black87,
+//              child: Icon(Icons.close),
+//              onPressed: () {
+//                if (_isSearching) {
+//                  Future.delayed(Duration(milliseconds: 50)).then((_) {
+//                    _searchController.clear();
+//                  });
+//                  setState(() {
+//                    _isSearching = false;
+//                  });
+//                } else {
+//                  Navigator.pop(context);
+//                }
+//              },
+//            ),
+//          ),
+//        ),
         appBar: AppBar(
           automaticallyImplyLeading: false,
           elevation: 0,
@@ -292,9 +292,9 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
               cursorColor: CMColors.blueLonely,
               textInputAction: TextInputAction.search,
               onEditingComplete: () {
-                  searchText = _searchController.text.isEmpty
-                      ? '阡陌'
-                      : _searchController.text;
+                searchText = _searchController.text.isEmpty
+                    ? '阡陌'
+                    : _searchController.text;
                 _search();
               },
               onChanged: (text) {
@@ -315,7 +315,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                 suffixIcon: IconButton(
                     padding: EdgeInsets.zero,
                     icon: Icon(
-                      Icons.clear,
+                      Icons.cancel,
                       color: Colors.black87,
                     ),
                     onPressed: () {
@@ -331,6 +331,22 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
             ),
             data: Theme.of(context).copyWith(primaryColor: Colors.black54),
           ),
+          actions: <Widget>[
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: EdgeInsets.only(right: 15),
+                child: Center(
+                  child: Text(
+                    "取消",
+                    style: TextUtil.style(18, 300),
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
         body: Listener(
           onPointerDown: (d) {

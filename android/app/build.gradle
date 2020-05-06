@@ -80,7 +80,7 @@ android {
 //                                    "chainmore_" + defaultConfig.versionName + "_" + formattedDate))
 //                }
 //            }
-//        }
+        }
     }
 }
 

@@ -16,6 +16,8 @@ class TextUtil {
   }
 }
 
+final commonTitleTextStyle = TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.w500);
+
 final commonTextStyle = TextStyle(fontSize: 16, color: Colors.black87);
 final commonWhiteTextStyle = TextStyle(fontSize: 16, color: Colors.white);
 final commonGrayTextStyle = TextStyle(fontSize: 16, color: Colors.grey);

@@ -75,7 +75,8 @@ class API {
     });
   }
 
-  static Future<List<Post>> getTrendingPosts({Map<String, dynamic> params}) async {
+  static Future<List<Post>> getTrendingPosts(
+      {Map<String, dynamic> params}) async {
     var response =
         await NetUtils.request("get", '/v1/post/trendings', params: params)
             .catchError((e) {
@@ -83,7 +84,8 @@ class API {
     });
 
     if (response != null) {
-      return List<Post>.from(response.data["items"].map((item) => Post.fromJson(item)));
+      return List<Post>.from(
+          response.data["items"].map((item) => Post.fromJson(item)));
     } else {
       return List<Post>();
     }
@@ -132,10 +134,10 @@ class API {
 
   static postComment(BuildContext context, String content,
       {Map<String, dynamic> params}) async {
-    Map<String, dynamic> data = {"comment": content};
+    Map<String, dynamic> data = {"comment": content, "id": params["id"]};
 
     var response = await NetUtils.request('post', '/v1/post/comment',
-            data: data, params: params, context: context)
+            data: data, context: context)
         .catchError((e) {
       Utils.showToast(context, e.toString());
     });
@@ -177,8 +179,8 @@ class API {
     return Domain();
   }
 
-  static Future<List<Post>> getDomainPosts(
-      BuildContext context, {Map<String, dynamic> params}) async {
+  static Future<List<Post>> getDomainPosts(BuildContext context,
+      {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/domain/post",
             params: params, context: context, isShowLoading: false)
         .catchError((e) {
@@ -258,8 +260,7 @@ class API {
   }
 
   static getUpdateInfo() async {
-    var response = await NetUtils.request("get", "/v1/update")
-        .catchError((e) {
+    var response = await NetUtils.request("get", "/v1/update").catchError((e) {
 //      Utils.showToast(context, e.toString());
     });
 
@@ -280,12 +281,12 @@ class API {
 
   static replySparkle(BuildContext context, {Map<String, dynamic> data}) async {
     var response = await NetUtils.request("post", "/v1/sparkle/reply",
-        data: data, context: context)
+            data: data, context: context)
         .catchError((e) {
       Utils.showToast(context, e.toString());
     });
 
-    if (response!=null) {
+    if (response != null) {
       return Sparkle.fromJson(response.data["item"]);
     }
   }
@@ -302,7 +303,17 @@ class API {
 
   static putPost(BuildContext context, {Map<String, dynamic> data}) async {
     var response =
-    await NetUtils.request("put", "/v1/post", data: data, context: context)
+        await NetUtils.request("put", "/v1/post", data: data, context: context)
+            .catchError((e) {
+      Utils.showToast(context, e.toString());
+    });
+
+    return response;
+  }
+
+  static deletePost(BuildContext context, {Map<String, dynamic> params}) async {
+    var response =
+    await NetUtils.request("delete", "/v1/post", params: params, context: context)
         .catchError((e) {
       Utils.showToast(context, e.toString());
     });
@@ -363,7 +374,7 @@ class API {
 
   static updateDomain(BuildContext context, {Map<String, dynamic> data}) async {
     var response = await NetUtils.request("put", "/v1/domain",
-        data: data, context: context)
+            data: data, context: context)
         .catchError((e) {
       Utils.showToast(context, e.toString());
     });
@@ -482,7 +493,7 @@ class API {
   static getDomainDependentTree(BuildContext context,
       {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("get", "/v1/domain/dependent",
-        params: params, context: context, isShowLoading: false)
+            params: params, context: context, isShowLoading: false)
         .catchError((e) {
       Utils.showToast(context, e.toString());
     });
@@ -501,13 +512,16 @@ class API {
     });
 
     if (response != null) {
-      return List<Sparkle>.from(response.data["items"].map((item) => Sparkle.fromJson(item)).toList());
+      return List<Sparkle>.from(response.data["items"]
+          .map((item) => Sparkle.fromJson(item))
+          .toList());
     }
   }
 
-  static addEmojiReply(BuildContext context, {Map<String, dynamic> params}) async {
+  static addEmojiReply(BuildContext context,
+      {Map<String, dynamic> params}) async {
     var response = await NetUtils.request("post", "/v1/post/emoji",
-        params: params, context: context, isShowLoading: false)
+            params: params, context: context, isShowLoading: false)
         .catchError((e) {
       Utils.showToast(context, e.toString());
     });
@@ -520,7 +534,8 @@ class API {
         params: params, isShowLoading: false);
 
     if (response != null) {
-      return List<CategoryGroup>.from(response.data["items"].map((item) => CategoryGroup.fromJson(item)));
+      return List<CategoryGroup>.from(
+          response.data["items"].map((item) => CategoryGroup.fromJson(item)));
     }
     return List<CategoryGroup>();
   }

@@ -24,32 +24,31 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   provider: ^3.1.0
-  shared_preferences: ^0.5.3+4
+  shared_preferences: ^0.5.7+1
   dio: ^3.0.2
   connectivity: ^0.4.5+3
   flutter_screenutil: ^0.6.0
-  fluro: ^1.5.1
+  fluro: ^1.6.3
   fluttertoast: ^3.1.3
   common_utils: ^1.1.3
   cookie_jar: ^1.0.0
-  permission_handler: ^3.2.0
-  path_provider: ^1.5.1
-  extended_image: ^0.6.1
+  permission_handler: ^5.0.0
+  path_provider: ^1.6.7
   get_it: ^3.0.1
   flutter_easyrefresh: ^2.0.4
   json_annotation: ^3.0.0
   http: ^0.12.0+2
   pull_to_refresh: ^1.5.7
-#  webview_flutter: ^0.3.19+3
   webview_flutter:
     path: plugins/webview_flutter
-  url_launcher: ^5.2.5
-  flutter_downloader: ^1.0.5
+  url_launcher: ^5.4.5
   open_file: ^2.1.1
-  package_info: ^0.4.0+13
+  package_info: ^0.4.0+17
   version: ^1.0.3
-  flushbar: ^1.9.1
+  flushbar: ^1.10.0
   simple_animations: ^1.3.3
+#  flutter_slidable: ^0.5.4
+  cached_network_image: ^2.2.0+1
 
 dev_dependencies:
   flutter_test:

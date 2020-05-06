@@ -1,5 +1,6 @@
 import 'package:chainmore/pages/home/home_page.dart';
 import 'package:chainmore/pages/login_page.dart';
+import 'package:chainmore/pages/main_page.dart';
 import 'package:chainmore/pages/splash_page.dart';
 import 'package:chainmore/providers/certify_model.dart';
 import 'package:chainmore/providers/domain_create_model.dart';
@@ -72,11 +73,15 @@ class MyApp extends StatelessWidget {
       title: 'ChainMore',
       navigatorKey: Application.getIt<NavigateService>().key,
       theme: ThemeData(
-//          fontFamily: 'SourceHanSans',
-          brightness: Brightness.light,
-          primaryColor: Colors.white,
-          splashColor: Colors.transparent,
-          tooltipTheme: TooltipThemeData(verticalOffset: -100000)),
+        brightness: Brightness.light,
+        primaryColor: Colors.white,
+        splashColor: Colors.transparent,
+        tooltipTheme: TooltipThemeData(verticalOffset: -100000),
+        pageTransitionsTheme: PageTransitionsTheme(builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        }),
+      ),
       home: SplashPage(),
       onGenerateRoute: Application.router.generator,
     );

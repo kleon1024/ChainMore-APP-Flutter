@@ -16,14 +16,14 @@ class NavigatorUtil {
   static _navigateTo(BuildContext context, String path,
       {bool replace = false,
       bool clearStack = false,
-      Duration transitionDuration = const Duration(milliseconds: 250),
+      Duration transitionDuration = const Duration(milliseconds: 150),
       RouteTransitionsBuilder transitionBuilder}) {
     return Application.router.navigateTo(context, path,
         replace: replace,
         clearStack: clearStack,
         transitionDuration: transitionDuration,
         transitionBuilder: transitionBuilder,
-        transition: TransitionType.material);
+        transition: TransitionType.native);
   }
 
   static void goLoginPage(BuildContext context,
