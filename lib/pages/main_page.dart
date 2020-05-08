@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chainmore/models/category_group.dart';
 import 'package:chainmore/models/tab_icon_data.dart';
+import 'package:chainmore/pages/explore_page.dart';
 import 'package:chainmore/pages/home/home_page.dart';
 import 'package:chainmore/pages/login_page.dart';
 import 'package:chainmore/pages/user/mine_page.dart';
+import 'package:chainmore/pages/workbench_page.dart';
 import 'package:chainmore/providers/certify_model.dart';
 import 'package:chainmore/providers/domain_create_model.dart';
 import 'package:chainmore/providers/edit_model.dart';
@@ -34,8 +36,8 @@ class _MainPageState extends State<MainPage>
 
   List<Widget> _pages = [
     HomePage(),
-    Scaffold(),
-    MinePage(),
+    WorkbenchPage(),
+    ExplorePage(),
   ];
 
   Widget tabBody = Container(

@@ -4,6 +4,7 @@ import 'package:chainmore/pages/home/personal_drawer.dart';
 import 'package:chainmore/pages/home/sparkle/sparkle_page.dart';
 import 'package:chainmore/providers/setting_model.dart';
 import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/widgets/cards/explore_card.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/widget_category_tag_selectable.dart';
@@ -13,12 +14,12 @@ import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
+class ExplorePage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _ExplorePageState createState() => _ExplorePageState();
 }
 
-class _HomePageState extends State<HomePage>
+class _ExplorePageState extends State<ExplorePage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   TabController _tabController;
 
@@ -29,15 +30,6 @@ class _HomePageState extends State<HomePage>
     super.initState();
     _tabController = TabController(vsync: this, length: 2);
   }
-
-  List items = [
-    Dismissible(
-      key: Key("ABC"),
-      onDismissed: (direction) {},
-      background: Container(color: Colors.red),
-      child: ListTile(title: Text("ABC")),
-    )
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -68,18 +60,18 @@ class _HomePageState extends State<HomePage>
           ),
         ),
         title: Text(
-          "聚焦",
+          "探索",
           style: commonTitleTextStyle,
         ),
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.filter_list,
+              Icons.apps,
               size: ScreenUtil().setWidth(70),
               color: Colors.black87,
             ),
             onPressed: () {
-              _onSelectClassifier();
+//              _onSelectClassifier();
             },
           ),
           IconButton(
@@ -98,22 +90,11 @@ class _HomePageState extends State<HomePage>
       drawer: Drawer(
         child: PersonalDrawer(),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-        child: Card(
-//        borderOnForeground: false,
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          elevation: 1,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
-          ),
-          child: CachedNetworkImage(
-            imageUrl:
-                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588792994611&di=cd5bb29b62e0e44aefb4f08961ff2ad1&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20160923%2Fadaf5902a26e4362ad8e36f53ae2e30a_th.jpg",
-          ),
-        ),
-      ),
+      body: ListView.builder(
+        itemCount: 2,
+          itemBuilder: (context, index) {
+        return ExploreCard();
+      })
     );
   }
 
