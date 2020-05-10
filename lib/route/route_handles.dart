@@ -10,13 +10,18 @@ import 'package:chainmore/pages/domain/domain_certify_page.dart';
 import 'package:chainmore/pages/domain/domain_map_page.dart';
 import 'package:chainmore/pages/domain/domain_page.dart';
 import 'package:chainmore/pages/edit/edit_page.dart';
+import 'package:chainmore/pages/explore/domain_page.dart';
+import 'package:chainmore/pages/explore/roadmap_page.dart';
+import 'package:chainmore/pages/explore_page.dart';
 import 'package:chainmore/pages/home/home_page.dart';
 import 'package:chainmore/pages/home/sparkle/sparkle_detail_page.dart';
 import 'package:chainmore/pages/login_page.dart';
 import 'package:chainmore/pages/main_page.dart';
 import 'package:chainmore/pages/post/post_page.dart';
+import 'package:chainmore/pages/roadmap/roadmap_detail_page.dart';
 import 'package:chainmore/pages/search/domain_search_page.dart';
 import 'package:chainmore/pages/search/search_page.dart';
+import 'package:chainmore/pages/setting_page.dart';
 import 'package:chainmore/pages/splash_page.dart';
 import 'package:chainmore/pages/user/user_page.dart';
 import 'package:chainmore/pages/webview/web_view_page.dart';
@@ -82,15 +87,15 @@ var domainHandler = Handler(
 
 var domainMapHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
-      String data = params['data'].first;
-      return DomainMapPage(Domain.fromJson(FluroConvertUtils.string2map(data)));
-    });
+  String data = params['data'].first;
+  return DomainMapPage(Domain.fromJson(FluroConvertUtils.string2map(data)));
+});
 
 var webHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
-      String data = params['data'].first;
-      return WebViewPage(web: Web.fromJson(FluroConvertUtils.string2map(data)));
-    });
+  String data = params['data'].first;
+  return WebViewPage(web: Web.fromJson(FluroConvertUtils.string2map(data)));
+});
 
 var editHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
@@ -99,12 +104,38 @@ var editHandler = Handler(
 
 var userHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
-      String data = params['data'].first;
-      return UserPage(Author.fromJson(FluroConvertUtils.string2map(data)));
-    });
+  String data = params['data'].first;
+  return UserPage(Author.fromJson(FluroConvertUtils.string2map(data)));
+});
 
 var sparkleHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
-      String data = params['data'].first;
-      return SparkleDetailPage(Sparkle.fromJson(FluroConvertUtils.string2map(data)));
-    });
+  String data = params['data'].first;
+  return SparkleDetailPage(
+      Sparkle.fromJson(FluroConvertUtils.string2map(data)));
+});
+
+var exploreRoadmapHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+  return ExploreRoadmapPage();
+});
+
+var exploreDomainHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+  return ExploreDomainPage();
+});
+
+var exploreHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+  return ExplorePage();
+});
+
+var roadmapHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+  return RoadmapDetailPage();
+});
+
+var settingHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+  return SettingPage();
+});

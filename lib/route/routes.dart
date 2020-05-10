@@ -23,6 +23,13 @@ class Routes {
   static String domainCertify = "/domain/certify";
   static String domainMap = "/domain/map";
 
+  static String explore = "/explore";
+  static String exploreRoadmap = "/explore/roadmap";
+  static String exploreDomain = "/explore/domain";
+
+  static String roadmap = "/roadmap";
+
+  static String setting = "/setting";
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
@@ -45,5 +52,12 @@ class Routes {
     router.define(domainMap, handler: domainMapHandler);
     router.define(user, handler: userHandler);
     router.define(sparkle, handler: sparkleHandler);
+    router.define(exploreRoadmap, handler: exploreRoadmapHandler);
+    router.define(exploreDomain, handler: exploreDomainHandler);
+    router.define(explore, handler: exploreHandler);
+
+    router.define(roadmap, handler: roadmapHandler);
+
+    router.define(setting, handler: settingHandler);
   }
 }

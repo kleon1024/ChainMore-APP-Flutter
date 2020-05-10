@@ -1,9 +1,10 @@
+import 'package:chainmore/utils/navigator_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PersonalDrawer extends StatelessWidget{
 
-  PersonalDrawer();
+  PersonalDrawer({Key key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +27,8 @@ class PersonalDrawer extends StatelessWidget{
         ListTile(
           title: Text('设置'),
           onTap: () {
-            // Update the state of the app.
-            // ...
+            Navigator.pop(context);
+            NavigatorUtil.goSettingPage(context);
           },
         ),
       ],

@@ -32,3 +32,32 @@ class LoadHeader extends Header {
       );
   }
 }
+
+class EmptyLoadHeader extends Header {
+  @override
+  Widget contentBuilder(
+      BuildContext context,
+      RefreshMode loadState,
+      double pulledExtent,
+      double loadTriggerPullDistance,
+      double loadIndicatorExtent,
+      AxisDirection axisDirection,
+      bool float,
+      Duration completeDuration,
+      bool enableInfiniteLoad,
+      bool success,
+      bool noMore) {
+    if (noMore)
+      return Container(
+        height: ScreenUtil().setWidth(100),
+        alignment: Alignment.center,
+        child: Container(),
+      );
+    else
+      return Container(
+        height: ScreenUtil().setWidth(100),
+        alignment: Alignment.center,
+        child: Container(),
+      );
+  }
+}

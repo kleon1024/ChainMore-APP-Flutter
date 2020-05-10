@@ -10,7 +10,6 @@ import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/toast_animation.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +18,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flushbar/flushbar_route.dart' as route;
 
 class ToastUtils {}
 

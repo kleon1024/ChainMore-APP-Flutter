@@ -91,7 +91,7 @@ class _MainPageState extends State<MainPage>
         statusBarColor: Colors.transparent,
       ),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+//        resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
         body: _pages[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(

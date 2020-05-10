@@ -1,17 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chainmore/pages/home/discover/discover_page.dart';
 import 'package:chainmore/pages/home/personal_drawer.dart';
-import 'package:chainmore/pages/home/sparkle/sparkle_page.dart';
-import 'package:chainmore/providers/setting_model.dart';
-import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/widgets/cards/circle_cached_image_card.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
-import 'package:chainmore/widgets/h_empty_view.dart';
-import 'package:chainmore/widgets/widget_category_tag_selectable.dart';
+import 'package:chainmore/widgets/indicators/action_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:chainmore/utils/navigator_util.dart';
-import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'dart:math' as math;
 
 class WorkbenchPage extends StatefulWidget {
   @override
@@ -20,43 +15,25 @@ class WorkbenchPage extends StatefulWidget {
 
 class _WorkbenchPageState extends State<WorkbenchPage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  TabController _tabController;
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 2);
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0,
-        leading: Padding(
-          padding: EdgeInsets.only(left: ScreenUtil().setWidth(30)),
-          child: Row(
-            children: <Widget>[
-              GestureDetector(
-                child: ClipOval(
-                  child: CachedNetworkImage(
-                    width: ScreenUtil().setWidth(120),
-                    height: ScreenUtil().setHeight(120),
-                    imageUrl:
-                        "http://i.serengeseba.com/uploads/i_2_2608823560x2626403468_26.jpg",
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  ),
-                ),
-                onTap: () {
-                  _scaffoldKey.currentState.openDrawer();
-                },
-              )
-            ],
-          ),
+        leading: CircleCachedImageCard(
+          onTap: () {
+            _scaffoldKey.currentState.openDrawer();
+          },
         ),
         title: Text(
           "工作台",
@@ -89,26 +66,84 @@ class _WorkbenchPageState extends State<WorkbenchPage>
       drawer: Drawer(
         child: PersonalDrawer(),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-        child: Card(
-//        borderOnForeground: false,
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          elevation: 1,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
-          ),
-          child: CachedNetworkImage(
-            imageUrl:
-                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588792994611&di=cd5bb29b62e0e44aefb4f08961ff2ad1&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20160923%2Fadaf5902a26e4362ad8e36f53ae2e30a_th.jpg",
-          ),
+      body: Scrollbar(
+        child: CustomScrollView(
+          physics: BouncingScrollPhysics(),
+          slivers: <Widget>[
+            SliverGrid.extent(
+              mainAxisSpacing: ScreenUtil().setWidth(90),
+              maxCrossAxisExtent: ScreenUtil().setHeight(300),
+              children: <Widget>[
+                ActionIndicator(
+                    icon: Icon(Icons.add_circle_outline), text: "常用应用"),
+              ],
+            ),
+            SliverPersistentHeader(
+              delegate: _SliverHeaderDelegate(
+                minHeight: ScreenUtil().setHeight(150),
+                maxHeight: ScreenUtil().setHeight(150),
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ScreenUtil().setWidth(30),
+                    vertical: ScreenUtil().setHeight(10),
+                  ),
+                  child: Text(
+                    "我的应用",
+                    style: commonTitleTextStyle,
+                  ),
+                ),
+              ),
+            ),
+            SliverGrid.extent(
+              mainAxisSpacing: ScreenUtil().setWidth(0),
+              maxCrossAxisExtent: ScreenUtil().setHeight(300),
+              children: <Widget>[
+                ActionIndicator(icon: Icon(Icons.add), text: "常用应用"),
+                ActionIndicator(icon: Icon(Icons.receipt), text: "常用应用"),
+                ActionIndicator(icon: Icon(Icons.add), text: "常用应用"),
+                ActionIndicator(icon: Icon(Icons.add), text: "常用应用"),
+                ActionIndicator(icon: Icon(Icons.add), text: "常用应用"),
+                ActionIndicator(icon: Icon(Icons.add), text: "常用应用"),
+                ActionIndicator(icon: Icon(Icons.add), text: "常用应用"),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
 
-
   @override
   bool get wantKeepAlive => true;
+}
+
+class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
+  _SliverHeaderDelegate({
+    @required this.minHeight,
+    @required this.maxHeight,
+    @required this.child,
+  });
+
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => math.max(maxHeight, minHeight);
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return new SizedBox.expand(child: child);
+  }
+
+  @override
+  bool shouldRebuild(_SliverHeaderDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
+  }
 }

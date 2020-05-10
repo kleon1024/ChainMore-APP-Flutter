@@ -16,7 +16,7 @@ class NavigatorUtil {
   static _navigateTo(BuildContext context, String path,
       {bool replace = false,
       bool clearStack = false,
-      Duration transitionDuration = const Duration(milliseconds: 150),
+      Duration transitionDuration = const Duration(milliseconds: 500),
       RouteTransitionsBuilder transitionBuilder}) {
     return Application.router.navigateTo(context, path,
         replace: replace,
@@ -92,5 +92,25 @@ class NavigatorUtil {
   static goSparkleDetailPage(BuildContext context, {@required Sparkle data}) {
     return _navigateTo(context,
         "${Routes.sparkle}?data=${FluroConvertUtils.object2string(data)}");
+  }
+
+  static goExploreRoadmapPage(BuildContext context) {
+    return _navigateTo(context, Routes.exploreRoadmap);
+  }
+
+  static goExploreDomainPage(BuildContext context) {
+    return _navigateTo(context, Routes.exploreDomain);
+  }
+
+  static goExplorePage(BuildContext context) {
+    return _navigateTo(context, Routes.explore);
+  }
+
+  static goRoadmapDetailPage(BuildContext context) {
+    return _navigateTo(context, Routes.roadmap);
+  }
+
+  static goSettingPage(BuildContext context) {
+    return _navigateTo(context, Routes.setting);
   }
 }

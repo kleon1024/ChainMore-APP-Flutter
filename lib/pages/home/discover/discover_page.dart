@@ -75,61 +75,61 @@ class _DiscoverPageState extends State<DiscoverPage>
     SettingModel settingModel = Provider.of<SettingModel>(context);
     List<int> filteredIndices = [];
     for (int i = 0; i < _posts.length; ++i) {
-      if (Utils.hasAnyCategory(_posts[i].categories, settingModel.disabledCategories)) {
+      if (Utils.hasAnyCategory(
+          _posts[i].categories, settingModel.disabledCategories)) {
         filteredIndices.add(i);
       }
     }
 
     return Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: Scrollbar(
-              child: EasyRefresh.custom(
-                header: LoadHeader(),
-                footer: LoadFooter(),
-                controller: _controller,
-                onRefresh: _onRefresh,
-                onLoad: _onLoading,
-                  slivers: <Widget>[
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          child: Scrollbar(
+            child: EasyRefresh.custom(
+              header: LoadHeader(),
+              footer: LoadFooter(),
+              controller: _controller,
+              onRefresh: _onRefresh,
+              onLoad: _onLoading,
+              slivers: <Widget>[
+                SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    if (filteredIndices.length == 0) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: ScreenUtil().setHeight(50)),
+                        child: Center(
+                          child: Text("没什么好看的"),
+                        ),
+                      );
+                    }
 
-                        if (filteredIndices.length == 0) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: ScreenUtil().setHeight(50)),
-                            child: Center(
-                              child: Text("没什么好看的"),
-                            ),
-                          );
-                        }
-
-                        if (index == filteredIndices.length) {
-                          return Column(
-                            children: <Widget>[
-                              Container(
-                                  padding:
+                    if (index == filteredIndices.length) {
+                      return Column(
+                        children: <Widget>[
+                          Container(
+                              padding:
                                   EdgeInsets.all(ScreenUtil().setWidth(100)),
-                                  child: Text("你碰到我的底线了",
-                                      textAlign: TextAlign.center)),
-                            ],
-                          );
-                        }
+                              child: Text("你碰到我的底线了",
+                                  textAlign: TextAlign.center)),
+                        ],
+                      );
+                    }
 
-                        return Container(
-                            padding: EdgeInsets.only(
-                                top: ScreenUtil().setHeight(20),
-                                bottom: ScreenUtil().setHeight(20),
-                                left: ScreenUtil().setWidth(0),
-                                right: ScreenUtil().setWidth(0)),
-                            child: PostItem(_posts[filteredIndices[index]], callback: (post) {
-                                  _posts[filteredIndices[index]] = post;
-                                }));
-                      }, childCount: filteredIndices.length + 1),
-                    ),
-                  ],
-
+                    return Container(
+                        padding: EdgeInsets.only(
+                            top: ScreenUtil().setHeight(20),
+                            bottom: ScreenUtil().setHeight(20),
+                            left: ScreenUtil().setWidth(0),
+                            right: ScreenUtil().setWidth(0)),
+                        child: PostItem(_posts[filteredIndices[index]],
+                            callback: (post) {
+                          _posts[filteredIndices[index]] = post;
+                        }));
+                  }, childCount: filteredIndices.length + 1),
+                ),
+              ],
             ),
           ),
         ),
