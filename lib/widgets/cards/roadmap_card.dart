@@ -55,7 +55,7 @@ class RoadmapCard extends StatelessWidget {
                         "VueJS快速入门",
                         style: TextUtil.style(16, 800, color: Colors.white),
                       ),
-                      VEmptyView(ScreenUtil().setHeight(80)),
+                      VEmptyView(80),
                       Text(
                         "三天精通没啥可说的，想来就赶快吧！",
                         style: TextUtil.style(16, 300),

@@ -9,41 +9,50 @@ class ActionIndicator extends StatelessWidget {
   final text;
   final border;
   final style;
+  final onTap;
 
   ActionIndicator({
     @required this.icon,
     this.text = "",
     this.border = BorderSide.none,
     this.style,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: ScreenUtil().setWidth(180),
-            height: ScreenUtil().setHeight(180),
-            child: Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setHeight(90)),
-                side: border,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            Container(
+              width: ScreenUtil().setWidth(180),
+              height: ScreenUtil().setHeight(180),
+              child: Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(ScreenUtil().setHeight(90)),
+                  side: border,
+                ),
+                child: icon,
               ),
-              child: icon,
             ),
-          ),
-          VEmptyView(ScreenUtil().setWidth(5)),
-          Text(
-            text,
-            style: style != null ? style : TextUtil.style(14, 500),
-          ),
-        ],
-      ),
-      padding: EdgeInsets.symmetric(
+            VEmptyView(5),
+            text != ""
+                ? Text(
+                    text,
+                    style: style != null ? style : TextUtil.style(14, 500),
+                  )
+                : VEmptyView(0),
+          ],
+        ),
+        padding: EdgeInsets.symmetric(
           horizontal: ScreenUtil().setHeight(10),
-          vertical: ScreenUtil().setWidth(10)),
+          vertical: ScreenUtil().setWidth(10),
+        ),
+      ),
     );
   }
 }

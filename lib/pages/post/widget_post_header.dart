@@ -45,7 +45,7 @@ class PostHeader extends StatelessWidget {
                   child: Material(
                     child: GestureDetector(
                       onTap: () {
-                        NavigatorUtil.goDomainPage(context, data: item.domain);
+//                        NavigatorUtil.goDomainPage(context, data: item.domain);
                       },
                       child: Container(
                         width: double.infinity,

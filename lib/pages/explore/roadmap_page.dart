@@ -8,6 +8,7 @@ import 'package:chainmore/widgets/cards/explore_card.dart';
 import 'package:chainmore/widgets/cards/roadmap_card.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
+import 'package:chainmore/widgets/indicators/action_indicator.dart';
 import 'package:chainmore/widgets/widget_category_tag_selectable.dart';
 import 'package:flutter/material.dart';
 import 'package:chainmore/utils/navigator_util.dart';
@@ -25,40 +26,41 @@ class _ExploreRoadmapPageState extends State<ExploreRoadmapPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          centerTitle: true,
-          title: Text(
-            "路线地图",
-            style: commonTitleTextStyle,
-          ),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.search,
-                size: ScreenUtil().setWidth(70),
-                color: Colors.black87,
-              ),
-              onPressed: () {
-                NavigatorUtil.goSearchPage(context);
-              },
-            ),
-          ],
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          "路线地图",
+          style: commonTitleTextStyle,
         ),
-        backgroundColor: Colors.white,
-        body: CustomScrollView(
-          physics: BouncingScrollPhysics(),
-          slivers: <Widget>[
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return RoadmapCard();
-                },
-                childCount: 4,
-              ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              size: ScreenUtil().setWidth(70),
+              color: Colors.black87,
             ),
-          ],
-        ));
+            onPressed: () {
+              NavigatorUtil.goSearchPage(context);
+            },
+          ),
+        ],
+      ),
+      backgroundColor: Colors.white,
+      body: CustomScrollView(
+        physics: BouncingScrollPhysics(),
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return RoadmapCard();
+              },
+              childCount: 4,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override

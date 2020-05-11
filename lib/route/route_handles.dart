@@ -7,6 +7,7 @@ import 'package:chainmore/models/sparkle.dart';
 import 'package:chainmore/models/web.dart';
 import 'package:chainmore/pages/domain/create_domain_page.dart';
 import 'package:chainmore/pages/domain/domain_certify_page.dart';
+import 'package:chainmore/pages/domain/domain_detail_page.dart';
 import 'package:chainmore/pages/domain/domain_map_page.dart';
 import 'package:chainmore/pages/domain/domain_page.dart';
 import 'package:chainmore/pages/edit/edit_page.dart';
@@ -81,8 +82,9 @@ var postHandler = Handler(
 
 var domainHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
-  String data = params['data'].first;
-  return DomainPage(Domain.fromJson(FluroConvertUtils.string2map(data)));
+//  String data = params['data'].first;
+//  return DomainPage(Domain.fromJson(FluroConvertUtils.string2map(data)));
+    return DomainDetailPage();
 });
 
 var domainMapHandler = Handler(

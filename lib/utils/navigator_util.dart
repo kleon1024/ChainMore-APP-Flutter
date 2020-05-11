@@ -51,8 +51,7 @@ class NavigatorUtil {
         "${Routes.domainSearch}?data=${FluroConvertUtils.object2string(data)}");
   }
 
-  static goDomainCertifyPage(BuildContext context,
-      {@required Domain data}) {
+  static goDomainCertifyPage(BuildContext context, {@required Domain data}) {
     return _navigateTo(context,
         "${Routes.domainCertify}?data=${FluroConvertUtils.object2string(data)}");
   }
@@ -66,9 +65,13 @@ class NavigatorUtil {
         "${Routes.post}?data=${FluroConvertUtils.object2string(data)}");
   }
 
-  static void goDomainPage(BuildContext context, {@required Domain data}) {
-    _navigateTo(context,
-        "${Routes.domain}?data=${FluroConvertUtils.object2string(data)}");
+//  static void goDomainPage(BuildContext context, {@required Domain data}) {
+//    _navigateTo(context,
+//        "${Routes.domain}?data=${FluroConvertUtils.object2string(data)}");
+//  }
+
+  static goDomainDetailPage(BuildContext context) {
+    return _navigateTo(context, Routes.domain);
   }
 
   static goUserPage(BuildContext context, {@required Author data}) {
@@ -81,7 +84,8 @@ class NavigatorUtil {
   }
 
   static goWebViewPage(BuildContext context, {@required Web web}) {
-    return _navigateTo(context, "${Routes.web}?data=${FluroConvertUtils.object2string(web)}");
+    return _navigateTo(
+        context, "${Routes.web}?data=${FluroConvertUtils.object2string(web)}");
   }
 
   static goDomainMapPage(BuildContext context, {@required Domain data}) {

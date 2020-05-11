@@ -16,7 +16,7 @@ class DomainCard extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       child: GestureDetector(
         onTap: () {
-          NavigatorUtil.goRoadmapDetailPage(context);
+          NavigatorUtil.goDomainDetailPage(context);
         },
         onLongPress: () {
           print("Long pressed");
@@ -59,7 +59,7 @@ class DomainCard extends StatelessWidget {
                           "游戏设计",
                           style: TextUtil.style(16, 800, color: Colors.white),
                         ),
-                        VEmptyView(ScreenUtil().setHeight(80)),
+                        VEmptyView(30),
                         Text(
                           "我们的理想是做最好玩的游戏，做最美的设计，做最令人感动的故事。欢迎加入我们一起行动吧。",
                           style: TextUtil.style(16, 300),

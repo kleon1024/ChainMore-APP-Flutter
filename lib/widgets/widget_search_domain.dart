@@ -79,7 +79,7 @@ class SearchDomainWidget extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (state == "") {
-          NavigatorUtil.goDomainPage(context, data: domain);
+//          NavigatorUtil.goDomainPage(context, data: domain);
         } else {
           if (login) {
             if (state == "precertified") {

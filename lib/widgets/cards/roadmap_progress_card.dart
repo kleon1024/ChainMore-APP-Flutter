@@ -105,7 +105,7 @@ class _RoadmapProgressCardState extends State<RoadmapProgressCard>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text("进行中：", style: commonTitleTextStyle,),
-                      VEmptyView(ScreenUtil().setHeight(30)),
+                      VEmptyView(30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
