@@ -30,15 +30,11 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
-  final pageController = PageController();
+  final pageController = PageController(
+    initialPage: 1,
+  );
 
   int _currentIndex = 0;
-
-  List<Widget> _pages = [
-    HomePage(),
-    WorkbenchPage(),
-    ExplorePage(),
-  ];
 
   Widget tabBody = Container(
     color: Colors.white,
@@ -86,6 +82,16 @@ class _MainPageState extends State<MainPage>
 
   @override
   Widget build(BuildContext context) {
+    print("Rebuild Main Page");
+    final pageView = PageView(
+      controller: pageController,
+      children: <Widget>[
+        HomePage(),
+        WorkbenchPage(),
+        ExplorePage(),
+      ],
+    );
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -93,13 +99,11 @@ class _MainPageState extends State<MainPage>
       child: Scaffold(
 //        resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
-        body: _pages[_currentIndex],
+        body: pageView,
         bottomNavigationBar: BottomNavigationBar(
           elevation: 0,
           onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
+            pageController.jumpToPage(index);
           },
           currentIndex: _currentIndex,
           items: [

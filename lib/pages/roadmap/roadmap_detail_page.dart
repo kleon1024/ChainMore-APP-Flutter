@@ -16,6 +16,7 @@ import 'package:chainmore/widgets/flexible_detail_bar.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/indicators/action_indicator.dart';
 import 'package:chainmore/widgets/indicators/icon_indicator.dart';
+import 'package:chainmore/widgets/indicators/statistic_indicator.dart';
 import 'package:chainmore/widgets/list/list_divider.dart';
 import 'package:chainmore/widgets/widget_category_tag_selectable.dart';
 import 'package:chainmore/widgets/widget_load_footer.dart';
@@ -67,7 +68,7 @@ class _RoadmapDetailPageState extends State<RoadmapDetailPage>
                     },
                     child: CachedImage(
                       imageUrl:
-                      "http://www.linuxeden.com/wp-content/uploads/2017/07/vm9ej5e7rl5i0h2v.jpegheading.jpg",
+                          "http://www.linuxeden.com/wp-content/uploads/2017/07/vm9ej5e7rl5i0h2v.jpegheading.jpg",
                     ),
                   ),
                 ),
@@ -76,26 +77,28 @@ class _RoadmapDetailPageState extends State<RoadmapDetailPage>
                 delegate: SliverChildListDelegate(
                   [
                     Container(
-                      child: Column(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          IconIndicator(
-                            icon: Icon(Icons.location_on),
-                            text: "全部领域：" + "162",
+                          StatisticIndicator(
+                            number: 162,
+                            icon: Icon(Icons.location_on, size: 18),
+                            text: "全部领域",
                           ),
-                          VEmptyView(30),
-                          IconIndicator(
-                            icon: Icon(Icons.flight_takeoff),
-                            text: "正在进行：" + "126",
+                          StatisticIndicator(
+                            number: 126,
+                            icon: Icon(Icons.flight_takeoff, size: 18),
+                            text: "正在进行",
                           ),
-                          VEmptyView(30),
-                          IconIndicator(
-                            icon: Icon(Icons.favorite),
-                            text: "标记收藏：" + "123",
+                          StatisticIndicator(
+                            number: 163,
+                            icon: Icon(Icons.favorite, size: 18),
+                            text: "标记收藏",
                           ),
-                          VEmptyView(30),
-                          IconIndicator(
-                            icon: Icon(Icons.access_time),
-                            text: "预计时长：" + "24h",
+                          StatisticIndicator(
+                            number: 16,
+                            icon: Icon(Icons.access_time, size: 18),
+                            text: "预计时间",
                           ),
                         ],
                       ),

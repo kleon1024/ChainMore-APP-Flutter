@@ -35,6 +35,8 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
 
+    print("Rebuild Home Page");
+
     AppBar appbar = AppBar(
       elevation: 0,
       leading: CircleCachedImageCard(

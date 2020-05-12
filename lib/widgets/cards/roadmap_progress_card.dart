@@ -19,7 +19,7 @@ class RoadmapProgressCard extends StatefulWidget {
 
 class _RoadmapProgressCardState extends State<RoadmapProgressCard>
     with AutomaticKeepAliveClientMixin {
-  Color progressBarColor = Colors.blue;
+  Color progressBarColor;
 
   @override
   void initState() {
@@ -65,7 +65,7 @@ class _RoadmapProgressCardState extends State<RoadmapProgressCard>
                     imageUrl:
                         "http://pic1.win4000.com/wallpaper/2020-05-08/5eb5209b6028b.jpg",
                     callback: (color) {
-                      if (color != null) {
+                      if (progressBarColor == null && color != null) {
                         setState(() {
                           progressBarColor =
                               Color.fromARGB(255, color[0], color[1], color[2]);
@@ -92,7 +92,7 @@ class _RoadmapProgressCardState extends State<RoadmapProgressCard>
                   top: ScreenUtil().setHeight(100),
                   right: ScreenUtil().setHeight(0),
                   child: Container(
-                    child: ProgressBar(color: progressBarColor, percent: 0.8),
+                    child: ProgressBar(color: progressBarColor != null ? progressBarColor : Colors.grey, percent: 0.8),
                   ),
                 ),
 

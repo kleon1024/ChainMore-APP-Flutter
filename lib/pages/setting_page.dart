@@ -43,7 +43,7 @@ class _SettingPageState extends State<SettingPage>
             SliverList(
               delegate: SliverChildListDelegate(
                 [
-                  VEmptyView(120),
+                  VEmptyView(50),
                   SettingEntryCard(),
                 ]
               ),

@@ -3,6 +3,7 @@ import 'package:chainmore/utils/params.dart';
 import 'package:chainmore/widgets/cached_image.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/indicators/icon_indicator.dart';
+import 'package:chainmore/widgets/indicators/percent_indicator.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class ResourceCard extends StatelessWidget {
                       ).createShader(bounds);
                     },
                     child: Container(
-                      color: Colors.grey[200],
+                      color: Colors.grey.withOpacity(0.2),
                     )),
                 Positioned(
                   left: ScreenUtil().setWidth(30),
@@ -54,8 +55,14 @@ class ResourceCard extends StatelessWidget {
                       Text("HTML入门"),
                       Row(
                         children: <Widget>[
-                          Icon(Icons.build, size: 16,),
-                          Icon(Icons.link, size: 16,),
+                          Icon(
+                            Icons.share,
+                            size: 16,
+                          ),
+                          Icon(
+                            Icons.list,
+                            size: 16,
+                          ),
                         ],
                       )
                     ],
@@ -67,7 +74,7 @@ class ResourceCard extends StatelessWidget {
                   right: ScreenUtil().setWidth(30),
                   child: Text(
                     "三分钟精通HTML简史",
-                    style: TextUtil.style(18, 800),
+                    style: TextUtil.style(16, 800),
                   ),
                 ),
                 Positioned(
@@ -76,9 +83,18 @@ class ResourceCard extends StatelessWidget {
                   right: ScreenUtil().setWidth(30),
                   child: Text(
                     "2018-01-01",
-                    style: TextUtil.style(16, 300),
                   ),
                 ),
+                Positioned(
+                  top: ScreenUtil().setWidth(80),
+                  right: ScreenUtil().setWidth(30),
+                  child: PercentIndicator([
+                    0.1,
+                    0.4,
+                    0.4,
+                    0.1,
+                  ]),
+                )
               ],
             ),
           ),

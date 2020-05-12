@@ -181,6 +181,19 @@ class Utils {
     "Dec": "12"
   };
 
+  static String readableNumber(int number) {
+
+    double result = 0;
+
+    if (number < 1e3) {
+      return number.toString();
+    } else if (number < 1e4) {
+      result = number / 1e3;
+      return result.toStringAsFixed(1) + "K";
+    } else {
+      return "1W+";
+    }
+  }
   static String readableTimeStamp(String timestamp) {
     List res = timestamp.split(" ");
     assert(res.length == 6);
