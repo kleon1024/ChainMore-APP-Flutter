@@ -14,7 +14,7 @@ class PersonalDrawer extends StatelessWidget{
         DrawerHeader(
           child: Text('大丁丁'),
           decoration: BoxDecoration(
-            color: Colors.blue,
+//            color: Colors.blue,
           ),
         ),
         ListTile(

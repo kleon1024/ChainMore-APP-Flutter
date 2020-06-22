@@ -33,10 +33,9 @@ class _SettingPageState extends State<SettingPage>
           centerTitle: true,
           title: Text(
             "设置",
-            style: commonTitleTextStyle,
+            style: Theme.of(context).textTheme.subtitle1,
           ),
         ),
-        backgroundColor: Colors.grey[100],
         body: CustomScrollView(
         physics: BouncingScrollPhysics(),
           slivers: <Widget>[

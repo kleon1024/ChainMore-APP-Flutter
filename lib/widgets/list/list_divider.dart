@@ -6,9 +6,8 @@ class ListDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(50)),
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(10)),
       child: Container(
-        color: Colors.black,
         height: 0.1,
       ),
     );

@@ -16,7 +16,7 @@ class NavigatorUtil {
   static _navigateTo(BuildContext context, String path,
       {bool replace = false,
       bool clearStack = false,
-      Duration transitionDuration = const Duration(milliseconds: 500),
+      Duration transitionDuration = const Duration(milliseconds: 2000),
       RouteTransitionsBuilder transitionBuilder}) {
     return Application.router.navigateTo(context, path,
         replace: replace,

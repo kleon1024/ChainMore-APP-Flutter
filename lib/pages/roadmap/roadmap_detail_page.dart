@@ -47,14 +47,10 @@ class _RoadmapDetailPageState extends State<RoadmapDetailPage>
                 centerTitle: true,
                 pinned: true,
                 elevation: 0,
-                title: Text("VueJS快速入门"),
+                title: Text("VueJS快速入门", style: Theme.of(context).textTheme.subtitle1),
                 floating: false,
                 expandedHeight: GlobalParams.topImageHeight,
                 flexibleSpace: FlexibleSpaceBar(
-//                  title: Text(
-//                    "VueJS快速入门",
-//                    style: TextUtil.style(16, 800),
-//                  ),
                   centerTitle: true,
                   background: ShaderMask(
                     shaderCallback: (Rect bounds) {
@@ -82,22 +78,22 @@ class _RoadmapDetailPageState extends State<RoadmapDetailPage>
                         children: <Widget>[
                           StatisticIndicator(
                             number: 162,
-                            icon: Icon(Icons.location_on, size: 18),
+                            icon: Icon(Icons.location_on),
                             text: "全部领域",
                           ),
                           StatisticIndicator(
                             number: 126,
-                            icon: Icon(Icons.flight_takeoff, size: 18),
+                            icon: Icon(Icons.flight_takeoff),
                             text: "正在进行",
                           ),
                           StatisticIndicator(
                             number: 163,
-                            icon: Icon(Icons.favorite, size: 18),
+                            icon: Icon(Icons.favorite),
                             text: "标记收藏",
                           ),
                           StatisticIndicator(
                             number: 16,
-                            icon: Icon(Icons.access_time, size: 18),
+                            icon: Icon(Icons.access_time),
                             text: "预计时间",
                           ),
                         ],
@@ -108,11 +104,11 @@ class _RoadmapDetailPageState extends State<RoadmapDetailPage>
                     Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(30)),
-                      child: Text("前置领域", style: commonTitleTextStyle),
+                      child: Text("前置领域", style: Theme.of(context).textTheme.subtitle1),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(30)),
+                          horizontal: ScreenUtil().setWidth(10)),
                       child: ListView.builder(
                         padding: EdgeInsets.zero,
                         primary: true,
@@ -139,24 +135,24 @@ class _RoadmapDetailPageState extends State<RoadmapDetailPage>
                     Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(30)),
-                      child: Text("使用建议", style: commonTitleTextStyle),
+                      child: Text("使用建议", style: Theme.of(context).textTheme.subtitle1),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(30)),
                       child: Text(
                           "扎实的 JavaScript / HTML / CSS 基本功。这是前置条件。通读官方教程 (guide) 的基础篇。不要用任何构建工具，就只用最简单的 <script>，把教程里的例子模仿一遍，理解用法。不推荐上来就直接用 vue-cli 构建项目，尤其是如果没有 Node/Webpack 基础。",
-                          style: commonSubtitleTextStyle),
+                          style: Theme.of(context).textTheme.bodyText2),
                     ),
                     ListDivider(),
                     Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(30)),
-                      child: Text("关键节点", style: commonTitleTextStyle),
+                      child: Text("关键节点", style: Theme.of(context).textTheme.subtitle1),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(30)),
+                          horizontal: ScreenUtil().setWidth(10)),
                       child: ListView.builder(
                         padding: EdgeInsets.zero,
                         primary: true,
@@ -202,7 +198,6 @@ class _RoadmapDetailPageState extends State<RoadmapDetailPage>
             left: ScreenUtil().setHeight(0),
             right: ScreenUtil().setHeight(0),
             child: Container(
-              color: Colors.white,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[

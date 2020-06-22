@@ -16,14 +16,19 @@ class SettingEntryCard extends StatelessWidget {
       onLongPress: () {
         print("Long pressed");
       },
-      child: Container(
-        color: Colors.white,
-        height: ScreenUtil().setHeight(120),
+      child: Card(
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(0),
+        ),
+        child: Container(
+        height: ScreenUtil().setHeight(150),
         width: double.infinity,
         child: Center(
           child: Text(
-            "退出登录",
-            style: commonSubtitleTextStyle,
+              "退出登录",
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
           ),
         ),
       ),

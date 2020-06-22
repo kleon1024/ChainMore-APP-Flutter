@@ -1,10 +1,7 @@
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/params.dart';
-import 'package:chainmore/widgets/cached_image.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
-import 'package:chainmore/widgets/indicators/icon_indicator.dart';
 import 'package:chainmore/widgets/indicators/percent_indicator.dart';
-import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,7 +35,7 @@ class ResourceCard extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: <Color>[Colors.grey[400], Colors.transparent],
-                        stops: [0.2, 0.2],
+                        stops: [0.25, 0.25],
                         tileMode: TileMode.clamp,
                       ).createShader(bounds);
                     },
@@ -52,7 +49,10 @@ class ResourceCard extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text("HTML入门"),
+                      Text(
+                        "HTML入门",
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
                       Row(
                         children: <Widget>[
                           Icon(
@@ -74,7 +74,7 @@ class ResourceCard extends StatelessWidget {
                   right: ScreenUtil().setWidth(30),
                   child: Text(
                     "三分钟精通HTML简史",
-                    style: TextUtil.style(16, 800),
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
                 Positioned(
@@ -83,6 +83,7 @@ class ResourceCard extends StatelessWidget {
                   right: ScreenUtil().setWidth(30),
                   child: Text(
                     "2018-01-01",
+                    style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),
                 Positioned(

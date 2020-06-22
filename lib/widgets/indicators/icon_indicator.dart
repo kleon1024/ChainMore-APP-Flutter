@@ -21,7 +21,7 @@ class IconIndicator extends StatelessWidget {
           HEmptyView(ScreenUtil().setWidth(5)),
           Text(
             text,
-            style: TextUtil.style(16, 500),
+            style: Theme.of(context).textTheme.bodyText1,
           ),
         ],
       ),

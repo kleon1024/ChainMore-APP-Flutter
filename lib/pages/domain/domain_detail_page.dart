@@ -81,39 +81,39 @@ class _DomainDetailPageState extends State<DomainDetailPage>
                         children: <Widget>[
                           StatisticIndicator(
                             number: 162162,
-                            icon: Icon(Icons.location_on, size: 18),
+                            icon: Icon(Icons.location_on),
                             text: "全部资源",
                           ),
                           StatisticIndicator(
                             number: 126,
-                            icon: Icon(Icons.flight_takeoff, size: 18),
+                            icon: Icon(Icons.flight_takeoff),
                             text: "正在关注",
                           ),
                           StatisticIndicator(
                             number: 163,
-                            icon: Icon(Icons.favorite, size: 18),
+                            icon: Icon(Icons.favorite),
                             text: "标记收藏",
                           ),
                           StatisticIndicator(
                             number: 1623,
-                            icon: Icon(Icons.access_time, size: 18),
+                            icon: Icon(Icons.access_time),
                             text: "获得认证",
                           ),
                         ],
                       ),
                       padding: EdgeInsets.all(ScreenUtil().setHeight(30)),
                     ),
-                    ListDivider(),
+//                    ListDivider(),
                     Align(
                       alignment: Alignment.centerRight,
                       child: Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setHeight(30),
                         ),
-                        child: Text("按时间排序", style: commonSubtitleTextStyle),
+                        child: Text("按时间排序", style: Theme.of(context).textTheme.bodyText1),
                       ),
                     ),
-                    VEmptyView(30),
+                    VEmptyView(15),
                     ListView.builder(
                       padding: EdgeInsets.zero,
                       primary: true,
@@ -137,7 +137,6 @@ class _DomainDetailPageState extends State<DomainDetailPage>
             left: ScreenUtil().setHeight(0),
             right: ScreenUtil().setHeight(0),
             child: Container(
-              color: Colors.white,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[

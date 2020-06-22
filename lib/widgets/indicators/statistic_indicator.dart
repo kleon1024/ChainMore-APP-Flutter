@@ -32,12 +32,12 @@ class StatisticIndicator extends StatelessWidget {
           children: <Widget>[
             Row(children: [
               icon != null ? icon : HEmptyView(0),
-              Text(Utils.readableNumber(number), style: TextUtil.style(20, 900)),
+              Text(Utils.readableNumber(number), style: Theme.of(context).textTheme.bodyText2),
             ]),
             VEmptyView(5),
             Text(
               text,
-              style: TextUtil.style(16, 900),
+              style: Theme.of(context).textTheme.bodyText2,
             )
           ],
         ),

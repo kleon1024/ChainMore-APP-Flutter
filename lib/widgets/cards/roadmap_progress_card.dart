@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chainmore/models/emoji.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/widgets/cached_image.dart';
 import 'package:chainmore/widgets/common_text_style.dart';

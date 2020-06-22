@@ -74,12 +74,12 @@ class _DiscoverPageState extends State<DiscoverPage>
   Widget build(BuildContext context) {
     SettingModel settingModel = Provider.of<SettingModel>(context);
     List<int> filteredIndices = [];
-    for (int i = 0; i < _posts.length; ++i) {
-      if (Utils.hasAnyCategory(
-          _posts[i].categories, settingModel.disabledCategories)) {
-        filteredIndices.add(i);
-      }
-    }
+//    for (int i = 0; i < _posts.length; ++i) {
+//      if (Utils.hasAnyCategory(
+//          _posts[i].categories, settingModel.disabledCategories)) {
+//        filteredIndices.add(i);
+//      }
+//    }
 
     return Scaffold(
       body: SafeArea(

@@ -13,7 +13,7 @@ class DomainCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(15)),
       child: GestureDetector(
         onTap: () {
           NavigatorUtil.goDomainDetailPage(context);
@@ -22,7 +22,7 @@ class DomainCard extends StatelessWidget {
           print("Long pressed");
         },
         child: Container(
-          height: ScreenUtil().setHeight(500),
+          height: ScreenUtil().setHeight(400),
           child: Card(
             semanticContainer: true,
             clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -38,7 +38,7 @@ class DomainCard extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: <Color>[Colors.grey[400], Colors.transparent],
-                      stops: [0.2, 0.2],
+                      stops: [0.25, 0.25],
                       tileMode: TileMode.clamp,
                     ).createShader(bounds);
                   },
@@ -48,21 +48,21 @@ class DomainCard extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  left: ScreenUtil().setHeight(30),
+                  left: ScreenUtil().setHeight(15),
                   top: ScreenUtil().setHeight(10),
-                  right: ScreenUtil().setHeight(30),
+                  right: ScreenUtil().setHeight(15),
                   child: Container(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
                           "游戏设计",
-                          style: TextUtil.style(16, 800, color: Colors.white),
+                          style: Theme.of(context).textTheme.subtitle1,
                         ),
-                        VEmptyView(30),
+                        VEmptyView(25),
                         Text(
                           "我们的理想是做最好玩的游戏，做最美的设计，做最令人感动的故事。欢迎加入我们一起行动吧。",
-                          style: TextUtil.style(16, 300),
+                          style: Theme.of(context).textTheme.bodyText2,
                           softWrap: true,
                           maxLines: 3,
                           textAlign: TextAlign.justify,
@@ -72,9 +72,9 @@ class DomainCard extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  bottom: ScreenUtil().setHeight(30),
-                  left: ScreenUtil().setHeight(30),
-                  right: ScreenUtil().setHeight(30),
+                  bottom: ScreenUtil().setHeight(15),
+                  left: ScreenUtil().setHeight(15),
+                  right: ScreenUtil().setHeight(15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[

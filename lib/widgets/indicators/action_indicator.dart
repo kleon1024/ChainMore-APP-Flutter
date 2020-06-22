@@ -27,8 +27,8 @@ class ActionIndicator extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Container(
-              width: ScreenUtil().setWidth(180),
-              height: ScreenUtil().setHeight(180),
+              width: ScreenUtil().setWidth(150),
+              height: ScreenUtil().setHeight(150),
               child: Card(
                 elevation: 0,
                 shape: RoundedRectangleBorder(
@@ -43,7 +43,7 @@ class ActionIndicator extends StatelessWidget {
             text != ""
                 ? Text(
                     text,
-                    style: style != null ? style : TextUtil.style(14, 500),
+                    style: style != null ? style : Theme.of(context).textTheme.bodyText1,
                   )
                 : VEmptyView(0),
           ],

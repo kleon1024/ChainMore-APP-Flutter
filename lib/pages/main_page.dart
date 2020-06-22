@@ -31,7 +31,7 @@ class _MainPageState extends State<MainPage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
   final pageController = PageController(
-    initialPage: 1,
+    initialPage: 0,
   );
 
   int _currentIndex = 0;
@@ -57,8 +57,8 @@ class _MainPageState extends State<MainPage>
         DomainCreateModel domainCreateModel =
             Provider.of<DomainCreateModel>(context);
         domainCreateModel.initState();
-        SettingModel settingModel = Provider.of<SettingModel>(context);
-        settingModel.initState();
+//        SettingModel settingModel = Provider.of<SettingModel>(context);
+//        settingModel.initState();
         await Utils.checkClipBoard(context: context);
         UpdateModel updateModel = Provider.of<UpdateModel>(context);
         updateModel.checkUpdate(context);
@@ -98,12 +98,15 @@ class _MainPageState extends State<MainPage>
       ),
       child: Scaffold(
 //        resizeToAvoidBottomInset: true,
-        backgroundColor: Colors.white,
+//        backgroundColor: Colors.white,
         body: pageView,
         bottomNavigationBar: BottomNavigationBar(
           elevation: 0,
           onTap: (index) {
             pageController.jumpToPage(index);
+            setState(() {
+              _currentIndex = index;
+            });
           },
           currentIndex: _currentIndex,
           items: [
@@ -114,14 +117,16 @@ class _MainPageState extends State<MainPage>
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.widgets),
+              activeIcon: Icon(Icons.open_with),
               title: VEmptyView(0),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.explore),
+              activeIcon: Icon(Icons.exit_to_app),
               title: VEmptyView(0),
             ),
           ],
-          selectedItemColor: Colors.black87,
+//          selectedItemColor: Colors.black87,
         ),
       ),
     );

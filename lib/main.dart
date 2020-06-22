@@ -1,6 +1,3 @@
-import 'package:chainmore/pages/home/home_page.dart';
-import 'package:chainmore/pages/login_page.dart';
-import 'package:chainmore/pages/main_page.dart';
 import 'package:chainmore/pages/splash_page.dart';
 import 'package:chainmore/providers/certify_model.dart';
 import 'package:chainmore/providers/domain_create_model.dart';
@@ -10,7 +7,6 @@ import 'package:chainmore/providers/update_model.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/route/navigate_service.dart';
 import 'package:chainmore/route/routes.dart';
-import 'package:chainmore/utils/colors.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -72,10 +68,26 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'ChainMore',
       navigatorKey: Application.getIt<NavigateService>().key,
-      theme: ThemeData(
+      darkTheme: ThemeData(
         brightness: Brightness.light,
         primaryColor: Colors.white,
-        splashColor: Colors.transparent,
+//        splashColor: Colors.transparent,
+        tooltipTheme: TooltipThemeData(verticalOffset: -100000),
+        pageTransitionsTheme: PageTransitionsTheme(builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        }),
+//        textTheme: TextTheme(
+//          headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+//          headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+//          bodyText1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+//        ),
+      ),
+      theme: ThemeData(
+        brightness: Brightness.dark,
+//        primaryColor: Colors.black,
+
+//        splashColor: Colors.transparent,
         tooltipTheme: TooltipThemeData(verticalOffset: -100000),
         pageTransitionsTheme: PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),

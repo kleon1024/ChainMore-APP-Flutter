@@ -35,8 +35,6 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
 
-    print("Rebuild Home Page");
-
     AppBar appbar = AppBar(
       elevation: 0,
       leading: CircleCachedImageCard(
@@ -46,14 +44,13 @@ class _HomePageState extends State<HomePage>
       ),
       title: Text(
         "聚焦",
-        style: commonTitleTextStyle,
+        style: Theme.of(context).textTheme.headline6,
       ),
       actions: <Widget>[
         IconButton(
           icon: Icon(
             Icons.filter_list,
             size: ScreenUtil().setWidth(70),
-            color: Colors.black87,
           ),
           onPressed: () {
             _onSelectClassifier();
@@ -63,7 +60,6 @@ class _HomePageState extends State<HomePage>
           icon: Icon(
             Icons.search,
             size: ScreenUtil().setWidth(70),
-            color: Colors.black87,
           ),
           onPressed: () {
             NavigatorUtil.goSearchPage(context);
@@ -75,12 +71,11 @@ class _HomePageState extends State<HomePage>
     return Scaffold(
       key: _scaffoldKey,
       appBar: appbar,
-      backgroundColor: Colors.white,
       drawer: Drawer(
         child: PersonalDrawer(),
       ),
       body: CustomScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildListDelegate([
@@ -93,71 +88,20 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  List<Widget> _buildCategoryGroups() {
-    SettingModel settingModel = Provider.of<SettingModel>(context);
-
-    return settingModel.categoryGroups
-        .map(
-          (categoryGroup) => Container(
-            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(30)),
-            child: Row(
-              children: <Widget>[
-                Text(categoryGroup.title, style: TextUtil.style(15, 700)),
-                HEmptyView(30),
-                Row(
-                  children: categoryGroup.categories
-                      .map(
-                        (category) => Container(
-                          padding:
-                              EdgeInsets.only(right: ScreenUtil().setWidth(50)),
-                          child: CategoryTagSelectable(
-                            text: category.category,
-                            selected: settingModel.disabledCategories
-                                .contains(category.id),
-                            onTap: () {
-                              if (settingModel.disabledCategories
-                                  .contains(category.id)) {
-                                settingModel
-                                    .removeDisabledCategory(category.id);
-                              } else {
-                                settingModel.addDisabledCategory(category.id);
-                              }
-                              setState(() {});
-                            },
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ],
-            ),
-          ),
-        )
-        .toList();
-  }
-
   void _onSelectClassifier() {
     var widgets = <Widget>[
       Container(
         padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(30)),
-        child: Text("过滤选项", style: TextUtil.style(16, 700)),
+        child: Text("过滤选项", style: Theme.of(context).textTheme.subtitle1,),
       ),
     ];
-    widgets.addAll(_buildCategoryGroups());
 
     showModalBottomSheet(
         context: context,
         builder: (context) {
           return Container(
               height: ScreenUtil().setHeight(780),
-              color: Color(0xFF737373),
               child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(ScreenUtil().setWidth(50)),
-                        topRight: Radius.circular(ScreenUtil().setWidth(50))),
-                  ),
                   padding: EdgeInsets.symmetric(
                       vertical: ScreenUtil().setWidth(30),
                       horizontal: ScreenUtil().setHeight(80)),

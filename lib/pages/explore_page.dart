@@ -43,14 +43,12 @@ class _ExplorePageState extends State<ExplorePage>
           ),
           title: Text(
             "探索",
-            style: commonTitleTextStyle,
+            style: Theme.of(context).textTheme.headline6,
           ),
           actions: <Widget>[
             IconButton(
               icon: Icon(
                 Icons.apps,
-                size: ScreenUtil().setWidth(70),
-                color: Colors.black87,
               ),
               onPressed: () {
 //              _onSelectClassifier();
@@ -59,8 +57,6 @@ class _ExplorePageState extends State<ExplorePage>
             IconButton(
               icon: Icon(
                 Icons.search,
-                size: ScreenUtil().setWidth(70),
-                color: Colors.black87,
               ),
               onPressed: () {
                 NavigatorUtil.goSearchPage(context);
@@ -68,12 +64,11 @@ class _ExplorePageState extends State<ExplorePage>
             ),
           ],
         ),
-        backgroundColor: Colors.white,
         drawer: Drawer(
           child: PersonalDrawer(),
         ),
         body: CustomScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           slivers: <Widget>[
             SliverList(
               delegate: SliverChildListDelegate([

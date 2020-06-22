@@ -4,6 +4,7 @@ import 'package:chainmore/pages/home/personal_drawer.dart';
 import 'package:chainmore/pages/home/sparkle/sparkle_page.dart';
 import 'package:chainmore/providers/setting_model.dart';
 import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/widgets/cards/domain_card.dart';
 import 'package:chainmore/widgets/cards/explore_card.dart';
 import 'package:chainmore/widgets/cards/roadmap_card.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
@@ -31,14 +32,13 @@ class _ExploreRoadmapPageState extends State<ExploreRoadmapPage>
         centerTitle: true,
         title: Text(
           "路线地图",
-          style: commonTitleTextStyle,
+          style: Theme.of(context).textTheme.subtitle1,
         ),
         actions: <Widget>[
           IconButton(
             icon: Icon(
               Icons.search,
               size: ScreenUtil().setWidth(70),
-              color: Colors.black87,
             ),
             onPressed: () {
               NavigatorUtil.goSearchPage(context);
@@ -46,14 +46,13 @@ class _ExploreRoadmapPageState extends State<ExploreRoadmapPage>
           ),
         ],
       ),
-      backgroundColor: Colors.white,
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                return RoadmapCard();
+                return DomainCard();
               },
               childCount: 4,
             ),

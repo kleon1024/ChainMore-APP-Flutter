@@ -108,7 +108,6 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                           v,
                           style: common14TextStyle,
                         ),
-                        backgroundColor: Color(0xFFf2f2f2),
                       ),
                     ))
                 .toList(),
@@ -127,7 +126,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
       children: <Widget>[
         Text(
           '热门搜索',
-          style: bold18TextStyle,
+          style: Theme.of(context).textTheme.subtitle1,
         ),
         VEmptyView(15),
         CustomFutureBuilder<HotSearchData>(
@@ -255,7 +254,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
-        backgroundColor: Colors.white,
+//        backgroundColor: Colors.white,
 //        floatingActionButton: Container(
 //          padding: EdgeInsets.only(
 //              bottom: ScreenUtil().setHeight(150),
@@ -311,12 +310,15 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
               textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                 hintText: "阡陌",
-                hintStyle: commonGrayTextStyle,
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1
+                    .merge(TextStyle(color: Colors.grey)),
                 suffixIcon: IconButton(
                     padding: EdgeInsets.zero,
                     icon: Icon(
                       Icons.cancel,
-                      color: Colors.black87,
+                      size: 16,
                     ),
                     onPressed: () {
                       setState(() {
@@ -341,7 +343,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                 child: Center(
                   child: Text(
                     "取消",
-                    style: TextUtil.style(18, 300),
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
               ),

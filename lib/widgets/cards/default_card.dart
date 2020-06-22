@@ -34,7 +34,7 @@ class DefaultCard extends StatelessWidget {
                 size: 32,
               ),
               text: "开始探索吧！",
-              style: TextUtil.style(20, 900),
+              style: Theme.of(context).textTheme.headline6,
             ),
           ),
         ),

@@ -56,7 +56,7 @@ class ExploreCard extends StatelessWidget {
                   left: ScreenUtil().setWidth(30),
                   child: Text(
                     title,
-                    style: TextUtil.style(18, 800, color: Colors.white),
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
                 Positioned(
@@ -64,7 +64,7 @@ class ExploreCard extends StatelessWidget {
                   right: ScreenUtil().setWidth(30),
                   child: Text(
                     subtitle,
-                    style: TextUtil.style(18, 800, color: Colors.white),
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
               ],

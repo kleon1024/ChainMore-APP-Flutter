@@ -20,14 +20,13 @@ class _ExploreDomainPageState extends State<ExploreDomainPage>
           centerTitle: true,
           title: Text(
             "发现领域",
-            style: commonTitleTextStyle,
+            style: Theme.of(context).textTheme.subtitle1,
           ),
           actions: <Widget>[
             IconButton(
               icon: Icon(
                 Icons.search,
                 size: ScreenUtil().setWidth(70),
-                color: Colors.black87,
               ),
               onPressed: () {
                 NavigatorUtil.goSearchPage(context);
@@ -35,7 +34,6 @@ class _ExploreDomainPageState extends State<ExploreDomainPage>
             ),
           ],
         ),
-        backgroundColor: Colors.white,
         body: CustomScrollView(
           physics: BouncingScrollPhysics(),
           slivers: <Widget>[

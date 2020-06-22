@@ -37,14 +37,13 @@ class _WorkbenchPageState extends State<WorkbenchPage>
         ),
         title: Text(
           "工作台",
-          style: commonTitleTextStyle,
+          style: Theme.of(context).textTheme.headline6
         ),
         actions: <Widget>[
           IconButton(
             icon: Icon(
               Icons.apps,
               size: ScreenUtil().setWidth(70),
-              color: Colors.black87,
             ),
             onPressed: () {
 //              _onSelectClassifier();
@@ -54,7 +53,6 @@ class _WorkbenchPageState extends State<WorkbenchPage>
             icon: Icon(
               Icons.search,
               size: ScreenUtil().setWidth(70),
-              color: Colors.black87,
             ),
             onPressed: () {
               NavigatorUtil.goSearchPage(context);
@@ -62,13 +60,12 @@ class _WorkbenchPageState extends State<WorkbenchPage>
           ),
         ],
       ),
-      backgroundColor: Colors.white,
       drawer: Drawer(
         child: PersonalDrawer(),
       ),
       body: Scrollbar(
         child: CustomScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           slivers: <Widget>[
             SliverGrid.extent(
               mainAxisSpacing: ScreenUtil().setWidth(90),
@@ -89,7 +86,7 @@ class _WorkbenchPageState extends State<WorkbenchPage>
                   ),
                   child: Text(
                     "我的应用",
-                    style: commonTitleTextStyle,
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
               ),
