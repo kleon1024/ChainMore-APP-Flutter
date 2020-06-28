@@ -135,7 +135,7 @@ class _PostPageState extends State<PostPage> {
                 onTap: () {
                   FocusScope.of(context).requestFocus(new FocusNode());
                 },
-                child: Scrollbar(
+                child: CupertinoScrollbar(
                   child: CustomScrollView(
                     physics: BouncingScrollPhysics(),
                     slivers: <Widget>[

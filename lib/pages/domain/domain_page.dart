@@ -179,7 +179,7 @@ class _DomainPageState extends State<DomainPage> {
                 onTap: () {
                   FocusScope.of(context).requestFocus(new FocusNode());
                 },
-                child: Scrollbar(
+                child: CupertinoScrollbar(
                   child: EasyRefresh.custom(
                     header: LoadHeader(),
                     footer: LoadFooter(),

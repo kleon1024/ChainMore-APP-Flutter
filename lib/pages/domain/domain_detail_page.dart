@@ -9,7 +9,7 @@ import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/params.dart';
 import 'package:chainmore/widgets/cached_image.dart';
 import 'package:chainmore/widgets/cards/explore_card.dart';
-import 'package:chainmore/widgets/cards/resource_card.dart';
+import 'package:chainmore/widgets/cards/collection_card.dart';
 import 'package:chainmore/widgets/cards/roadmap_card.dart';
 import 'package:chainmore/widgets/cards/roadmap_item_card.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
@@ -120,7 +120,7 @@ class _DomainDetailPageState extends State<DomainDetailPage>
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return ResourceCard();
+                        return CollectionCard();
                       },
                       itemCount: 3,
                     ),

@@ -95,7 +95,7 @@ class _UserPageState extends State<UserPage> {
                 onTap: () {
                   FocusScope.of(context).requestFocus(new FocusNode());
                 },
-                child: Scrollbar(
+                child: CupertinoScrollbar(
                   child: EasyRefresh.custom(
                     header: LoadHeader(),
                     footer: LoadFooter(),

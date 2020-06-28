@@ -85,7 +85,7 @@ class _DiscoverPageState extends State<DiscoverPage>
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-          child: Scrollbar(
+          child: CupertinoScrollbar(
             child: EasyRefresh.custom(
               header: LoadHeader(),
               footer: LoadFooter(),

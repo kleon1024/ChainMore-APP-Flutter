@@ -3,6 +3,7 @@ import 'package:chainmore/pages/home/personal_drawer.dart';
 import 'package:chainmore/widgets/cards/circle_cached_image_card.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/indicators/action_indicator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -63,45 +64,45 @@ class _WorkbenchPageState extends State<WorkbenchPage>
       drawer: Drawer(
         child: PersonalDrawer(),
       ),
-      body: Scrollbar(
+      body: CupertinoScrollbar(
         child: CustomScrollView(
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           slivers: <Widget>[
-            SliverGrid.extent(
-              mainAxisSpacing: ScreenUtil().setWidth(90),
-              maxCrossAxisExtent: ScreenUtil().setHeight(300),
-              children: <Widget>[
-                ActionIndicator(
-                    icon: Icon(Icons.add_circle_outline), text: "常用应用"),
-              ],
-            ),
-            SliverPersistentHeader(
-              delegate: _SliverHeaderDelegate(
-                minHeight: ScreenUtil().setHeight(150),
-                maxHeight: ScreenUtil().setHeight(150),
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(30),
-                    vertical: ScreenUtil().setHeight(10),
-                  ),
-                  child: Text(
-                    "我的应用",
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                ),
-              ),
-            ),
+//            SliverGrid.extent(
+//              mainAxisSpacing: ScreenUtil().setWidth(90),
+//              maxCrossAxisExtent: ScreenUtil().setHeight(300),
+//              children: <Widget>[
+//                ActionIndicator(
+//                    icon: Icon(Icons.add_circle_outline), text: "常用应用"),
+//              ],
+//            ),
+//            SliverPersistentHeader(
+//              delegate: _SliverHeaderDelegate(
+//                minHeight: ScreenUtil().setHeight(150),
+//                maxHeight: ScreenUtil().setHeight(150),
+//                child: Container(
+//                  padding: EdgeInsets.symmetric(
+//                    horizontal: ScreenUtil().setWidth(30),
+//                    vertical: ScreenUtil().setHeight(10),
+//                  ),
+//                  child: Text(
+//                    "工具箱",
+//                    style: Theme.of(context).textTheme.subtitle1,
+//                  ),
+//                ),
+//              ),
+//            ),
             SliverGrid.extent(
               mainAxisSpacing: ScreenUtil().setWidth(0),
-              maxCrossAxisExtent: ScreenUtil().setHeight(300),
+              maxCrossAxisExtent: ScreenUtil().setHeight(275),
               children: <Widget>[
-                ActionIndicator(icon: Icon(Icons.add), text: "常用应用"),
-                ActionIndicator(icon: Icon(Icons.receipt), text: "常用应用"),
-                ActionIndicator(icon: Icon(Icons.add), text: "常用应用"),
-                ActionIndicator(icon: Icon(Icons.add), text: "常用应用"),
-                ActionIndicator(icon: Icon(Icons.add), text: "常用应用"),
-                ActionIndicator(icon: Icon(Icons.add), text: "常用应用"),
-                ActionIndicator(icon: Icon(Icons.add), text: "常用应用"),
+                ActionIndicator(
+                  icon: Icon(Icons.link),
+                  text: "我的资源",
+                  onTap: () {
+                    NavigatorUtil.goPage(context, "/resource");
+                  },
+                ),
               ],
             ),
           ],

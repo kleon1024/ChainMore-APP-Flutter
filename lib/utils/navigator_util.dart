@@ -16,7 +16,7 @@ class NavigatorUtil {
   static _navigateTo(BuildContext context, String path,
       {bool replace = false,
       bool clearStack = false,
-      Duration transitionDuration = const Duration(milliseconds: 2000),
+      Duration transitionDuration = const Duration(milliseconds: 500),
       RouteTransitionsBuilder transitionBuilder}) {
     return Application.router.navigateTo(context, path,
         replace: replace,
@@ -24,6 +24,9 @@ class NavigatorUtil {
         transitionDuration: transitionDuration,
         transitionBuilder: transitionBuilder,
         transition: TransitionType.native);
+  }
+  static goPage(BuildContext context, String path) {
+    return _navigateTo(context, path);
   }
 
   static void goLoginPage(BuildContext context,
@@ -117,4 +120,9 @@ class NavigatorUtil {
   static goSettingPage(BuildContext context) {
     return _navigateTo(context, Routes.setting);
   }
+
+  static goNewResourcePage(BuildContext context) {
+    return _navigateTo(context, Routes.newResource);
+  }
+
 }

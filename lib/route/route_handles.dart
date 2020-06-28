@@ -19,6 +19,8 @@ import 'package:chainmore/pages/home/sparkle/sparkle_detail_page.dart';
 import 'package:chainmore/pages/login_page.dart';
 import 'package:chainmore/pages/main_page.dart';
 import 'package:chainmore/pages/post/post_page.dart';
+import 'package:chainmore/pages/resource/new_resource_page.dart';
+import 'package:chainmore/pages/resource/resource_page.dart';
 import 'package:chainmore/pages/roadmap/roadmap_detail_page.dart';
 import 'package:chainmore/pages/search/domain_search_page.dart';
 import 'package:chainmore/pages/search/search_page.dart';
@@ -84,7 +86,7 @@ var domainHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
 //  String data = params['data'].first;
 //  return DomainPage(Domain.fromJson(FluroConvertUtils.string2map(data)));
-    return DomainDetailPage();
+  return DomainDetailPage();
 });
 
 var domainMapHandler = Handler(
@@ -140,4 +142,14 @@ var roadmapHandler = Handler(
 var settingHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
   return SettingPage();
+});
+
+var resourceHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+  return ResourcePage();
+});
+
+var newResourceHandler = Handler(
+    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+  return NewResourcePage();
 });

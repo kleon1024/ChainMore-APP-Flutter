@@ -31,6 +31,10 @@ class Routes {
 
   static String setting = "/setting";
 
+  static String resource = "/resource";
+
+  static String newResource = "/resource/new";
+
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
@@ -59,5 +63,9 @@ class Routes {
     router.define(roadmap, handler: roadmapHandler);
 
     router.define(setting, handler: settingHandler);
+
+    router.define(resource, handler: resourceHandler);
+
+    router.define(newResource, handler: newResourceHandler);
   }
 }

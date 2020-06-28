@@ -7,6 +7,7 @@ import 'package:chainmore/providers/update_model.dart';
 import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/route/navigate_service.dart';
 import 'package:chainmore/route/routes.dart';
+import 'package:chainmore/utils/colors.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -77,22 +78,24 @@ class MyApp extends StatelessWidget {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         }),
-//        textTheme: TextTheme(
-//          headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-//          headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-//          bodyText1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-//        ),
+        textTheme: TextTheme(
+          headline6: TextStyle(fontSize: 18),
+          bodyText2: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+        ),
       ),
       theme: ThemeData(
         brightness: Brightness.dark,
-//        primaryColor: Colors.black,
-
+        primaryColor: HexColor("#303030"),
 //        splashColor: Colors.transparent,
         tooltipTheme: TooltipThemeData(verticalOffset: -100000),
         pageTransitionsTheme: PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         }),
+        textTheme: TextTheme(
+          headline6: TextStyle(fontSize: 18),
+          bodyText2: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+        ),
       ),
       home: SplashPage(),
       onGenerateRoute: Application.router.generator,
