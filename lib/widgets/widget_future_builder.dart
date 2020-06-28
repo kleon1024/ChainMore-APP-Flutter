@@ -26,7 +26,7 @@ class CustomFutureBuilder<T> extends StatefulWidget {
   }) : loadingWidget = loadingWidget ??
             Container(
               alignment: Alignment.center,
-              height: ScreenUtil().setWidth(200),
+//              height: ScreenUtil().setWidth(200),
               child: CupertinoActivityIndicator(),
             );
 
@@ -57,7 +57,6 @@ class _CustomFutureBuilderState<T> extends State<CustomFutureBuilder<T>> {
 
   @override
   void didUpdateWidget(CustomFutureBuilder<T> oldWidget) {
-
     if (widget.forceUpdate) {
       WidgetsBinding.instance.addPostFrameCallback((call) {
         _request();
@@ -93,11 +92,12 @@ class _CustomFutureBuilderState<T> extends State<CustomFutureBuilder<T>> {
                   if (snapshot.hasData) {
                     return widget.builder(context, snapshot.data);
                   } else if (snapshot.hasError) {
-                    return NetErrorWidget(
-                      callback: () {
-                        _request();
-                      },
-                    );
+//                    return NetErrorWidget(
+//                      callback: () {
+//                        _request();
+//                      },
+//                    );
+                    return Container();
                   }
               }
               return Container();

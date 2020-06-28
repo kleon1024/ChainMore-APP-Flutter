@@ -82,11 +82,15 @@ class _ResourceCardState extends State<ResourceCard>
               icon: Icons.share,
             ),
             IconSlideAction(
+              caption: '选中',
+              color: Colors.transparent,
+              icon: Icons.check,
+            ),
+            IconSlideAction(
               caption: '更多',
               color: Colors.transparent,
               icon: Icons.more_horiz,
             ),
-
           ],
         ),
       ),

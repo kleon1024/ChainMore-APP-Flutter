@@ -1,9 +1,14 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:chainmore/utils/navigator_util.dart';
+import 'package:chainmore/utils/utils.dart';
+import 'package:chainmore/utils/web_page_parser.dart';
 import 'package:chainmore/widgets/cards/resource_add_card.dart';
 import 'package:chainmore/widgets/cards/resource_card.dart';
+import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
+import 'package:chainmore/widgets/widget_future_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
@@ -20,17 +25,29 @@ class _NewResourcePageState extends State<NewResourcePage>
 
   final TextEditingController _uriEditingController = TextEditingController();
   final TextEditingController _titleEditingController = TextEditingController();
+  final FocusNode _titleFocusNode = FocusNode();
+  final FocusNode _uriFocusNode = FocusNode();
   final double _padding = 45;
 
   bool _isPaid = false;
-  bool _isAds = false;
 
-  List _mediaType = [
-    "文字",
-    "图片",
-    "音频",
-    "视频",
-  ];
+  bool _isLoading = false;
+
+  Map _mediaType = {
+    "图文": 1,
+    "音频": 3,
+    "视频": 4,
+  };
+
+  String _selectedMediaType = "图文";
+
+  Map _resourceType = {
+    "文章": 1,
+    "教程": 2,
+    "新闻": 3,
+  };
+
+  String _selectedResourceType = "文章";
 
   @override
   void initState() {
@@ -42,29 +59,9 @@ class _NewResourcePageState extends State<NewResourcePage>
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text("添加资源", style: Theme.of(context).textTheme.headline6),
+        title: Text("添加资源", style: Theme.of(context).textTheme.subtitle1),
         centerTitle: true,
         key: _scaffoldKey,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.select_all,
-              size: Theme.of(context).iconTheme.size,
-            ),
-            onPressed: () {
-//              _onSelectClassifier();
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              size: Theme.of(context).iconTheme.size,
-            ),
-            onPressed: () {
-              NavigatorUtil.goSearchPage(context);
-            },
-          ),
-        ],
       ),
       body: GestureDetector(
         onTap: () {
@@ -82,7 +79,6 @@ class _NewResourcePageState extends State<NewResourcePage>
                         horizontal: ScreenUtil().setWidth(_padding)),
                     child: Text(
                       "链接",
-                      style: Theme.of(context).textTheme.subtitle1,
                     ),
                   ),
                   VEmptyView(20),
@@ -94,6 +90,29 @@ class _NewResourcePageState extends State<NewResourcePage>
                       controller: _uriEditingController,
                       maxLines: 16,
                       minLines: 1,
+                      focusNode: _uriFocusNode,
+                      onSubmitted: (String value) {
+                        if (!_isLoading && value.trim().isNotEmpty) {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          WebPageParser.getData(value.trim()).then((Map data) {
+                            print(data);
+                            setState(() {
+                              if (data != null) {
+                                if (data.containsKey('title')) {
+                                  _titleEditingController.text = data['title'];
+                                }
+                              }
+                              _isLoading = false;
+                            });
+                          }).catchError((e) {
+                            setState(() {
+                              _isLoading = false;
+                            });
+                          });
+                        }
+                      },
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(
@@ -111,9 +130,14 @@ class _NewResourcePageState extends State<NewResourcePage>
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: ScreenUtil().setWidth(_padding)),
-                    child: Text(
-                      "标题",
-                      style: Theme.of(context).textTheme.subtitle1,
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          "标题",
+                        ),
+                        HEmptyView(10),
+                        _isLoading ? CupertinoActivityIndicator() : Container(),
+                      ],
                     ),
                   ),
                   VEmptyView(20),
@@ -122,6 +146,7 @@ class _NewResourcePageState extends State<NewResourcePage>
                         horizontal: ScreenUtil().setWidth(_padding)),
                     child: TextField(
                       controller: _titleEditingController,
+                      focusNode: _titleFocusNode,
                       maxLines: 3,
                       minLines: 1,
                       keyboardType: TextInputType.text,
@@ -143,7 +168,6 @@ class _NewResourcePageState extends State<NewResourcePage>
                         horizontal: ScreenUtil().setWidth(_padding)),
                     child: Text(
                       "媒体类型",
-                      style: Theme.of(context).textTheme.subtitle1,
                     ),
                   ),
                   Padding(
@@ -151,13 +175,18 @@ class _NewResourcePageState extends State<NewResourcePage>
                         horizontal: ScreenUtil().setWidth(_padding)),
                     child: RaisedButton(
                       onPressed: () {
-                        showPickerIcons(context);
+                        Utils()
+                            .showPickerIcons(context, _mediaType.keys.toList(),
+                                callback: (Picker picker, List value) {
+                          setState(() {
+                            _selectedMediaType = picker.getSelectedValues()[0];
+                          });
+                        });
                       },
                       color: Theme.of(context).canvasColor,
-                      elevation: 5,
+                      elevation: 8,
                       child: Text(
-                        "文字",
-                        style: Theme.of(context).textTheme.subtitle1,
+                        _selectedMediaType,
                       ),
                     ),
                   ),
@@ -166,7 +195,6 @@ class _NewResourcePageState extends State<NewResourcePage>
                         horizontal: ScreenUtil().setWidth(_padding)),
                     child: Text(
                       "内容类型",
-                      style: Theme.of(context).textTheme.subtitle1,
                     ),
                   ),
                   Padding(
@@ -174,13 +202,19 @@ class _NewResourcePageState extends State<NewResourcePage>
                         horizontal: ScreenUtil().setWidth(_padding)),
                     child: RaisedButton(
                       color: Theme.of(context).canvasColor,
-                      elevation: 5,
+                      elevation: 8,
                       onPressed: () {
-                        showPickerIcons(context);
+                        Utils().showPickerIcons(
+                            context, _resourceType.keys.toList(),
+                            callback: (Picker picker, List value) {
+                          setState(() {
+                            _selectedResourceType =
+                                picker.getSelectedValues()[0];
+                          });
+                        });
                       },
                       child: Text(
-                        "文章",
-                        style: Theme.of(context).textTheme.subtitle1,
+                        _selectedResourceType,
                       ),
                     ),
                   ),
@@ -188,7 +222,8 @@ class _NewResourcePageState extends State<NewResourcePage>
                   CheckboxListTile(
                     contentPadding: EdgeInsets.symmetric(
                         horizontal: ScreenUtil().setWidth(_padding)),
-                    title: Text("内容额外付费"),
+                    title: Text("需要额外付费",
+                        style: Theme.of(context).textTheme.bodyText1),
                     value: _isPaid,
                     secondary: Icon(Icons.attach_money),
                     controlAffinity: ListTileControlAffinity.platform,
@@ -198,6 +233,32 @@ class _NewResourcePageState extends State<NewResourcePage>
                       });
                     },
                   ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setWidth(_padding)),
+                    child: RaisedButton(
+                      color: Theme.of(context).canvasColor,
+                      textColor: Theme.of(context).accentColor,
+                      elevation: 8,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("分享"),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setWidth(_padding)),
+                    child: RaisedButton(
+                      color: Theme.of(context).canvasColor,
+//                      textColor: Theme.of(context).accentColor,
+                      elevation: 0,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("保存"),
+                    ),
+                  ),
                 ]),
               )
             ],
@@ -205,29 +266,6 @@ class _NewResourcePageState extends State<NewResourcePage>
         ),
       ),
     );
-  }
-
-  showPickerIcons(BuildContext context) {
-    Picker(
-        headercolor: Theme.of(context).canvasColor,
-        backgroundColor: Theme.of(context).canvasColor,
-        textStyle: Theme.of(context).textTheme.subtitle1,
-        adapter: PickerDataAdapter(pickerdata: _mediaType),
-        confirmText: "确认",
-        confirmTextStyle: Theme.of(context)
-            .textTheme
-            .subtitle1
-            .merge(TextStyle(color: Theme.of(context).accentColor)),
-        cancelText: "取消",
-        cancelTextStyle: Theme.of(context)
-            .textTheme
-            .subtitle1
-            .merge(TextStyle(color: Theme.of(context).accentColor)),
-        title: Text("媒体类型", style: Theme.of(context).textTheme.subtitle1),
-        onConfirm: (Picker picker, List value) {
-          print(value.toString());
-          print(picker.getSelectedValues());
-        }).showModal(context); //_scaffoldKey.currentState);
   }
 
   @override

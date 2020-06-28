@@ -9,6 +9,7 @@ import 'package:chainmore/providers/user_model.dart';
 import 'package:chainmore/route/routes.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:chainmore/models/user.dart';
@@ -36,6 +37,20 @@ class NetUtils {
       ..interceptors.add(ErrorInterceptors(_dio))
       ..interceptors
           .add(CustomLogInterceptor(responseBody: true, requestBody: true));
+    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate  = (client) {
+      client.badCertificateCallback=(X509Certificate cert, String host, int port){
+        return true;
+      };
+    };
+  }
+
+  static Future<Response> get(String url) async {
+    Response response;
+    try {
+      response =
+          await _dio.request(url, options: Options(followRedirects: true));
+    } on DioError catch (e) {}
+    return response;
   }
 
   static Future<Response> request(String method, String url,
@@ -75,8 +90,9 @@ class NetUtils {
     } on DioError catch (e) {
       print(e);
       if (e == null) {
-
-      } else if (e.response != null && e.response.statusCode > 400 && e.response.statusCode < 404) {
+      } else if (e.response != null &&
+          e.response.statusCode > 400 &&
+          e.response.statusCode < 404) {
         relogin = true;
       } else if (refresh) {
         _reLogin(context);

@@ -13,6 +13,7 @@ import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -339,5 +340,27 @@ class Utils {
         );
       },
     );
+  }
+
+  showPickerIcons(BuildContext context, List list, {Function callback}) {
+    Picker(
+        headercolor: Theme.of(context).canvasColor,
+        backgroundColor: Theme.of(context).canvasColor,
+        textStyle: Theme.of(context).textTheme.subtitle1,
+        selectedTextStyle: Theme.of(context).textTheme.subtitle1,
+        adapter: PickerDataAdapter(pickerdata: list),
+        confirmText: "确认",
+        confirmTextStyle: Theme.of(context)
+            .textTheme
+            .subtitle1
+            .merge(TextStyle(color: Theme.of(context).accentColor)),
+        cancelText: "取消",
+        cancelTextStyle: Theme.of(context)
+            .textTheme
+            .subtitle1
+            .merge(TextStyle(color: Theme.of(context).accentColor)),
+        title: Text("媒体类型", style: Theme.of(context).textTheme.subtitle1),
+        onConfirm: callback
+    ).showModal(context); //_scaffoldKey.currentState);
   }
 }

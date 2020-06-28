@@ -1,8 +1,10 @@
 import 'package:chainmore/utils/navigator_util.dart';
+import 'package:chainmore/utils/slivers.dart';
 import 'package:chainmore/widgets/cards/resource_add_card.dart';
 import 'package:chainmore/widgets/cards/resource_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ResourcePage extends StatefulWidget {
   @override
@@ -21,12 +23,12 @@ class _ResourcePageState extends State<ResourcePage>
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text("资源管理", style: Theme.of(context).textTheme.headline6),
+        title: Text("资源管理", style: Theme.of(context).textTheme.subtitle1),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.select_all,
+              Icons.filter_list,
               size: Theme.of(context).iconTheme.size,
             ),
             onPressed: () {
@@ -49,13 +51,22 @@ class _ResourcePageState extends State<ResourcePage>
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           slivers: <Widget>[
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  ResourceAddCard(),
-                  ResourceCard(),
-                ]
+            SliverPersistentHeader(
+              delegate: SliverHeaderDelegate(
+                minHeight: ScreenUtil().setHeight(150),
+                maxHeight: ScreenUtil().setHeight(150),
+                child: ResourceAddCard(),
               ),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                ResourceCard(),
+                ResourceCard(),
+                ResourceCard(),
+                ResourceCard(),
+                ResourceCard(),
+                ResourceCard(),
+              ]),
             )
           ],
         ),
