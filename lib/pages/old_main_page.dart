@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chainmore/models/category_group.dart';
 import 'package:chainmore/models/tab_icon_data.dart';
+import 'package:chainmore/network/net_utils.dart';
 import 'package:chainmore/pages/explore_page.dart';
-import 'package:chainmore/pages/home/home_page.dart';
 import 'package:chainmore/pages/login_page.dart';
+import 'package:chainmore/pages/old_home_page.dart';
 import 'package:chainmore/pages/user/mine_page.dart';
 import 'package:chainmore/pages/workbench_page.dart';
 import 'package:chainmore/providers/certify_model.dart';
@@ -22,48 +23,30 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-class MainPage extends StatefulWidget {
+class OldMainPage extends StatefulWidget {
   @override
-  _MainPageState createState() => _MainPageState();
+  _OldMainPageState createState() => _OldMainPageState();
 }
 
-class _MainPageState extends State<MainPage>
-    with TickerProviderStateMixin, WidgetsBindingObserver {
-  List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+class _OldMainPageState extends State<OldMainPage> with TickerProviderStateMixin {
   final pageController = PageController(
     initialPage: 0,
   );
 
+  final List<Widget> pages = [
+    OldHomePage(),
+    WorkbenchPage(),
+    ExplorePage(),
+  ];
+
   int _currentIndex = 0;
 
-  Widget tabBody = Container(
-    color: Colors.white,
-  );
+  bool _initialized = false;
 
   @override
   void initState() {
-    tabIconsList.forEach((tab) {
-      tab.isSelected = false;
-    });
-    tabIconsList[0].isSelected = true;
-    WidgetsBinding.instance.addObserver(this);
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((d) async {
-      if (mounted) {
-        EditModel editModel = Provider.of<EditModel>(context);
-        editModel.initState();
-        CertifyModel certifyModel = Provider.of<CertifyModel>(context);
-        certifyModel.initState();
-        DomainCreateModel domainCreateModel =
-            Provider.of<DomainCreateModel>(context);
-        domainCreateModel.initState();
-//        SettingModel settingModel = Provider.of<SettingModel>(context);
-//        settingModel.initState();
-        await Utils.checkClipBoard(context: context);
-        UpdateModel updateModel = Provider.of<UpdateModel>(context);
-        updateModel.checkUpdate(context);
-      }
-    });
+    NetUtils.init();
   }
 
   @override
@@ -76,20 +59,20 @@ class _MainPageState extends State<MainPage>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Rebuild Main Page");
+    debugPrint("Build Main Page");
+
+    if (!_initialized) {
+      ScreenUtil.instance = ScreenUtil()..init(context);
+    }
+
     final pageView = PageView(
       controller: pageController,
-      children: <Widget>[
-        HomePage(),
-        WorkbenchPage(),
-        ExplorePage(),
-      ],
+      children: pages,
     );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -98,7 +81,6 @@ class _MainPageState extends State<MainPage>
       ),
       child: Scaffold(
 //        resizeToAvoidBottomInset: true,
-//        backgroundColor: Colors.white,
         body: pageView,
         bottomNavigationBar: BottomNavigationBar(
           elevation: 0,
@@ -113,17 +95,17 @@ class _MainPageState extends State<MainPage>
             BottomNavigationBarItem(
               icon: Icon(Icons.center_focus_weak),
               activeIcon: Icon(Icons.center_focus_strong),
-              title: VEmptyView(0),
+              title: Container(),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.widgets),
               activeIcon: Icon(Icons.open_with),
-              title: VEmptyView(0),
+              title: Container(),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.explore),
               activeIcon: Icon(Icons.exit_to_app),
-              title: VEmptyView(0),
+              title: Container(),
             ),
           ],
 //          selectedItemColor: Colors.black87,

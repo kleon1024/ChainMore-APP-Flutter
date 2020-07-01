@@ -1,5 +1,5 @@
+import 'package:chainmore/page/main/main_page.dart';
 import 'package:chainmore/pages/login_page.dart';
-import 'package:chainmore/pages/main_page.dart';
 import 'package:chainmore/route/route_handles.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';

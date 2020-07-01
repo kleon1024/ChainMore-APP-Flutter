@@ -1,50 +1,18 @@
-import 'package:chainmore/pages/splash_page.dart';
-import 'package:chainmore/providers/certify_model.dart';
-import 'package:chainmore/providers/domain_create_model.dart';
-import 'package:chainmore/providers/edit_model.dart';
-import 'package:chainmore/providers/setting_model.dart';
-import 'package:chainmore/providers/update_model.dart';
-import 'package:chainmore/providers/user_model.dart';
-import 'package:chainmore/route/navigate_service.dart';
-import 'package:chainmore/route/routes.dart';
+import 'package:chainmore/config/provider_config.dart';
+import 'file:///D:/project/ChainMore/ChainMore-APP-Flutter/lib/pages/old_main_page.dart';
 import 'package:chainmore/utils/colors.dart';
-import 'package:fluro/fluro.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'application.dart';
-import 'utils/log_util.dart';
 
 void main() {
-  Router router = Router();
-  Routes.configureRoutes(router);
-  Application.router = router;
-  Application.setupLocator();
-  LogUtil.init(tag: 'CHAIN_MORE');
-  Provider.debugCheckInvalidValueType = null;
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider<UserModel>.value(
-        value: UserModel(),
-      ),
-      ChangeNotifierProvider<EditModel>.value(
-        value: EditModel(),
-      ),
-      ChangeNotifierProvider<DomainCreateModel>.value(
-        value: DomainCreateModel(),
-      ),
-      ChangeNotifierProvider<CertifyModel>.value(
-        value: CertifyModel(),
-      ),
-      ChangeNotifierProvider<UpdateModel>.value(
-        value: UpdateModel(),
-      ),
-      ChangeNotifierProvider<SettingModel>.value(
-        value: SettingModel(),
-      ),
-    ],
-    child: MyApp(),
-  ));
+  runApp(
+    EasyLocalization(
+      supportedLocales: [Locale('en', 'US'), Locale('zh', 'CN')],
+      path: 'assets/translations',
+      fallbackLocale: Locale('en', 'US'),
+      child: ProviderConfig.getInstance().getGlobal(MyApp()),
+    ),
+  );
 }
 
 class ScrollBehaviorNoGlow extends ScrollBehavior {
@@ -60,19 +28,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       builder: (context, child) {
         return ScrollConfiguration(
+          // Remove Scroll Glow
           behavior: ScrollBehaviorNoGlow(),
           child: child,
         );
       },
       debugShowCheckedModeBanner: false,
       title: 'ChainMore',
-      navigatorKey: Application.getIt<NavigateService>().key,
+//      navigatorKey: Application.getIt<NavigateService>().key,
       darkTheme: ThemeData(
         brightness: Brightness.light,
         primaryColor: Colors.white,
-//        splashColor: Colors.transparent,
         tooltipTheme: TooltipThemeData(verticalOffset: -100000),
         pageTransitionsTheme: PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
@@ -86,7 +57,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: HexColor("#303030"),
-//        splashColor: Colors.transparent,
         tooltipTheme: TooltipThemeData(verticalOffset: -100000),
         pageTransitionsTheme: PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
@@ -97,8 +67,12 @@ class MyApp extends StatelessWidget {
           bodyText2: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
         ),
       ),
-      home: SplashPage(),
-      onGenerateRoute: Application.router.generator,
+      home: goPage(),
+//      onGenerateRoute: Application.router.generator,
     );
+  }
+
+  Widget goPage() {
+    return ProviderConfig.getInstance().getMainPage();
   }
 }

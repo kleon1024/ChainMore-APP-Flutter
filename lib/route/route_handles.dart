@@ -5,6 +5,7 @@ import 'package:chainmore/models/login_config.dart';
 import 'package:chainmore/models/post.dart';
 import 'package:chainmore/models/sparkle.dart';
 import 'package:chainmore/models/web.dart';
+import 'package:chainmore/page/main/main_page.dart';
 import 'package:chainmore/pages/domain/create_domain_page.dart';
 import 'package:chainmore/pages/domain/domain_certify_page.dart';
 import 'package:chainmore/pages/domain/domain_detail_page.dart';
@@ -14,10 +15,9 @@ import 'package:chainmore/pages/edit/edit_page.dart';
 import 'package:chainmore/pages/explore/domain_page.dart';
 import 'package:chainmore/pages/explore/roadmap_page.dart';
 import 'package:chainmore/pages/explore_page.dart';
-import 'package:chainmore/pages/home/home_page.dart';
+import 'file:///D:/project/ChainMore/ChainMore-APP-Flutter/lib/pages/old_home_page.dart';
 import 'package:chainmore/pages/home/sparkle/sparkle_detail_page.dart';
 import 'package:chainmore/pages/login_page.dart';
-import 'package:chainmore/pages/main_page.dart';
 import 'package:chainmore/pages/post/post_page.dart';
 import 'package:chainmore/pages/resource/new_resource_page.dart';
 import 'package:chainmore/pages/resource/resource_page.dart';
@@ -50,7 +50,7 @@ var mainHandler = Handler(
 
 var homeHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
-  return HomePage();
+  return OldHomePage();
 });
 
 var searchHandler = Handler(

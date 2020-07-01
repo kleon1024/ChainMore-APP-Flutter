@@ -39,6 +39,7 @@ class _ResourceCardState extends State<ResourceCard>
         },
         child: Slidable(
           actionPane: SlidableDrawerActionPane(),
+          fastThreshold: 0,
           actionExtentRatio: 0.2,
           child: Container(
             height: ScreenUtil().setHeight(200),
@@ -72,25 +73,25 @@ class _ResourceCardState extends State<ResourceCard>
           ),
           secondaryActions: <Widget>[
             IconSlideAction(
-              caption: '删除',
+//              caption: '归档',
               color: Colors.transparent,
-              icon: Icons.delete,
+              icon: Icons.archive,
             ),
             IconSlideAction(
-              caption: '分享',
+//              caption: '分享',
               color: Colors.transparent,
               icon: Icons.share,
             ),
-            IconSlideAction(
-              caption: '选中',
-              color: Colors.transparent,
-              icon: Icons.check,
-            ),
-            IconSlideAction(
-              caption: '更多',
-              color: Colors.transparent,
-              icon: Icons.more_horiz,
-            ),
+//            IconSlideAction(
+//              caption: '选中',
+//              color: Colors.transparent,
+//              icon: Icons.check,
+//            ),
+//            IconSlideAction(
+//              caption: '更多',
+//              color: Colors.transparent,
+//              icon: Icons.more_horiz,
+//            ),
           ],
         ),
       ),
