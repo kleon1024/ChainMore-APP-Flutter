@@ -1,6 +1,6 @@
 import 'package:chainmore/logic/home_page_logic.dart';
 import 'package:chainmore/model/global_model.dart';
-import 'package:chainmore/widgets/cards/roadmap_progress_card.dart';
+import 'package:chainmore/struct/info_capsule.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -15,9 +15,7 @@ class HomePageModel extends ChangeNotifier {
 
   GlobalModel _globalModel;
 
-  List cards = [
-    1
-  ];
+  List<InfoCapsule> elements = [];
 
   HomePageModel() {
     logic = HomePageLogic(this);

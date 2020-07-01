@@ -1,5 +1,6 @@
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/model/home_page_model.dart';
+import 'package:chainmore/struct/info_capsule.dart';
 import 'package:chainmore/widgets/animation/animation_item.dart';
 import 'package:chainmore/widgets/cards/roadmap_progress_card.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +16,7 @@ class HomePage extends StatelessWidget {
       ..setContext(context, globalModel: globalModel);
 
     globalModel.setHomePageModel(model);
+    globalModel.resourceModel.registerCallback(model.logic.updateResource);
 
     return Scaffold(
       key: model.scaffoldKey,
@@ -36,8 +38,7 @@ class HomePage extends StatelessWidget {
               size: Theme.of(context).iconTheme.size,
             ),
             onPressed: () {
-//              showModalBottomSheet(context: context, builder: buildFilterPanel);
-              model.logic.insertCard(0);
+              showModalBottomSheet(context: context, builder: buildFilterPanel);
             },
           )
         ],
@@ -47,18 +48,13 @@ class HomePage extends StatelessWidget {
         slivers: <Widget>[
           SliverAnimatedList(
             key: model.sliverAnimatedListKey,
-            initialItemCount: model.cards.length,
+            initialItemCount: model.elements.length,
             itemBuilder: (context, index, animation) {
-              return FadeTransition(
-                opacity: animation,
-                child: SizeTransition(
-                  sizeFactor: animation,
-                  child: RoadmapProgressCard(
-                    index: index,
-                    onFinished: model.logic.removeCard,
-                  ),
-                ),
-              );
+              final element = model.elements[index];
+              switch (element.type) {
+                case InfoType.ResourceType:
+              }
+              return Container();
             },
           )
         ],

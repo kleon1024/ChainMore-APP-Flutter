@@ -1,4 +1,8 @@
 {
   "home_title" : "聚焦",
-  "explore_title" : "探索"
+  "explore_title" : "探索",
+
+  "archive" : "归档",
+  "share" : "分享",
+  "more" : "更多"
 }

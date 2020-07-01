@@ -6,8 +6,8 @@ part of 'resource.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Resource _$ResourceFromJson(Map<String, dynamic> json) {
-  return Resource(
+ResourceBean _$ResourceBeanFromJson(Map<String, dynamic> json) {
+  return ResourceBean(
     id: json['id'] as int,
     title: json['title'] as String,
     url: json['url'] as String,
@@ -16,12 +16,16 @@ Resource _$ResourceFromJson(Map<String, dynamic> json) {
     resource_type_id: json['resource_type_id'] as int,
     media_type_id: json['media_type_id'] as int,
     author_id: json['author_id'] as int,
-    timestamp: json['timestamp'] as String,
+    create_time: json['create_time'] as String,
+    modify_time: json['modify_time'] as String,
     deleted: json['deleted'] as bool,
+    local_id: json['local_id'] as int,
+    dirty: json['dirty'] as bool,
   );
 }
 
-Map<String, dynamic> _$ResourceToJson(Resource instance) => <String, dynamic>{
+Map<String, dynamic> _$ResourceBeanToJson(ResourceBean instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'url': instance.url,
@@ -30,6 +34,9 @@ Map<String, dynamic> _$ResourceToJson(Resource instance) => <String, dynamic>{
       'resource_type_id': instance.resource_type_id,
       'media_type_id': instance.media_type_id,
       'author_id': instance.author_id,
-      'timestamp': instance.timestamp,
+      'create_time': instance.create_time,
+      'modify_time': instance.modify_time,
       'deleted': instance.deleted,
+      'local_id': instance.local_id,
+      'dirty': instance.dirty,
     };

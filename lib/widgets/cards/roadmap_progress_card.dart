@@ -15,7 +15,7 @@ class RoadmapProgressCard extends StatelessWidget {
   final OnTapFinished onFinished;
   final index;
 
-  RoadmapProgressCard({this.index, this.onFinished});
+  RoadmapProgressCard({Key key, this.index, this.onFinished}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +23,7 @@ class RoadmapProgressCard extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       child: GestureDetector(
         onTap: () {
+          // TODO: Go Detail
 //          NavigatorUtil.goRoadmapDetailPage(context);
         },
         onLongPress: () {
@@ -105,20 +106,14 @@ class RoadmapProgressCard extends StatelessWidget {
             ),
           ),
           actions: [
-            SlideAction(
-              child: Container(),
-            )
+            IconSlideAction(
+              caption: '归档',
+              color: Colors.transparent,
+              icon: Icons.check,
+              onTap: () {},
+            ),
           ],
           secondaryActions: <Widget>[
-//            IconSlideAction(
-//              caption: '完成',
-//              color: Colors.transparent,
-//              icon: Icons.check,
-//              onTap: () {
-//                onFinished(index);
-//              },
-////              closeOnTap: false,
-//            ),
             IconSlideAction(
               caption: '分享',
               color: Colors.transparent,
@@ -128,6 +123,7 @@ class RoadmapProgressCard extends StatelessWidget {
               caption: '更多',
               color: Colors.transparent,
               icon: Icons.more_horiz,
+              onTap: () {},
             ),
           ],
         ),

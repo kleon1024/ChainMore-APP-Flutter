@@ -1,7 +1,9 @@
 import 'package:chainmore/config/provider_config.dart';
 import 'package:chainmore/model/home_page_model.dart';
+import 'package:chainmore/model/resource_model.dart';
+import 'package:chainmore/struct/info_capsule.dart';
+import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/cards/roadmap_progress_card.dart';
-import 'file:///D:/project/ChainMore/ChainMore-APP-Flutter/lib/pages/old_home_page.dart';
 import 'package:flutter/cupertino.dart';
 
 class HomePageLogic {
@@ -10,29 +12,28 @@ class HomePageLogic {
   HomePageLogic(this._model);
 
   void onSearchTap() {
-    Navigator.of(_model.context).push(new CupertinoPageRoute(builder: (ctx) {
-      return ProviderConfig.getInstance().getSearchPage();
-    }));
+    /// TODO: navigate to search page
+//    Navigator.of(_model.context).push(new CupertinoPageRoute(builder: (ctx) {
+//      return ProviderConfig.getInstance().getSearchPage();
+//    }));
   }
 
-  insertCard(index) {
-    _model.cards.insert(index, 1);
-    _model.sliverAnimatedListKey.currentState.insertItem(index);
-  }
+  void updateResource(ResourceModel model) {
+    if (model.resources.isNotEmpty) {
+      final capsule = InfoCapsule(
+          type: InfoType.ResourceType,
+          updateTime: Utils.toDateTime(model.resources.first.modify_time),
+          info: model.resources.first);
 
-  removeCard(index) async {
-    final removedItem = _model.cards.removeAt(index);
-    if (removedItem != null) {
-      _model.sliverAnimatedListKey.currentState.removeItem(index,
-          (context, animation) {
-        return SizeTransition(
-          sizeFactor: animation,
-          child: SlideTransition(
-            position: Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0)).animate(animation),
-            child: RoadmapProgressCard(index: removedItem),
-          ),
-        );
-      }, duration: Duration(milliseconds: 1000));
+      insertElement(capsule);
     }
+  }
+
+  insertElement(element) {
+    _model.elements.insert(0, element);
+  }
+
+  removeElement(index) {
+    _model.elements.removeAt(index);
   }
 }

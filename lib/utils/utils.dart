@@ -195,6 +195,13 @@ class Utils {
       return "1W+";
     }
   }
+
+  static DateTime toDateTime(String timestamp) {
+    List res = timestamp.split(" ");
+    final String datetimeStr = res[3] + monthMap[res[2]] + res[1] + " " + res[4] + "Z";
+    return DateTime.parse(datetimeStr);
+  }
+
   static String readableTimeStamp(String timestamp) {
     List res = timestamp.split(" ");
     assert(res.length == 6);

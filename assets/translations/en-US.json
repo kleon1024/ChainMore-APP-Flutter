@@ -1,4 +1,8 @@
 {
   "home_title" : "Focus",
-  "explore_title" : "Explore"
+  "explore_title" : "Explore",
+
+  "archive" : "Archive",
+  "share" : "Share",
+  "more" : "More"
 }

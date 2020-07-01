@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'resource.g.dart';
 
 @JsonSerializable()
-class Resource {
+class ResourceBean {
   int     id;
   String  title;
   String  url;
@@ -12,10 +12,16 @@ class Resource {
   int     resource_type_id;
   int     media_type_id;
   int     author_id;
-  String  timestamp;
+  String  create_time;
+  String  modify_time;
   bool    deleted;
 
-  Resource({
+  /// Local Columns
+  int     local_id;
+  bool    dirty;
+  String  update_time;
+
+  ResourceBean({
     this.id,
     this.title,
     this.url,
@@ -24,11 +30,15 @@ class Resource {
     this.resource_type_id,
     this.media_type_id,
     this.author_id,
-    this.timestamp,
+    this.create_time,
+    this.modify_time,
     this.deleted,
+    this.local_id,
+    this.dirty,
+    this.update_time,
   });
 
-  factory Resource.fromJson(Map<String, dynamic> json) => _$ResourceFromJson(json);
+  factory ResourceBean.fromJson(Map<String, dynamic> json) => _$ResourceBeanFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ResourceToJson(this);
+  Map<String, dynamic> toJson() => _$ResourceBeanToJson(this);
 }

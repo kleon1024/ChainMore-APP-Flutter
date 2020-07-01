@@ -2,6 +2,7 @@ import 'package:chainmore/logic/global_logic.dart';
 import 'package:chainmore/model/explore_page_model.dart';
 
 import 'package:chainmore/model/models.dart';
+import 'file:///D:/project/ChainMore/ChainMore-APP-Flutter/lib/model/resource_model.dart';
 
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,8 @@ class GlobalModel extends ChangeNotifier {
   HomePageModel homePageModel;
   ExplorePageModel explorePageModel;
   SearchPageModel searchPageModel;
+
+  ResourceModel resourceModel;
 
   String currentLanguageCode;
   String currentCountryCode;
@@ -69,6 +72,13 @@ class GlobalModel extends ChangeNotifier {
     if (this.searchPageModel == null) {
       this.searchPageModel = searchPageModel;
       debugPrint("Set Search Page Model [Global Model]");
+    }
+  }
+
+  void setResourceModel(ResourceModel resourceModel) {
+    if (this.resourceModel == null) {
+      this.resourceModel = resourceModel;
+      debugPrint("Set Resource Model [Global Model]");
     }
   }
 
