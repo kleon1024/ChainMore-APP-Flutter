@@ -23,6 +23,23 @@ class GlobalModel extends ChangeNotifier {
   String currentCountryCode;
   Locale currentLocale;
 
+  /// {name: id}
+  Map resourceTypeMap = {};
+  /// {id: name}
+  Map resourceTypeIdMap = {};
+  /// {name: id}
+  Map mediaTypeMap = {};
+  /// {id: name}
+  Map mediaTypeIdMap = {};
+  /// {name: media}
+  Map<String, List> resourceMediaMap = {};
+  /// {language: language}
+  Map resourceLanguageMap = {};
+  /// {language: name}
+  Map mediaLanguageMap = {};
+  /// []
+  List resourceMediaList = [];
+
   GlobalModel() {
     logic = GlobalLogic(this);
   }

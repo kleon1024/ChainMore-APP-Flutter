@@ -1,9 +1,9 @@
+import 'package:chainmore/config/provider_config.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/json/resource_bean.dart';
+import 'package:chainmore/page/main/resource_creation_page.dart';
 import 'package:chainmore/page/main/resource_management_page.dart';
-import 'package:chainmore/pages/resource/new_resource_page.dart';
 import 'package:chainmore/widgets/animation/custom_slidable.dart';
-import 'package:chainmore/widgets/cards/resource_add_card.dart';
 import 'package:chainmore/widgets/cards/resource_card.dart';
 import 'package:chainmore/widgets/separator.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -70,7 +70,7 @@ class CreatedResourceView extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context)
                           .push(CupertinoPageRoute(builder: (ctx) {
-                        return NewResourcePage();
+                        return ProviderConfig.getInstance().getResourceCreationPage();
                       }));
                     },
                   ),

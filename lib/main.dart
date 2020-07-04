@@ -1,12 +1,11 @@
 import 'package:chainmore/config/provider_config.dart';
-import 'file:///D:/project/ChainMore/ChainMore-APP-Flutter/lib/pages/old_main_page.dart';
 import 'package:chainmore/utils/colors.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' as ez;
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(
-    EasyLocalization(
+    ez.EasyLocalization(
       supportedLocales: [Locale('en', 'US'), Locale('zh', 'CN')],
       path: 'assets/translations',
       fallbackLocale: Locale('en', 'US'),
@@ -39,7 +38,7 @@ class MyApp extends StatelessWidget {
         );
       },
       debugShowCheckedModeBanner: false,
-      title: 'ChainMore',
+      title: ez.tr("app_title"),
 //      navigatorKey: Application.getIt<NavigateService>().key,
       darkTheme: ThemeData(
         brightness: Brightness.light,
@@ -53,6 +52,7 @@ class MyApp extends StatelessWidget {
           headline6: TextStyle(fontSize: 18),
           bodyText2: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
         ),
+        splashFactory: NoSplashFactory(),
       ),
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -66,6 +66,7 @@ class MyApp extends StatelessWidget {
           headline6: TextStyle(fontSize: 18),
           bodyText2: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
         ),
+        splashFactory: NoSplashFactory(),
       ),
       home: goPage(),
 //      onGenerateRoute: Application.router.generator,
@@ -75,4 +76,43 @@ class MyApp extends StatelessWidget {
   Widget goPage() {
     return ProviderConfig.getInstance().getMainPage();
   }
+}
+
+class NoSplashFactory extends InteractiveInkFeatureFactory {
+  const NoSplashFactory();
+
+  @override
+  InteractiveInkFeature create({
+    MaterialInkController controller,
+    RenderBox referenceBox,
+    Offset position,
+    Color color,
+    TextDirection textDirection,
+    bool containedInkWell = false,
+    RectCallback rectCallback,
+    BorderRadius borderRadius,
+    ShapeBorder customBorder,
+    double radius,
+    VoidCallback onRemoved,
+  }) {
+    return NoSplash(
+      controller: controller,
+      referenceBox: referenceBox,
+    );
+  }
+}
+
+class NoSplash extends InteractiveInkFeature {
+  NoSplash({
+    @required MaterialInkController controller,
+    @required RenderBox referenceBox,
+  })  : assert(controller != null),
+        assert(referenceBox != null),
+        super(
+        controller: controller,
+        referenceBox: referenceBox,
+      );
+
+  @override
+  void paintFeature(Canvas canvas, Matrix4 transform) {}
 }

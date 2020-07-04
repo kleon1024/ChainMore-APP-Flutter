@@ -10,6 +10,7 @@ import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/toast_animation.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -355,24 +356,24 @@ class Utils {
     );
   }
 
-  showPickerIcons(BuildContext context, List list, {Function callback}) {
+  showPickerIcons(BuildContext context, data, {Function callback}) {
     Picker(
             headercolor: Theme.of(context).canvasColor,
             backgroundColor: Theme.of(context).canvasColor,
             textStyle: Theme.of(context).textTheme.subtitle1,
             selectedTextStyle: Theme.of(context).textTheme.subtitle1,
-            adapter: PickerDataAdapter(pickerdata: list),
-            confirmText: "确认",
+            adapter: PickerDataAdapter<String>(pickerdata: data),
+            confirmText: tr("confirm"),
             confirmTextStyle: Theme.of(context)
                 .textTheme
                 .subtitle1
                 .merge(TextStyle(color: Theme.of(context).accentColor)),
-            cancelText: "取消",
+            cancelText: tr("cancel"),
             cancelTextStyle: Theme.of(context)
                 .textTheme
                 .subtitle1
                 .merge(TextStyle(color: Theme.of(context).accentColor)),
-            title: Text("媒体类型", style: Theme.of(context).textTheme.subtitle1),
+            title: Text(tr("classification"), style: Theme.of(context).textTheme.subtitle1),
             onConfirm: callback)
         .showModal(context); //_scaffoldKey.currentState);
   }

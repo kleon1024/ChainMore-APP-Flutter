@@ -1,4 +1,6 @@
 import 'package:chainmore/dao/resource_dao.dart';
+import 'package:chainmore/model/resource_creation_page_model.dart';
+import 'package:chainmore/page/main/resource_creation_page.dart';
 import 'package:chainmore/page/pages.dart';
 import 'package:chainmore/model/models.dart';
 
@@ -55,6 +57,13 @@ class ProviderConfig {
     return ChangeNotifierProvider<SearchPageModel>(
       create: (context) => SearchPageModel(),
       child: SearchPage(),
+    );
+  }
+
+  ChangeNotifierProvider<ResourceCreationPageModel> getResourceCreationPage() {
+    return ChangeNotifierProvider<ResourceCreationPageModel>(
+      create: (context) => ResourceCreationPageModel(),
+      child: ResourceCreationPage(),
     );
   }
 }

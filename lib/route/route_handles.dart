@@ -6,6 +6,7 @@ import 'package:chainmore/models/post.dart';
 import 'package:chainmore/models/sparkle.dart';
 import 'package:chainmore/models/web.dart';
 import 'package:chainmore/page/main/main_page.dart';
+import 'package:chainmore/page/main/resource_creation_page.dart';
 import 'package:chainmore/page/main/resource_management_page.dart';
 import 'package:chainmore/pages/domain/create_domain_page.dart';
 import 'package:chainmore/pages/domain/domain_certify_page.dart';
@@ -20,7 +21,6 @@ import 'package:chainmore/pages/home/sparkle/sparkle_detail_page.dart';
 import 'package:chainmore/pages/login_page.dart';
 import 'package:chainmore/pages/old_home_page.dart';
 import 'package:chainmore/pages/post/post_page.dart';
-import 'package:chainmore/pages/resource/new_resource_page.dart';
 import 'package:chainmore/pages/roadmap/roadmap_detail_page.dart';
 import 'package:chainmore/pages/search/domain_search_page.dart';
 import 'package:chainmore/pages/search/search_page.dart';
@@ -151,5 +151,5 @@ var resourceHandler = Handler(
 
 var newResourceHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
-  return NewResourcePage();
+  return ResourceCreationPage();
 });
