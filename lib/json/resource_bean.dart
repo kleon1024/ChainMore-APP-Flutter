@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'resource.g.dart';
+part 'resource_bean.g.dart';
 
 @JsonSerializable()
 class ResourceBean {
@@ -20,6 +20,7 @@ class ResourceBean {
   int     local_id;
   bool    dirty;
   String  update_time;
+  bool    collected;
 
   ResourceBean({
     this.id,
@@ -36,6 +37,7 @@ class ResourceBean {
     this.local_id,
     this.dirty,
     this.update_time,
+    this.collected,
   });
 
   factory ResourceBean.fromJson(Map<String, dynamic> json) => _$ResourceBeanFromJson(json);

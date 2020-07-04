@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'resource.dart';
+part of 'resource_bean.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -21,7 +21,8 @@ ResourceBean _$ResourceBeanFromJson(Map<String, dynamic> json) {
     deleted: json['deleted'] as bool,
     local_id: json['local_id'] as int,
     dirty: json['dirty'] as bool,
-  );
+    update_time: json['update_time'] as String,
+  )..collected = json['collected'] as bool;
 }
 
 Map<String, dynamic> _$ResourceBeanToJson(ResourceBean instance) =>
@@ -39,4 +40,6 @@ Map<String, dynamic> _$ResourceBeanToJson(ResourceBean instance) =>
       'deleted': instance.deleted,
       'local_id': instance.local_id,
       'dirty': instance.dirty,
+      'update_time': instance.update_time,
+      'collected': instance.collected,
     };

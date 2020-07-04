@@ -1,8 +1,8 @@
+import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/logic/global_logic.dart';
 import 'package:chainmore/model/explore_page_model.dart';
 
 import 'package:chainmore/model/models.dart';
-import 'file:///D:/project/ChainMore/ChainMore-APP-Flutter/lib/model/resource_model.dart';
 
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,7 @@ class GlobalModel extends ChangeNotifier {
   ExplorePageModel explorePageModel;
   SearchPageModel searchPageModel;
 
-  ResourceModel resourceModel;
+  ResourceDao createdResourceDao;
 
   String currentLanguageCode;
   String currentCountryCode;
@@ -75,9 +75,9 @@ class GlobalModel extends ChangeNotifier {
     }
   }
 
-  void setResourceModel(ResourceModel resourceModel) {
-    if (this.resourceModel == null) {
-      this.resourceModel = resourceModel;
+  void setResourceModel(ResourceDao resourceModel) {
+    if (this.createdResourceDao == null) {
+      this.createdResourceDao = resourceModel;
       debugPrint("Set Resource Model [Global Model]");
     }
   }

@@ -1,8 +1,8 @@
+import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/page/pages.dart';
 import 'package:chainmore/model/models.dart';
 
 import 'package:chainmore/pages/search/search_page.dart';
-import 'file:///D:/project/ChainMore/ChainMore-APP-Flutter/lib/model/resource_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +22,7 @@ class ProviderConfig {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<GlobalModel>.value(value: GlobalModel()),
-        ChangeNotifierProvider<ResourceModel>.value(value: ResourceModel()),
+        ChangeNotifierProvider<ResourceDao>.value(value: ResourceDao()),
       ],
       child: child,
     );

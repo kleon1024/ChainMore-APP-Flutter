@@ -1,31 +1,18 @@
 import 'package:chainmore/utils/navigator_util.dart';
-import 'package:chainmore/widgets/cached_image.dart';
-import 'package:chainmore/widgets/common_text_style.dart';
-import 'package:chainmore/widgets/indicators/icon_indicator.dart';
-import 'package:chainmore/widgets/indicators/progress_bar.dart';
-import 'package:chainmore/widgets/v_empty_view.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
-class ResourceAddCard extends StatefulWidget {
-  @override
-  _ResourceAddCardState createState() {
-    return _ResourceAddCardState();
-  }
-}
 
-class _ResourceAddCardState extends State<ResourceAddCard>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  void initState() {
-    super.initState();
-  }
+class ResourceAddCard extends StatelessWidget {
+
+  final double elevation;
+
+  ResourceAddCard({Key key, this.elevation});
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
@@ -41,7 +28,7 @@ class _ResourceAddCardState extends State<ResourceAddCard>
           child: Card(
             semanticContainer: true,
             clipBehavior: Clip.antiAliasWithSaveLayer,
-            elevation: 1,
+            elevation: elevation,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
             ),
@@ -52,7 +39,7 @@ class _ResourceAddCardState extends State<ResourceAddCard>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "添加资源",
+                    tr("create_resource"),
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
@@ -64,6 +51,4 @@ class _ResourceAddCardState extends State<ResourceAddCard>
     );
   }
 
-  @override
-  bool get wantKeepAlive => true;
 }

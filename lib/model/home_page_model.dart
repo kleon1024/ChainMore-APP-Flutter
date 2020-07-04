@@ -1,5 +1,7 @@
 import 'package:chainmore/logic/home_page_logic.dart';
 import 'package:chainmore/model/global_model.dart';
+import 'package:chainmore/provider/created_resource_view_model.dart';
+import 'package:chainmore/provider/view_model.dart';
 import 'package:chainmore/struct/info_capsule.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,7 @@ class HomePageModel extends ChangeNotifier {
 
   GlobalModel _globalModel;
 
-  List<InfoCapsule> elements = [];
+  List<Widget> elements = [];
 
   HomePageModel() {
     logic = HomePageLogic(this);
@@ -26,11 +28,11 @@ class HomePageModel extends ChangeNotifier {
       this.context = context;
       this._globalModel = globalModel;
 
-//      Future.wait([
-//        logic.insertCard(),
-//      ]).then((value) {
-//        refresh();
-//      });
+      Future.wait([
+        logic.addCreatedResourceView(),
+      ]).then((value) {
+        refresh();
+      });
     }
   }
 

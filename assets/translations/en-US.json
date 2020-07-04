@@ -1,8 +1,11 @@
 {
-  "home_title" : "Focus",
-  "explore_title" : "Explore",
-
-  "archive" : "Archive",
-  "share" : "Share",
-  "more" : "More"
+  "home_title": "Focus",
+  "explore_title": "Explore",
+  "archive": "Archive",
+  "share": "Share",
+  "more": "More",
+  "create_resource": "Create Resource",
+  "recently": "Recently",
+  "resource": "Resource",
+  "resource_management": "Resource Management"
 }

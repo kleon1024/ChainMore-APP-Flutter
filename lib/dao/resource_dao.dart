@@ -1,17 +1,18 @@
 import 'dart:math';
 
-import 'package:chainmore/json/resource.dart';
-import 'package:chainmore/logic/resource_logic.dart';
+import 'package:chainmore/database/database.dart';
+import 'package:chainmore/json/resource_bean.dart';
+import 'package:chainmore/mock.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/utils/types.dart';
+import 'package:chainmore/utils/utils.dart';
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 
-class ResourceModel extends ChangeNotifier {
+class ResourceDao extends ChangeNotifier {
   /// Model
   BuildContext context;
-  ResourceLogic logic;
   GlobalModel _globalModel;
 
   CancelToken cancelToken = CancelToken();
@@ -20,26 +21,14 @@ class ResourceModel extends ChangeNotifier {
 
   List<ChangeNotifierCallBack> callbacks = [];
 
-  ResourceModel() {
-    logic = ResourceLogic(this);
-  }
-
   void setContext(BuildContext context, {GlobalModel globalModel}) {
     if (this.context == null) {
       this.context = context;
       this._globalModel = globalModel;
-      Future.wait([logic.getResources()]);
+      Future.wait([this.initResources()]).then((value) {
+        refresh();
+      });
     }
-  }
-
-  void registerCallback(ChangeNotifierCallBack callback) {
-    callbacks.add(callback);
-  }
-
-  void traverseCallbacks() {
-    callbacks.forEach((element) {
-      element(this);
-    });
   }
 
   @override
@@ -51,5 +40,26 @@ class ResourceModel extends ChangeNotifier {
   }
 
   /// Logic
+  Future initResources() async {
+    List<ResourceBean> rawResources;
 
+    if (Utils.isMocking) {
+      rawResources = await Mock.getResourceBeans(3);
+    } else {
+      rawResources = await DBProvider.db.getAllResources();
+    }
+
+    /// Fake Data
+    if (rawResources == null) return;
+    resources.clear();
+    resources.addAll(rawResources);
+  }
+
+  getAllResources() {
+    return resources;
+  }
+
+  void refresh() {
+    notifyListeners();
+  }
 }

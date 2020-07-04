@@ -25,6 +25,8 @@ class ToastUtils {}
 class Utils {
 //  static bool isShowing = true;
 
+  static bool isMocking = true;
+
   static Timer toastTimer;
   static OverlayEntry _overlayEntry;
 
@@ -38,6 +40,10 @@ class Utils {
         }
       });
     }
+  }
+
+  static getShortUrl(String url) {
+    return url.split("/")[2];
   }
 
   static OverlayEntry createOverlayEntry(BuildContext context, String message) {
@@ -158,14 +164,14 @@ class Utils {
 //    });
 //  }
 
-  static bool hasAnyCategory(List<Category> categories, Set<int> disabledCategories) {
+  static bool hasAnyCategory(
+      List<Category> categories, Set<int> disabledCategories) {
     if (disabledCategories.isEmpty) return true;
     for (int i = 0; i < categories.length; ++i) {
       if (disabledCategories.contains(categories[i].id)) return true;
     }
     return false;
   }
-
 
   static Map<String, String> monthMap = {
     "Jan": "01",
@@ -183,7 +189,6 @@ class Utils {
   };
 
   static String readableNumber(int number) {
-
     double result = 0;
 
     if (number < 1e3) {
@@ -198,7 +203,8 @@ class Utils {
 
   static DateTime toDateTime(String timestamp) {
     List res = timestamp.split(" ");
-    final String datetimeStr = res[3] + monthMap[res[2]] + res[1] + " " + res[4] + "Z";
+    final String datetimeStr =
+        res[3] + monthMap[res[2]] + res[1] + " " + res[4] + "Z";
     return DateTime.parse(datetimeStr);
   }
 
@@ -351,23 +357,23 @@ class Utils {
 
   showPickerIcons(BuildContext context, List list, {Function callback}) {
     Picker(
-        headercolor: Theme.of(context).canvasColor,
-        backgroundColor: Theme.of(context).canvasColor,
-        textStyle: Theme.of(context).textTheme.subtitle1,
-        selectedTextStyle: Theme.of(context).textTheme.subtitle1,
-        adapter: PickerDataAdapter(pickerdata: list),
-        confirmText: "确认",
-        confirmTextStyle: Theme.of(context)
-            .textTheme
-            .subtitle1
-            .merge(TextStyle(color: Theme.of(context).accentColor)),
-        cancelText: "取消",
-        cancelTextStyle: Theme.of(context)
-            .textTheme
-            .subtitle1
-            .merge(TextStyle(color: Theme.of(context).accentColor)),
-        title: Text("媒体类型", style: Theme.of(context).textTheme.subtitle1),
-        onConfirm: callback
-    ).showModal(context); //_scaffoldKey.currentState);
+            headercolor: Theme.of(context).canvasColor,
+            backgroundColor: Theme.of(context).canvasColor,
+            textStyle: Theme.of(context).textTheme.subtitle1,
+            selectedTextStyle: Theme.of(context).textTheme.subtitle1,
+            adapter: PickerDataAdapter(pickerdata: list),
+            confirmText: "确认",
+            confirmTextStyle: Theme.of(context)
+                .textTheme
+                .subtitle1
+                .merge(TextStyle(color: Theme.of(context).accentColor)),
+            cancelText: "取消",
+            cancelTextStyle: Theme.of(context)
+                .textTheme
+                .subtitle1
+                .merge(TextStyle(color: Theme.of(context).accentColor)),
+            title: Text("媒体类型", style: Theme.of(context).textTheme.subtitle1),
+            onConfirm: callback)
+        .showModal(context); //_scaffoldKey.currentState);
   }
 }

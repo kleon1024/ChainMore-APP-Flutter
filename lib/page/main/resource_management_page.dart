@@ -1,29 +1,25 @@
+import 'package:chainmore/dao/resource_dao.dart';
+import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/utils/navigator_util.dart';
-import 'package:chainmore/utils/slivers.dart';
-import 'package:chainmore/widgets/cards/resource_add_card.dart';
 import 'package:chainmore/widgets/cards/resource_card.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
-class ResourcePage extends StatefulWidget {
-  @override
-  _ResourcePageState createState() => _ResourcePageState();
-}
-
-class _ResourcePageState extends State<ResourcePage>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class ResourceManagementPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final ResourceDao dao = Provider.of<ResourceDao>(context);
+
+    final List<ResourceBean> resources = dao.getAllResources();
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text("资源管理", style: Theme.of(context).textTheme.subtitle1),
+        title: Text(tr("resource_management"),
+            style: Theme.of(context).textTheme.subtitle1),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -51,29 +47,18 @@ class _ResourcePageState extends State<ResourcePage>
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           slivers: <Widget>[
-            SliverPersistentHeader(
-              delegate: SliverHeaderDelegate(
-                minHeight: ScreenUtil().setHeight(150),
-                maxHeight: ScreenUtil().setHeight(150),
-                child: ResourceAddCard(),
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate([
-                ResourceCard(),
-                ResourceCard(),
-                ResourceCard(),
-                ResourceCard(),
-                ResourceCard(),
-                ResourceCard(),
-              ]),
+            SliverAnimatedList(
+              initialItemCount: resources.length,
+              itemBuilder: (context, index, animation) {
+                return ResourceCard(
+                  bean: resources[index],
+                  horizontalPadding: ScreenUtil().setWidth(30),
+                );
+              },
             )
           ],
         ),
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

@@ -56,6 +56,8 @@ class _NewResourcePageState extends State<NewResourcePage>
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

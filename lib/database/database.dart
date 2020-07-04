@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:chainmore/json/resource.dart';
+import 'package:chainmore/json/resource_bean.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -27,7 +27,7 @@ class DBProvider {
       onCreate: (Database db, int version) async {
         print("Current Version:$version");
         await db.execute("CREATE TABLE resource ("
-            "local id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            "local_id INTEGER PRIMARY KEY AUTOINCREMENT,"
             "id INTEGER,"
             "title TEXT,"
             "url TEXT,"
