@@ -49,7 +49,9 @@ class NetUtils {
     try {
       response =
           await _dio.request(url, options: Options(followRedirects: true));
-    } on DioError catch (e) {}
+    } on DioError catch (e) {
+      debugPrint(e.toString());
+    }
     return response;
   }
 

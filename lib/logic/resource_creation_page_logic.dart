@@ -21,8 +21,14 @@ class ResourceCreationPageLogic {
   ResourceCreationPageLogic(this._model);
 
   onSubmit(String value) {
-    if (!_model.isLoading && value.trim().isNotEmpty) {
+    if (!_model.isLoading &&
+        value.trim().isNotEmpty &&
+        value.trim().startsWith('http') &&
+        value.trim() != _model.lastUrl) {
+
       _model.isLoading = true;
+      _model.refresh();
+      _model.lastUrl = value.trim();
 
       WebPageParser.getData(value.trim()).then((Map data) {
         print(data);
@@ -35,6 +41,7 @@ class ResourceCreationPageLogic {
         _model.isLoading = false;
         _model.refresh();
       }).catchError((e) {
+        debugPrint(e.toString());
         _model.isLoading = false;
         _model.refresh();
       });

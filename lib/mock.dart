@@ -26,12 +26,12 @@ class Mock {
       ));
     }
 
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(Duration(milliseconds: 50));
     return beans;
   }
 
   static Future getResourceMediaTypeMap() async {
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(Duration(milliseconds: 50));
 
     return [
       ResourceMediaBean(

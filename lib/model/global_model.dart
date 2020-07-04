@@ -3,9 +3,11 @@ import 'package:chainmore/logic/global_logic.dart';
 import 'package:chainmore/model/explore_page_model.dart';
 
 import 'package:chainmore/model/models.dart';
+import 'package:chainmore/network/net_utils.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GlobalModel extends ChangeNotifier {
   GlobalLogic logic;
@@ -49,7 +51,10 @@ class GlobalModel extends ChangeNotifier {
     if (this.context == null) {
       this.context = context;
       context.locale = Locale('zh', 'CN');
-      
+
+      ScreenUtil.instance = ScreenUtil()..init(context);
+      NetUtils.init();
+
       Future.wait([
         logic.getAppName(),
         logic.getCurrentLanguageCode(),

@@ -57,7 +57,7 @@ class ResourceCreationPage extends StatelessWidget {
                           minLines: 1,
                           focusNode: model.uriFocusNode,
                           onSubmitted: model.logic.onSubmit,
-                          keyboardType: TextInputType.text,
+                          keyboardType: TextInputType.url,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: ScreenUtil().setWidth(0),

@@ -30,8 +30,6 @@ class MainPageModel extends ChangeNotifier {
       /// TODO Check Version Update
       this._globalModel = globalModel;
 
-      ScreenUtil.instance = ScreenUtil()..init(context);
-
 //      refresh();
     }
   }

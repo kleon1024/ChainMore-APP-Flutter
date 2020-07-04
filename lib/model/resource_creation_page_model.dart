@@ -23,8 +23,9 @@ class ResourceCreationPageModel extends ChangeNotifier {
   final double padding = ScreenUtil().setWidth(30);
 
   bool isPaid = false;
-
   bool isLoading = false;
+
+  String lastUrl = "";
 
   int selectedMediaTypeId = 1;
   int selectedResourceTypeId = 1;
