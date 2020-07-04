@@ -22,7 +22,8 @@ ResourceBean _$ResourceBeanFromJson(Map<String, dynamic> json) {
     local_id: json['local_id'] as int,
     dirty: json['dirty'] as bool,
     update_time: json['update_time'] as String,
-  )..collected = json['collected'] as bool;
+    collected: json['collected'] as bool,
+  );
 }
 
 Map<String, dynamic> _$ResourceBeanToJson(ResourceBean instance) =>

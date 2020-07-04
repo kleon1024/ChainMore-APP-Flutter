@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chainmore/config/api_service.dart';
 import 'package:chainmore/config/keys.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/utils/shared_util.dart';
@@ -21,7 +22,7 @@ class GlobalLogic {
 
   Future getCurrentCountryCode() async {
     final countryCode =
-    await SharedUtil.instance.getString(Keys.currentCountryCode);
+        await SharedUtil.instance.getString(Keys.currentCountryCode);
     if (countryCode == null) return;
     if (countryCode == _model.currentLanguageCode) return;
     _model.currentLanguageCode = countryCode;
@@ -34,8 +35,10 @@ class GlobalLogic {
     _model.appName = appName;
   }
 
-  Future getMediaType() async {
-    final mediaTypeStr = await SharedUtil.instance.getString(Keys.resourceTypeMap);
+  Future getResourceMediaType() async {
+    /// TODO: Change to database
+    final mediaTypeStr =
+        await SharedUtil.instance.getString(Keys.resourceTypeMap);
     if (mediaTypeStr == null) return;
     final allMap = json.decode(mediaTypeStr);
     _model.resourceTypeMap = allMap["resource_type"];
@@ -43,23 +46,68 @@ class GlobalLogic {
     _model.mediaTypeMap = allMap["media_type"];
     _model.mediaTypeIdMap = allMap["media_id"];
     _model.resourceMediaMap = allMap["resource_media"];
+    generateLanguageMap();
+  }
+
+  Future getResourceMediaTypeRemote() async {
+    ApiService.instance.getResourceMediaType(success: (beans) async {
+
+      _model.resourceTypeMap.clear();
+      _model.resourceTypeIdMap.clear();
+      _model.mediaTypeMap.clear();
+      _model.mediaTypeIdMap.clear();
+      _model.resourceMediaMap.clear();
+
+      beans.forEach((e) {
+        _model.resourceTypeMap[e.resource_name] = e.resource_id;
+        _model.resourceTypeIdMap[e.resource_id] = e.resource_name;
+        _model.mediaTypeMap[e.media_name] = e.media_id;
+        _model.mediaTypeIdMap[e.media_id] = e.media_name;
+        if (_model.resourceMediaMap.containsKey(e.resource_name)) {
+          _model.resourceMediaMap[e.resource_name].add(e.media_name);
+        } else {
+          _model.resourceMediaMap[e.resource_name] = [e.media_name];
+        }
+      });
+
+      print(_model.resourceMediaMap);
+
+
+      Map all = {
+        "resource_type": _model.resourceTypeMap,
+        "resource_id": _model.resourceTypeIdMap,
+        "media_type": _model.mediaTypeMap,
+        "media_id": _model.mediaTypeIdMap,
+        "resource_media": _model.resourceMediaMap,
+      };
+
+      generateLanguageMap();
+
+//      await SharedUtil.instance
+//          .saveString(Keys.resourceTypeMap, json.encode(all));
+    });
+  }
+
+  generateLanguageMap() {
     _model.resourceTypeMap.forEach((key, value) {
       _model.resourceLanguageMap[tr(key)] = key;
     });
-    _model.mediaLanguageMap.forEach((key, value) {
+
+    _model.mediaTypeMap.forEach((key, value) {
       _model.mediaLanguageMap[tr(key)] = key;
     });
+
     _model.resourceMediaMap.forEach((key, value) {
       _model.resourceMediaList.add({tr(key): value.map((e) => tr(e)).toList()});
     });
   }
 
   int getMediaTypeId(String type) {
-    return _model.mediaTypeIdMap[_model.mediaLanguageMap[type]];
+    return _model.mediaTypeMap[_model.mediaLanguageMap[type]];
   }
 
   int getResourceTypeId(String type) {
-    return _model.resourceTypeIdMap[_model.resourceLanguageMap[type]];
+    return _model.resourceTypeMap[_model.resourceLanguageMap[type]];
   }
 
   String getMediaTypeStr(int id) {
@@ -69,5 +117,4 @@ class GlobalLogic {
   String getResourceTypeStr(int id) {
     return _model.resourceTypeIdMap[id];
   }
-
 }

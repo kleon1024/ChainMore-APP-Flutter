@@ -15,5 +15,14 @@
   "create_resource": "创建资源",
   "recently": "最近",
   "resource": "资源",
-  "resource_management": "资源管理"
+  "resource_management": "资源管理",
+  "article": "议论",
+  "text": "文字",
+  "image": "图片",
+  "audio": "音频",
+  "video": "视频",
+  "article_text": "文章",
+  "article_image": "图文",
+  "article_audio": "录音/播客",
+  "article_video": "视频表达"
 }

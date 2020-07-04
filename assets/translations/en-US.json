@@ -15,5 +15,15 @@
   "create_resource": "Create Resource",
   "recently": "Recently",
   "resource": "Resource",
-  "resource_management": "Resource Management"
+  "resource_management": "Resource Management",
+  "article": "Expression",
+  "text": "Text",
+  "image": "Image",
+  "audio": "Audio",
+  "video": "Video",
+  "article_text": "Essay/Article",
+  "article_image": "Essay/Article(Image)",
+  "article_audio": "Recording/Podcast",
+  "article_video": "Descriptive Video"
+
 }

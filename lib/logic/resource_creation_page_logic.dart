@@ -47,6 +47,8 @@ class ResourceCreationPageLogic {
   }
 
   onShowPicker() {
+    print(_model.globalModel.resourceMediaList);
+
     Utils().showPickerIcons(
       _model.context,
       _model.globalModel.resourceMediaList,
@@ -54,7 +56,7 @@ class ResourceCreationPageLogic {
         _model.selectedResourceTypeId = _model.globalModel.logic
             .getResourceTypeId(picker.getSelectedValues()[0]);
         _model.selectedMediaTypeId = _model.globalModel.logic
-            .getMediaTypeId(picker.getSelectedValues()[0]);
+            .getMediaTypeId(picker.getSelectedValues()[1]);
         _model.refresh();
       },
     );

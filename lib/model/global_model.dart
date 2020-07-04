@@ -3,6 +3,7 @@ import 'package:chainmore/logic/global_logic.dart';
 import 'package:chainmore/model/explore_page_model.dart';
 
 import 'package:chainmore/model/models.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 
@@ -24,19 +25,19 @@ class GlobalModel extends ChangeNotifier {
   Locale currentLocale;
 
   /// {name: id}
-  Map resourceTypeMap = {};
+  Map<String, int> resourceTypeMap = {};
   /// {id: name}
-  Map resourceTypeIdMap = {};
+  Map<int, String> resourceTypeIdMap = {};
   /// {name: id}
-  Map mediaTypeMap = {};
+  Map<String, int> mediaTypeMap = {};
   /// {id: name}
-  Map mediaTypeIdMap = {};
+  Map<int, String> mediaTypeIdMap = {};
   /// {name: media}
-  Map<String, List> resourceMediaMap = {};
+  Map<String, List<String>> resourceMediaMap = {};
   /// {language: language}
-  Map resourceLanguageMap = {};
+  Map<String, String> resourceLanguageMap = {};
   /// {language: name}
-  Map mediaLanguageMap = {};
+  Map<String, String> mediaLanguageMap = {};
   /// []
   List resourceMediaList = [];
 
@@ -47,10 +48,14 @@ class GlobalModel extends ChangeNotifier {
   void setContext(BuildContext context) {
     if (this.context == null) {
       this.context = context;
+      context.locale = Locale('zh', 'CN');
+      
       Future.wait([
         logic.getAppName(),
         logic.getCurrentLanguageCode(),
         logic.getCurrentCountryCode(),
+//        logic.getResourceMediaType(),
+        logic.getResourceMediaTypeRemote(),
       ]).then((value) {
         if (currentLanguageCode == null || currentCountryCode == null) {
           currentLocale = Localizations.localeOf(context);
@@ -59,7 +64,10 @@ class GlobalModel extends ChangeNotifier {
         } else {
           currentLocale = Locale(currentLanguageCode, currentCountryCode);
         }
+
         refresh();
+
+        debugPrint("Global Model Initialized");
       });
     }
   }

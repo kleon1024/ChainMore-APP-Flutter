@@ -1,5 +1,6 @@
 
 import 'package:chainmore/json/resource_bean.dart';
+import 'package:chainmore/json/resource_media_bean.dart';
 
 class Mock {
   static Future getResourceBeans(int num) async {
@@ -27,5 +28,36 @@ class Mock {
 
     await Future.delayed(Duration(milliseconds: 300));
     return beans;
+  }
+
+  static Future getResourceMediaTypeMap() async {
+    await Future.delayed(Duration(milliseconds: 300));
+
+    return [
+      ResourceMediaBean(
+        resource_id: 1,
+        resource_name: "article",
+        media_id: 1,
+        media_name: "text",
+      ),
+      ResourceMediaBean(
+        resource_id: 1,
+        resource_name: "article",
+        media_id: 2,
+        media_name: "image",
+      ),
+      ResourceMediaBean(
+        resource_id: 1,
+        resource_name: "article",
+        media_id: 3,
+        media_name: "audio",
+      ),
+      ResourceMediaBean(
+        resource_id: 1,
+        resource_name: "article",
+        media_id: 4,
+        media_name: "video",
+      ),
+    ];
   }
 }

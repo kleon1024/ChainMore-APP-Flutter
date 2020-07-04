@@ -10,7 +10,7 @@ import 'package:easy_localization/easy_localization.dart';
 class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final globalModel = Provider.of<GlobalModel>(context);
+    final globalModel = Provider.of<GlobalModel>(context)..setContext(context);
     final resourceModel = Provider.of<ResourceDao>(context)
       ..setContext(context, globalModel: globalModel);
     final model = Provider.of<MainPageModel>(context)

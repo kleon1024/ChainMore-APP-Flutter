@@ -360,20 +360,21 @@ class Utils {
     Picker(
             headercolor: Theme.of(context).canvasColor,
             backgroundColor: Theme.of(context).canvasColor,
-            textStyle: Theme.of(context).textTheme.subtitle1,
-            selectedTextStyle: Theme.of(context).textTheme.subtitle1,
+            textStyle: Theme.of(context).textTheme.bodyText1,
+            selectedTextStyle: Theme.of(context).textTheme.bodyText1,
             adapter: PickerDataAdapter<String>(pickerdata: data),
             confirmText: tr("confirm"),
             confirmTextStyle: Theme.of(context)
                 .textTheme
-                .subtitle1
+                .bodyText1
                 .merge(TextStyle(color: Theme.of(context).accentColor)),
             cancelText: tr("cancel"),
             cancelTextStyle: Theme.of(context)
                 .textTheme
-                .subtitle1
+                .bodyText1
                 .merge(TextStyle(color: Theme.of(context).accentColor)),
-            title: Text(tr("classification"), style: Theme.of(context).textTheme.subtitle1),
+            title: Text(tr("classification"),
+                style: Theme.of(context).textTheme.bodyText1),
             onConfirm: callback)
         .showModal(context); //_scaffoldKey.currentState);
   }

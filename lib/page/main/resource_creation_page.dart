@@ -3,17 +3,11 @@ import 'dart:convert';
 
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/model/resource_creation_page_model.dart';
-import 'package:chainmore/utils/navigator_util.dart';
-import 'package:chainmore/utils/utils.dart';
-import 'package:chainmore/utils/web_page_parser.dart';
-import 'package:chainmore/widgets/cards/resource_add_card.dart';
-import 'package:chainmore/widgets/cards/resource_card.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_picker/flutter_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +17,11 @@ class ResourceCreationPage extends StatelessWidget {
     final globalModel = Provider.of<GlobalModel>(context);
     final model = Provider.of<ResourceCreationPageModel>(context)
       ..setContext(context, globalModel: globalModel);
+
+    final resourceStr =
+        globalModel.logic.getResourceTypeStr(model.selectedResourceTypeId);
+    final mediaStr =
+        globalModel.logic.getMediaTypeStr(model.selectedMediaTypeId);
 
     return Scaffold(
       appBar: AppBar(
@@ -103,17 +102,14 @@ class ResourceCreationPage extends StatelessWidget {
                         Container(
                           width: double.infinity,
                           child: FlatButton(
-                            onPressed: () {
-                              model.logic.onShowPicker(
-                              );
-                            },
+                            onPressed: model.logic.onShowPicker,
                             color: Theme.of(context).cardColor,
                             child: Text(
-                              tr(globalModel.logic.getMediaTypeStr(
-                                      model.selectedMediaTypeId)) +
-                                  " - " +
-                                  tr(globalModel.logic.getResourceTypeStr(
-                                      model.selectedResourceTypeId)),
+                              tr(resourceStr) +
+                                  " + " +
+                                  tr(mediaStr) +
+                                  " = " +
+                                  tr(resourceStr + "_" + mediaStr),
                             ),
                           ),
                         ),
