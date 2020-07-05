@@ -60,7 +60,7 @@ class CustomSlidable extends StatelessWidget {
             IconSlideAction(
               caption: tr('share'),
               color: Colors.transparent,
-              icon: Icons.share,
+              icon: Icons.call_made,
               onTap: onMore,
             )
           ],

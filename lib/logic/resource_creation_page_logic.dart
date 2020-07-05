@@ -10,7 +10,7 @@ import 'package:chainmore/struct/info_capsule.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/utils/web_page_parser.dart';
 import 'package:chainmore/widgets/cards/roadmap_progress_card.dart';
-import 'package:chainmore/widgets/view/created_resource_view.dart';
+import 'package:chainmore/widgets/view/resource_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_picker/flutter_picker.dart';

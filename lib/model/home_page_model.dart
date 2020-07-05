@@ -29,7 +29,8 @@ class HomePageModel extends ChangeNotifier {
       this._globalModel = globalModel;
 
       Future.wait([
-        logic.addCreatedResourceView(),
+        logic.addResourceView(),
+        logic.addCollectionView(),
       ]).then((value) {
         refresh();
       });

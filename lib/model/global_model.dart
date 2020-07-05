@@ -1,3 +1,4 @@
+import 'package:chainmore/dao/collection_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/logic/global_logic.dart';
 import 'package:chainmore/model/explore_page_model.dart';
@@ -20,7 +21,8 @@ class GlobalModel extends ChangeNotifier {
   ExplorePageModel explorePageModel;
   SearchPageModel searchPageModel;
 
-  ResourceDao createdResourceDao;
+  ResourceDao resourceDao;
+  CollectionDao collectionDao;
 
   String currentLanguageCode;
   String currentCountryCode;
@@ -105,9 +107,16 @@ class GlobalModel extends ChangeNotifier {
     }
   }
 
-  void setResourceModel(ResourceDao resourceModel) {
-    if (this.createdResourceDao == null) {
-      this.createdResourceDao = resourceModel;
+  void setResourceDao(ResourceDao resourceDao) {
+    if (this.resourceDao == null) {
+      this.resourceDao = resourceDao;
+      debugPrint("Set Resource Model [Global Model]");
+    }
+  }
+
+  void setCollectionDao(CollectionDao collectionDao) {
+    if (this.collectionDao == null) {
+      this.collectionDao = collectionDao;
       debugPrint("Set Resource Model [Global Model]");
     }
   }

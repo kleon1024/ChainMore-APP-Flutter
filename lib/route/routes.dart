@@ -42,7 +42,7 @@ class Routes {
       return MainPage();
     });
     router.define(root, handler: splashHandler);
-    router.define(web, handler: webHandler);
+//    router.define(web, handler: webHandler);
     router.define(login, handler: loginHandler);
     router.define(main, handler: mainHandler);
     router.define(home, handler: homeHandler);

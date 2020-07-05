@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
@@ -41,9 +42,14 @@ class DBProvider {
             "deleted BOOLEAN,"
             "dirty BOOLEAN,"
             "update_time TEXT"
-            ")");
+            ");"
+            "CREATE TABLE collection ("
+            "local_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            "id INTEGER,"
+            "title TEXT"
+            ");");
       },
-      onUpgrade: (Database db, int oldVersion, int newVersion) async{
+      onUpgrade: (Database db, int oldVersion, int newVersion) async {
         print("Newer Version:$newVersion");
         print("Older Version:$oldVersion");
       },
@@ -56,4 +62,9 @@ class DBProvider {
     return list.map((e) => ResourceBean.fromJson(e)).toList();
   }
 
+  Future<List<CollectionBean>> getAllCollections() async {
+    final db = await database;
+    var list = await db.query("collection");
+    return list.map((e) => CollectionBean.fromJson(e)).toList();
+  }
 }

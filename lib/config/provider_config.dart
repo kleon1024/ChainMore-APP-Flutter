@@ -1,3 +1,4 @@
+import 'package:chainmore/dao/collection_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/model/resource_creation_page_model.dart';
 import 'package:chainmore/page/main/resource_creation_page.dart';
@@ -25,6 +26,7 @@ class ProviderConfig {
       providers: [
         ChangeNotifierProvider<GlobalModel>.value(value: GlobalModel()),
         ChangeNotifierProvider<ResourceDao>.value(value: ResourceDao()),
+        ChangeNotifierProvider<CollectionDao>.value(value: CollectionDao()),
       ],
       child: child,
     );

@@ -1,4 +1,5 @@
 import 'package:chainmore/json/resource_bean.dart';
+import 'package:chainmore/pages/webview/web_view_page.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ResourceCard extends StatelessWidget {
   final void Function() onTap;
+  final void Function() onLongPress;
   final ResourceBean bean;
   final double elevation;
   final double verticalPadding;
@@ -14,6 +16,7 @@ class ResourceCard extends StatelessWidget {
   ResourceCard({
     Key key,
     this.bean,
+    this.onLongPress,
     this.onTap,
     this.elevation,
     this.verticalPadding = 0.0,
@@ -26,10 +29,13 @@ class ResourceCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap ??
           () {
-            /// TODO: Go Resource Detail Page
+            Navigator.of(context).push(new CupertinoPageRoute(builder: (ctx) {
+              return WebViewPage(url: bean.url);
+            }));
           },
+      onLongPress: onLongPress,
       child: Container(
-        height: ScreenUtil().setHeight(200),
+//        height: ScreenUtil().setHeight(200),
         child: Card(
           elevation: elevation,
           child: Padding(

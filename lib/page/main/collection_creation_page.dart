@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-class ResourceCreationPage extends StatelessWidget {
+class CollectionCreationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final globalModel = Provider.of<GlobalModel>(context);

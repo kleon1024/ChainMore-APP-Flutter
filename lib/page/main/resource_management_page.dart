@@ -1,6 +1,7 @@
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/utils/navigator_util.dart';
+import 'package:chainmore/utils/params.dart';
 import 'package:chainmore/widgets/cards/resource_card.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,31 +17,34 @@ class ResourceManagementPage extends StatelessWidget {
     final List<ResourceBean> resources = dao.getAllResources();
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(tr("resource_management"),
-            style: Theme.of(context).textTheme.subtitle1),
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.filter_list,
-              size: Theme.of(context).iconTheme.size,
-            ),
-            onPressed: () {
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(GlobalParams.appBarHeight),
+        child: AppBar(
+          elevation: 0,
+          title: Text(tr("resource_management"),
+              style: Theme.of(context).textTheme.subtitle1),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.filter_list,
+                size: Theme.of(context).iconTheme.size,
+              ),
+              onPressed: () {
 //              _onSelectClassifier();
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              size: Theme.of(context).iconTheme.size,
+              },
             ),
-            onPressed: () {
-              NavigatorUtil.goSearchPage(context);
-            },
-          ),
-        ],
+            IconButton(
+              icon: Icon(
+                Icons.add,
+                size: Theme.of(context).iconTheme.size,
+              ),
+              onPressed: () {
+                NavigatorUtil.goSearchPage(context);
+              },
+            ),
+          ],
+        ),
       ),
       body: CupertinoScrollbar(
         child: CustomScrollView(
@@ -53,6 +57,7 @@ class ResourceManagementPage extends StatelessWidget {
                 return ResourceCard(
                   bean: resources[index],
                   horizontalPadding: ScreenUtil().setWidth(30),
+                  verticalPadding: ScreenUtil().setHeight(15),
                 );
               },
             )

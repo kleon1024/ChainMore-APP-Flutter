@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:chainmore/database/database.dart';
+import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/mock.dart';
 import 'package:chainmore/model/global_model.dart';
@@ -10,14 +11,14 @@ import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 
-class ResourceDao extends ChangeNotifier {
+class CollectionDao extends ChangeNotifier {
   /// Model
   BuildContext context;
   GlobalModel _globalModel;
 
   CancelToken cancelToken = CancelToken();
 
-  List<ResourceBean> resources = [];
+  List<CollectionBean> collections = [];
 
   List<ChangeNotifierCallBack> callbacks = [];
 
@@ -43,23 +44,23 @@ class ResourceDao extends ChangeNotifier {
 
   /// Logic
   Future initResources() async {
-    List<ResourceBean> rawResources;
+    List<CollectionBean> rawCollections;
 
     if (Utils.isMocking) {
-      rawResources = await Mock.getResourceBeans(3);
+      rawCollections = await Mock.getCollectionBeans(3);
     } else {
-      rawResources = await DBProvider.db.getAllResources();
+      rawCollections = await DBProvider.db.getAllCollections();
     }
 
     /// Fake Data
-    if (rawResources == null) return;
-    resources.clear();
-    resources.addAll(rawResources);
+    if (rawCollections == null) return;
+    collections.clear();
+    collections.addAll(rawCollections);
     debugPrint("Resource Bean Inited");
   }
 
   getAllResources() {
-    return resources;
+    return collections;
   }
 
   void refresh() {

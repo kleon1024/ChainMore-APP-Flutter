@@ -95,11 +95,11 @@ var domainMapHandler = Handler(
   return DomainMapPage(Domain.fromJson(FluroConvertUtils.string2map(data)));
 });
 
-var webHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
-  String data = params['data'].first;
-  return WebViewPage(web: Web.fromJson(FluroConvertUtils.string2map(data)));
-});
+//var webHandler = Handler(
+//    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+//  String data = params['data'].first;
+//  return WebViewPage(web: Web.fromJson(FluroConvertUtils.string2map(data)));
+//});
 
 var editHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {

@@ -312,6 +312,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.1"
+  flutter_inappwebview:
+    dependency: "direct main"
+    description:
+      name: flutter_inappwebview
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.0.0+4"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -981,13 +988,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.7.3"
-  webview_flutter:
-    dependency: "direct main"
-    description:
-      path: "plugins/webview_flutter"
-      relative: true
-    source: path
-    version: "0.3.7+1"
   xdg_directories:
     dependency: transitive
     description:

@@ -5,7 +5,8 @@ import 'package:chainmore/provider/created_resource_view_model.dart';
 import 'package:chainmore/struct/info_capsule.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/cards/roadmap_progress_card.dart';
-import 'package:chainmore/widgets/view/created_resource_view.dart';
+import 'package:chainmore/widgets/view/collection_view.dart';
+import 'package:chainmore/widgets/view/resource_view.dart';
 import 'package:flutter/cupertino.dart';
 
 class HomePageLogic {
@@ -28,10 +29,12 @@ class HomePageLogic {
     _model.elements.remove(element);
   }
 
-  Future addCreatedResourceView() async {
+  Future addResourceView() async {
     /// Set to global setting
-    insertElement(CreatedResourceView(
-      onRemove: removeElement,
-    ));
+    insertElement(ResourceView(onRemove: removeElement));
+  }
+
+  Future addCollectionView() async {
+    insertElement(CollectionView(onRemove: removeElement));
   }
 }
