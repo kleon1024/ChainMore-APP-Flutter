@@ -1,8 +1,6 @@
 import 'package:chainmore/json/collection_bean.dart';
-import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/params.dart';
 import 'package:chainmore/utils/utils.dart';
-import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/indicators/percent_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -99,12 +97,15 @@ class CollectionCard extends StatelessWidget {
                     ),
                     Expanded(
                       flex: 1,
-                      child: PercentIndicator([
-                        0.1,
-                        0.4,
-                        0.4,
-                        0.1,
-                      ]),
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        child: PercentIndicator([
+                          0.1,
+                          0.4,
+                          0.4,
+                          0.1,
+                        ]),
+                      ),
                     ),
                   ],
                 )

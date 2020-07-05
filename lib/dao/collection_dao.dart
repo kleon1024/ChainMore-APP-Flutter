@@ -59,7 +59,7 @@ class CollectionDao extends ChangeNotifier {
     debugPrint("Resource Bean Inited");
   }
 
-  getAllResources() {
+  getAllCollections() {
     return collections;
   }
 

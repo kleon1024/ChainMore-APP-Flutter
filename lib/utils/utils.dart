@@ -224,28 +224,30 @@ class Utils {
     var month = day / 30.4375;
     var year = month / 12;
 
-    String prefix = "前";
+    String suffix = tr("ago");
     if (ms < 0) {
-      prefix = "后";
+      suffix = tr("later");
       ms = -ms;
     }
 
-    if (year >= 1) {
-      return year.floor().toString() + "年" + prefix;
-    }
-    if (month >= 1) {
-      return month.floor().toString() + "个月" + prefix;
-    }
+//    if (year >= 1) {
+//      return year.floor().toString() + "年" + suffix;
+//    }
+//    if (month >= 1) {
+//      return month.floor().toString() + "个月" + suffix;
+//    }
+
     if (day >= 1) {
-      return day.floor().toString() + "天" + prefix;
+//      return day.floor().toString() + "天" + suffix;
+      return datetime.toIso8601String().split("T")[0];
     }
     if (hour >= 1) {
-      return hour.floor().toString() + "小时" + prefix;
+      return hour.floor().toString() + tr("hour") + suffix;
     }
     if (minute >= 1) {
-      return minute.floor().toString() + "分钟" + prefix;
+      return minute.floor().toString() + tr("minute") + suffix;
     }
-    return "1分钟内";
+    return tr("jut_now");
   }
 
   static checkClipBoard({BuildContext context}) async {

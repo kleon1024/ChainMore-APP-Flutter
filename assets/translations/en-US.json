@@ -9,14 +9,19 @@
   "share": "Share",
   "more": "More",
   "create": "Create",
+  "post": "Post",
   "link": "Link",
   "title": "Title",
+  "description": "Description",
   "paid_content": "Paid Content",
   "create_resource": "Create Resource",
+  "create_collection": "Post Collection",
+  "refer_resource": "Refer Resource",
   "recently": "Recently",
   "resource": "Resource",
   "collection": "Collection",
   "resource_management": "Resource Management",
+  "collection_management": "Collection Management",
   "article": "Expression",
   "text": "Text",
   "image": "Image",
@@ -25,6 +30,11 @@
   "article_text": "Essay/Article",
   "article_image": "Essay/Article(Image)",
   "article_audio": "Recording/Podcast",
-  "article_video": "Descriptive Video"
+  "article_video": "Descriptive Video",
+  "ago": " Ago",
+  "later": " Later",
+  "hour": " Hour",
+  "minute": " Minute",
+  "just_now": "Just Now"
 
 }

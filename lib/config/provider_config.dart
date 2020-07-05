@@ -1,6 +1,8 @@
 import 'package:chainmore/dao/collection_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
+import 'package:chainmore/model/collection_creation_page_model.dart';
 import 'package:chainmore/model/resource_creation_page_model.dart';
+import 'package:chainmore/page/main/collection_creation_page.dart';
 import 'package:chainmore/page/main/resource_creation_page.dart';
 import 'package:chainmore/page/pages.dart';
 import 'package:chainmore/model/models.dart';
@@ -66,6 +68,13 @@ class ProviderConfig {
     return ChangeNotifierProvider<ResourceCreationPageModel>(
       create: (context) => ResourceCreationPageModel(),
       child: ResourceCreationPage(),
+    );
+  }
+
+  ChangeNotifierProvider<CollectionCreationPageModel> getCollectionCreationPage() {
+    return ChangeNotifierProvider<CollectionCreationPageModel>(
+      create: (context) => CollectionCreationPageModel(),
+      child: CollectionCreationPage(),
     );
   }
 }

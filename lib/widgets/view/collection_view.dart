@@ -3,6 +3,7 @@ import 'package:chainmore/dao/collection_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
+import 'package:chainmore/page/main/collection_management_page.dart';
 import 'package:chainmore/page/main/resource_creation_page.dart';
 import 'package:chainmore/page/main/resource_management_page.dart';
 import 'package:chainmore/widgets/animation/custom_slidable.dart';
@@ -73,7 +74,7 @@ class CollectionView extends StatelessWidget {
                       Navigator.of(context)
                           .push(CupertinoPageRoute(builder: (ctx) {
                         return ProviderConfig.getInstance()
-                            .getResourceCreationPage();
+                            .getCollectionCreationPage();
                       }));
                     },
                   ),
@@ -82,7 +83,7 @@ class CollectionView extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context)
                           .push(CupertinoPageRoute(builder: (ctx) {
-                        return ResourceManagementPage();
+                        return CollectionManagementPage();
                       }));
                     },
                   )

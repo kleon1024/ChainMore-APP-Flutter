@@ -31,8 +31,8 @@ class PercentIndicator extends StatelessWidget {
         padding: const EdgeInsets.all(4.0),
         child: CustomPaint(
           painter: CurvePainter(colors: [
-            colors[i],
-            colors[i],
+            colors[i % 4],
+            colors[i % 4],
           ], angle: degree),
           child: SizedBox(
             width: ScreenUtil().setWidth(150),

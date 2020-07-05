@@ -1,26 +1,29 @@
-import 'package:chainmore/logic/resource_creation_page_logic.dart';
+import 'package:chainmore/json/resource_bean.dart';
+import 'package:chainmore/logic/collection_creation_page_logic.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ResourceCreationPageModel extends ChangeNotifier {
-  ResourceCreationPageLogic logic;
+class CollectionCreationPageModel extends ChangeNotifier {
+  CollectionCreationPageLogic logic;
   BuildContext context;
 
   GlobalModel globalModel;
 
-  ResourceCreationPageModel() {
-    logic = ResourceCreationPageLogic(this);
+  CollectionCreationPageModel() {
+    logic = CollectionCreationPageLogic(this);
   }
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final TextEditingController uriEditingController = TextEditingController();
+  final TextEditingController descEditingController = TextEditingController();
   final TextEditingController titleEditingController = TextEditingController();
   final FocusNode titleFocusNode = FocusNode();
-  final FocusNode uriFocusNode = FocusNode();
+  final FocusNode descFocusNode = FocusNode();
   final double padding = ScreenUtil().setWidth(15);
+
+  final List<ResourceBean> resources = [];
 
   bool isPaid = false;
   bool isLoading = false;
@@ -28,7 +31,7 @@ class ResourceCreationPageModel extends ChangeNotifier {
   String lastUrl = "";
 
   int selectedMediaTypeId = 1;
-  int selectedResourceTypeId = 1;
+  int selectedCollectionTypeId = 1;
 
   void setContext(BuildContext context, {GlobalModel globalModel}) {
     if (this.context == null) {
