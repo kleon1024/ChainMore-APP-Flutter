@@ -105,7 +105,7 @@ class ResourceCreationPage extends StatelessWidget {
                         Row(children: [Text(tr("classification"))]),
                         Container(
                           width: double.infinity,
-                          child: FlatButton(
+                          child: OutlineButton(
                             onPressed: model.logic.onShowPicker,
                             color: Theme.of(context).cardColor,
                             child: Text(
@@ -130,7 +130,7 @@ class ResourceCreationPage extends StatelessWidget {
                         ),
                         Container(
                           width: double.infinity,
-                          child: RaisedButton(
+                          child: FlatButton(
                             splashColor: Colors.transparent,
                             color: Theme.of(context).cardColor,
                             textColor: Theme.of(context).accentColor,

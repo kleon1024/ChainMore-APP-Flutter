@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:chainmore/database/database.dart';
 import 'package:chainmore/json/collection_bean.dart';
+import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/mock.dart';
 import 'package:chainmore/model/global_model.dart';
@@ -11,14 +12,14 @@ import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 
-class CollectionDao extends ChangeNotifier {
+class DomainDao extends ChangeNotifier {
   /// Model
   BuildContext context;
   GlobalModel _globalModel;
 
   CancelToken cancelToken = CancelToken();
 
-  List<CollectionBean> collections = [];
+  List<DomainBean> domains = [];
 
   List<ChangeNotifierCallBack> callbacks = [];
 
@@ -27,7 +28,7 @@ class CollectionDao extends ChangeNotifier {
       this.context = context;
       this._globalModel = globalModel;
       Future.wait([
-        this.initCollections(),
+        this.initDomains(),
       ]).then((value) {
         refresh();
       });
@@ -43,24 +44,24 @@ class CollectionDao extends ChangeNotifier {
   }
 
   /// Logic
-  Future initCollections() async {
-    List<CollectionBean> rawCollections;
+  Future initDomains() async {
+    List<DomainBean> rawDomains;
 
     if (Utils.isMocking) {
-      rawCollections = await Mock.getCollectionBeans(3);
+      rawDomains = await Mock.getDomainBeans(3);
     } else {
-      rawCollections = await DBProvider.db.getAllCollections();
+      rawDomains = await DBProvider.db.getAllDomains();
     }
 
     /// Fake Data
-    if (rawCollections == null) return;
-    collections.clear();
-    collections.addAll(rawCollections);
-    debugPrint("Collection Bean Inited");
+    if (rawDomains == null) return;
+    domains.clear();
+    domains.addAll(rawDomains);
+    debugPrint("Domain Bean Inited");
   }
 
-  getAllCollections() {
-    return collections;
+  getAllDomains() {
+    return domains;
   }
 
   void refresh() {

@@ -31,6 +31,7 @@ class HomePageModel extends ChangeNotifier {
       Future.wait([
         logic.addResourceView(),
         logic.addCollectionView(),
+        logic.addDomainView(),
       ]).then((value) {
         refresh();
       });

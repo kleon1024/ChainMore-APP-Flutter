@@ -27,18 +27,12 @@ class CollectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        /// Go collection detail
+        ///TODO Go collection detail
       },
       onLongPress: onLongPress,
       child: Container(
-//        height: GlobalParams.resourceCardHeight,
         child: Card(
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
           elevation: elevation,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
-          ),
           child: Padding(
             padding: EdgeInsets.symmetric(
               vertical: verticalPadding,

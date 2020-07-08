@@ -1,4 +1,5 @@
 import 'package:chainmore/dao/collection_dao.dart';
+import 'package:chainmore/dao/domain_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/model/main_page_model.dart';
@@ -16,12 +17,15 @@ class MainPage extends StatelessWidget {
       ..setContext(context, globalModel: globalModel);
     final collectionDao = Provider.of<CollectionDao>(context)
       ..setContext(context, globalModel: globalModel);
+    final domainDao = Provider.of<DomainDao>(context)
+      ..setContext(context, globalModel: globalModel);
     final model = Provider.of<MainPageModel>(context)
       ..setContext(context, globalModel: globalModel);
 
     globalModel.setMainPageModel(model);
     globalModel.setResourceDao(resourceDao);
     globalModel.setCollectionDao(collectionDao);
+    globalModel.setDomainDao(domainDao);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(

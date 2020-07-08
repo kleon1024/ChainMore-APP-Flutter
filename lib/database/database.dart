@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:chainmore/json/collection_bean.dart';
+import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
@@ -66,5 +67,11 @@ class DBProvider {
     final db = await database;
     var list = await db.query("collection");
     return list.map((e) => CollectionBean.fromJson(e)).toList();
+  }
+
+  Future<List<DomainBean>> getAllDomains() async {
+    final db = await database;
+    var list = await db.query("domain");
+    return list.map((e) => DomainBean.fromJson(e)).toList();
   }
 }

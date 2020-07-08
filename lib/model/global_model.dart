@@ -1,4 +1,5 @@
 import 'package:chainmore/dao/collection_dao.dart';
+import 'package:chainmore/dao/domain_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/logic/global_logic.dart';
 import 'package:chainmore/model/explore_page_model.dart';
@@ -23,6 +24,7 @@ class GlobalModel extends ChangeNotifier {
 
   ResourceDao resourceDao;
   CollectionDao collectionDao;
+  DomainDao domainDao;
 
   String currentLanguageCode;
   String currentCountryCode;
@@ -117,7 +119,14 @@ class GlobalModel extends ChangeNotifier {
   void setCollectionDao(CollectionDao collectionDao) {
     if (this.collectionDao == null) {
       this.collectionDao = collectionDao;
-      debugPrint("Set Resource Model [Global Model]");
+      debugPrint("Set Collection Dao [Global Model]");
+    }
+  }
+
+  void setDomainDao(DomainDao domainDao) {
+    if (this.domainDao == null) {
+      this.domainDao = domainDao;
+      debugPrint("Set Domain Dao [Global Model]");
     }
   }
 

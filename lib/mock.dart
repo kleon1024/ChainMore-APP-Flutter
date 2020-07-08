@@ -1,4 +1,5 @@
 import 'package:chainmore/json/collection_bean.dart';
+import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/json/resource_media_bean.dart';
 
@@ -48,6 +49,30 @@ class Mock {
         dirty: false,
         update_time: "",
         collected: false,
+      ));
+    }
+
+    await Future.delayed(Duration(milliseconds: 1));
+    return beans;
+  }
+
+  static Future getDomainBeans(int num) async {
+    List<DomainBean> beans = [];
+    for (int i = 0; i < num; i++) {
+      beans.add(DomainBean(
+        id: 1,
+        title: "音乐小站",
+        intro: "和我一起做个安静听歌的美子",
+        creator_id: 1,
+        create_time: "Sat, 04 Jul 2020 04:34:57 GMT",
+        modify_time: "Sat, 04 Jul 2020 04:34:57 GMT",
+        deleted: false,
+        deleting: false,
+        /// Local
+        local_id: 1,
+        dirty: false,
+        update_time: "",
+        marked: false,
       ));
     }
 

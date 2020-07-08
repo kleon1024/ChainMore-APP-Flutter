@@ -6,6 +6,7 @@ import 'package:chainmore/struct/info_capsule.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/cards/roadmap_progress_card.dart';
 import 'package:chainmore/widgets/view/collection_view.dart';
+import 'package:chainmore/widgets/view/domain_view.dart';
 import 'package:chainmore/widgets/view/resource_view.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -36,5 +37,9 @@ class HomePageLogic {
 
   Future addCollectionView() async {
     insertElement(CollectionView(onRemove: removeElement));
+  }
+
+  Future addDomainView() async {
+    insertElement(DomainView(onRemove: removeElement));
   }
 }

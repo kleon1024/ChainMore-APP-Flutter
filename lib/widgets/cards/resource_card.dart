@@ -12,6 +12,7 @@ class ResourceCard extends StatelessWidget {
   final double elevation;
   final double verticalPadding;
   final double horizontalPadding;
+  final Color color;
 
   ResourceCard({
     Key key,
@@ -21,11 +22,13 @@ class ResourceCard extends StatelessWidget {
     this.elevation,
     this.verticalPadding = 0.0,
     this.horizontalPadding = 0.0,
+    this.color,
   })  : assert(bean != null),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: onTap ??
           () {
@@ -37,6 +40,7 @@ class ResourceCard extends StatelessWidget {
       child: Container(
 //        height: ScreenUtil().setHeight(200),
         child: Card(
+          color: color ?? Theme.of(context).cardColor,
           elevation: elevation,
           child: Padding(
             padding: EdgeInsets.symmetric(
@@ -51,11 +55,13 @@ class ResourceCard extends StatelessWidget {
                   bean.title,
                   style: Theme.of(context).textTheme.bodyText1,
                   softWrap: false,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   Utils.getShortUrl(bean.url),
                   style: Theme.of(context).textTheme.bodyText2,
                   softWrap: false,
+                  overflow: TextOverflow.ellipsis,
                 )
               ],
             ),

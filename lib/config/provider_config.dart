@@ -1,8 +1,12 @@
 import 'package:chainmore/dao/collection_dao.dart';
+import 'package:chainmore/dao/domain_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/model/collection_creation_page_model.dart';
+import 'package:chainmore/model/domain_creation_page_model.dart';
 import 'package:chainmore/model/resource_creation_page_model.dart';
+import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/page/main/collection_creation_page.dart';
+import 'package:chainmore/page/main/domain_creation_page.dart';
 import 'package:chainmore/page/main/resource_creation_page.dart';
 import 'package:chainmore/page/pages.dart';
 import 'package:chainmore/model/models.dart';
@@ -29,6 +33,7 @@ class ProviderConfig {
         ChangeNotifierProvider<GlobalModel>.value(value: GlobalModel()),
         ChangeNotifierProvider<ResourceDao>.value(value: ResourceDao()),
         ChangeNotifierProvider<CollectionDao>.value(value: CollectionDao()),
+        ChangeNotifierProvider<DomainDao>.value(value: DomainDao()),
       ],
       child: child,
     );
@@ -42,7 +47,6 @@ class ProviderConfig {
   }
 
   ChangeNotifierProvider<HomePageModel> getHomePage() {
-    debugPrint("Create Home Page Model");
     return ChangeNotifierProvider<HomePageModel>(
       create: (context) => HomePageModel(),
       child: HomePage(),
@@ -50,7 +54,6 @@ class ProviderConfig {
   }
 
   ChangeNotifierProvider<ExplorePageModel> getExplorePage() {
-    debugPrint("Create Explore Page Model");
     return ChangeNotifierProvider<ExplorePageModel>(
       create: (context) => ExplorePageModel(),
       child: ExplorePage(),
@@ -75,6 +78,13 @@ class ProviderConfig {
     return ChangeNotifierProvider<CollectionCreationPageModel>(
       create: (context) => CollectionCreationPageModel(),
       child: CollectionCreationPage(),
+    );
+  }
+  
+  ChangeNotifierProvider<DomainCreationPageModel> getDomainCreationPage() {
+    return ChangeNotifierProvider<DomainCreationPageModel>(
+      create: (context) => DomainCreationPageModel(),
+      child: DomainCreationPage(),
     );
   }
 }

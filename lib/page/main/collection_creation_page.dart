@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:chainmore/model/collection_creation_page_model.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/utils/params.dart';
+import 'package:chainmore/widgets/cards/resource_card.dart';
+import 'package:chainmore/widgets/separator.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -88,30 +90,48 @@ class CollectionCreationPage extends StatelessWidget {
                           ),
                         ),
                         VEmptyView(30),
-                        Row(children: [Text(tr("classification"))]),
-                        VEmptyView(30),
                         Row(children: [Text(tr("refer_resource"))]),
+                        VEmptyView(20),
                         Container(
                           width: double.infinity,
                           child: OutlineButton(
+                            onLongPress: null,
+                            padding: EdgeInsets.zero,
                             splashColor: Colors.transparent,
                             color: Theme.of(context).cardColor,
-//                            textColor: Theme.of(context).accentColor,
-
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Icon(Icons.playlist_add),
+                            onPressed: model.logic.onSelectResources,
+                            child: Column(children: [
+                              Container(
+                                height: ScreenUtil().setHeight(120),
+                                child: Icon(Icons.playlist_add),
+                              ),
+                              Separator(),
+                              ListView.separated(
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return ResourceCard(
+                                    horizontalPadding: ScreenUtil().setWidth(15),
+                                    color: Theme.of(context).canvasColor,
+                                    bean: model.resources[index],
+                                    elevation: 0,
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return Separator();
+                                },
+                                itemCount: model.resources.length,
+                              ),
+                            ]),
                           ),
                         ),
                         Container(
                           width: double.infinity,
-                          child: RaisedButton(
+                          child: FlatButton(
                             splashColor: Colors.transparent,
                             color: Theme.of(context).cardColor,
                             textColor: Theme.of(context).accentColor,
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              ///TODO Post
                             },
                             child: Text(tr("post")),
                           ),
