@@ -1,6 +1,7 @@
 import 'package:chainmore/config/provider_config.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/model/home_page_model.dart';
+import 'package:chainmore/page/main/search_page.dart';
 import 'package:chainmore/provider/created_resource_view_model.dart';
 import 'package:chainmore/struct/info_capsule.dart';
 import 'package:chainmore/utils/utils.dart';
@@ -16,10 +17,9 @@ class HomePageLogic {
   HomePageLogic(this._model);
 
   void onSearchTap() {
-    /// TODO: navigate to search page
-//    Navigator.of(_model.context).push(new CupertinoPageRoute(builder: (ctx) {
-//      return ProviderConfig.getInstance().getSearchPage();
-//    }));
+    Navigator.of(_model.context).push(new CupertinoPageRoute(builder: (ctx) {
+      return SearchPage();
+    }));
   }
 
   insertElement(element) {

@@ -11,6 +11,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 class CollectionCreationPage extends StatelessWidget {
@@ -36,6 +37,9 @@ class CollectionCreationPage extends StatelessWidget {
           onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
           },
+          onVerticalDragDown: (drag) {
+            FocusScope.of(context).unfocus();
+          },
           child: CupertinoScrollbar(
             child: CustomScrollView(
               physics: BouncingScrollPhysics(
@@ -55,6 +59,7 @@ class CollectionCreationPage extends StatelessWidget {
                           focusNode: model.titleFocusNode,
                           maxLines: 3,
                           minLines: 1,
+                          maxLength: model.maxTitleLength,
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
@@ -67,7 +72,6 @@ class CollectionCreationPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        VEmptyView(30),
                         Row(
                           children: [Text(tr("description"))],
                         ),
@@ -77,6 +81,7 @@ class CollectionCreationPage extends StatelessWidget {
                           focusNode: model.descFocusNode,
                           maxLines: 99,
                           minLines: 1,
+                          maxLength: model.maxDescLength,
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
@@ -89,41 +94,43 @@ class CollectionCreationPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        VEmptyView(30),
                         Row(children: [Text(tr("refer_resource"))]),
                         VEmptyView(20),
                         Container(
                           width: double.infinity,
                           child: OutlineButton(
-                            onLongPress: null,
                             padding: EdgeInsets.zero,
                             splashColor: Colors.transparent,
                             color: Theme.of(context).cardColor,
                             onPressed: model.logic.onSelectResources,
-                            child: Column(children: [
-                              Container(
-                                height: ScreenUtil().setHeight(120),
-                                child: Icon(Icons.playlist_add),
-                              ),
-                              Separator(),
-                              ListView.separated(
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return ResourceCard(
-                                    horizontalPadding: ScreenUtil().setWidth(15),
-                                    color: Theme.of(context).canvasColor,
-                                    bean: model.resources[index],
-                                    elevation: 0,
-                                  );
-                                },
-                                separatorBuilder: (context, index) {
-                                  return Separator();
-                                },
-                                itemCount: model.resources.length,
-                              ),
-                            ]),
+                            child: Icon(Icons.playlist_add),
                           ),
                         ),
+                        ListView.separated(
+                          shrinkWrap: true,
+                          separatorBuilder: (context, index) {
+                            return Separator();
+                          },
+                          itemBuilder: (context, index) {
+                            return Dismissible(
+                              background: Container(color: Theme.of(context).accentColor),
+                              key: Key(index.toString()),
+                              onDismissed: (direction) {
+                                model.logic.removeRefResourceAt(index);
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                child: ResourceCard(
+                                  color: Theme.of(context).canvasColor,
+                                  bean: model.resources[index],
+                                  elevation: 0,
+                                ),
+                              ),
+                            );
+                          },
+                          itemCount: model.resources.length,
+                        ),
+                        VEmptyView(30),
                         Container(
                           width: double.infinity,
                           child: FlatButton(

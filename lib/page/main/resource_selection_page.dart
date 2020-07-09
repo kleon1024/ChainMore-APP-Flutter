@@ -2,6 +2,8 @@ import 'package:chainmore/model/collection_creation_page_model.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/params.dart';
 import 'package:chainmore/utils/utils.dart';
+import 'package:chainmore/widgets/cards/resource_card.dart';
+import 'package:chainmore/widgets/form/labeled_checkbox.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -54,15 +56,15 @@ class ResourceSelectionPageState extends State<ResourceSelectionPage> {
 //              _onSelectClassifier();
               },
             ),
-            IconButton(
-              icon: Icon(
-                Icons.search,
-                size: Theme.of(context).iconTheme.size,
-              ),
-              onPressed: () {
-                NavigatorUtil.goSearchPage(context);
-              },
-            ),
+//            IconButton(
+//              icon: Icon(
+//                Icons.search,
+//                size: Theme.of(context).iconTheme.size,
+//              ),
+//              onPressed: () {
+////                NavigatorUtil.goSearchPage(context);
+//              },
+//            ),
           ],
         ),
       ),
@@ -74,25 +76,18 @@ class ResourceSelectionPageState extends State<ResourceSelectionPage> {
             SliverAnimatedList(
               initialItemCount: resources.length,
               itemBuilder: (context, index, animation) {
-                return CheckboxListTile(
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 0,
-                    horizontal: ScreenUtil().setWidth(30),
-                  ),
-                  dense: true,
-                  controlAffinity: ListTileControlAffinity.platform,
-                  value: values[index],
-                  onChanged: (value) {
-                    widget.model.logic.onSelect(resources[index], value, index);
-                    setState(() {});
-                  },
-                  title: Text(
-                    resources[index].title,
-                    softWrap: false,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: Text(Utils.getShortUrl(resources[index].url)),
-                );
+                return LabeledCheckbox(
+                    value: values[index],
+                    onChanged: (value) {
+                      widget.model.logic
+                          .onSelect(resources[index], value, index);
+                      setState(() {});
+                    },
+                    child: ResourceCard(
+                      bean: resources[index],
+                      horizontalPadding: ScreenUtil().setWidth(30),
+                      verticalPadding: ScreenUtil().setHeight(15),
+                    ));
               },
             )
           ],

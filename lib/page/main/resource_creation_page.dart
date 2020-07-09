@@ -38,7 +38,10 @@ class ResourceCreationPage extends StatelessWidget {
       body: Container(
         child: GestureDetector(
           onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
+            FocusScope.of(context).unfocus();
+          },
+          onVerticalDragDown: (drag) {
+            FocusScope.of(context).unfocus();
           },
           child: CupertinoScrollbar(
             child: CustomScrollView(
@@ -51,7 +54,19 @@ class ResourceCreationPage extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: model.padding),
                       child: Column(children: [
                         Row(
-                          children: [Text(tr("link"))],
+                          children: [
+                            Text(tr("link")),
+                            HEmptyView(10),
+                            model.isChecking
+                                ? CupertinoActivityIndicator()
+                                : Text(model.urlExists,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2
+                                        .merge(TextStyle(
+                                            color: Theme.of(context)
+                                                .accentColor))),
+                          ],
                         ),
                         VEmptyView(20),
                         TextField(
@@ -59,8 +74,8 @@ class ResourceCreationPage extends StatelessWidget {
                           controller: model.uriEditingController,
                           maxLines: 16,
                           minLines: 1,
+                          maxLength: model.maxUriLength,
                           focusNode: model.uriFocusNode,
-                          onSubmitted: model.logic.onSubmit,
                           keyboardType: TextInputType.url,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
@@ -73,7 +88,6 @@ class ResourceCreationPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        VEmptyView(30),
                         Row(
                           children: <Widget>[
                             Text(tr("title")),
@@ -89,6 +103,7 @@ class ResourceCreationPage extends StatelessWidget {
                           focusNode: model.titleFocusNode,
                           maxLines: 3,
                           minLines: 1,
+                          maxLength: model.maxTitleLength,
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
@@ -101,7 +116,6 @@ class ResourceCreationPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        VEmptyView(30),
                         Row(children: [Text(tr("classification"))]),
                         Container(
                           width: double.infinity,
@@ -117,14 +131,16 @@ class ResourceCreationPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        VEmptyView(20),
                         CheckboxListTile(
+                          dense: true,
                           contentPadding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(0)),
+                            vertical: 0,
+                            horizontal: 0,
+                          ),
                           title: Text(tr("paid_content"),
                               style: Theme.of(context).textTheme.bodyText1),
                           value: model.isPaid,
-                          secondary: Icon(Icons.attach_money),
+//                          secondary: Icon(Icons.attach_money),
                           controlAffinity: ListTileControlAffinity.platform,
                           onChanged: model.logic.onPaidChecked,
                         ),

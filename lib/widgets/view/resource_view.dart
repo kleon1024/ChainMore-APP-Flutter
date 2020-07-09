@@ -32,61 +32,55 @@ class ResourceView extends StatelessWidget {
     /// TODO: Change to global setting
     List<ResourceBean> resources = dao.resources.take(2).toList();
 
-    return CustomSlidable(
-      onDismissed: () {
-        onRemove(this);
-      },
-      onMore: onMore,
-      onShared: onShared,
-      child: Card(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
-                child: Text(
-                  tr("resource"),
-                  style: Theme.of(context).textTheme.subtitle1,
+    return Card(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: ScreenUtil().setWidth(10)),
+              child: Text(
+                tr("resource"),
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+            ),
+            ListView.separated(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return ResourceCard(elevation: 0, bean: resources[index]);
+              },
+              itemCount: resources.length,
+              separatorBuilder: (context, index) {
+                return Separator();
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(CupertinoPageRoute(builder: (ctx) {
+                      return ProviderConfig.getInstance()
+                          .getResourceCreationPage();
+                    }));
+                  },
                 ),
-              ),
-              ListView.separated(
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return ResourceCard(elevation: 0, bean: resources[index]);
-                },
-                itemCount: resources.length,
-                separatorBuilder: (context, index) {
-                  return Separator();
-                },
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(CupertinoPageRoute(builder: (ctx) {
-                        return ProviderConfig.getInstance().getResourceCreationPage();
-                      }));
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.clear_all),
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(CupertinoPageRoute(builder: (ctx) {
-                        return ResourceManagementPage();
-                      }));
-                    },
-                  )
-                ],
-              )
-            ],
-          ),
+                IconButton(
+                  icon: Icon(Icons.clear_all),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(CupertinoPageRoute(builder: (ctx) {
+                      return ResourceManagementPage();
+                    }));
+                  },
+                )
+              ],
+            )
+          ],
         ),
       ),
     );

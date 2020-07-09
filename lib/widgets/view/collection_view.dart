@@ -36,61 +36,56 @@ class CollectionView extends StatelessWidget {
     /// TODO: Change to global setting
     List<CollectionBean> resources = dao.collections.take(2).toList();
 
-    return CustomSlidable(
-      onDismissed: () {
-        onRemove(this);
-      },
-      onMore: onMore,
-      onShared: onShared,
-      child: Card(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: ScreenUtil().setWidth(30)),
-                child: Text(
-                  tr("collection"),
-                  style: Theme.of(context).textTheme.subtitle1,
+    return Card(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+//              alignment: Alignment.bottomRight,
+              padding: EdgeInsets.only(top: ScreenUtil().setWidth(10)),
+              child: Text(
+                tr("collection"),
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+            ),
+            ListView.separated(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return CollectionCard(elevation: 0, bean: resources[index]);
+              },
+              itemCount: resources.length,
+              separatorBuilder: (context, index) {
+                return Separator();
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(CupertinoPageRoute(builder: (ctx) {
+                      return ProviderConfig.getInstance()
+                          .getCollectionCreationPage();
+                    }));
+                  },
                 ),
-              ),
-              ListView.separated(
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return CollectionCard(elevation: 0, bean: resources[index]);
-                },
-                itemCount: resources.length,
-                separatorBuilder: (context, index) {
-                  return Separator();
-                },
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(CupertinoPageRoute(builder: (ctx) {
-                        return ProviderConfig.getInstance()
-                            .getCollectionCreationPage();
-                      }));
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.clear_all),
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(CupertinoPageRoute(builder: (ctx) {
-                        return CollectionManagementPage();
-                      }));
-                    },
-                  )
-                ],
-              )
-            ],
-          ),
+                IconButton(
+                  icon: Icon(Icons.clear_all),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(CupertinoPageRoute(builder: (ctx) {
+                      return CollectionManagementPage();
+                    }));
+                  },
+                )
+              ],
+            ),
+          ],
         ),
       ),
     );

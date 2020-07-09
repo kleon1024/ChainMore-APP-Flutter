@@ -51,7 +51,6 @@ class GlobalLogic {
 
   Future getResourceMediaTypeRemote() async {
     ApiService.instance.getResourceMediaType(success: (beans) async {
-
       _model.resourceTypeMap.clear();
       _model.resourceTypeIdMap.clear();
       _model.mediaTypeMap.clear();
@@ -71,7 +70,6 @@ class GlobalLogic {
       });
 
       print(_model.resourceMediaMap);
-
 
       Map all = {
         "resource_type": _model.resourceTypeMap,

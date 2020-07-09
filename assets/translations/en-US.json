@@ -4,6 +4,7 @@
   "explore_title": "Explore",
   "confirm": "Confirm",
   "cancel": "Cancel",
+  "search": "Search",
   "classification": "Classification",
   "archive": "Archive",
   "share": "Share",
@@ -41,6 +42,9 @@
   "later": " Later",
   "hour": " Hour",
   "minute": " Minute",
-  "just_now": "Just Now"
-
+  "just_now": "Just Now",
+  "url_exists": "Url already exists",
+  "introduction": "Intro",
+  "search_history": "Search History",
+  "confirm_to_clear_search_history": "Clear all search history?"
 }

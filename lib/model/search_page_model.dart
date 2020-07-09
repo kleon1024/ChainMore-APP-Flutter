@@ -14,6 +14,16 @@ class SearchPageModel extends ChangeNotifier {
 
   GlobalModel _globalModel;
 
+  final searchFocusNode = FocusNode();
+  final searchController = TextEditingController();
+
+  bool isSearching = false;
+
+  List<String> historySearchList = ["abc"];
+
+  String searchText = "";
+  String lastSearchText = "";
+
   List cards = [];
 
   SearchPageModel() {
@@ -23,7 +33,6 @@ class SearchPageModel extends ChangeNotifier {
   void setContext(BuildContext context, {GlobalModel globalModel}) {
     if (this.context == null) {
       this.context = context;
-      /// TODO Check Version Update
       this._globalModel = globalModel;
 
 //      refresh();

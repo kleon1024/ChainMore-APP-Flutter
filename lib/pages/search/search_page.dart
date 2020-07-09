@@ -10,12 +10,12 @@ import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:chainmore/widgets/widget_future_builder.dart';
 
-class SearchPage extends StatefulWidget {
+class OldSearchPage extends StatefulWidget {
   @override
-  _SearchPageState createState() => _SearchPageState();
+  _OldSearchPageState createState() => _OldSearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
+class _OldSearchPageState extends State<OldSearchPage> with TickerProviderStateMixin {
   List<String> historySearchList;
   TextEditingController _searchController = TextEditingController();
   FocusNode _searchFocusNode = FocusNode();

@@ -27,7 +27,7 @@ class CollectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        ///TODO Go collection detail
+        /// Go collection detail
       },
       onLongPress: onLongPress,
       child: Container(

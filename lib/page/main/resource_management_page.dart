@@ -2,6 +2,7 @@ import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/params.dart';
+import 'package:chainmore/widgets/animation/custom_slidable.dart';
 import 'package:chainmore/widgets/cards/resource_card.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -54,10 +55,13 @@ class ResourceManagementPage extends StatelessWidget {
             SliverAnimatedList(
               initialItemCount: resources.length,
               itemBuilder: (context, index, animation) {
-                return ResourceCard(
-                  bean: resources[index],
-                  horizontalPadding: ScreenUtil().setWidth(30),
-                  verticalPadding: ScreenUtil().setHeight(15),
+                return CustomSlidable(
+                  onDismissed: () {},
+                  child: ResourceCard(
+                    bean: resources[index],
+                    horizontalPadding: ScreenUtil().setWidth(30),
+                    verticalPadding: ScreenUtil().setHeight(15),
+                  ),
                 );
               },
             )

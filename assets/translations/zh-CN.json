@@ -4,6 +4,7 @@
   "explore_title": "探索",
   "confirm": "确认",
   "cancel": "取消",
+  "search": "搜索",
   "classification": "分类",
   "archive": "归档",
   "share": "分享",
@@ -41,5 +42,9 @@
   "later": "后",
   "hour": "小时",
   "minute": "分钟",
-  "just_now": "刚刚"
+  "just_now": "刚刚",
+  "url_exists": "链接已存在",
+  "introduction": "简介",
+  "search_history": "搜索历史",
+  "confirm_to_clear_search_history": "清除所有搜索历史？"
 }

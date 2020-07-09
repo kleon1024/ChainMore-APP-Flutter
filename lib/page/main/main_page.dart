@@ -3,6 +3,7 @@ import 'package:chainmore/dao/domain_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/model/main_page_model.dart';
+import 'package:chainmore/model/models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,11 +22,14 @@ class MainPage extends StatelessWidget {
       ..setContext(context, globalModel: globalModel);
     final model = Provider.of<MainPageModel>(context)
       ..setContext(context, globalModel: globalModel);
+    final searchPageModel = Provider.of<SearchPageModel>(context)
+      ..setContext(context, globalModel: globalModel);
 
     globalModel.setMainPageModel(model);
     globalModel.setResourceDao(resourceDao);
     globalModel.setCollectionDao(collectionDao);
     globalModel.setDomainDao(domainDao);
+    globalModel.setSearchPageModel(searchPageModel);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(

@@ -21,10 +21,14 @@ class ResourceCreationPageModel extends ChangeNotifier {
   final FocusNode titleFocusNode = FocusNode();
   final FocusNode uriFocusNode = FocusNode();
   final double padding = ScreenUtil().setWidth(15);
+  final int maxUriLength = 512;
+  final int maxTitleLength = 30;
 
   bool isPaid = false;
   bool isLoading = false;
+  bool isChecking = false;
 
+  String urlExists = "";
   String lastUrl = "";
 
   int selectedMediaTypeId = 1;
@@ -34,6 +38,7 @@ class ResourceCreationPageModel extends ChangeNotifier {
     if (this.context == null) {
       this.context = context;
       this.globalModel = globalModel;
+      this.uriFocusNode.addListener(logic.onSubmit);
 
       Future.wait([]).then((value) {
         refresh();

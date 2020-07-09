@@ -8,6 +8,7 @@ import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/page/main/collection_creation_page.dart';
 import 'package:chainmore/page/main/domain_creation_page.dart';
 import 'package:chainmore/page/main/resource_creation_page.dart';
+import 'package:chainmore/page/main/search_page.dart';
 import 'package:chainmore/page/pages.dart';
 import 'package:chainmore/model/models.dart';
 
@@ -34,6 +35,7 @@ class ProviderConfig {
         ChangeNotifierProvider<ResourceDao>.value(value: ResourceDao()),
         ChangeNotifierProvider<CollectionDao>.value(value: CollectionDao()),
         ChangeNotifierProvider<DomainDao>.value(value: DomainDao()),
+        ChangeNotifierProvider<SearchPageModel>.value(value: SearchPageModel()),
       ],
       child: child,
     );
@@ -57,13 +59,6 @@ class ProviderConfig {
     return ChangeNotifierProvider<ExplorePageModel>(
       create: (context) => ExplorePageModel(),
       child: ExplorePage(),
-    );
-  }
-
-  ChangeNotifierProvider<SearchPageModel> getSearchPage() {
-    return ChangeNotifierProvider<SearchPageModel>(
-      create: (context) => SearchPageModel(),
-      child: SearchPage(),
     );
   }
 

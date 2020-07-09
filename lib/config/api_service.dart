@@ -9,7 +9,6 @@ import 'package:dio/dio.dart';
 import 'api_strategy.dart';
 export 'package:dio/dio.dart';
 
-
 ///这里存放所有的网络请求接口
 class ApiService {
   factory ApiService() => _getInstance();
@@ -20,9 +19,7 @@ class ApiService {
   static final int requestSucceed = 0;
   static final int requestFailed = 1;
 
-  ApiService._internal() {
-
-  }
+  ApiService._internal() {}
 
   static ApiService _getInstance() {
     if (_instance == null) {
@@ -30,7 +27,6 @@ class ApiService {
     }
     return _instance;
   }
-
 
   void getResourceMediaType({
     Function(List<ResourceMediaBean>) success,
@@ -66,4 +62,17 @@ class ApiService {
     );
   }
 
+  void checkResourceUrlExists({
+    Function(bool) success,
+    Function failed,
+    Function error,
+    Map<String, String> params,
+    CancelToken token,
+  }) {
+    if (Utils.isMocking) {
+      success(true);
+
+      return;
+    }
+  }
 }

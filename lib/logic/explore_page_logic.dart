@@ -1,6 +1,7 @@
 
 import 'package:chainmore/config/provider_config.dart';
 import 'package:chainmore/model/explore_page_model.dart';
+import 'package:chainmore/page/main/search_page.dart';
 import 'package:flutter/cupertino.dart';
 
 class ExplorePageLogic {
@@ -10,7 +11,7 @@ class ExplorePageLogic {
 
   void onSearchTap() {
     Navigator.of(_model.context).push(new CupertinoPageRoute(builder: (ctx) {
-      return ProviderConfig.getInstance().getSearchPage();
+      return SearchPage();
     }));
   }
 }

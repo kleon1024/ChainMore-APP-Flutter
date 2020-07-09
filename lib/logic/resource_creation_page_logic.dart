@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chainmore/config/api_service.dart';
 import 'package:chainmore/config/provider_config.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/model/home_page_model.dart';
@@ -20,32 +21,55 @@ class ResourceCreationPageLogic {
 
   ResourceCreationPageLogic(this._model);
 
-  onSubmit(String value) {
-    if (!_model.isLoading &&
-        value.trim().isNotEmpty &&
-        value.trim().startsWith('http') &&
-        value.trim() != _model.lastUrl) {
+  onSubmit() {
+    if (_model.uriFocusNode.hasFocus) return;
 
-      _model.isLoading = true;
-      _model.refresh();
-      _model.lastUrl = value.trim();
+    String value = _model.uriEditingController.text.trim();
 
-      WebPageParser.getData(value.trim()).then((Map data) {
-        print(data);
+    if (value.isNotEmpty &&
+        value.startsWith('http') &&
+        value != _model.lastUrl) {
 
-        if (data != null) {
-          if (data.containsKey('title')) {
-            _model.titleEditingController.text = data['title'];
+      if (!_model.isLoading) {
+        _model.lastUrl = value;
+        _model.isLoading = true;
+        _model.refresh();
+
+        WebPageParser.getData(value).then((Map data) {
+          print(data);
+
+          if (data != null) {
+            if (data.containsKey('title')) {
+              _model.titleEditingController.text = data['title'];
+            }
           }
-        }
-        _model.isLoading = false;
+          _model.isLoading = false;
+          _model.refresh();
+        }).catchError((e) {
+          debugPrint(e.toString());
+          _model.isLoading = false;
+          _model.refresh();
+        });
+      }
+
+      if (!_model.isChecking) {
+        _model.lastUrl = value;
+        _model.isChecking = true;
         _model.refresh();
-      }).catchError((e) {
-        debugPrint(e.toString());
-        _model.isLoading = false;
-        _model.refresh();
-      });
+
+        ApiService().checkResourceUrlExists(success: onCheckResourceUrlSuccess);
+      }
     }
+  }
+
+  onCheckResourceUrlSuccess(bool) {
+    if (bool) {
+      _model.urlExists = tr("url_exists");
+    } else {
+      _model.urlExists = "";
+    }
+
+    _model.isChecking = false;
   }
 
   onPaidChecked(bool value) {

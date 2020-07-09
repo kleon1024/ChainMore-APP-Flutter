@@ -29,17 +29,17 @@ class HomePage extends StatelessWidget {
                 Icons.developer_board,
                 size: Theme.of(context).iconTheme.size,
               ),
-              onPressed: model.logic.onSearchTap,
+              onPressed: () {
+                showModalBottomSheet(
+                    context: context, builder: buildFilterPanel);
+              },
             ),
             IconButton(
               icon: Icon(
                 Icons.search,
                 size: Theme.of(context).iconTheme.size,
               ),
-              onPressed: () {
-                showModalBottomSheet(
-                    context: context, builder: buildFilterPanel);
-              },
+              onPressed:model.logic.onSearchTap,
             )
           ],
         ),

@@ -34,7 +34,10 @@ class DomainCreationPage extends StatelessWidget {
       body: Container(
         child: GestureDetector(
           onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
+            FocusScope.of(context).unfocus();
+          },
+          onVerticalDragDown: (drag) {
+            FocusScope.of(context).unfocus();
           },
           child: CupertinoScrollbar(
             child: CustomScrollView(
@@ -63,6 +66,7 @@ class DomainCreationPage extends StatelessWidget {
                               focusNode: model.titleFocusNode,
                               maxLines: 3,
                               minLines: 1,
+                              maxLength: model.maxTitleLength,
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(
@@ -75,7 +79,28 @@ class DomainCreationPage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            VEmptyView(30),
+                            Row(
+                              children: [Text(tr("introduction"))],
+                            ),
+                            VEmptyView(20),
+                            TextField(
+                              controller: model.introEditingController,
+                              focusNode: model.introFocusNode,
+                              maxLines: 99,
+                              minLines: 1,
+                              maxLength: model.maxIntroLength,
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: ScreenUtil().setWidth(0),
+                                    horizontal: ScreenUtil().setWidth(30)),
+                                border: new OutlineInputBorder(
+                                  borderRadius: const BorderRadius.all(
+                                    const Radius.circular(10.0),
+                                  ),
+                                ),
+                              ),
+                            ),
                             Row(
                               children: [Text(tr("aggregate"))],
                             ),

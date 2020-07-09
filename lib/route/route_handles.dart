@@ -55,7 +55,7 @@ var homeHandler = Handler(
 
 var searchHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
-  return SearchPage();
+  return OldSearchPage();
 });
 
 var domainSearchHandler = Handler(

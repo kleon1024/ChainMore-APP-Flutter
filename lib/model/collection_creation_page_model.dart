@@ -23,6 +23,9 @@ class CollectionCreationPageModel extends ChangeNotifier {
   final FocusNode descFocusNode = FocusNode();
   final double padding = ScreenUtil().setWidth(15);
 
+  final int maxDescLength = 256;
+  final int maxTitleLength = 30;
+
   final List<ResourceBean> resources = [];
 
   bool isPaid = false;

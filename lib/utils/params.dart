@@ -8,4 +8,6 @@ class GlobalParams {
   static double appBarHeight = ScreenUtil().setHeight(120);
 
   static double collectionTopBarIconSize = 15;
+
+  static double smallIconSize = 18;
 }

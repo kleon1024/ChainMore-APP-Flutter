@@ -20,9 +20,14 @@ class DomainCreationPageModel extends ChangeNotifier {
 
   final TextEditingController titleEditingController = TextEditingController();
   final FocusNode titleFocusNode = FocusNode();
+  final TextEditingController introEditingController = TextEditingController();
+  final FocusNode introFocusNode = FocusNode();
   final double padding = ScreenUtil().setWidth(15);
 
   final List<ResourceBean> resources = [];
+
+  final int maxTitleLength = 24;
+  final int maxIntroLength = 56;
 
   bool isPaid = false;
   bool isLoading = false;

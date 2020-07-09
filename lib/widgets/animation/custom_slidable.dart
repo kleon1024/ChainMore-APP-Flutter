@@ -35,11 +35,11 @@ class CustomSlidable extends StatelessWidget {
           dismissal: SlidableDismissal(
             dismissThresholds: <SlideActionType, double>{
               SlideActionType.secondary: 0.99,
-              SlideActionType.primary: 0.3,
+              SlideActionType.primary: 0.5,
             },
             child: SlidableDrawerDismissal(),
             onWillDismiss: (type) {
-              return true;
+              return false;
             },
             onDismissed: (type) {
               onDismissed();
