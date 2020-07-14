@@ -16,9 +16,7 @@ import 'package:provider/provider.dart';
 class DomainCreationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final globalModel = Provider.of<GlobalModel>(context);
-    final model = Provider.of<DomainCreationPageModel>(context)
-      ..setContext(context, globalModel: globalModel);
+    final model = Provider.of<DomainCreationPageModel>(context);
 
     return Scaffold(
       appBar: PreferredSize(

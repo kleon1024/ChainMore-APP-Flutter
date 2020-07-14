@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:chainmore/database/database.dart';
 import 'package:chainmore/json/collection_bean.dart';
-import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/mock.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/utils/types.dart';

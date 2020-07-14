@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 class ApiStrategy {
   static ApiStrategy _instance;
 
-  static final String baseUrl = "http://192.168.137.1:8080/";
+  static final String baseUrl = "http://192.168.3.5:5000/v1";
   static const int connectTimeOut = 10 * 1000; // Connection Timeout 10s
   static const int receiveTimeOut = 15 * 1000; // Response Timeout 15s
 
@@ -19,11 +19,11 @@ class ApiStrategy {
 
   ApiStrategy._internal() {
     if (_client == null) {
-      BaseOptions options = new BaseOptions();
+      BaseOptions options = BaseOptions();
       options.connectTimeout = connectTimeOut;
       options.receiveTimeout = receiveTimeOut;
       options.baseUrl = baseUrl;
-      _client = new Dio(options);
+      _client = Dio(options);
       _client.interceptors.add(LogInterceptor(
         responseBody: true,
         requestHeader: false,
@@ -36,6 +36,8 @@ class ApiStrategy {
   Dio get client => _client;
   static const String GET = "get";
   static const String POST = "post";
+  static const String PUT = "put";
+  static const String DELETE = "delete";
 
   static String getBaseUrl() {
     return baseUrl;
@@ -44,7 +46,7 @@ class ApiStrategy {
   void get(
     String url,
     Function callBack, {
-    Map<String, String> params,
+    Map<String, dynamic> params,
     Function errorCallBack,
     CancelToken token,
   }) async {
@@ -58,10 +60,27 @@ class ApiStrategy {
     );
   }
 
+  void delete(
+      String url,
+      Function callBack, {
+        Map<String, dynamic> params,
+        Function errorCallBack,
+        CancelToken token,
+      }) async {
+    _request(
+      url,
+      callBack,
+      method: DELETE,
+      params: params,
+      errorCallBack: errorCallBack,
+      token: token,
+    );
+  }
+
   void post(
     String url,
     Function callBack, {
-    Map<String, String> params,
+    Map<String, dynamic> params,
     Function errorCallBack,
     CancelToken token,
   }) async {
@@ -69,6 +88,23 @@ class ApiStrategy {
       url,
       callBack,
       method: POST,
+      params: params,
+      errorCallBack: errorCallBack,
+      token: token,
+    );
+  }
+
+  void put(
+      String url,
+      Function callBack, {
+        Map<String, dynamic> params,
+        Function errorCallBack,
+        CancelToken token,
+      }) async {
+    _request(
+      url,
+      callBack,
+      method: PUT,
       params: params,
       errorCallBack: errorCallBack,
       token: token,
@@ -98,7 +134,7 @@ class ApiStrategy {
     String url,
     Function callBack, {
     String method,
-    Map<String, String> params,
+    Map<String, dynamic> params,
     FormData formData,
     Function errorCallBack,
     ProgressCallback progressCallBack,
@@ -113,7 +149,6 @@ class ApiStrategy {
     try {
       Response response;
       if (method == GET) {
-        //组合GET请求的参数
         if (params != null && params.isNotEmpty) {
           response = await _client.get(
             url,
@@ -126,11 +161,11 @@ class ApiStrategy {
             cancelToken: token,
           );
         }
-      } else {
+      } else if (method == POST) {
         if (params != null && params.isNotEmpty) {
           response = await _client.post(
             url,
-            data: formData ?? new FormData.fromMap(params),
+            data: formData ?? FormData.fromMap(params),
             onSendProgress: progressCallBack,
             cancelToken: token,
           );
@@ -140,13 +175,39 @@ class ApiStrategy {
             cancelToken: token,
           );
         }
+      } else if (method == PUT) {
+        if (params != null && params.isNotEmpty) {
+          response = await _client.put(
+            url,
+            data: formData ?? FormData.fromMap(params),
+            onSendProgress: progressCallBack,
+            cancelToken: token,
+          );
+        } else {
+          response = await _client.post(
+            url,
+            cancelToken: token,
+          );
+        }
+      } else if (method == DELETE) {
+        if (params != null && params.isNotEmpty) {
+          response = await _client.get(
+            url,
+            queryParameters: params,
+            cancelToken: token,
+          );
+        } else {
+          response = await _client.get(
+            url,
+            cancelToken: token,
+          );
+        }
       }
 
       statusCode = response.statusCode;
 
-      //处理错误部分
-      if (statusCode < 0) {
-        errorMsg = "网络请求错误,状态码:" + statusCode.toString();
+      if (statusCode != 200) {
+        errorMsg = "ERROR CODE:" + statusCode.toString();
         _handError(errorCallBack, errorMsg);
         return;
       }

@@ -19,9 +19,8 @@ ResourceBean _$ResourceBeanFromJson(Map<String, dynamic> json) {
     create_time: json['create_time'] as String,
     modify_time: json['modify_time'] as String,
     deleted: json['deleted'] as bool,
-    local_id: json['local_id'] as int,
-    dirty: json['dirty'] as bool,
-    update_time: json['update_time'] as String,
+    dirty_modify: json['dirty_modify'] as bool,
+    dirty_collect: json['dirty_collect'] as bool,
     collected: json['collected'] as bool,
   );
 }
@@ -39,8 +38,7 @@ Map<String, dynamic> _$ResourceBeanToJson(ResourceBean instance) =>
       'create_time': instance.create_time,
       'modify_time': instance.modify_time,
       'deleted': instance.deleted,
-      'local_id': instance.local_id,
-      'dirty': instance.dirty,
-      'update_time': instance.update_time,
+      'dirty_modify': instance.dirty_modify,
+      'dirty_collect': instance.dirty_collect,
       'collected': instance.collected,
     };

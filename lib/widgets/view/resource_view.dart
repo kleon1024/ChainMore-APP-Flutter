@@ -39,7 +39,7 @@ class ResourceView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.only(top: ScreenUtil().setWidth(10)),
+              padding: EdgeInsets.only(top: ScreenUtil().setWidth(10), left: ScreenUtil().setWidth(10)),
               child: Text(
                 tr("resource"),
                 style: Theme.of(context).textTheme.subtitle1,
@@ -64,8 +64,7 @@ class ResourceView extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context)
                         .push(CupertinoPageRoute(builder: (ctx) {
-                      return ProviderConfig.getInstance()
-                          .getResourceCreationPage();
+                      return ResourceCreationPage();
                     }));
                   },
                 ),

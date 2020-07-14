@@ -19,7 +19,7 @@ class SearchPageModel extends ChangeNotifier {
 
   bool isSearching = false;
 
-  List<String> historySearchList = ["abc"];
+  List<String> historySearchList = ["abc", "怎好啊"];
 
   String searchText = "";
   String lastSearchText = "";

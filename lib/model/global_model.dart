@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chainmore/dao/collection_dao.dart';
 import 'package:chainmore/dao/domain_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
@@ -6,10 +8,12 @@ import 'package:chainmore/model/explore_page_model.dart';
 
 import 'package:chainmore/model/models.dart';
 import 'package:chainmore/network/net_utils.dart';
+import 'package:chainmore/utils/utils.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 class GlobalModel extends ChangeNotifier {
   GlobalLogic logic;
@@ -30,20 +34,28 @@ class GlobalModel extends ChangeNotifier {
   String currentCountryCode;
   Locale currentLocale;
 
+
   /// {name: id}
   Map<String, int> resourceTypeMap = {};
+
   /// {id: name}
   Map<int, String> resourceTypeIdMap = {};
+
   /// {name: id}
   Map<String, int> mediaTypeMap = {};
+
   /// {id: name}
   Map<int, String> mediaTypeIdMap = {};
+
   /// {name: media}
   Map<String, List<String>> resourceMediaMap = {};
+
   /// {language: language}
   Map<String, String> resourceLanguageMap = {};
+
   /// {language: name}
   Map<String, String> mediaLanguageMap = {};
+
   /// []
   List resourceMediaList = [];
 

@@ -17,7 +17,7 @@ class HomePageLogic {
   HomePageLogic(this._model);
 
   void onSearchTap() {
-    Navigator.of(_model.context).push(new CupertinoPageRoute(builder: (ctx) {
+    Navigator.of(_model.context).push(CupertinoPageRoute(builder: (ctx) {
       return SearchPage();
     }));
   }

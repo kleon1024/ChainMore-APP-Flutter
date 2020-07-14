@@ -21,7 +21,7 @@ class CollectionCreationPageModel extends ChangeNotifier {
   final TextEditingController titleEditingController = TextEditingController();
   final FocusNode titleFocusNode = FocusNode();
   final FocusNode descFocusNode = FocusNode();
-  final double padding = ScreenUtil().setWidth(15);
+  double padding;
 
   final int maxDescLength = 256;
   final int maxTitleLength = 30;
@@ -40,6 +40,7 @@ class CollectionCreationPageModel extends ChangeNotifier {
     if (this.context == null) {
       this.context = context;
       this.globalModel = globalModel;
+      this.padding = ScreenUtil().setWidth(15);
 
       Future.wait([]).then((value) {
         refresh();

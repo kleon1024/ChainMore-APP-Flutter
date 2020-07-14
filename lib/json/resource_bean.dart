@@ -17,9 +17,8 @@ class ResourceBean {
   bool    deleted;
 
   /// Local Columns
-  int     local_id;
-  bool    dirty;
-  String  update_time;
+  bool    dirty_modify;
+  bool    dirty_collect;
   bool    collected;
 
   ResourceBean({
@@ -34,9 +33,8 @@ class ResourceBean {
     this.create_time,
     this.modify_time,
     this.deleted,
-    this.local_id,
-    this.dirty,
-    this.update_time,
+    this.dirty_modify,
+    this.dirty_collect,
     this.collected,
   });
 

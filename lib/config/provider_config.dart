@@ -13,6 +13,7 @@ import 'package:chainmore/page/pages.dart';
 import 'package:chainmore/model/models.dart';
 
 import 'package:chainmore/pages/search/search_page.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +37,12 @@ class ProviderConfig {
         ChangeNotifierProvider<CollectionDao>.value(value: CollectionDao()),
         ChangeNotifierProvider<DomainDao>.value(value: DomainDao()),
         ChangeNotifierProvider<SearchPageModel>.value(value: SearchPageModel()),
+        ChangeNotifierProvider<ResourceCreationPageModel>.value(
+            value: ResourceCreationPageModel()),
+        ChangeNotifierProvider<CollectionCreationPageModel>.value(
+          value: CollectionCreationPageModel()),
+        ChangeNotifierProvider<DomainCreationPageModel>.value(
+          value: DomainCreationPageModel()),
       ],
       child: child,
     );
@@ -62,24 +69,4 @@ class ProviderConfig {
     );
   }
 
-  ChangeNotifierProvider<ResourceCreationPageModel> getResourceCreationPage() {
-    return ChangeNotifierProvider<ResourceCreationPageModel>(
-      create: (context) => ResourceCreationPageModel(),
-      child: ResourceCreationPage(),
-    );
-  }
-
-  ChangeNotifierProvider<CollectionCreationPageModel> getCollectionCreationPage() {
-    return ChangeNotifierProvider<CollectionCreationPageModel>(
-      create: (context) => CollectionCreationPageModel(),
-      child: CollectionCreationPage(),
-    );
-  }
-  
-  ChangeNotifierProvider<DomainCreationPageModel> getDomainCreationPage() {
-    return ChangeNotifierProvider<DomainCreationPageModel>(
-      create: (context) => DomainCreationPageModel(),
-      child: DomainCreationPage(),
-    );
-  }
 }

@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:chainmore/config/provider_config.dart';
 import 'package:chainmore/utils/colors.dart';
+import 'package:chainmore/utils/utils.dart';
 import 'package:easy_localization/easy_localization.dart' as ez;
 import 'package:flutter/material.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 void main() {
   runApp(
@@ -22,7 +26,20 @@ class ScrollBehaviorNoGlow extends ScrollBehavior {
   }
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
+  @override
+  State<StatefulWidget> createState() => MyAppState();
+
+}
+class MyAppState extends State<MyApp> {
+
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -75,6 +92,11 @@ class MyApp extends StatelessWidget {
 
   Widget goPage() {
     return ProviderConfig.getInstance().getMainPage();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:chainmore/logic/resource_creation_page_logic.dart';
 import 'package:chainmore/model/global_model.dart';
+import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,9 +21,11 @@ class ResourceCreationPageModel extends ChangeNotifier {
   final TextEditingController titleEditingController = TextEditingController();
   final FocusNode titleFocusNode = FocusNode();
   final FocusNode uriFocusNode = FocusNode();
-  final double padding = ScreenUtil().setWidth(15);
+  double padding;
   final int maxUriLength = 512;
   final int maxTitleLength = 30;
+
+  Widget topResource = HEmptyView(0);
 
   bool isPaid = false;
   bool isLoading = false;
@@ -39,6 +42,7 @@ class ResourceCreationPageModel extends ChangeNotifier {
       this.context = context;
       this.globalModel = globalModel;
       this.uriFocusNode.addListener(logic.onSubmit);
+      this.padding = ScreenUtil().setWidth(15);
 
       Future.wait([]).then((value) {
         refresh();

@@ -32,7 +32,7 @@ class ApiService {
     Function(List<ResourceMediaBean>) success,
     Function failed,
     Function error,
-    Map<String, String> params,
+    Map<String, dynamic> params,
     CancelToken token,
   }) {
     if (Utils.isMocking) {
@@ -44,15 +44,12 @@ class ApiService {
     }
 
     ApiStrategy.getInstance().get(
-      ApiStrategy.baseUrl,
+      '/type',
       (data) {
-        if (data["code"] != "20000") {
-          failed(data);
-        } else {
-//          var beans = ResourceBean.fromJson(data);
-          List<ResourceMediaBean> beans = [];
-          success(beans);
-        }
+        final List items = data["items"];
+        final List<ResourceMediaBean> beans =
+            items.map((e) => ResourceMediaBean.fromJson(e)).toList();
+        success(beans);
       },
       params: params,
       errorCallBack: (errorMessage) {
@@ -63,16 +60,234 @@ class ApiService {
   }
 
   void checkResourceUrlExists({
-    Function(bool) success,
+    Function(List<ResourceBean>) success,
     Function failed,
     Function error,
-    Map<String, String> params,
+    Map<String, dynamic> params,
     CancelToken token,
-  }) {
+  }) async {
     if (Utils.isMocking) {
-      success(true);
-
+      final r = await Mock.getResourceBeans(1);
+      success(r);
       return;
     }
   }
+
+  void getCollectedResources({
+    Function(List<ResourceBean>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getResourceBeans(3).then((value) {
+        success(value);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/resource/collected',
+          (data) {
+        final List items = data["items"];
+        final List<ResourceBean> beans =
+        items.map((e) => ResourceBean.fromJson(e)).toList();
+        success(beans);
+      },
+      params: params,
+      errorCallBack: (errorMessage) {
+        error(errorMessage);
+      },
+      token: token,
+    );
+  }
+
+  void getCreatedResources({
+    Function(List<ResourceBean>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getResourceBeans(3).then((value) {
+        success(value);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/resource/created',
+          (data) {
+        final List items = data["items"];
+        final List<ResourceBean> beans =
+        items.map((e) => ResourceBean.fromJson(e)).toList();
+        success(beans);
+      },
+      params: params,
+      errorCallBack: (errorMessage) {
+        error(errorMessage);
+      },
+      token: token,
+    );
+  }
+
+  void getResource({
+    Function(ResourceBean) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getResourceBeans(1).then((value) {
+        success(value[0]);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/resource',
+          (data) {
+        final List items = data["items"];
+        final List<ResourceBean> beans =
+        items.map((e) => ResourceBean.fromJson(e)).toList();
+        success(beans[0]);
+      },
+      params: params,
+      errorCallBack: (errorMessage) {
+        error(errorMessage);
+      },
+      token: token,
+    );
+  }
+
+  void updateResource({
+    Function(ResourceBean) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getResourceBeans(1).then((value) {
+        success(value[0]);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().put(
+      '/resource',
+          (data) {
+        final List items = data["items"];
+        final List<ResourceBean> beans =
+        items.map((e) => ResourceBean.fromJson(e)).toList();
+        success(beans[0]);
+      },
+      params: params,
+      errorCallBack: (errorMessage) {
+        error(errorMessage);
+      },
+      token: token,
+    );
+  }
+
+  void createResource({
+    Function(ResourceBean) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getResourceBeans(1).then((value) {
+        success(value[0]);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().post(
+      '/resource',
+          (data) {
+        final List items = data["items"];
+        final List<ResourceBean> beans =
+        items.map((e) => ResourceBean.fromJson(e)).toList();
+        success(beans[0]);
+      },
+      params: params,
+      errorCallBack: (errorMessage) {
+        error(errorMessage);
+      },
+      token: token,
+    );
+  }
+
+  void collectResource({
+    Function(ResourceBean) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getResourceBeans(1).then((value) {
+        success(value[0]);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().post(
+      '/resource/star',
+          (data) {
+        final List items = data["items"];
+        final List<ResourceBean> beans =
+        items.map((e) => ResourceBean.fromJson(e)).toList();
+        success(beans[0]);
+      },
+      params: params,
+      errorCallBack: (errorMessage) {
+        error(errorMessage);
+      },
+      token: token,
+    );
+  }
+
+  void unCollectResource({
+    Function(ResourceBean) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getResourceBeans(1).then((value) {
+        success(value[0]);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().delete(
+      '/resource/star',
+          (data) {
+        final List items = data["items"];
+        final List<ResourceBean> beans =
+        items.map((e) => ResourceBean.fromJson(e)).toList();
+        success(beans[0]);
+      },
+      params: params,
+      errorCallBack: (errorMessage) {
+        error(errorMessage);
+      },
+      token: token,
+    );
+  }
+
 }

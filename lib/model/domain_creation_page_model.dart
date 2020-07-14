@@ -22,7 +22,7 @@ class DomainCreationPageModel extends ChangeNotifier {
   final FocusNode titleFocusNode = FocusNode();
   final TextEditingController introEditingController = TextEditingController();
   final FocusNode introFocusNode = FocusNode();
-  final double padding = ScreenUtil().setWidth(15);
+  double padding;
 
   final List<ResourceBean> resources = [];
 
@@ -41,6 +41,7 @@ class DomainCreationPageModel extends ChangeNotifier {
     if (this.context == null) {
       this.context = context;
       this.globalModel = globalModel;
+      this.padding = ScreenUtil().setWidth(15);
 
       Future.wait([]).then((value) {
         refresh();

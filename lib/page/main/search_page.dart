@@ -29,6 +29,7 @@ class SearchPage extends StatelessWidget {
                           vertical: ScreenUtil().setHeight(15),
                           horizontal: ScreenUtil().setWidth(15)),
                       child: TextField(
+                        autofocus: true,
                         focusNode: model.searchFocusNode,
                         controller: model.searchController,
                         cursorColor: Theme.of(context).accentColor,

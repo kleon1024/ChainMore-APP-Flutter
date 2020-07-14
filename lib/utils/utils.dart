@@ -26,16 +26,17 @@ class ToastUtils {}
 class Utils {
 //  static bool isShowing = true;
 
-  static bool isMocking = true;
+  static bool isMocking = false;
 
   static Timer toastTimer;
   static OverlayEntry _overlayEntry;
 
   static void showToast(BuildContext context, String message) {
     if (toastTimer == null || !toastTimer.isActive) {
+      debugPrint("Start an toast");
       _overlayEntry = createOverlayEntry(context, message);
       Overlay.of(context).insert(_overlayEntry);
-      toastTimer = Timer(Duration(milliseconds: 600), () {
+      toastTimer = Timer(Duration(milliseconds: 10000), () {
         if (_overlayEntry != null) {
           _overlayEntry.remove();
         }

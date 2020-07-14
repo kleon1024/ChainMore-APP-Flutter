@@ -2,9 +2,14 @@ import 'dart:convert';
 
 import 'package:chainmore/config/api_service.dart';
 import 'package:chainmore/config/keys.dart';
+import 'package:chainmore/database/database.dart';
+import 'package:chainmore/json/resource_media_bean.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/utils/shared_util.dart';
+import 'package:chainmore/utils/utils.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GlobalLogic {
@@ -50,7 +55,8 @@ class GlobalLogic {
   }
 
   Future getResourceMediaTypeRemote() async {
-    ApiService.instance.getResourceMediaType(success: (beans) async {
+    ApiService.instance.getResourceMediaType(
+        success: (List<ResourceMediaBean> beans) async {
       _model.resourceTypeMap.clear();
       _model.resourceTypeIdMap.clear();
       _model.mediaTypeMap.clear();
@@ -69,8 +75,6 @@ class GlobalLogic {
         }
       });
 
-      print(_model.resourceMediaMap);
-
       Map all = {
         "resource_type": _model.resourceTypeMap,
         "resource_id": _model.resourceTypeIdMap,
@@ -81,8 +85,7 @@ class GlobalLogic {
 
       generateLanguageMap();
 
-//      await SharedUtil.instance
-//          .saveString(Keys.resourceTypeMap, json.encode(all));
+      DBProvider.db.createTypes(beans);
     });
   }
 

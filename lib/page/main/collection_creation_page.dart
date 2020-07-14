@@ -17,9 +17,7 @@ import 'package:provider/provider.dart';
 class CollectionCreationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final globalModel = Provider.of<GlobalModel>(context);
-    final model = Provider.of<CollectionCreationPageModel>(context)
-      ..setContext(context, globalModel: globalModel);
+    final model = Provider.of<CollectionCreationPageModel>(context);
 
     return Scaffold(
       appBar: PreferredSize(

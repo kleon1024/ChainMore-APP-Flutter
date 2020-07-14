@@ -6,6 +6,7 @@ import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/page/main/collection_management_page.dart';
+import 'package:chainmore/page/main/domain_creation_page.dart';
 import 'package:chainmore/page/main/domain_management_page.dart';
 import 'package:chainmore/page/main/resource_creation_page.dart';
 import 'package:chainmore/page/main/resource_management_page.dart';
@@ -47,7 +48,7 @@ class DomainView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.only(top: ScreenUtil().setWidth(10)),
+              padding: EdgeInsets.only(top: ScreenUtil().setWidth(10), left: ScreenUtil().setWidth(10)),
               child: Text(
                 tr("domain"),
                 style: Theme.of(context).textTheme.subtitle1,
@@ -72,8 +73,7 @@ class DomainView extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context)
                         .push(CupertinoPageRoute(builder: (ctx) {
-                      return ProviderConfig.getInstance()
-                          .getDomainCreationPage();
+                      return DomainCreationPage();
                     }));
                   },
                 ),

@@ -20,9 +20,8 @@ class Mock {
         modify_time: "Sat, 04 Jul 2020 04:34:57 GMT",
         deleted: false,
         /// Local
-        local_id: 1,
-        dirty: false,
-        update_time: "",
+        dirty_modify: false,
+        dirty_collect: false,
         collected: false,
       ));
     }

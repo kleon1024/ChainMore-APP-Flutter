@@ -16,8 +16,7 @@ class ResourceCreationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final globalModel = Provider.of<GlobalModel>(context);
-    final model = Provider.of<ResourceCreationPageModel>(context)
-      ..setContext(context, globalModel: globalModel);
+    final model = Provider.of<ResourceCreationPageModel>(context);
 
     final resourceStr =
         globalModel.logic.getResourceTypeStr(model.selectedResourceTypeId);
@@ -53,6 +52,7 @@ class ResourceCreationPage extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: model.padding),
                       child: Column(children: [
+                        model.topResource,
                         Row(
                           children: [
                             Text(tr("link")),
@@ -150,9 +150,9 @@ class ResourceCreationPage extends StatelessWidget {
                             splashColor: Colors.transparent,
                             color: Theme.of(context).cardColor,
                             textColor: Theme.of(context).accentColor,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
+                            onPressed: model.urlExists == ""
+                                ? null
+                                : model.logic.popOut,
                             child: Text(tr("create")),
                           ),
                         ),

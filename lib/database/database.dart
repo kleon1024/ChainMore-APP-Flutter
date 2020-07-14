@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
+import 'package:chainmore/json/resource_media_bean.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -29,8 +30,7 @@ class DBProvider {
       onCreate: (Database db, int version) async {
         print("Current Version:$version");
         await db.execute("CREATE TABLE resource ("
-            "local_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-            "id INTEGER,"
+            "id INTEGER PRIMARY KEY,"
             "title TEXT,"
             "url TEXT,"
             "external BOOLEAN,"
@@ -41,13 +41,32 @@ class DBProvider {
             "create_time TEXT,"
             "modify_time TEXT,"
             "deleted BOOLEAN,"
-            "dirty BOOLEAN,"
-            "update_time TEXT"
-            ");"
-            "CREATE TABLE collection ("
-            "local_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-            "id INTEGER,"
+            "dirty_collect BOOLEAN DEFAULT false,"
+            "dirty_modify BOOLEAN DEFAULT false,"
+            "collected BOOLEAN DEFAULT false"
+            ");");
+
+        await db.execute("CREATE TABLE collection ("
+            "id INTEGER PRIMARY KEY,"
             "title TEXT"
+            ");");
+
+        await db.execute("CREATE TABLE domain ("
+            "id INTEGER PRIMARY KEY,"
+            "title TEXT,"
+            "intro TEXT,"
+            "deleting BOOLEAN,"
+            "deleted BOOLEAN,"
+            "create_time TEXT,"
+            "modify_time TEXT,"
+            "creator_id INTEGER"
+            ");");
+
+        await db.execute("CREATE TABLE type ("
+            "media_id INTEGER PRIMARY KEY,"
+            "media_name TEXT,"
+            "resource_id INTEGER PRIMARY KEY,"
+            "resource_name TEXT"
             ");");
       },
       onUpgrade: (Database db, int oldVersion, int newVersion) async {
@@ -57,10 +76,68 @@ class DBProvider {
     );
   }
 
+  Future<List<ResourceBean>> getCollectedResources() async {
+    final db = await database;
+    var list = await db.query("resource", where: "collected = ?", whereArgs: [true]);
+    return list.map((e) => ResourceBean.fromJson(e)).toList();
+  }
+
   Future<List<ResourceBean>> getAllResources() async {
     final db = await database;
     var list = await db.query("resource");
     return list.map((e) => ResourceBean.fromJson(e)).toList();
+  }
+
+  Future<List<ResourceBean>> getCreatedResources(int id) async {
+    final db = await database;
+    var list = await db.query("resource", where: "author_id = ?", whereArgs: [id]);
+    return list.map((e) => ResourceBean.fromJson(e)).toList();
+  }
+
+  Future updateResource(ResourceBean bean) async {
+    final db = await database;
+    await db.update("resource", bean.toJson(), where: "id = ?", whereArgs: [bean.id]);
+    debugPrint("Update Resource:${bean.toJson()}");
+  }
+
+  Future updateResources(List<ResourceBean> beans) async {
+    final db = await database;
+    final batch = db.batch();
+    beans.forEach((bean) {
+      batch.update("resource", bean.toJson(), where: "id = ?", whereArgs: [bean.id]);
+    });
+    final results = await batch.commit();
+    debugPrint("Update Resources$results");
+  }
+
+  Future createResource(ResourceBean bean) async {
+    final db = await database;
+    await db.insert("resource", bean.toJson());
+    debugPrint("Update Resource:${bean.toJson()}");
+  }
+
+  Future createResources(List<ResourceBean> beans) async {
+    final db = await database;
+    final batch = db.batch();
+    beans.forEach((bean) {
+      batch.insert("resource", bean.toJson());
+    });
+    final results = await batch.commit();
+    debugPrint("Update Resources$results");
+  }
+  
+  Future removeResource(ResourceBean bean) async {
+    final db = await database;
+    await db.delete("resource", where: "id = ?", whereArgs: [bean.id]);
+  }
+
+  Future removeResources(List<ResourceBean> beans) async {
+    final db = await database;
+    final batch = db.batch();
+    beans.forEach((bean) {
+      batch.delete("resource", where: "id = ?", whereArgs: [bean.id]);
+    });
+    await batch.commit();
   }
 
   Future<List<CollectionBean>> getAllCollections() async {
@@ -73,5 +150,25 @@ class DBProvider {
     final db = await database;
     var list = await db.query("domain");
     return list.map((e) => DomainBean.fromJson(e)).toList();
+  }
+
+  Future<List<ResourceMediaBean>> getAllTypes() async {
+    final db = await database;
+    var list = await db.query("type");
+    return list.map((e) => ResourceMediaBean.fromJson(e)).toList();
+  }
+
+  Future createTypes(List<ResourceMediaBean> beans) async {
+    final db = await database;
+
+    db.delete("type");
+
+    final batch = db.batch();
+    for (var bean in beans) {
+      batch.insert("type", bean.toJson());
+    }
+
+    final results = await batch.commit();
+    debugPrint("Create Resource Media Result:$results");
   }
 }
