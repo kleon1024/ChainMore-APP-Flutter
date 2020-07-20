@@ -36,7 +36,7 @@ class Utils {
       debugPrint("Start an toast");
       _overlayEntry = createOverlayEntry(context, message);
       Overlay.of(context).insert(_overlayEntry);
-      toastTimer = Timer(Duration(milliseconds: 10000), () {
+      toastTimer = Timer(Duration(milliseconds: 500), () {
         if (_overlayEntry != null) {
           _overlayEntry.remove();
         }
@@ -45,6 +45,7 @@ class Utils {
   }
 
   static getShortUrl(String url) {
+    debugPrint(url);
     return url.split("/")[2];
   }
 
@@ -57,7 +58,7 @@ class Utils {
             child: Container(
               width: ScreenUtil().setHeight(350),
               height: ScreenUtil().setHeight(350),
-              color: Colors.black12,
+              color: Colors.black87,
               child: Material(
                 color: Colors.transparent,
                 elevation: 0,
@@ -380,5 +381,40 @@ class Utils {
                 style: Theme.of(context).textTheme.bodyText1),
             onConfirm: callback)
         .showModal(context); //_scaffoldKey.currentState);
+  }
+
+  static sqlBoolToInt(Map<String, dynamic> json, ref) {
+    ref = ref.toJson();
+    Map<String, dynamic> res = {};
+    json.forEach((key, value) {
+      if (value is bool) {
+        if (value) {
+          value = 1;
+        } else {
+          value = 0;
+        }
+      }
+      res[key] = value;
+    });
+    return res;
+  }
+
+  static sqlIntToBool(Map<String, dynamic> json, ref) {
+    ref = ref.toJson();
+    Map<String, dynamic> res = {};
+    json.forEach((key, value) {
+      print("------------");
+      print(key);
+      print(ref[key]);
+      print(ref[key] is bool);
+
+      if (ref[key] is bool) {
+        print(key);
+        value = value == 1;
+      }
+      print(res);
+      res[key] = value;
+    });
+    return res;
   }
 }

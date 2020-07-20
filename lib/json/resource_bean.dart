@@ -25,17 +25,17 @@ class ResourceBean {
     this.id,
     this.title,
     this.url,
-    this.external,
-    this.free,
+    this.external = false,
+    this.free = false,
     this.resource_type_id,
     this.media_type_id,
     this.author_id,
     this.create_time,
     this.modify_time,
-    this.deleted,
-    this.dirty_modify,
-    this.dirty_collect,
-    this.collected,
+    this.deleted = false,
+    this.dirty_modify = false,
+    this.dirty_collect = false,
+    this.collected = false,
   });
 
   factory ResourceBean.fromJson(Map<String, dynamic> json) => _$ResourceBeanFromJson(json);

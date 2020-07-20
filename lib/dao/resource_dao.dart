@@ -32,9 +32,12 @@ class ResourceDao extends ChangeNotifier {
         refresh();
       });
 
-      updateCollectedResources();
-      updateCreatedResources();
-      updateAllResources();
+      /// TODO: Check Login
+      if (false) {
+        updateCollectedResources();
+        updateCreatedResources();
+        updateAllResources();
+      }
     }
   }
 
@@ -53,13 +56,14 @@ class ResourceDao extends ChangeNotifier {
     if (Utils.isMocking) {
       rawResources = await Mock.getResourceBeans(3);
     } else {
-      rawResources = await DBProvider.db.getCollectedResources();
+      rawResources = await DBProvider.db.getAllResources();
     }
 
     /// Fake Data
     if (rawResources == null) return;
     resources.clear();
     resources.addAll(rawResources);
+    refresh();
     debugPrint("Resource Bean Inited");
   }
 

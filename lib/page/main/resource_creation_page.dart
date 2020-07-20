@@ -13,15 +13,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class ResourceCreationPage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     final globalModel = Provider.of<GlobalModel>(context);
     final model = Provider.of<ResourceCreationPageModel>(context);
 
     final resourceStr =
-        globalModel.logic.getResourceTypeStr(model.selectedResourceTypeId);
+        globalModel.logic.getResourceTypeStr(model.selectedResourceTypeId) ??
+            "article";
     final mediaStr =
-        globalModel.logic.getMediaTypeStr(model.selectedMediaTypeId);
+        globalModel.logic.getMediaTypeStr(model.selectedMediaTypeId) ?? "text";
 
     return Scaffold(
       appBar: PreferredSize(
@@ -70,7 +72,8 @@ class ResourceCreationPage extends StatelessWidget {
                         ),
                         VEmptyView(20),
                         TextField(
-                          autofocus: true,
+                          enabled: !model.isChecking,
+                          autofocus: model.uriEditingController.text == "",
                           controller: model.uriEditingController,
                           maxLines: 16,
                           minLines: 1,
@@ -150,10 +153,20 @@ class ResourceCreationPage extends StatelessWidget {
                             splashColor: Colors.transparent,
                             color: Theme.of(context).cardColor,
                             textColor: Theme.of(context).accentColor,
-                            onPressed: model.urlExists == ""
-                                ? null
-                                : model.logic.popOut,
+                            onPressed: model.isUrlChecked
+                                ? model.logic.createResource
+                                : null,
                             child: Text(tr("create")),
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          child: FlatButton(
+                            splashColor: Colors.transparent,
+                            color: Theme.of(context).cardColor,
+                            onPressed: model.isChecking || model.isUrlChecked
+                                ? null : model.logic.onSubmit,
+                            child: Text(tr("recheck")),
                           ),
                         ),
                       ]),

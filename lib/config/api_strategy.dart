@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 
-
 class ApiStrategy {
   static ApiStrategy _instance;
 
@@ -49,6 +48,7 @@ class ApiStrategy {
     Map<String, dynamic> params,
     Function errorCallBack,
     CancelToken token,
+    Options options,
   }) async {
     _request(
       url,
@@ -57,16 +57,18 @@ class ApiStrategy {
       params: params,
       errorCallBack: errorCallBack,
       token: token,
+      options: options,
     );
   }
 
   void delete(
-      String url,
-      Function callBack, {
-        Map<String, dynamic> params,
-        Function errorCallBack,
-        CancelToken token,
-      }) async {
+    String url,
+    Function callBack, {
+    Map<String, dynamic> params,
+    Function errorCallBack,
+    CancelToken token,
+    Options options,
+  }) async {
     _request(
       url,
       callBack,
@@ -74,6 +76,7 @@ class ApiStrategy {
       params: params,
       errorCallBack: errorCallBack,
       token: token,
+      options: options,
     );
   }
 
@@ -83,6 +86,7 @@ class ApiStrategy {
     Map<String, dynamic> params,
     Function errorCallBack,
     CancelToken token,
+    Options options,
   }) async {
     _request(
       url,
@@ -91,16 +95,18 @@ class ApiStrategy {
       params: params,
       errorCallBack: errorCallBack,
       token: token,
+      options: options,
     );
   }
 
   void put(
-      String url,
-      Function callBack, {
-        Map<String, dynamic> params,
-        Function errorCallBack,
-        CancelToken token,
-      }) async {
+    String url,
+    Function callBack, {
+    Map<String, dynamic> params,
+    Function errorCallBack,
+    CancelToken token,
+    Options options,
+  }) async {
     _request(
       url,
       callBack,
@@ -108,6 +114,7 @@ class ApiStrategy {
       params: params,
       errorCallBack: errorCallBack,
       token: token,
+      options: options,
     );
   }
 
@@ -118,6 +125,7 @@ class ApiStrategy {
     FormData formData,
     Function errorCallBack,
     CancelToken token,
+    Options options,
   }) async {
     _request(
       url,
@@ -127,6 +135,7 @@ class ApiStrategy {
       errorCallBack: errorCallBack,
       progressCallBack: progressCallBack,
       token: token,
+      options: options,
     );
   }
 
@@ -139,67 +148,80 @@ class ApiStrategy {
     Function errorCallBack,
     ProgressCallback progressCallBack,
     CancelToken token,
+    Options options,
   }) async {
     if (params != null && params.isNotEmpty) {
       print("<net> params :" + params.toString());
     }
+    if (options == null) options = Options();
 
-    String errorMsg = "";
     int statusCode;
     try {
       Response response;
       if (method == GET) {
+        options.method = "GET";
         if (params != null && params.isNotEmpty) {
           response = await _client.get(
             url,
             queryParameters: params,
             cancelToken: token,
+            options: options,
           );
         } else {
           response = await _client.get(
             url,
             cancelToken: token,
+            options: options,
           );
         }
       } else if (method == POST) {
+        options.method = "POST";
         if (params != null && params.isNotEmpty) {
           response = await _client.post(
             url,
-            data: formData ?? FormData.fromMap(params),
+            data: formData ?? params,
             onSendProgress: progressCallBack,
             cancelToken: token,
+            options: options,
           );
         } else {
           response = await _client.post(
             url,
             cancelToken: token,
+            options: options,
           );
         }
       } else if (method == PUT) {
+        options.method = "PUT";
         if (params != null && params.isNotEmpty) {
           response = await _client.put(
             url,
             data: formData ?? FormData.fromMap(params),
             onSendProgress: progressCallBack,
             cancelToken: token,
+            options: options,
           );
         } else {
           response = await _client.post(
             url,
             cancelToken: token,
+            options: options,
           );
         }
       } else if (method == DELETE) {
+        options.method = "DELETE";
         if (params != null && params.isNotEmpty) {
           response = await _client.get(
             url,
             queryParameters: params,
             cancelToken: token,
+            options: options,
           );
         } else {
           response = await _client.get(
             url,
             cancelToken: token,
+            options: options,
           );
         }
       }
@@ -207,8 +229,7 @@ class ApiStrategy {
       statusCode = response.statusCode;
 
       if (statusCode != 200) {
-        errorMsg = "ERROR CODE:" + statusCode.toString();
-        _handError(errorCallBack, errorMsg);
+        _handError(errorCallBack, statusCode.toString());
         return;
       }
 

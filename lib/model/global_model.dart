@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:chainmore/dao/collection_dao.dart';
 import 'package:chainmore/dao/domain_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
+import 'package:chainmore/dao/user_dao.dart';
 import 'package:chainmore/logic/global_logic.dart';
 import 'package:chainmore/model/explore_page_model.dart';
 
@@ -29,6 +30,7 @@ class GlobalModel extends ChangeNotifier {
   ResourceDao resourceDao;
   CollectionDao collectionDao;
   DomainDao domainDao;
+  UserDao userDao;
 
   String currentLanguageCode;
   String currentCountryCode;
@@ -75,7 +77,7 @@ class GlobalModel extends ChangeNotifier {
         logic.getAppName(),
         logic.getCurrentLanguageCode(),
         logic.getCurrentCountryCode(),
-//        logic.getResourceMediaType(),
+        logic.getResourceMediaType(),
         logic.getResourceMediaTypeRemote(),
       ]).then((value) {
         if (currentLanguageCode == null || currentCountryCode == null) {
@@ -139,6 +141,13 @@ class GlobalModel extends ChangeNotifier {
     if (this.domainDao == null) {
       this.domainDao = domainDao;
       debugPrint("Set Domain Dao [Global Model]");
+    }
+  }
+
+  void setUserDao(UserDao userDao) {
+    if (this.userDao == null) {
+      this.userDao = userDao;
+      debugPrint("Set User Dao [Global Model]");
     }
   }
 

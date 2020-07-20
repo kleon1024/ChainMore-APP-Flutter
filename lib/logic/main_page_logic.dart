@@ -26,7 +26,6 @@ class MainPageLogic {
     });
 
     ReceiveSharingIntent.getInitialText().then((String value) {
-      debugPrint(value);
       ReceiveSharingIntent.reset();
       if (value != null && value != "" && value.startsWith('http')) {
         model.logic.setInitUrl(value);

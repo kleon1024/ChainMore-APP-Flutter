@@ -1,6 +1,8 @@
+import 'package:chainmore/config/api_service.dart';
 import 'package:chainmore/logic/resource_creation_page_logic.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
+import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,13 +25,16 @@ class ResourceCreationPageModel extends ChangeNotifier {
   final FocusNode uriFocusNode = FocusNode();
   double padding;
   final int maxUriLength = 512;
-  final int maxTitleLength = 30;
+  final int maxTitleLength = 64;
 
-  Widget topResource = HEmptyView(0);
+  final cancelToken = CancelToken();
+
+  Widget topResource = VEmptyView(0);
 
   bool isPaid = false;
   bool isLoading = false;
   bool isChecking = false;
+  bool isUrlChecked = false;
 
   String urlExists = "";
   String lastUrl = "";
@@ -55,6 +60,7 @@ class ResourceCreationPageModel extends ChangeNotifier {
     super.dispose();
     scaffoldKey?.currentState?.dispose();
     globalModel.homePageModel = null;
+    if (!cancelToken.isCancelled) cancelToken.cancel();
     debugPrint("Home Page Model Destroyed");
   }
 

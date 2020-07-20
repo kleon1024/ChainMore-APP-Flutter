@@ -1,19 +1,12 @@
 import 'package:chainmore/dao/collection_dao.dart';
 import 'package:chainmore/dao/domain_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
+import 'package:chainmore/dao/user_dao.dart';
 import 'package:chainmore/model/collection_creation_page_model.dart';
 import 'package:chainmore/model/domain_creation_page_model.dart';
 import 'package:chainmore/model/resource_creation_page_model.dart';
-import 'package:chainmore/models/domain.dart';
-import 'package:chainmore/page/main/collection_creation_page.dart';
-import 'package:chainmore/page/main/domain_creation_page.dart';
-import 'package:chainmore/page/main/resource_creation_page.dart';
-import 'package:chainmore/page/main/search_page.dart';
 import 'package:chainmore/page/pages.dart';
 import 'package:chainmore/model/models.dart';
-
-import 'package:chainmore/pages/search/search_page.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +29,7 @@ class ProviderConfig {
         ChangeNotifierProvider<ResourceDao>.value(value: ResourceDao()),
         ChangeNotifierProvider<CollectionDao>.value(value: CollectionDao()),
         ChangeNotifierProvider<DomainDao>.value(value: DomainDao()),
+        ChangeNotifierProvider<UserDao>.value(value: UserDao()),
         ChangeNotifierProvider<SearchPageModel>.value(value: SearchPageModel()),
         ChangeNotifierProvider<ResourceCreationPageModel>.value(
             value: ResourceCreationPageModel()),

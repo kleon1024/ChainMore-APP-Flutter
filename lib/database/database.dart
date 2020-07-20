@@ -3,6 +3,7 @@ import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/json/resource_media_bean.dart';
+import 'package:chainmore/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -63,9 +64,10 @@ class DBProvider {
             ");");
 
         await db.execute("CREATE TABLE type ("
-            "media_id INTEGER PRIMARY KEY,"
+            "id INTEGER PRIMARY KEY,"
+            "media_id INTEGER,"
             "media_name TEXT,"
-            "resource_id INTEGER PRIMARY KEY,"
+            "resource_id INTEGER,"
             "resource_name TEXT"
             ");");
       },
@@ -78,14 +80,14 @@ class DBProvider {
 
   Future<List<ResourceBean>> getCollectedResources() async {
     final db = await database;
-    var list = await db.query("resource", where: "collected = ?", whereArgs: [true]);
-    return list.map((e) => ResourceBean.fromJson(e)).toList();
+    var list = await db.query("resource", where: "collected = ?", whereArgs: [1]);
+    return list.map((e) => ResourceBean.fromJson(Utils.sqlIntToBool(e, ResourceBean()))).toList();
   }
 
   Future<List<ResourceBean>> getAllResources() async {
     final db = await database;
     var list = await db.query("resource");
-    return list.map((e) => ResourceBean.fromJson(e)).toList();
+    return list.map((e) => ResourceBean.fromJson(Utils.sqlIntToBool(e, ResourceBean()))).toList();
   }
 
   Future<List<ResourceBean>> getCreatedResources(int id) async {

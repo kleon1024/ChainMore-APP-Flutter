@@ -5,6 +5,7 @@ import 'package:chainmore/json/resource_media_bean.dart';
 import 'package:chainmore/mock.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'api_strategy.dart';
 export 'package:dio/dio.dart';
@@ -34,6 +35,7 @@ class ApiService {
     Function error,
     Map<String, dynamic> params,
     CancelToken token,
+    Options options,
   }) {
     if (Utils.isMocking) {
       Mock.getResourceMediaTypeMap().then((value) {
@@ -56,6 +58,7 @@ class ApiService {
         error(errorMessage);
       },
       token: token,
+      options: options,
     );
   }
 
@@ -65,12 +68,29 @@ class ApiService {
     Function error,
     Map<String, dynamic> params,
     CancelToken token,
+    Options options,
   }) async {
     if (Utils.isMocking) {
       final r = await Mock.getResourceBeans(1);
       success(r);
       return;
     }
+
+    ApiStrategy.getInstance().post(
+      '/resource/exist',
+      (data) {
+        final List items = data["items"];
+        final List<ResourceBean> beans =
+            items.map((e) => ResourceBean.fromJson(e)).toList();
+        success(beans);
+      },
+      params: params,
+      errorCallBack: (errorMessage) {
+        error(errorMessage);
+      },
+      token: token,
+      options: options,
+    );
   }
 
   void getCollectedResources({
@@ -79,6 +99,7 @@ class ApiService {
     Function error,
     Map<String, dynamic> params,
     CancelToken token,
+    Options options,
   }) {
     if (Utils.isMocking) {
       Mock.getResourceBeans(3).then((value) {
@@ -90,10 +111,10 @@ class ApiService {
 
     ApiStrategy.getInstance().get(
       '/resource/collected',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<ResourceBean> beans =
-        items.map((e) => ResourceBean.fromJson(e)).toList();
+            items.map((e) => ResourceBean.fromJson(e)).toList();
         success(beans);
       },
       params: params,
@@ -101,6 +122,7 @@ class ApiService {
         error(errorMessage);
       },
       token: token,
+      options: options,
     );
   }
 
@@ -110,6 +132,7 @@ class ApiService {
     Function error,
     Map<String, dynamic> params,
     CancelToken token,
+    Options options,
   }) {
     if (Utils.isMocking) {
       Mock.getResourceBeans(3).then((value) {
@@ -121,10 +144,10 @@ class ApiService {
 
     ApiStrategy.getInstance().get(
       '/resource/created',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<ResourceBean> beans =
-        items.map((e) => ResourceBean.fromJson(e)).toList();
+            items.map((e) => ResourceBean.fromJson(e)).toList();
         success(beans);
       },
       params: params,
@@ -132,6 +155,7 @@ class ApiService {
         error(errorMessage);
       },
       token: token,
+      options: options,
     );
   }
 
@@ -141,6 +165,7 @@ class ApiService {
     Function error,
     Map<String, dynamic> params,
     CancelToken token,
+    Options options,
   }) {
     if (Utils.isMocking) {
       Mock.getResourceBeans(1).then((value) {
@@ -152,10 +177,10 @@ class ApiService {
 
     ApiStrategy.getInstance().get(
       '/resource',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<ResourceBean> beans =
-        items.map((e) => ResourceBean.fromJson(e)).toList();
+            items.map((e) => ResourceBean.fromJson(e)).toList();
         success(beans[0]);
       },
       params: params,
@@ -163,6 +188,7 @@ class ApiService {
         error(errorMessage);
       },
       token: token,
+      options: options,
     );
   }
 
@@ -172,6 +198,7 @@ class ApiService {
     Function error,
     Map<String, dynamic> params,
     CancelToken token,
+    Options options,
   }) {
     if (Utils.isMocking) {
       Mock.getResourceBeans(1).then((value) {
@@ -183,10 +210,10 @@ class ApiService {
 
     ApiStrategy.getInstance().put(
       '/resource',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<ResourceBean> beans =
-        items.map((e) => ResourceBean.fromJson(e)).toList();
+            items.map((e) => ResourceBean.fromJson(e)).toList();
         success(beans[0]);
       },
       params: params,
@@ -194,6 +221,7 @@ class ApiService {
         error(errorMessage);
       },
       token: token,
+      options: options,
     );
   }
 
@@ -203,6 +231,7 @@ class ApiService {
     Function error,
     Map<String, dynamic> params,
     CancelToken token,
+    Options options,
   }) {
     if (Utils.isMocking) {
       Mock.getResourceBeans(1).then((value) {
@@ -214,10 +243,10 @@ class ApiService {
 
     ApiStrategy.getInstance().post(
       '/resource',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<ResourceBean> beans =
-        items.map((e) => ResourceBean.fromJson(e)).toList();
+            items.map((e) => ResourceBean.fromJson(e)).toList();
         success(beans[0]);
       },
       params: params,
@@ -225,6 +254,7 @@ class ApiService {
         error(errorMessage);
       },
       token: token,
+      options: options,
     );
   }
 
@@ -234,6 +264,7 @@ class ApiService {
     Function error,
     Map<String, dynamic> params,
     CancelToken token,
+    Options options,
   }) {
     if (Utils.isMocking) {
       Mock.getResourceBeans(1).then((value) {
@@ -245,10 +276,10 @@ class ApiService {
 
     ApiStrategy.getInstance().post(
       '/resource/star',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<ResourceBean> beans =
-        items.map((e) => ResourceBean.fromJson(e)).toList();
+            items.map((e) => ResourceBean.fromJson(e)).toList();
         success(beans[0]);
       },
       params: params,
@@ -256,6 +287,7 @@ class ApiService {
         error(errorMessage);
       },
       token: token,
+      options: options,
     );
   }
 
@@ -265,6 +297,7 @@ class ApiService {
     Function error,
     Map<String, dynamic> params,
     CancelToken token,
+    Options options,
   }) {
     if (Utils.isMocking) {
       Mock.getResourceBeans(1).then((value) {
@@ -276,10 +309,10 @@ class ApiService {
 
     ApiStrategy.getInstance().delete(
       '/resource/star',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<ResourceBean> beans =
-        items.map((e) => ResourceBean.fromJson(e)).toList();
+            items.map((e) => ResourceBean.fromJson(e)).toList();
         success(beans[0]);
       },
       params: params,
@@ -287,6 +320,7 @@ class ApiService {
         error(errorMessage);
       },
       token: token,
+      options: options,
     );
   }
 

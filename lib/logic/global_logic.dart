@@ -41,52 +41,41 @@ class GlobalLogic {
   }
 
   Future getResourceMediaType() async {
-    /// TODO: Change to database
-    final mediaTypeStr =
-        await SharedUtil.instance.getString(Keys.resourceTypeMap);
-    if (mediaTypeStr == null) return;
-    final allMap = json.decode(mediaTypeStr);
-    _model.resourceTypeMap = allMap["resource_type"];
-    _model.resourceTypeIdMap = allMap["resource_id"];
-    _model.mediaTypeMap = allMap["media_type"];
-    _model.mediaTypeIdMap = allMap["media_id"];
-    _model.resourceMediaMap = allMap["resource_media"];
-    generateLanguageMap();
+    final beans = await DBProvider.db.getAllTypes();
+    generateTypeMap(beans);
   }
 
   Future getResourceMediaTypeRemote() async {
     ApiService.instance.getResourceMediaType(
         success: (List<ResourceMediaBean> beans) async {
-      _model.resourceTypeMap.clear();
-      _model.resourceTypeIdMap.clear();
-      _model.mediaTypeMap.clear();
-      _model.mediaTypeIdMap.clear();
-      _model.resourceMediaMap.clear();
+          generateTypeMap(beans);
 
-      beans.forEach((e) {
-        _model.resourceTypeMap[e.resource_name] = e.resource_id;
-        _model.resourceTypeIdMap[e.resource_id] = e.resource_name;
-        _model.mediaTypeMap[e.media_name] = e.media_id;
-        _model.mediaTypeIdMap[e.media_id] = e.media_name;
-        if (_model.resourceMediaMap.containsKey(e.resource_name)) {
-          _model.resourceMediaMap[e.resource_name].add(e.media_name);
-        } else {
-          _model.resourceMediaMap[e.resource_name] = [e.media_name];
-        }
-      });
+          DBProvider.db.createTypes(beans);
+        },
+        error: (String errCode) {});
+  }
 
-      Map all = {
-        "resource_type": _model.resourceTypeMap,
-        "resource_id": _model.resourceTypeIdMap,
-        "media_type": _model.mediaTypeMap,
-        "media_id": _model.mediaTypeIdMap,
-        "resource_media": _model.resourceMediaMap,
-      };
+  void generateTypeMap(List<ResourceMediaBean> beans) {
+    print(beans);
+    _model.resourceTypeMap.clear();
+    _model.resourceTypeIdMap.clear();
+    _model.mediaTypeMap.clear();
+    _model.mediaTypeIdMap.clear();
+    _model.resourceMediaMap.clear();
 
-      generateLanguageMap();
-
-      DBProvider.db.createTypes(beans);
+    beans.forEach((e) {
+      _model.resourceTypeMap[e.resource_name] = e.resource_id;
+      _model.resourceTypeIdMap[e.resource_id] = e.resource_name;
+      _model.mediaTypeMap[e.media_name] = e.media_id;
+      _model.mediaTypeIdMap[e.media_id] = e.media_name;
+      if (_model.resourceMediaMap.containsKey(e.resource_name)) {
+        _model.resourceMediaMap[e.resource_name].add(e.media_name);
+      } else {
+        _model.resourceMediaMap[e.resource_name] = [e.media_name];
+      }
     });
+
+    generateLanguageMap();
   }
 
   generateLanguageMap() {
