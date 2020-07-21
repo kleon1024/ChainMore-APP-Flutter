@@ -48,7 +48,7 @@ class DomainView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.only(top: ScreenUtil().setWidth(10), left: ScreenUtil().setWidth(10)),
+              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(15)),
               child: Text(
                 tr("domain"),
                 style: Theme.of(context).textTheme.subtitle1,
@@ -66,7 +66,7 @@ class DomainView extends StatelessWidget {
               },
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
                   icon: Icon(Icons.add),

@@ -36,10 +36,13 @@ class ResourceCreationPageLogic {
           detectTitle();
           checkUrl();
         }
+      } else if (_model.urlExists == tr("error_network")) {
+        _model.lastUrl = value;
+        detectTitle();
+        checkUrl();
       }
     } else {
       _model.isUrlChecked = false;
-      _model.topResource = VEmptyView(0);
       if (value.isNotEmpty) {
         _model.urlExists = tr("url_illegal");
       }
@@ -71,7 +74,7 @@ class ResourceCreationPageLogic {
     if (!_model.isChecking) {
       _model.isUrlChecked = false;
       _model.isChecking = true;
-      _model.topResource = VEmptyView(0);
+      _model.bean = null;
       _model.refresh();
       ApiService().checkResourceUrlExists(
         params: {'url': _model.lastUrl},
@@ -82,30 +85,35 @@ class ResourceCreationPageLogic {
     }
   }
 
-  onCheckResourceUrlSuccess(List<ResourceBean> beans) {
+  onCheckResourceUrlSuccess(List<ResourceBean> beans) async {
     if (_model.uriEditingController.text.trim() != _model.lastUrl) {
       _model.isUrlChecked = false;
       _model.isChecking = false;
-      _model.topResource = VEmptyView(0);
       _model.urlExists = tr("url_not_checked");
       _model.refresh();
       return;
     }
 
     if (beans.isNotEmpty) {
+      final bean = beans[0];
+      bean.collected = false;
+      _model.bean = bean;
       _model.urlExists = tr("url_exists");
       _model.isUrlChecked = true;
-      _model.topResource = Row(children: [
-        Expanded(
-            child: ResourceCard(
-                bean: beans[0],
-                elevation: 0,
-                color: Theme.of(_model.context).canvasColor)),
-        IconButton(
-          icon: Icon(Icons.star_border),
-          onPressed: () {},
-        ),
-      ]);
+
+      ApiService.instance.checkCollectResource(
+        options: _model.globalModel.userDao.buildOptions(),
+        params: {'id':_model.bean.id},
+        success: (items) {
+          if (items.isEmpty) {
+            _model.bean.collected = false;
+          } else {
+            _model.bean.collected = true;
+          }
+
+          _model.refresh();
+        }
+      );
     } else {
       _model.isUrlChecked = true;
       _model.urlExists = "";
@@ -159,15 +167,19 @@ class ResourceCreationPageLogic {
   }
 
   void submitResource() {
+    final userId = _model.globalModel.userDao.id;
+
     final resource = ResourceBean(
         title: _model.titleEditingController.text.trim(),
         url: _model.uriEditingController.text.trim(),
+        author_id: userId,
         external: true,
         free: !_model.isPaid,
         resource_type_id: _model.selectedResourceTypeId,
         media_type_id: _model.selectedMediaTypeId);
 
-    Options options = _model.globalModel.userDao.buildOptions(_model.context);
+    final userDao = _model.globalModel.userDao;
+    Options options = userDao.buildOptions();
 
     ApiService.instance.createResource(
         token: _model.cancelToken,
@@ -180,15 +192,16 @@ class ResourceCreationPageLogic {
               success: (ResourceBean bean) {
                 bean.collected = true;
                 DBProvider.db.createResource(bean);
-                Utils.showToast(_model.context, tr("resource_created"));
                 onPostProcess();
+                Utils.showToast(_model.context, tr("resource_created"));
               },
               error: (err) {
                 remote.collected = true;
                 remote.dirty_collect = true;
                 DBProvider.db.createResource(remote);
-                Utils.showToast(_model.context, tr("resource_created_but_not_collected"));
                 onPostProcess();
+                Utils.showToast(
+                    _model.context, tr("resource_created_but_not_collected"));
               });
         },
         error: (err) {
@@ -196,13 +209,64 @@ class ResourceCreationPageLogic {
           resource.dirty_collect = true;
           resource.collected = true;
           DBProvider.db.createResource(resource);
-          Utils.showToast(_model.context, tr("resource_not_created"));
           onPostProcess();
+          Utils.showToast(_model.context, tr("resource_not_created"));
         });
   }
 
   onPostProcess() {
     _model.globalModel.resourceDao.initResources();
+    _model.uriEditingController.clear();
+    _model.titleEditingController.clear();
+    _model.isPaid = false;
+    _model.isLoading = false;
+    _model.isChecking = false;
+    _model.isUrlChecked = false;
+
+    _model.urlExists = "";
+    _model.lastUrl = "";
+
+    _model.selectedMediaTypeId = 1;
+    _model.selectedResourceTypeId = 1;
+
     Navigator.of(_model.context).pop();
+  }
+
+  onPressCollectButton() async {
+    if (!_model.bean.collected) {
+      ApiService.instance.collectResource(
+          options: _model.globalModel.userDao.buildOptions(),
+          params: {'id': _model.bean.id},
+          success: (remote) async {
+            remote.collected = true;
+            _model.bean = remote;
+            final locals = await DBProvider.db.getResources(
+                _model.bean.id);
+            if (locals.isEmpty) {
+              await DBProvider.db.createResource(remote);
+            } else {
+              await DBProvider.db.updateResource(remote);
+            }
+
+            _model.refresh();
+          }
+      );
+    } else {
+      ApiService.instance.unCollectResource(
+          options: _model.globalModel.userDao.buildOptions(),
+          params: {'id': _model.bean.id},
+          success: (remote) async {
+            remote.collected = false;
+            _model.bean = remote;
+            final locals = await DBProvider.db.getCreatedResources(
+                _model.bean.id);
+            if (locals.isNotEmpty) {
+              await DBProvider.db.updateResource(remote);
+            }
+
+            _model.refresh();
+          }
+      );
+    }
   }
 }

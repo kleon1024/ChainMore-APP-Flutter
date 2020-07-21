@@ -109,4 +109,12 @@ class Mock {
       ),
     ];
   }
+
+  static Future getAccessToken() async {
+    await Future.delayed(Duration(milliseconds: 10));
+    return {
+      "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUyNDQ4NjIsIm5iZiI6MTU5NTI0NDg2MiwianRpIjoiYWI1YTU5MjEtMDA2ZC00MmM0LTllNjEtOTcyNmZlYjRhN2ZkIiwiZXhwIjoxNjA1NjEyODYyLCJpZGVudGl0eSI6ImtsZW9uIiwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.NnBHekj3SHQgUmoJr5EbM8hxGDdjTzoKY2RqBWTS9fU",
+      "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUyNDQ4NjIsIm5iZiI6MTU5NTI0NDg2MiwianRpIjoiYzBkMzI3NWYtMTU3MS00MzZlLThkOTAtNTRhMTBiMjA4YjY3IiwiZXhwIjoxNjIxMTY0ODYyLCJpZGVudGl0eSI6ImtsZW9uIiwidHlwZSI6InJlZnJlc2gifQ.HtqxmEpIGUglLhl8lWoHTkVEe9HYz2JT1_VhknxLZ5k",
+    };
+  }
 }

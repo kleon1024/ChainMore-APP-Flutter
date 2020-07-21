@@ -16,9 +16,7 @@ DomainBean _$DomainBeanFromJson(Map<String, dynamic> json) {
     modify_time: json['modify_time'] as String,
     deleting: json['deleting'] as bool,
     deleted: json['deleted'] as bool,
-    local_id: json['local_id'] as int,
-    dirty: json['dirty'] as bool,
-    update_time: json['update_time'] as String,
+    dirty_mark: json['dirty_mark'] as bool,
     marked: json['marked'] as bool,
   );
 }
@@ -33,8 +31,6 @@ Map<String, dynamic> _$DomainBeanToJson(DomainBean instance) =>
       'modify_time': instance.modify_time,
       'deleting': instance.deleting,
       'deleted': instance.deleted,
-      'local_id': instance.local_id,
-      'dirty': instance.dirty,
-      'update_time': instance.update_time,
+      'dirty_mark': instance.dirty_mark,
       'marked': instance.marked,
     };

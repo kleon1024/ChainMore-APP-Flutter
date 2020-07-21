@@ -56,7 +56,6 @@ class GlobalLogic {
   }
 
   void generateTypeMap(List<ResourceMediaBean> beans) {
-    print(beans);
     _model.resourceTypeMap.clear();
     _model.resourceTypeIdMap.clear();
     _model.mediaTypeMap.clear();
@@ -79,6 +78,9 @@ class GlobalLogic {
   }
 
   generateLanguageMap() {
+    _model.resourceLanguageMap.clear();
+    _model.resourceMediaList.clear();
+
     _model.resourceTypeMap.forEach((key, value) {
       _model.resourceLanguageMap[tr(key)] = key;
     });

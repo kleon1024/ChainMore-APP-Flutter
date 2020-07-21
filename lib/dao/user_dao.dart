@@ -18,11 +18,11 @@ class UserDao extends ChangeNotifier {
 
   CancelToken cancelToken = CancelToken();
 
-  String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUxOTc0MjYsIm5iZiI6MTU5NTE5NzQyNiwianRpIjoiZjk5YTliMWQtMzQzMC00Mjc1LTk3ODgtMGIxMjY1YmE1Y2M2IiwiZXhwIjoxNTk1MjA0NjI2LCJpZGVudGl0eSI6ImtsZW9uIiwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.gI3fyXMNz4zpNKWO1TjeFrlwjHmpuuOTdwl_-y9m8v4";
+  String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUyNDQ4NjIsIm5iZiI6MTU5NTI0NDg2MiwianRpIjoiYWI1YTU5MjEtMDA2ZC00MmM0LTllNjEtOTcyNmZlYjRhN2ZkIiwiZXhwIjoxNjA1NjEyODYyLCJpZGVudGl0eSI6ImtsZW9uIiwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.NnBHekj3SHQgUmoJr5EbM8hxGDdjTzoKY2RqBWTS9fU";
   String refreshToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUxOTc0MjYsIm5iZiI6MTU5NTE5NzQyNiwianRpIjoiNDcyZTA1YjYtMzMyYS00NDliLTgzNTEtNzJjOWVmNDQwMmEzIiwiZXhwIjoxNTk3Nzg5NDI2LCJpZGVudGl0eSI6ImtsZW9uIiwidHlwZSI6InJlZnJlc2gifQ.6TzZYLWPn4LQm5ITERVrNH4k9b0xSdkFCpNm2FmLHio";
 
   bool isLoggedIn = false;
-
+  int id = 1;
 
   void setContext(BuildContext context, {GlobalModel globalModel}) {
     if (this.context == null) {
@@ -30,16 +30,41 @@ class UserDao extends ChangeNotifier {
       this.context = context;
       this._globalModel = globalModel;
       this.isLoggedIn = true;
-//      Future.wait([
-//
-//      ]).then((value) {
-//        refresh();
-//      });
+      Future.wait([
+
+      ]).then((value) {
+        _globalModel.resourceDao.syncResources();
+        refresh();
+      });
 
     }
   }
 
-  Options buildOptions(BuildContext context) {
+  void refreshAccessToken() {
+    if (this.isLoggedIn) {
+      Options options = Options(
+          headers: {"Authorization": "Bearer " + refreshToken}
+      );
+
+      ApiService.instance.refreshAccessToken(
+          options: options,
+          success: (data) {
+            this.accessToken = data["access_token"];
+            this.refreshToken = data["refresh_token"];
+          },
+          error: (err) {
+
+          },
+          failed: () {
+
+          }
+      );
+    } else {
+      /// TODO: push to login page
+    }
+  }
+
+  Options buildOptions() {
     if(this.isLoggedIn) {
       Options options = Options(
           headers: {"Authorization": "Bearer " + accessToken});

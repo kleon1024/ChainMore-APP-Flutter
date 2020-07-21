@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/json/resource_media_bean.dart';
 import 'package:chainmore/mock.dart';
+import 'package:chainmore/models/domain.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -54,9 +56,7 @@ class ApiService {
         success(beans);
       },
       params: params,
-      errorCallBack: (errorMessage) {
-        error(errorMessage);
-      },
+      errorCallBack: error,
       token: token,
       options: options,
     );
@@ -85,9 +85,7 @@ class ApiService {
         success(beans);
       },
       params: params,
-      errorCallBack: (errorMessage) {
-        error(errorMessage);
-      },
+      errorCallBack: error,
       token: token,
       options: options,
     );
@@ -110,7 +108,7 @@ class ApiService {
     }
 
     ApiStrategy.getInstance().get(
-      '/resource/collected',
+      '/resource/stared',
       (data) {
         final List items = data["items"];
         final List<ResourceBean> beans =
@@ -118,9 +116,38 @@ class ApiService {
         success(beans);
       },
       params: params,
-      errorCallBack: (errorMessage) {
-        error(errorMessage);
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+  void getMarkedDomains({
+    Function(List<DomainBean>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getDomainBeans(3).then((value) {
+        success(value);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/domain/marked',
+          (data) {
+        final List items = data["items"];
+        final List<DomainBean> beans =
+        items.map((e) => DomainBean.fromJson(e)).toList();
+        success(beans);
       },
+      params: params,
+      errorCallBack: error,
       token: token,
       options: options,
     );
@@ -151,9 +178,38 @@ class ApiService {
         success(beans);
       },
       params: params,
-      errorCallBack: (errorMessage) {
-        error(errorMessage);
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+  void getCreatedDomains({
+    Function(List<DomainBean>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getDomainBeans(3).then((value) {
+        success(value);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/domain/created',
+          (data) {
+        final List items = data["items"];
+        final List<DomainBean> beans =
+        items.map((e) => DomainBean.fromJson(e)).toList();
+        success(beans);
       },
+      params: params,
+      errorCallBack: error,
       token: token,
       options: options,
     );
@@ -184,9 +240,38 @@ class ApiService {
         success(beans[0]);
       },
       params: params,
-      errorCallBack: (errorMessage) {
-        error(errorMessage);
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+  void getDomain({
+    Function(DomainBean) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getDomainBeans(1).then((value) {
+        success(value[0]);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/domain',
+          (data) {
+        final List items = data["items"];
+        final List<DomainBean> beans =
+        items.map((e) => DomainBean.fromJson(e)).toList();
+        success(beans[0]);
       },
+      params: params,
+      errorCallBack: error,
       token: token,
       options: options,
     );
@@ -217,9 +302,7 @@ class ApiService {
         success(beans[0]);
       },
       params: params,
-      errorCallBack: (errorMessage) {
-        error(errorMessage);
-      },
+      errorCallBack: error,
       token: token,
       options: options,
     );
@@ -250,9 +333,7 @@ class ApiService {
         success(beans[0]);
       },
       params: params,
-      errorCallBack: (errorMessage) {
-        error(errorMessage);
-      },
+      errorCallBack: error,
       token: token,
       options: options,
     );
@@ -283,9 +364,7 @@ class ApiService {
         success(beans[0]);
       },
       params: params,
-      errorCallBack: (errorMessage) {
-        error(errorMessage);
-      },
+      errorCallBack: error,
       token: token,
       options: options,
     );
@@ -316,9 +395,161 @@ class ApiService {
         success(beans[0]);
       },
       params: params,
-      errorCallBack: (errorMessage) {
-        error(errorMessage);
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+  void checkCollectResource({
+    Function(List<ResourceBean>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getResourceBeans(1).then((value) {
+        success(value);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/resource/star',
+          (data) {
+        final List items = data["items"];
+        final List<ResourceBean> beans =
+        items.map((e) => ResourceBean.fromJson(e)).toList();
+        success(beans);
       },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+
+  void markDomain({
+    Function(DomainBean) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getDomainBeans(1).then((value) {
+        success(value[0]);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().post(
+      '/domain/mark',
+          (data) {
+        final List items = data["items"];
+        final List<DomainBean> beans =
+        items.map((e) => DomainBean.fromJson(e)).toList();
+        success(beans[0]);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+  void unMarkDomain({
+    Function(DomainBean) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getDomainBeans(1).then((value) {
+        success(value[0]);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().delete(
+      '/domain/mark',
+          (data) {
+        final List items = data["items"];
+        final List<DomainBean> beans =
+        items.map((e) => DomainBean.fromJson(e)).toList();
+        success(beans[0]);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+  void checkMarkDomain({
+    Function(List<DomainBean>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getDomainBeans(1).then((value) {
+        success(value);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/domain/mark',
+          (data) {
+        final List items = data["items"];
+        final List<DomainBean> beans =
+        items.map((e) => DomainBean.fromJson(e)).toList();
+        success(beans);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+
+  void refreshAccessToken({
+    Function(Map<String, String>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getAccessToken().then((data) {
+        success(data);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().delete(
+      '/auth/refresh',
+          (data) {
+        success(data);
+      },
+      params: params,
+      errorCallBack: error,
       token: token,
       options: options,
     );

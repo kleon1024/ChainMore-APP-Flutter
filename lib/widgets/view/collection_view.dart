@@ -46,7 +46,7 @@ class CollectionView extends StatelessWidget {
           children: [
             Container(
 //              alignment: Alignment.bottomRight,
-              padding: EdgeInsets.only(top: ScreenUtil().setWidth(10), left: ScreenUtil().setWidth(10)),
+              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(15)),
               child: Text(
                 tr("collection"),
                 style: Theme.of(context).textTheme.subtitle1,
@@ -64,7 +64,7 @@ class CollectionView extends StatelessWidget {
               },
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
                   icon: Icon(Icons.add),

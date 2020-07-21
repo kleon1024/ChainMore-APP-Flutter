@@ -6,6 +6,7 @@ import 'package:chainmore/page/main/resource_management_page.dart';
 import 'package:chainmore/widgets/animation/custom_slidable.dart';
 import 'package:chainmore/widgets/cards/resource_card.dart';
 import 'package:chainmore/widgets/separator.dart';
+import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class ResourceView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.only(top: ScreenUtil().setWidth(10), left: ScreenUtil().setWidth(10)),
+              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(15)),
               child: Text(
                 tr("resource"),
                 style: Theme.of(context).textTheme.subtitle1,
@@ -57,7 +58,7 @@ class ResourceView extends StatelessWidget {
               },
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
                   icon: Icon(Icons.add),

@@ -32,12 +32,22 @@ class MyApp extends StatefulWidget {
   State<StatefulWidget> createState() => MyAppState();
 
 }
-class MyAppState extends State<MyApp> {
-
+class MyAppState extends State<MyApp> with WidgetsBindingObserver{
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    debugPrint("****************Resume*******************");
+    debugPrint(state.toString());
+
+    // OnResumed
+    if (state == AppLifecycleState.resumed) {
+      Utils.checkClipBoard(context: context);
+    }
   }
 
   // This widget is the root of your application.

@@ -14,9 +14,7 @@ class DomainBean {
   bool    deleted;
 
   /// Local Columns
-  int     local_id;
-  bool    dirty;
-  String  update_time;
+  bool    dirty_mark;
   bool    marked;
 
   DomainBean({
@@ -26,12 +24,10 @@ class DomainBean {
     this.creator_id,
     this.create_time,
     this.modify_time,
-    this.deleting,
-    this.deleted,
-    this.local_id,
-    this.dirty,
-    this.update_time,
-    this.marked,
+    this.deleting = false,
+    this.deleted = false,
+    this.dirty_mark = false,
+    this.marked = false,
   });
 
   factory DomainBean.fromJson(Map<String, dynamic> json) => _$DomainBeanFromJson(json);

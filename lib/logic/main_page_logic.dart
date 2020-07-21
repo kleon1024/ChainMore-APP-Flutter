@@ -21,12 +21,25 @@ class MainPageLogic {
     final model = Provider.of<ResourceCreationPageModel>(_model.context);
 
     _model.intentDataStreamSubscription = ReceiveSharingIntent.getTextStream()
-        .listen((String value) {}, onError: (err) {
+        .listen((String value) {
+      ReceiveSharingIntent.reset();
+      debugPrint("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+      debugPrint(value);
+      if (value != null && value != "" && value.startsWith('http')) {
+        model.logic.setInitUrl(value);
+        model.logic.onSubmit();
+        Navigator.of(_model.context).push(CupertinoPageRoute(builder: (ctx) {
+          return ResourceCreationPage();
+        }));
+      }
+    }, onError: (err) {
       debugPrint(err.toString());
     });
 
     ReceiveSharingIntent.getInitialText().then((String value) {
       ReceiveSharingIntent.reset();
+      debugPrint("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+      debugPrint(value);
       if (value != null && value != "" && value.startsWith('http')) {
         model.logic.setInitUrl(value);
         model.logic.onSubmit();
@@ -35,5 +48,6 @@ class MainPageLogic {
         }));
       }
     });
+
   }
 }

@@ -1,4 +1,5 @@
 import 'package:chainmore/config/api_service.dart';
+import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/logic/resource_creation_page_logic.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/widgets/h_empty_view.dart';
@@ -30,6 +31,8 @@ class ResourceCreationPageModel extends ChangeNotifier {
   final cancelToken = CancelToken();
 
   Widget topResource = VEmptyView(0);
+
+  ResourceBean bean;
 
   bool isPaid = false;
   bool isLoading = false;

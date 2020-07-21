@@ -10,6 +10,7 @@
   "share": "Share",
   "more": "More",
   "create": "Create",
+  "recheck": "Recheck",
   "post": "Post",
   "link": "Link",
   "title": "Title",
@@ -49,7 +50,11 @@
   "minute": " Minute",
   "just_now": "Just Now",
   "url_exists": "Url already exists",
+  "url_not_checked": "Url not checked",
+  "url_illegal": "Illegal url",
   "introduction": "Intro",
   "search_history": "Search History",
-  "confirm_to_clear_search_history": "Clear all search history?"
+  "confirm_to_clear_search_history": "Clear all search history?",
+  "error_network": "Network error",
+  "resource_created": "Successfully created and collected resource"
 }

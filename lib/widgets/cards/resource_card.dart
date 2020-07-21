@@ -38,8 +38,9 @@ class ResourceCard extends StatelessWidget {
           },
       onLongPress: onLongPress,
       child: Container(
-//        height: ScreenUtil().setHeight(200),
+        width: double.infinity,
         child: Card(
+          margin: EdgeInsets.zero,
           color: color ?? Theme.of(context).cardColor,
           elevation: elevation,
           child: Padding(

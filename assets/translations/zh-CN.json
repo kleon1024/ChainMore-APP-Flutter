@@ -10,6 +10,7 @@
   "share": "分享",
   "more": "更多",
   "create": "创建",
+  "recheck": "重新检查",
   "post": "发表",
   "link": "链接",
   "title": "标题",
@@ -49,7 +50,11 @@
   "minute": "分钟",
   "just_now": "刚刚",
   "url_exists": "链接已存在",
+  "url_not_checked": "链接未检查",
+  "url_illegal": "链接不合法",
   "introduction": "简介",
   "search_history": "搜索历史",
-  "confirm_to_clear_search_history": "清除所有搜索历史？"
+  "confirm_to_clear_search_history": "清除所有搜索历史？",
+  "error_network": "网络错误",
+  "resource_created": "成功创建并收藏资源"
 }

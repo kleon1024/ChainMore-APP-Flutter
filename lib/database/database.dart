@@ -56,11 +56,13 @@ class DBProvider {
             "id INTEGER PRIMARY KEY,"
             "title TEXT,"
             "intro TEXT,"
-            "deleting BOOLEAN,"
-            "deleted BOOLEAN,"
+            "creator_id INTEGER,"
             "create_time TEXT,"
             "modify_time TEXT,"
-            "creator_id INTEGER"
+            "deleting BOOLEAN DEFAULT false,"
+            "deleted BOOLEAN DEFAULT false,"
+            "mark_dirty BOOLEAN DEFAULT false,"
+            "marked BOOLEAN DEFAULT false"
             ");");
 
         await db.execute("CREATE TABLE type ("
@@ -80,25 +82,31 @@ class DBProvider {
 
   Future<List<ResourceBean>> getCollectedResources() async {
     final db = await database;
-    var list = await db.query("resource", where: "collected = ?", whereArgs: [1]);
+    var list = await db.query("resource", orderBy: "modify_time DESC", where: "collected = ?", whereArgs: [1]);
     return list.map((e) => ResourceBean.fromJson(Utils.sqlIntToBool(e, ResourceBean()))).toList();
   }
 
   Future<List<ResourceBean>> getAllResources() async {
     final db = await database;
-    var list = await db.query("resource");
+    var list = await db.query("resource", orderBy: "modify_time DESC");
     return list.map((e) => ResourceBean.fromJson(Utils.sqlIntToBool(e, ResourceBean()))).toList();
   }
 
   Future<List<ResourceBean>> getCreatedResources(int id) async {
     final db = await database;
     var list = await db.query("resource", where: "author_id = ?", whereArgs: [id]);
-    return list.map((e) => ResourceBean.fromJson(e)).toList();
+    return list.map((e) => ResourceBean.fromJson(Utils.sqlIntToBool(e, ResourceBean()))).toList();
+  }
+
+  Future<List<ResourceBean>> getResources(int id) async {
+    final db = await database;
+    var list = await db.query("resource", where: "id = ?", whereArgs: [id]);
+    return list.map((e) => ResourceBean.fromJson(Utils.sqlIntToBool(e, ResourceBean()))).toList();
   }
 
   Future updateResource(ResourceBean bean) async {
     final db = await database;
-    await db.update("resource", bean.toJson(), where: "id = ?", whereArgs: [bean.id]);
+    await db.update("resource", Utils.sqlBoolToInt(bean.toJson()), where: "id = ?", whereArgs: [bean.id]);
     debugPrint("Update Resource:${bean.toJson()}");
   }
 
@@ -106,7 +114,7 @@ class DBProvider {
     final db = await database;
     final batch = db.batch();
     beans.forEach((bean) {
-      batch.update("resource", bean.toJson(), where: "id = ?", whereArgs: [bean.id]);
+      batch.update("resource", Utils.sqlBoolToInt(bean.toJson()), where: "id = ?", whereArgs: [bean.id]);
     });
     final results = await batch.commit();
     debugPrint("Update Resources$results");
@@ -114,7 +122,7 @@ class DBProvider {
 
   Future createResource(ResourceBean bean) async {
     final db = await database;
-    await db.insert("resource", bean.toJson());
+    await db.insert("resource", Utils.sqlBoolToInt(bean.toJson()));
     debugPrint("Update Resource:${bean.toJson()}");
   }
 
@@ -122,15 +130,10 @@ class DBProvider {
     final db = await database;
     final batch = db.batch();
     beans.forEach((bean) {
-      batch.insert("resource", bean.toJson());
+      batch.insert("resource", Utils.sqlBoolToInt(bean.toJson()));
     });
     final results = await batch.commit();
-    debugPrint("Update Resources$results");
-  }
-  
-  Future removeResource(ResourceBean bean) async {
-    final db = await database;
-    await db.delete("resource", where: "id = ?", whereArgs: [bean.id]);
+    debugPrint("Create Resources$results");
   }
 
   Future removeResources(List<ResourceBean> beans) async {
@@ -142,22 +145,80 @@ class DBProvider {
     await batch.commit();
   }
 
+  Future removeResource(ResourceBean bean) async {
+    final db = await database;
+    await db.delete("resource", where: "id = ?", whereArgs: [bean.id]);
+  }
+
   Future<List<CollectionBean>> getAllCollections() async {
     final db = await database;
     var list = await db.query("collection");
-    return list.map((e) => CollectionBean.fromJson(e)).toList();
+    return list.map((e) => CollectionBean.fromJson(Utils.sqlIntToBool(e, DomainBean()))).toList();
   }
 
   Future<List<DomainBean>> getAllDomains() async {
     final db = await database;
     var list = await db.query("domain");
-    return list.map((e) => DomainBean.fromJson(e)).toList();
+    return list.map((e) => DomainBean.fromJson(Utils.sqlIntToBool(e, DomainBean()))).toList();
+  }
+
+  Future<List<DomainBean>> getMarkedDomains() async {
+    final db = await database;
+    var list = await db.query("domain", where: "marked = ?");
+    return list.map((e) => DomainBean.fromJson(Utils.sqlIntToBool(e, DomainBean()))).toList();
   }
 
   Future<List<ResourceMediaBean>> getAllTypes() async {
     final db = await database;
     var list = await db.query("type");
     return list.map((e) => ResourceMediaBean.fromJson(e)).toList();
+  }
+
+  Future createDomains(List<DomainBean> beans) async {
+    final db = await database;
+    final batch = db.batch();
+    beans.forEach((bean) {
+      batch.insert("domain", Utils.sqlBoolToInt(bean.toJson()));
+    });
+    final results = await batch.commit();
+    debugPrint("Create Domains$results");
+  }
+
+  Future createDomain(DomainBean bean) async {
+    final db = await database;
+    await db.insert("domain", Utils.sqlBoolToInt(bean.toJson()));
+    debugPrint("Update Domain:${bean.toJson()}");
+  }
+
+  Future updateDomains(List<DomainBean> beans) async {
+    final db = await database;
+    final batch = db.batch();
+    beans.forEach((bean) {
+      batch.update("domain", Utils.sqlBoolToInt(bean.toJson()), where: "id = ?", whereArgs: [bean.id]);
+    });
+    final results = await batch.commit();
+    debugPrint("Update Domains$results");
+  }
+
+  Future updateDomain(DomainBean bean) async {
+    final db = await database;
+    await db.update("domain", Utils.sqlBoolToInt(bean.toJson()), where: "id = ?", whereArgs: [bean.id]);
+    debugPrint("Update Domain:${bean.toJson()}");
+  }
+
+
+  Future removeDomains(List<DomainBean> beans) async {
+    final db = await database;
+    final batch = db.batch();
+    beans.forEach((bean) {
+      batch.delete("domain", where: "id = ?", whereArgs: [bean.id]);
+    });
+    await batch.commit();
+  }
+
+  Future removeDomain(DomainBean bean) async {
+    final db = await database;
+    await db.delete("domain", where: "id = ?", whereArgs: [bean.id]);
   }
 
   Future createTypes(List<ResourceMediaBean> beans) async {
@@ -167,7 +228,7 @@ class DBProvider {
 
     final batch = db.batch();
     for (var bean in beans) {
-      batch.insert("type", bean.toJson());
+      batch.insert("type", Utils.sqlBoolToInt(bean.toJson()));
     }
 
     final results = await batch.commit();

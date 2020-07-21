@@ -211,14 +211,14 @@ class ApiStrategy {
       } else if (method == DELETE) {
         options.method = "DELETE";
         if (params != null && params.isNotEmpty) {
-          response = await _client.get(
+          response = await _client.delete(
             url,
             queryParameters: params,
             cancelToken: token,
             options: options,
           );
         } else {
-          response = await _client.get(
+          response = await _client.delete(
             url,
             cancelToken: token,
             options: options,

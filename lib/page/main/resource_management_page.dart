@@ -1,5 +1,6 @@
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/json/resource_bean.dart';
+import 'package:chainmore/page/main/resource_creation_page.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/params.dart';
 import 'package:chainmore/widgets/animation/custom_slidable.dart';
@@ -26,22 +27,25 @@ class ResourceManagementPage extends StatelessWidget {
               style: Theme.of(context).textTheme.subtitle1),
           centerTitle: true,
           actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.filter_list,
-                size: Theme.of(context).iconTheme.size,
-              ),
-              onPressed: () {
-//              _onSelectClassifier();
-              },
-            ),
+//            IconButton(
+//              icon: Icon(
+//                Icons.filter_list,
+//                size: Theme.of(context).iconTheme.size,
+//              ),
+//              onPressed: () {
+////              _onSelectClassifier();
+//              },
+//            ),
             IconButton(
               icon: Icon(
                 Icons.add,
                 size: Theme.of(context).iconTheme.size,
               ),
               onPressed: () {
-                NavigatorUtil.goSearchPage(context);
+                Navigator.of(context)
+                    .push(CupertinoPageRoute(builder: (ctx) {
+                  return ResourceCreationPage();
+                }));
               },
             ),
           ],
@@ -55,12 +59,15 @@ class ResourceManagementPage extends StatelessWidget {
             SliverAnimatedList(
               initialItemCount: resources.length,
               itemBuilder: (context, index, animation) {
-                return CustomSlidable(
-                  onDismissed: () {},
-                  child: ResourceCard(
-                    bean: resources[index],
-                    horizontalPadding: ScreenUtil().setWidth(30),
-                    verticalPadding: ScreenUtil().setHeight(15),
+                return Container(
+                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(10), horizontal: ScreenUtil().setWidth(15)),
+                  child: CustomSlidable(
+                    onDismissed: () {},
+                    child: ResourceCard(
+                      bean: resources[index],
+                      horizontalPadding: ScreenUtil().setWidth(30),
+                      verticalPadding: ScreenUtil().setHeight(15),
+                    ),
                   ),
                 );
               },
