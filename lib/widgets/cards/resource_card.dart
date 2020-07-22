@@ -20,7 +20,7 @@ class ResourceCard extends StatelessWidget {
     this.onLongPress,
     this.onTap,
     this.elevation,
-    this.verticalPadding = 0.0,
+    this.verticalPadding = 5.0,
     this.horizontalPadding = 0.0,
     this.color,
   })  : assert(bean != null),

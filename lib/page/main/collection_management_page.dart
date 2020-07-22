@@ -2,6 +2,7 @@ import 'package:chainmore/dao/collection_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
+import 'package:chainmore/page/main/collection_creation_page.dart';
 import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/params.dart';
 import 'package:chainmore/widgets/cards/collection_card.dart';
@@ -42,7 +43,10 @@ class CollectionManagementPage extends StatelessWidget {
                 size: Theme.of(context).iconTheme.size,
               ),
               onPressed: () {
-                NavigatorUtil.goSearchPage(context);
+                Navigator.of(context)
+                    .push(CupertinoPageRoute(builder: (ctx) {
+                  return CollectionCreationPage();
+                }));
               },
             ),
           ],
@@ -56,10 +60,15 @@ class CollectionManagementPage extends StatelessWidget {
             SliverAnimatedList(
               initialItemCount: resources.length,
               itemBuilder: (context, index, animation) {
-                return CollectionCard(
-                  bean: resources[index],
-                  horizontalPadding: ScreenUtil().setWidth(30),
-                  verticalPadding: ScreenUtil().setHeight(15),
+                return Container(
+                  padding: EdgeInsets.symmetric(
+                      vertical: ScreenUtil().setHeight(10),
+                      horizontal: ScreenUtil().setWidth(15)),
+                  child: CollectionCard(
+                    bean: resources[index],
+                    horizontalPadding: ScreenUtil().setWidth(30),
+                    verticalPadding: ScreenUtil().setHeight(15),
+                  ),
                 );
               },
             )

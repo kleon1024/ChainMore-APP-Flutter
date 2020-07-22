@@ -555,4 +555,41 @@ class ApiService {
     );
   }
 
+  void createDomain({
+    Function(DomainBean) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getDomainBeans(1).then((value) {
+        success(value);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().post(
+      '/domain',
+          (data) {
+        final List items = data["items"];
+        final List<DomainBean> beans =
+        items.map((e) => DomainBean.fromJson(e)).toList();
+        if (beans.length == 1) {
+          success(beans[0]);
+        } else {
+          if (failed != null) {
+            failed(beans);
+          }
+        }
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
 }

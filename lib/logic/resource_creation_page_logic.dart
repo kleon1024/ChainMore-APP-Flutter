@@ -94,6 +94,8 @@ class ResourceCreationPageLogic {
       return;
     }
 
+    final options = await _model.globalModel.userDao.buildOptions();
+
     if (beans.isNotEmpty) {
       final bean = beans[0];
       bean.collected = false;
@@ -102,7 +104,7 @@ class ResourceCreationPageLogic {
       _model.isUrlChecked = true;
 
       ApiService.instance.checkCollectResource(
-        options: _model.globalModel.userDao.buildOptions(),
+        options: options,
         params: {'id':_model.bean.id},
         success: (items) {
           if (items.isEmpty) {
@@ -157,16 +159,17 @@ class ResourceCreationPageLogic {
   }
 
   createResource() async {
+    /// TODO: Make it more clear
     if (!_model.isUrlChecked) {
       if (_model.urlExists == tr("url_not_checked")) {
         onSubmit();
       }
     }
 
-    submitResource();
+    await submitResource();
   }
 
-  void submitResource() {
+  Future submitResource() async {
     final userId = _model.globalModel.userDao.id;
 
     final resource = ResourceBean(
@@ -178,8 +181,7 @@ class ResourceCreationPageLogic {
         resource_type_id: _model.selectedResourceTypeId,
         media_type_id: _model.selectedMediaTypeId);
 
-    final userDao = _model.globalModel.userDao;
-    Options options = userDao.buildOptions();
+    final options = await _model.globalModel.userDao.buildOptions();
 
     ApiService.instance.createResource(
         token: _model.cancelToken,
@@ -233,9 +235,11 @@ class ResourceCreationPageLogic {
   }
 
   onPressCollectButton() async {
+    final options = await _model.globalModel.userDao.buildOptions();
+
     if (!_model.bean.collected) {
       ApiService.instance.collectResource(
-          options: _model.globalModel.userDao.buildOptions(),
+          options: options,
           params: {'id': _model.bean.id},
           success: (remote) async {
             remote.collected = true;
@@ -253,7 +257,7 @@ class ResourceCreationPageLogic {
       );
     } else {
       ApiService.instance.unCollectResource(
-          options: _model.globalModel.userDao.buildOptions(),
+          options: options,
           params: {'id': _model.bean.id},
           success: (remote) async {
             remote.collected = false;

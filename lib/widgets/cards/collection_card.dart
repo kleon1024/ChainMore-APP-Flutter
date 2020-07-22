@@ -12,14 +12,16 @@ class CollectionCard extends StatelessWidget {
   final double horizontalPadding;
   final double elevation;
   final void Function() onLongPress;
+  final Color color;
 
   CollectionCard({
     Key key,
     this.elevation,
     this.bean,
-    this.verticalPadding = 0.0,
+    this.verticalPadding = 5.0,
     this.horizontalPadding = 0.0,
     this.onLongPress,
+    this.color,
   })  : assert(bean != null),
         super(key: key);
 
@@ -32,6 +34,8 @@ class CollectionCard extends StatelessWidget {
       onLongPress: onLongPress,
       child: Container(
         child: Card(
+          margin: EdgeInsets.zero,
+          color: color ?? Theme.of(context).cardColor,
           elevation: elevation,
           child: Padding(
             padding: EdgeInsets.symmetric(

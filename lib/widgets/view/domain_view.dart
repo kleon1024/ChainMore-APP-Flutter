@@ -15,6 +15,7 @@ import 'package:chainmore/widgets/cards/collection_card.dart';
 import 'package:chainmore/widgets/cards/domain_card.dart';
 import 'package:chainmore/widgets/cards/resource_card.dart';
 import 'package:chainmore/widgets/separator.dart';
+import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -48,11 +49,41 @@ class DomainView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(15)),
-              child: Text(
-                tr("domain"),
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
+              padding:
+                  EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(15)),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      tr("domain"),
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(
+                          visualDensity: VisualDensity.compact,
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .push(CupertinoPageRoute(builder: (ctx) {
+                              return DomainCreationPage();
+                            }));
+                          },
+                        ),
+                        IconButton(
+                          visualDensity: VisualDensity.compact,
+                          icon: Icon(Icons.menu),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .push(CupertinoPageRoute(builder: (ctx) {
+                              return DomainManagementPage();
+                            }));
+                          },
+                        )
+                      ],
+                    )
+                  ]),
             ),
             ListView.separated(
               physics: NeverScrollableScrollPhysics(),
@@ -65,29 +96,7 @@ class DomainView extends StatelessWidget {
                 return Separator();
               },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(CupertinoPageRoute(builder: (ctx) {
-                      return DomainCreationPage();
-                    }));
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.clear_all),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(CupertinoPageRoute(builder: (ctx) {
-                      return DomainManagementPage();
-                    }));
-                  },
-                )
-              ],
-            )
+            VEmptyView(30),
           ],
         ),
       ),

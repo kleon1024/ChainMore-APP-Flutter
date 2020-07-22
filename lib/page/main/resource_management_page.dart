@@ -16,7 +16,7 @@ class ResourceManagementPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ResourceDao dao = Provider.of<ResourceDao>(context);
 
-    final List<ResourceBean> resources = dao.getAllResources();
+    final List<ResourceBean> resources = dao.getCollectedResources();
 
     return Scaffold(
       appBar: PreferredSize(

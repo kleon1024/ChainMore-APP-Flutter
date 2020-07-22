@@ -34,8 +34,8 @@ class ResourceDao extends ChangeNotifier {
     }
   }
 
-  syncResources() {
-    updateCreatedResources();
+  syncResources() async {
+    await updateCreatedResources();
   }
 
   @override
@@ -64,13 +64,13 @@ class ResourceDao extends ChangeNotifier {
     debugPrint("Resource Bean Inited");
   }
 
-  getAllResources() {
+  getCollectedResources() {
     return resources;
   }
 
   updateCollectedResources() async {
+    final options = await _globalModel.userDao.buildOptions();
     final userId = _globalModel.userDao.id;
-    final options = _globalModel.userDao.buildOptions();
 
     ApiService.instance.getCollectedResources(
         options: options,
@@ -179,9 +179,10 @@ class ResourceDao extends ChangeNotifier {
         });
   }
 
-  updateCreatedResources() {
+  updateCreatedResources() async {
+
+    final options = await _globalModel.userDao.buildOptions();
     final userId = _globalModel.userDao.id;
-    final options = _globalModel.userDao.buildOptions();
 
     ApiService.instance.getCreatedResources(
         options: options,
@@ -262,10 +263,8 @@ class ResourceDao extends ChangeNotifier {
                 });
           });
 
-          updateCollectedResources();
+          await updateCollectedResources();
         });
-
-
   }
 
   updateAllResources() async {

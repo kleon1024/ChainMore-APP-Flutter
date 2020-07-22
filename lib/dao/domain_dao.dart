@@ -58,10 +58,11 @@ class DomainDao extends ChangeNotifier {
     if (rawDomains == null) return;
     domains.clear();
     domains.addAll(rawDomains);
+    refresh();
     debugPrint("Domain Bean Inited");
   }
 
-  getAllDomains() {
+  getMarkedDomains() {
     return domains;
   }
 
@@ -71,7 +72,7 @@ class DomainDao extends ChangeNotifier {
 
   updateMarkedDomain() async {
     final userId = _globalModel.userDao.id;
-    final options = _globalModel.userDao.buildOptions();
+    final options = await _globalModel.userDao.buildOptions();
 
     ApiService.instance.getMarkedDomains(
         options: options,
@@ -88,6 +89,7 @@ class DomainDao extends ChangeNotifier {
           List<DomainBean> remoteUnmarks = [];
           List<DomainBean> remoteCollects = [];
           beans.forEach((remote) {
+            debugPrint(remote.toJson().toString());
             if (domainMap.containsKey(remote.id)) {
               final local = domainMap[remote.id];
 

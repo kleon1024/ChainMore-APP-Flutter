@@ -49,7 +49,7 @@ class CollectionCreationPageLogic {
   }
 
   List<ResourceBean> getResources() {
-    return _model.globalModel.resourceDao.getAllResources();
+    return _model.globalModel.resourceDao.getCollectedResources();
   }
 
   removeRefResourceAt(index) {

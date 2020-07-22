@@ -1,3 +1,4 @@
+import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/logic/collection_creation_page_logic.dart';
 import 'package:chainmore/logic/domain_creation_page_logic.dart';
@@ -24,18 +25,11 @@ class DomainCreationPageModel extends ChangeNotifier {
   final FocusNode introFocusNode = FocusNode();
   double padding;
 
-  final List<ResourceBean> resources = [];
+  final List<DomainBean> depDomains = [];
+  final List<DomainBean> aggDomains = [];
 
   final int maxTitleLength = 24;
   final int maxIntroLength = 56;
-
-  bool isPaid = false;
-  bool isLoading = false;
-
-  String lastUrl = "";
-
-  int selectedMediaTypeId = 1;
-  int selectedCollectionTypeId = 1;
 
   void setContext(BuildContext context, {GlobalModel globalModel}) {
     if (this.context == null) {

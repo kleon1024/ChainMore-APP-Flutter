@@ -61,7 +61,7 @@ class DBProvider {
             "modify_time TEXT,"
             "deleting BOOLEAN DEFAULT false,"
             "deleted BOOLEAN DEFAULT false,"
-            "mark_dirty BOOLEAN DEFAULT false,"
+            "dirty_mark BOOLEAN DEFAULT false,"
             "marked BOOLEAN DEFAULT false"
             ");");
 
@@ -164,7 +164,7 @@ class DBProvider {
 
   Future<List<DomainBean>> getMarkedDomains() async {
     final db = await database;
-    var list = await db.query("domain", where: "marked = ?");
+    var list = await db.query("domain", where: "marked = ?", whereArgs: [1]);
     return list.map((e) => DomainBean.fromJson(Utils.sqlIntToBool(e, DomainBean()))).toList();
   }
 

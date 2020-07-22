@@ -33,7 +33,10 @@ class UserDao extends ChangeNotifier {
       Future.wait([
 
       ]).then((value) {
-        _globalModel.resourceDao.syncResources();
+        if (this.isLoggedIn) {
+          _globalModel.resourceDao.syncResources();
+          _globalModel.domainDao.syncDomains();
+        }
         refresh();
       });
 
@@ -64,7 +67,7 @@ class UserDao extends ChangeNotifier {
     }
   }
 
-  Options buildOptions() {
+  Future<Options> buildOptions() async {
     if(this.isLoggedIn) {
       Options options = Options(
           headers: {"Authorization": "Bearer " + accessToken});

@@ -40,10 +40,41 @@ class ResourceView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(15)),
-              child: Text(
-                tr("resource"),
-                style: Theme.of(context).textTheme.subtitle1,
+              padding:
+                  EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(15)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    tr("resource"),
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        visualDensity: VisualDensity.compact,
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(CupertinoPageRoute(builder: (ctx) {
+                            return ResourceCreationPage();
+                          }));
+                        },
+                      ),
+                      IconButton(
+                        visualDensity: VisualDensity.compact,
+                        icon: Icon(Icons.menu),
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(CupertinoPageRoute(builder: (ctx) {
+                            return ResourceManagementPage();
+                          }));
+                        },
+                      )
+                    ],
+                  )
+                ],
               ),
             ),
             ListView.separated(
@@ -57,29 +88,7 @@ class ResourceView extends StatelessWidget {
                 return Separator();
               },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(CupertinoPageRoute(builder: (ctx) {
-                      return ResourceCreationPage();
-                    }));
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.clear_all),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(CupertinoPageRoute(builder: (ctx) {
-                      return ResourceManagementPage();
-                    }));
-                  },
-                )
-              ],
-            )
+            VEmptyView(30),
           ],
         ),
       ),

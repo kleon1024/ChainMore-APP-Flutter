@@ -68,9 +68,6 @@ class Mock {
         deleted: false,
         deleting: false,
         /// Local
-        local_id: 1,
-        dirty: false,
-        update_time: "",
         marked: false,
       ));
     }
