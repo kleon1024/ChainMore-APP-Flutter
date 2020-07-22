@@ -16,6 +16,7 @@ class DomainBean {
   /// Local Columns
   bool    dirty_mark;
   bool    marked;
+  bool    certified;
 
   DomainBean({
     this.id,
@@ -28,6 +29,7 @@ class DomainBean {
     this.deleted = false,
     this.dirty_mark = false,
     this.marked = false,
+    this.certified = false,
   });
 
   factory DomainBean.fromJson(Map<String, dynamic> json) => _$DomainBeanFromJson(json);

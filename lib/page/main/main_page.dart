@@ -51,12 +51,12 @@ class MainPage extends StatelessWidget {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.center_focus_weak),
-              activeIcon: Icon(Icons.center_focus_strong),
+              activeIcon: Icon(Icons.center_focus_strong, color: Theme.of(context).textTheme.bodyText1.color),
               title: Container(),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.explore),
-              activeIcon: Icon(Icons.adjust),
+              activeIcon: Icon(Icons.adjust, color: Theme.of(context).textTheme.bodyText1.color),
               title: Container(),
             ),
           ],

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:chainmore/model/collection_creation_page_model.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/utils/params.dart';
+import 'package:chainmore/widgets/cards/domain_card.dart';
 import 'package:chainmore/widgets/cards/resource_card.dart';
 import 'package:chainmore/widgets/separator.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
@@ -92,6 +93,44 @@ class CollectionCreationPage extends StatelessWidget {
                             ),
                           ),
                         ),
+                        Row(
+                          children: [Text(tr("domain"))],
+                        ),
+                        VEmptyView(20),
+                        Container(
+                          width: double.infinity,
+                          child: OutlineButton(
+                            splashColor: Colors.transparent,
+                            color: Theme.of(context).cardColor,
+                            onPressed: model.logic.onSelectDomains,
+                            child: Icon(Icons.playlist_add),
+                          ),
+                        ),
+                        ListView.separated(
+                          shrinkWrap: true,
+                          separatorBuilder: (context, index) {
+                            return Separator();
+                          },
+                          itemBuilder: (context, index) {
+                            return Dismissible(
+                              background: Container(color: Theme.of(context).accentColor),
+                              key: Key(model.domains[index].id.toString()),
+                              onDismissed: (direction) {
+                                model.logic.removeDomainAt(index);
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                child: DomainCard(
+                                  horizontalPadding: ScreenUtil().setWidth(30),
+                                  color: Theme.of(context).canvasColor,
+                                  bean: model.domains[index],
+                                  elevation: 0,
+                                ),
+                              ),
+                            );
+                          },
+                          itemCount: model.domains.length,
+                        ),
                         Row(children: [Text(tr("refer_resource"))]),
                         VEmptyView(20),
                         Container(
@@ -112,13 +151,14 @@ class CollectionCreationPage extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return Dismissible(
                               background: Container(color: Theme.of(context).accentColor),
-                              key: Key(index.toString()),
+                              key: Key(model.resources[index].id.toString()),
                               onDismissed: (direction) {
                                 model.logic.removeRefResourceAt(index);
                               },
                               child: Container(
                                 width: double.infinity,
                                 child: ResourceCard(
+                                  horizontalPadding: ScreenUtil().setWidth(15),
                                   color: Theme.of(context).canvasColor,
                                   bean: model.resources[index],
                                   elevation: 0,
@@ -135,9 +175,7 @@ class CollectionCreationPage extends StatelessWidget {
                             splashColor: Colors.transparent,
                             color: Theme.of(context).cardColor,
                             textColor: Theme.of(context).accentColor,
-                            onPressed: () {
-                              ///TODO Post
-                            },
+                            onPressed: model.logic.validateForm() ? model.logic.onSubmit : null,
                             child: Text(tr("post")),
                           ),
                         ),

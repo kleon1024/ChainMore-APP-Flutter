@@ -1,14 +1,11 @@
 import 'package:chainmore/model/collection_creation_page_model.dart';
-import 'package:chainmore/utils/navigator_util.dart';
 import 'package:chainmore/utils/params.dart';
-import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/cards/resource_card.dart';
 import 'package:chainmore/widgets/form/labeled_checkbox.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 
 class ResourceSelectionPage extends StatefulWidget {
   final CollectionCreationPageModel model;
@@ -43,7 +40,7 @@ class ResourceSelectionPageState extends State<ResourceSelectionPage> {
         preferredSize: Size.fromHeight(GlobalParams.appBarHeight),
         child: AppBar(
           elevation: 0,
-          title: Text(tr("resource_management"),
+          title: Text(tr("resource_selection"),
               style: Theme.of(context).textTheme.subtitle1),
           centerTitle: true,
           actions: <Widget>[
@@ -71,7 +68,7 @@ class ResourceSelectionPageState extends State<ResourceSelectionPage> {
                     value: values[index],
                     onChanged: (value) {
                       widget.model.logic
-                          .onSelect(resources[index], value, index);
+                          .onSelectResource(resources[index], value, index);
                       setState(() {});
                     },
                     child: ResourceCard(

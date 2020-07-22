@@ -48,24 +48,11 @@ class CollectionCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      "HTML入门",
+                      bean.domain_title,
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
-                    Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.play_circle_outline,
-                          size: GlobalParams.collectionTopBarIconSize,
-                        ),
-                        Icon(
-                          Icons.book,
-                          size: GlobalParams.collectionTopBarIconSize,
-                        ),
-                        Icon(
-                          Icons.audiotrack,
-                          size: GlobalParams.collectionTopBarIconSize,
-                        ),
-                      ],
+                    Text(
+                      bean.indicator,
                     )
                   ],
                 ),

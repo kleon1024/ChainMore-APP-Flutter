@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/json/resource_media_bean.dart';
@@ -517,6 +518,131 @@ class ApiService {
         final List items = data["items"];
         final List<DomainBean> beans =
         items.map((e) => DomainBean.fromJson(e)).toList();
+        success(beans);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+  void createCollection({
+    Function(CollectionBean) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getResourceBeans(1).then((value) {
+        success(value[0]);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().post(
+      '/collection',
+          (data) {
+        final List items = data["items"];
+        final List<CollectionBean> beans =
+        items.map((e) => CollectionBean.fromJson(e)).toList();
+        success(beans[0]);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+
+  void collectCollection({
+    Function(CollectionBean) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getCollectionBeans(1).then((value) {
+        success(value[0]);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().post(
+      '/collection/collect',
+          (data) {
+        final List items = data["items"];
+        final List<CollectionBean> beans =
+        items.map((e) => CollectionBean.fromJson(e)).toList();
+        success(beans[0]);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+  void unCollectCollection({
+    Function(CollectionBean) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getCollectionBeans(1).then((value) {
+        success(value[0]);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().delete(
+      '/collection/collect',
+          (data) {
+        final List items = data["items"];
+        final List<CollectionBean> beans =
+        items.map((e) => CollectionBean.fromJson(e)).toList();
+        success(beans[0]);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+  void checkCollectCollection({
+    Function(List<CollectionBean>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getCollectionBeans(1).then((value) {
+        success(value);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/collection/collect',
+          (data) {
+        final List items = data["items"];
+        final List<CollectionBean> beans =
+        items.map((e) => CollectionBean.fromJson(e)).toList();
         success(beans);
       },
       params: params,

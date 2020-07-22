@@ -48,13 +48,15 @@ class CollectionDao extends ChangeNotifier {
     if (Utils.isMocking) {
       rawCollections = await Mock.getCollectionBeans(3);
     } else {
-      rawCollections = await DBProvider.db.getAllCollections();
+      rawCollections = await DBProvider.db.getCollectedCollections();
     }
 
     /// Fake Data
     if (rawCollections == null) return;
     collections.clear();
     collections.addAll(rawCollections);
+    
+    refresh();
     debugPrint("Collection Bean Inited");
   }
 

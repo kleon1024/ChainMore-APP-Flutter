@@ -1,3 +1,4 @@
+import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/logic/collection_creation_page_logic.dart';
 import 'package:chainmore/model/global_model.dart';
@@ -27,6 +28,9 @@ class CollectionCreationPageModel extends ChangeNotifier {
   final int maxTitleLength = 30;
 
   final List<ResourceBean> resources = [];
+  final int resourceLimit = 16;
+  final List<DomainBean> domains = [];
+  final int domainLimit = 1;
 
   bool isPaid = false;
   bool isLoading = false;

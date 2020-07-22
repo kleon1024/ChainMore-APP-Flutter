@@ -24,22 +24,20 @@ class DomainCreationPageLogic {
 
     final options = await _model.globalModel.userDao.buildOptions();
     ApiService.instance.createDomain(
-      options: options,
-      params: params,
-      success: (DomainBean domain) {
-        ApiService.instance.markDomain(
-          options: options,
-          params: {'id': domain.id},
-          success: (DomainBean remote) {
-            remote.marked = true;
-            remote.dirty_mark = false;
-            DBProvider.db.createDomain(remote);
-            onPostProcess();
-            Utils.showToast(_model.context, tr("resource_created"));
-          }
-        );
-      }
-    );
+        options: options,
+        params: params,
+        success: (DomainBean domain) {
+          ApiService.instance.markDomain(
+              options: options,
+              params: {'id': domain.id},
+              success: (DomainBean remote) {
+                remote.marked = true;
+                remote.dirty_mark = false;
+                DBProvider.db.createDomain(remote);
+                onPostProcess();
+                Utils.showToast(_model.context, tr("domain_created"));
+              });
+        });
   }
 
   onPostProcess() {
@@ -54,51 +52,49 @@ class DomainCreationPageLogic {
 
   onSelectDepDomains() {
     Navigator.of(_model.context).push(CupertinoPageRoute(builder: (ctx) {
-      return DomainSelectionPage(model: _model, depend: true);
+      return DomainSelectionPage(
+          domains: _model.depDomains,
+          allDomains: getDomains(),
+          onSelect: onSelectDep);
     }));
   }
 
   onSelectAggDomains() {
     Navigator.of(_model.context).push(CupertinoPageRoute(builder: (ctx) {
-      return DomainSelectionPage(model: _model, aggregate: true);
+      return DomainSelectionPage(
+          domains: _model.aggDomains,
+          allDomains: getDomains(),
+          onSelect: onSelectAgg);
     }));
   }
 
-  onSelect(resource, value, index, dep, agg) {
-    List<DomainBean> domains;
-    if (dep) {
-      domains = _model.depDomains;
-    } else {
-      domains = _model.aggDomains;
-    }
-
+  onSelectDep(resource, value, index) {
     if (value) {
-      if (!containDomain(domains, resource)) {
-        domains.add(resource);
+      if (!Utils.containDomain(_model.depDomains, resource)) {
+        if (_model.depDomains.length >= _model.depDomainLimit) {
+          _model.depDomains.removeAt(0);
+        }
+        _model.depDomains.add(resource);
       }
     } else {
-      removeDomain(domains, resource);
+      Utils.removeDomain(_model.depDomains, resource);
     }
-
     _model.refresh();
   }
 
-  containDomain(List<DomainBean> domains, DomainBean domain) {
-    for (final element in domains) {
-      if (element.id == domain.id) {
-        return true;
+  onSelectAgg(resource, value, index) {
+    if (value) {
+      if (!Utils.containDomain(_model.aggDomains, resource)) {
+        if (_model.aggDomains.length >= _model.aggDomainLimit) {
+          _model.aggDomains.removeAt(0);
+        }
+        _model.aggDomains.add(resource);
       }
+    } else {
+      Utils.removeDomain(_model.aggDomains, resource);
     }
-    return false;
-  }
 
-  removeDomain(List<DomainBean> domains, DomainBean res) {
-    for (int i = 0; i < domains.length; i++) {
-      if (domains[i].id == res.id) {
-        domains.removeAt(i);
-        break;
-      }
-    }
+    _model.refresh();
   }
 
   List<DomainBean> getDomains() {
@@ -117,7 +113,9 @@ class DomainCreationPageLogic {
 
   validateForm() {
     return _model.aggDomains.length > 0 &&
+        _model.aggDomains.length <= _model.aggDomainLimit &&
         _model.depDomains.length > 0 &&
+        _model.depDomains.length <= _model.depDomainLimit &&
         _model.titleEditingController.text.trim() != "" &&
         _model.introEditingController.text.trim() != "";
   }

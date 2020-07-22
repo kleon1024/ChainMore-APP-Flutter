@@ -28,6 +28,9 @@ class DomainCreationPageModel extends ChangeNotifier {
   final List<DomainBean> depDomains = [];
   final List<DomainBean> aggDomains = [];
 
+  final int depDomainLimit = 8;
+  final int aggDomainLimit = 1;
+
   final int maxTitleLength = 24;
   final int maxIntroLength = 56;
 

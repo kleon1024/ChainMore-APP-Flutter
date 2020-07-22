@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:chainmore/application.dart';
+import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/models/category.dart';
 import 'package:chainmore/models/update.dart';
 import 'package:chainmore/providers/edit_model.dart';
@@ -245,7 +246,7 @@ class Utils {
     if (minute >= 1) {
       return minute.floor().toString() + tr("minute") + suffix;
     }
-    return tr("jut_now");
+    return tr("just_now");
   }
 
   static checkClipBoard({BuildContext context}) async {
@@ -404,5 +405,23 @@ class Utils {
       res[key] = value;
     });
     return res;
+  }
+
+  static containDomain(List<DomainBean> domains, DomainBean domain) {
+    for (final element in domains) {
+      if (element.id == domain.id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  static removeDomain(List<DomainBean> domains, DomainBean res) {
+    for (int i = 0; i < domains.length; i++) {
+      if (domains[i].id == res.id) {
+        domains.removeAt(i);
+        break;
+      }
+    }
   }
 }

@@ -27,13 +27,11 @@ class ScrollBehaviorNoGlow extends ScrollBehavior {
 }
 
 class MyApp extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() => MyAppState();
-
 }
-class MyAppState extends State<MyApp> with WidgetsBindingObserver{
 
+class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -67,9 +65,13 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver{
       debugShowCheckedModeBanner: false,
       title: ez.tr("app_title"),
 //      navigatorKey: Application.getIt<NavigateService>().key,
-      darkTheme: ThemeData(
+      theme: ThemeData(
         brightness: Brightness.light,
-        primaryColor: Colors.white,
+//        primaryColor: Colors.white,
+        primaryColor: HexColor("#fafafa"),
+        accentColor: Colors.teal,
+        textSelectionColor: Colors.teal,
+        textSelectionHandleColor: Colors.teal,
         tooltipTheme: TooltipThemeData(verticalOffset: -100000),
         pageTransitionsTheme: PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
@@ -81,7 +83,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver{
         ),
         splashFactory: NoSplashFactory(),
       ),
-      theme: ThemeData(
+      darkTheme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: HexColor("#303030"),
         tooltipTheme: TooltipThemeData(verticalOffset: -100000),
@@ -141,9 +143,9 @@ class NoSplash extends InteractiveInkFeature {
   })  : assert(controller != null),
         assert(referenceBox != null),
         super(
-        controller: controller,
-        referenceBox: referenceBox,
-      );
+          controller: controller,
+          referenceBox: referenceBox,
+        );
 
   @override
   void paintFeature(Canvas canvas, Matrix4 transform) {}

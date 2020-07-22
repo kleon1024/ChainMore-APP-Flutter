@@ -49,6 +49,7 @@ class CustomSlidable extends StatelessWidget {
             IconSlideAction(
               caption: tr("archive"),
               color: Colors.transparent,
+              foregroundColor: Theme.of(context).textTheme.bodyText1.color,
               icon: Icons.check,
               onTap: () {
                 slidableKey.currentState
@@ -60,6 +61,7 @@ class CustomSlidable extends StatelessWidget {
             IconSlideAction(
               caption: tr('share'),
               color: Colors.transparent,
+              foregroundColor: Theme.of(context).textTheme.bodyText1.color,
               icon: Icons.call_made,
               onTap: onMore,
             )

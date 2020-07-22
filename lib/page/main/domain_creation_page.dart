@@ -118,7 +118,7 @@ class DomainCreationPage extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 return Dismissible(
                                   background: Container(color: Theme.of(context).accentColor),
-                                  key: Key(index.toString()),
+                                  key: Key(model.aggDomains[index].id.toString()),
                                   onDismissed: (direction) {
                                     model.logic.removeAggDomainAt(index);
                                   },
@@ -156,13 +156,14 @@ class DomainCreationPage extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 return Dismissible(
                                   background: Container(color: Theme.of(context).accentColor),
-                                  key: Key(index.toString()),
+                                  key: Key(model.depDomains[index].id.toString()),
                                   onDismissed: (direction) {
                                     model.logic.removeDepDomainAt(index);
                                   },
                                   child: Container(
                                     width: double.infinity,
                                     child: DomainCard(
+                                      horizontalPadding: ScreenUtil().setWidth(30),
                                       color: Theme.of(context).canvasColor,
                                       bean: model.depDomains[index],
                                       elevation: 0,

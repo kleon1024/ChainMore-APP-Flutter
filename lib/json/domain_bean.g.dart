@@ -18,6 +18,7 @@ DomainBean _$DomainBeanFromJson(Map<String, dynamic> json) {
     deleted: json['deleted'] as bool,
     dirty_mark: json['dirty_mark'] as bool,
     marked: json['marked'] as bool,
+    certified: json['certified'] as bool,
   );
 }
 
@@ -33,4 +34,5 @@ Map<String, dynamic> _$DomainBeanToJson(DomainBean instance) =>
       'deleted': instance.deleted,
       'dirty_mark': instance.dirty_mark,
       'marked': instance.marked,
+      'certified': instance.certified,
     };
