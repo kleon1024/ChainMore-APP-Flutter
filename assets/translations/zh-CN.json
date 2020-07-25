@@ -56,5 +56,11 @@
   "search_history": "搜索历史",
   "confirm_to_clear_search_history": "清除所有搜索历史？",
   "error_network": "网络错误",
-  "resource_created": "成功创建并收藏资源"
+  "resource_created": "成功分享并收藏资源",
+  "collection_created": "成功发布并收藏集合",
+  "domain_created": "成功划分并标记领域",
+  "ordered_by": "排序",
+  "time_desc": "最新",
+  "time_asc": "最早",
+  "collect_count": "最多收藏"
 }

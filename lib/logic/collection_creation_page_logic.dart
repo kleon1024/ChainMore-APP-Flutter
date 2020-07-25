@@ -47,6 +47,7 @@ class CollectionCreationPageLogic {
                 remote.dirty_collect = false;
                 remote.dirty_modify = false;
                 DBProvider.db.createCollection(remote);
+                _model.refresh();
                 onPostProcess();
                 Utils.showToast(_model.context, tr("collection_created"));
               });

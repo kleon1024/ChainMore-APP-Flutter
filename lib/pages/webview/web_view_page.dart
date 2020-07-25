@@ -23,6 +23,7 @@ class WebViewPageState extends State<WebViewPage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(GlobalParams.appBarHeight),
         child: AppBar(
+          elevation: 0,
           actions: [
             IconButton(
               icon: Icon(Icons.keyboard_arrow_left),

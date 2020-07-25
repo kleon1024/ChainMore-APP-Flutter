@@ -56,5 +56,11 @@
   "search_history": "Search History",
   "confirm_to_clear_search_history": "Clear all search history?",
   "error_network": "Network error",
-  "resource_created": "Successfully created and collected resource"
+  "resource_created": "Successfully broadcast and star a resource",
+  "collection_created": "Successfully post and collect a collection",
+  "domain_created": "Successfully divide and mark a domain",
+  "ordered_by": "Ordered by",
+  "time_desc": "Time Descendant",
+  "time_asc": "Time Ascendant",
+  "collect_count": "Collect Count"
 }

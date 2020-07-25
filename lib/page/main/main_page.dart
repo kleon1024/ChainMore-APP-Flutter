@@ -2,6 +2,7 @@ import 'package:chainmore/dao/collection_dao.dart';
 import 'package:chainmore/dao/domain_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/dao/user_dao.dart';
+import 'package:chainmore/model/domain_detail_page_model.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/model/main_page_model.dart';
 import 'package:chainmore/model/models.dart';
@@ -9,7 +10,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class MainPage extends StatelessWidget {
   @override
@@ -45,6 +45,7 @@ class MainPage extends StatelessWidget {
           model.explorePage,
         ]),
         bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
           onTap: model.logic.onBottomNavigationItemTapped,
           currentIndex: model.currentIndex,

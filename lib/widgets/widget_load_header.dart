@@ -22,14 +22,9 @@ class LoadHeader extends Header {
       return Container(
         height: ScreenUtil().setWidth(100),
         alignment: Alignment.center,
-        child: Text('暂无更多数据'),
       );
     else
-      return Container(
-        height: ScreenUtil().setWidth(100),
-        alignment: Alignment.center,
-        child: Text('正在加载...'),
-      );
+      return CupertinoActivityIndicator();
   }
 }
 

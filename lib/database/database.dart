@@ -204,7 +204,7 @@ class DBProvider {
 
   Future<List<DomainBean>> getAllDomains() async {
     final db = await database;
-    var list = await db.query("domain");
+    var list = await db.query("domain", orderBy: "modify_time DESC");
     return list
         .map((e) => DomainBean.fromJson(Utils.sqlIntToBool(e, DomainBean())))
         .toList();
@@ -212,7 +212,7 @@ class DBProvider {
 
   Future<List<DomainBean>> getMarkedDomains() async {
     final db = await database;
-    var list = await db.query("domain", where: "marked = ?", whereArgs: [1]);
+    var list = await db.query("domain", orderBy: "modify_time DESC", where: "marked = ?", whereArgs: [1]);
     return list
         .map((e) => DomainBean.fromJson(Utils.sqlIntToBool(e, DomainBean())))
         .toList();
@@ -268,7 +268,7 @@ class DBProvider {
 
   Future<List<CollectionBean>> getAllCollections() async {
     final db = await database;
-    var list = await db.query("collection");
+    var list = await db.query("collection", orderBy: "modify_time DESC");
     return list
         .map((e) =>
             CollectionBean.fromJson(Utils.sqlIntToBool(e, CollectionBean())))
@@ -278,7 +278,7 @@ class DBProvider {
   Future<List<CollectionBean>> getCollectedCollections() async {
     final db = await database;
     var list =
-        await db.query("collection", where: "collected = ?", whereArgs: [1]);
+        await db.query("collection", orderBy: "modify_time DESC", where: "collected = ?", whereArgs: [1]);
     return list
         .map((e) =>
             CollectionBean.fromJson(Utils.sqlIntToBool(e, CollectionBean())))

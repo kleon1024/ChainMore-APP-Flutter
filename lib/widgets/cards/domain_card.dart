@@ -1,3 +1,4 @@
+import 'package:chainmore/config/provider_config.dart';
 import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,7 +29,9 @@ class DomainCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        /// TODO Go Domain Detail Page
+        Navigator.of(context).push(new CupertinoPageRoute(builder: (ctx) {
+          return ProviderConfig.getInstance().getDomainDetailPage(bean);
+        }));
       },
       child: Container(
         child: Card(

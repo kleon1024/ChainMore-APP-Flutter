@@ -29,12 +29,12 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-class DomainDetailPage extends StatefulWidget {
+class OldDomainDetailPage extends StatefulWidget {
   @override
-  _DomainDetailPageState createState() => _DomainDetailPageState();
+  _OldDomainDetailPageState createState() => _OldDomainDetailPageState();
 }
 
-class _DomainDetailPageState extends State<DomainDetailPage>
+class _OldDomainDetailPageState extends State<OldDomainDetailPage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {

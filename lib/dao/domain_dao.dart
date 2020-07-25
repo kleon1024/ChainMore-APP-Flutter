@@ -111,7 +111,8 @@ class DomainDao extends ChangeNotifier {
                   local.marked = true;
                   localUpdates.add(local);
                 } else {
-                  /// Synced
+                  remote.marked = true;
+                  localUpdates.add(remote);
                 }
               }
               domainMap.remove(remote.id);

@@ -35,6 +35,7 @@ class DomainCreationPageLogic {
                 remote.dirty_mark = false;
                 DBProvider.db.createDomain(remote);
                 onPostProcess();
+                _model.refresh();
                 Utils.showToast(_model.context, tr("domain_created"));
               });
         });

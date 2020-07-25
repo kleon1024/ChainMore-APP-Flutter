@@ -28,13 +28,9 @@ class ResourceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: onTap ??
           () {
-            Navigator.of(context).push(new CupertinoPageRoute(builder: (ctx) {
-              return WebViewPage(url: bean.url);
-            }));
           },
       onLongPress: onLongPress,
       child: Container(
@@ -48,21 +44,36 @@ class ResourceCard extends StatelessWidget {
               vertical: verticalPadding,
               horizontal: horizontalPadding,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Row(
               children: [
-                Text(
-                  bean.title,
-                  style: Theme.of(context).textTheme.bodyText1,
-                  softWrap: false,
-                  overflow: TextOverflow.ellipsis,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        bean.title,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        Utils.getShortUrl(bean.url),
+                        style: Theme.of(context).textTheme.bodyText2,
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    ],
+                  ),
                 ),
-                Text(
-                  Utils.getShortUrl(bean.url),
-                  style: Theme.of(context).textTheme.bodyText2,
-                  softWrap: false,
-                  overflow: TextOverflow.ellipsis,
+                IconButton(
+                  visualDensity: VisualDensity.compact,
+                  icon: Icon(Icons.all_inclusive),
+                  onPressed: () {
+                    Navigator.of(context).push(new CupertinoPageRoute(builder: (ctx) {
+                      return WebViewPage(url: bean.url);
+                    }));
+                  },
                 )
               ],
             ),

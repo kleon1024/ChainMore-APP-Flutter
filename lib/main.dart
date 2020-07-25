@@ -69,9 +69,11 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         brightness: Brightness.light,
 //        primaryColor: Colors.white,
         primaryColor: HexColor("#fafafa"),
+        canvasColor: HexColor("#f0f0f0"),
         accentColor: Colors.teal,
         textSelectionColor: Colors.teal,
         textSelectionHandleColor: Colors.teal,
+        cursorColor: Colors.teal,
         tooltipTheme: TooltipThemeData(verticalOffset: -100000),
         pageTransitionsTheme: PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),

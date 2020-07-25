@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 class ApiStrategy {
   static ApiStrategy _instance;
 
-  static final String baseUrl = "http://192.168.3.5:5000/v1";
+  static final String baseUrl = "http://192.168.3.5:6789/v1";
   static const int connectTimeOut = 10 * 1000; // Connection Timeout 10s
   static const int receiveTimeOut = 15 * 1000; // Response Timeout 15s
 

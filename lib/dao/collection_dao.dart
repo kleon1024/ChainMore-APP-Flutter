@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:chainmore/config/api_service.dart';
 import 'package:chainmore/database/database.dart';
 import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/mock.dart';
@@ -58,6 +59,123 @@ class CollectionDao extends ChangeNotifier {
     
     refresh();
     debugPrint("Collection Bean Inited");
+  }
+
+  syncCollections() {
+    syncCollectedCollections();
+  }
+
+  syncCollectedCollections() async {
+    final userId = _globalModel.userDao.id;
+    final options = await _globalModel.userDao.buildOptions();
+
+    ApiService.instance.getCollectedCollections(
+        options: options,
+        success: (List<CollectionBean> beans) async {
+          final locals = await DBProvider.db.getAllCollections();
+          Map<int, CollectionBean> collectionMap = {};
+          locals.forEach((bean) {
+            collectionMap[bean.id] = bean;
+          });
+
+          List<CollectionBean> localUpdates = [];
+          List<CollectionBean> localCreates = [];
+          List<CollectionBean> localDeletes = [];
+          List<CollectionBean> remoteUncollects = [];
+          List<CollectionBean> remoteCollects = [];
+          beans.forEach((remote) {
+            debugPrint(remote.toJson().toString());
+            if (collectionMap.containsKey(remote.id)) {
+              final local = collectionMap[remote.id];
+
+              if (local.dirty_collect) {
+                if (!local.collected) {
+                  remoteUncollects.add(local);
+                  if (local.author_id != userId) {
+                    localDeletes.add(local);
+                  } else {
+                    local.dirty_collect = false;
+                    localUpdates.add(local);
+                  }
+                } else {
+                  local.dirty_collect = false;
+                  localUpdates.add(local);
+                }
+              } else {
+                if (!local.collected) {
+                  local.collected = true;
+                  localUpdates.add(local);
+                } else {
+                  remote.collected = true;
+                  localUpdates.add(remote);
+                }
+              }
+              collectionMap.remove(remote.id);
+            } else {
+              remote.collected = true;
+              localCreates.add(remote);
+            }
+          });
+
+          collectionMap.values.forEach((local) {
+            if (local.dirty_collect) {
+              if (local.collected) {
+                remoteCollects.add(local);
+              } else {
+                if (local.author_id != userId) {
+                  localDeletes.add(local);
+                } else {
+                  local.dirty_collect = false;
+                  localUpdates.add(local);
+                }
+              }
+            } else {
+              if (local.collected) {
+                if (local.author_id != userId) {
+                  localDeletes.add(local);
+                } else {
+                  local.collected = false;
+                  localUpdates.add(local);
+                }
+              } else {
+                if (local.author_id != userId) {
+                  localDeletes.add(local);
+                } else {
+                  /// Created
+                }
+              }
+            }
+          });
+
+          await DBProvider.db.createCollections(localCreates);
+          await DBProvider.db.updateCollections(localUpdates);
+          await DBProvider.db.removeCollections(localDeletes);
+
+          initCollections().then((value) {
+            refresh();
+          });
+
+          remoteCollects.forEach((local) {
+            ApiService.instance.collectCollection(
+                options: options,
+                params: {'id': local.id},
+                success: (CollectionBean remote) {
+                  local.dirty_collect = false;
+                  DBProvider.db.updateCollection(local);
+                });
+          });
+
+          remoteUncollects.forEach((local) {
+            ApiService.instance.unCollectCollection(
+                options: options,
+                params: {'id': local.id},
+                success: (CollectionBean remote) {
+                  local.dirty_collect = false;
+                  DBProvider.db.updateCollection(local);
+                });
+          });
+        });
+
   }
 
   getAllCollections() {

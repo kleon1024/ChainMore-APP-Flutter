@@ -24,7 +24,7 @@ class LoadFooter extends Footer {
       return Container(
         height: ScreenUtil().setWidth(100),
         alignment: Alignment.center,
-        child: Text('正在加载...'),
+        child: CupertinoActivityIndicator()
       );
   }
 }

@@ -1,16 +1,11 @@
-import 'package:chainmore/models/post.dart';
 import 'package:chainmore/network/apis.dart';
-import 'package:chainmore/pages/home/discover/post_item.dart';
 import 'package:chainmore/pages/home/sparkle/sparkle_item.dart';
-import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:chainmore/widgets/widget_load_footer.dart';
 import 'package:chainmore/widgets/widget_load_header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SparklePage extends StatefulWidget {
   @override

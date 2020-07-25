@@ -141,10 +141,10 @@ class ApiService {
 
     ApiStrategy.getInstance().get(
       '/domain/marked',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<DomainBean> beans =
-        items.map((e) => DomainBean.fromJson(e)).toList();
+            items.map((e) => DomainBean.fromJson(e)).toList();
         success(beans);
       },
       params: params,
@@ -203,10 +203,10 @@ class ApiService {
 
     ApiStrategy.getInstance().get(
       '/domain/created',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<DomainBean> beans =
-        items.map((e) => DomainBean.fromJson(e)).toList();
+            items.map((e) => DomainBean.fromJson(e)).toList();
         success(beans);
       },
       params: params,
@@ -265,10 +265,10 @@ class ApiService {
 
     ApiStrategy.getInstance().get(
       '/domain',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<DomainBean> beans =
-        items.map((e) => DomainBean.fromJson(e)).toList();
+            items.map((e) => DomainBean.fromJson(e)).toList();
         success(beans[0]);
       },
       params: params,
@@ -420,10 +420,10 @@ class ApiService {
 
     ApiStrategy.getInstance().get(
       '/resource/star',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<ResourceBean> beans =
-        items.map((e) => ResourceBean.fromJson(e)).toList();
+            items.map((e) => ResourceBean.fromJson(e)).toList();
         success(beans);
       },
       params: params,
@@ -432,7 +432,6 @@ class ApiService {
       options: options,
     );
   }
-
 
   void markDomain({
     Function(DomainBean) success,
@@ -452,10 +451,10 @@ class ApiService {
 
     ApiStrategy.getInstance().post(
       '/domain/mark',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<DomainBean> beans =
-        items.map((e) => DomainBean.fromJson(e)).toList();
+            items.map((e) => DomainBean.fromJson(e)).toList();
         success(beans[0]);
       },
       params: params,
@@ -483,10 +482,10 @@ class ApiService {
 
     ApiStrategy.getInstance().delete(
       '/domain/mark',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<DomainBean> beans =
-        items.map((e) => DomainBean.fromJson(e)).toList();
+            items.map((e) => DomainBean.fromJson(e)).toList();
         success(beans[0]);
       },
       params: params,
@@ -514,10 +513,10 @@ class ApiService {
 
     ApiStrategy.getInstance().get(
       '/domain/mark',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<DomainBean> beans =
-        items.map((e) => DomainBean.fromJson(e)).toList();
+            items.map((e) => DomainBean.fromJson(e)).toList();
         success(beans);
       },
       params: params,
@@ -545,10 +544,10 @@ class ApiService {
 
     ApiStrategy.getInstance().post(
       '/collection',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<CollectionBean> beans =
-        items.map((e) => CollectionBean.fromJson(e)).toList();
+            items.map((e) => CollectionBean.fromJson(e)).toList();
         success(beans[0]);
       },
       params: params,
@@ -557,7 +556,6 @@ class ApiService {
       options: options,
     );
   }
-
 
   void collectCollection({
     Function(CollectionBean) success,
@@ -577,10 +575,10 @@ class ApiService {
 
     ApiStrategy.getInstance().post(
       '/collection/collect',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<CollectionBean> beans =
-        items.map((e) => CollectionBean.fromJson(e)).toList();
+            items.map((e) => CollectionBean.fromJson(e)).toList();
         success(beans[0]);
       },
       params: params,
@@ -608,10 +606,10 @@ class ApiService {
 
     ApiStrategy.getInstance().delete(
       '/collection/collect',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<CollectionBean> beans =
-        items.map((e) => CollectionBean.fromJson(e)).toList();
+            items.map((e) => CollectionBean.fromJson(e)).toList();
         success(beans[0]);
       },
       params: params,
@@ -639,10 +637,10 @@ class ApiService {
 
     ApiStrategy.getInstance().get(
       '/collection/collect',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<CollectionBean> beans =
-        items.map((e) => CollectionBean.fromJson(e)).toList();
+            items.map((e) => CollectionBean.fromJson(e)).toList();
         success(beans);
       },
       params: params,
@@ -652,6 +650,36 @@ class ApiService {
     );
   }
 
+  void getCollectedCollections({
+    Function(List<CollectionBean>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getCollectionBeans(1).then((value) {
+        success(value);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/collection/collected',
+      (data) {
+        final List items = data["items"];
+        final List<CollectionBean> beans =
+            items.map((e) => CollectionBean.fromJson(e)).toList();
+        success(beans);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
 
   void refreshAccessToken({
     Function(Map<String, String>) success,
@@ -671,7 +699,7 @@ class ApiService {
 
     ApiStrategy.getInstance().delete(
       '/auth/refresh',
-          (data) {
+      (data) {
         success(data);
       },
       params: params,
@@ -699,10 +727,10 @@ class ApiService {
 
     ApiStrategy.getInstance().post(
       '/domain',
-          (data) {
+      (data) {
         final List items = data["items"];
         final List<DomainBean> beans =
-        items.map((e) => DomainBean.fromJson(e)).toList();
+            items.map((e) => DomainBean.fromJson(e)).toList();
         if (beans.length == 1) {
           success(beans[0]);
         } else {
@@ -718,4 +746,34 @@ class ApiService {
     );
   }
 
+  void getDomainCollections({
+    Function(List<CollectionBean>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getCollectionBeans(1).then((value) {
+        success(value);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/domain/collections',
+      (data) {
+        final List items = data["items"];
+        final List<CollectionBean> beans =
+            items.map((e) => CollectionBean.fromJson(e)).toList();
+        success(beans);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
 }

@@ -86,7 +86,7 @@ var domainHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
 //  String data = params['data'].first;
 //  return DomainPage(Domain.fromJson(FluroConvertUtils.string2map(data)));
-  return DomainDetailPage();
+  return OldDomainDetailPage();
 });
 
 var domainMapHandler = Handler(

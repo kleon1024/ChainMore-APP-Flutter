@@ -2,6 +2,7 @@ import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/utils/params.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/indicators/percent_indicator.dart';
+import 'package:chainmore/widgets/indicators/resource_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,6 +28,7 @@ class CollectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () {
         /// Go collection detail
@@ -51,8 +53,15 @@ class CollectionCard extends StatelessWidget {
                       bean.domain_title,
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
-                    Text(
-                      bean.indicator,
+                    Row(
+                      children: [
+                        ResourceIndicator(Icons.play_circle_outline),
+                        ResourceIndicator(Icons.font_download),
+                        ResourceIndicator(Icons.text_fields),
+                        ResourceIndicator(Icons.settings_voice),
+                        ResourceIndicator(Icons.music_note),
+                        ResourceIndicator(Icons.image)
+                      ],
                     )
                   ],
                 ),
