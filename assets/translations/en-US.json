@@ -62,5 +62,17 @@
   "ordered_by": "Ordered by",
   "time_desc": "Time Descendant",
   "time_asc": "Time Ascendant",
-  "collect_count": "Collect Count"
+  "collect_count": "Collect Count",
+  "collection_detail": "Collection Detail",
+  "domain_detail": "Domain Detail",
+  "resource_detail": "Resource Detail",
+  "modify_collection": "Modify Collection",
+  "modify_domain": "Modify Domain",
+  "modify_resource": "Modify Resource",
+  "collection_modified": "Collection Modified",
+  "domain_modified": "Domain Modified",
+  "resource_modified": "Resource Modified",
+  "domain_selection": "Select Domain",
+  "resource_selection": "Select Resources",
+  "read_more": "Read More"
 }

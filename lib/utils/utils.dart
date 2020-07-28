@@ -2,12 +2,18 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:chainmore/application.dart';
+import 'package:chainmore/config/keys.dart';
 import 'package:chainmore/json/domain_bean.dart';
+import 'package:chainmore/json/resource_bean.dart';
+import 'package:chainmore/model/global_model.dart';
+import 'package:chainmore/model/resource_creation_page_model.dart';
 import 'package:chainmore/models/category.dart';
 import 'package:chainmore/models/update.dart';
+import 'package:chainmore/page/main/resource_creation_page.dart';
 import 'package:chainmore/providers/edit_model.dart';
 import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/navigator_util.dart';
+import 'package:chainmore/utils/shared_util.dart';
 import 'package:chainmore/widgets/common_text_style.dart';
 import 'package:chainmore/widgets/toast_animation.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
@@ -249,13 +255,18 @@ class Utils {
     return tr("just_now");
   }
 
-  static checkClipBoard({BuildContext context}) async {
+  static Future checkClipBoard(BuildContext context) async {
     ClipboardData clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
     if (clipboardData != null && clipboardData.text.trim() != '') {
       String _name = clipboardData.text.trim();
       String lastUrl = "";
-      if (Application.sp.containsKey('last_url')) {
-        lastUrl = Application.sp.getString('last_url');
+      final lastClipBoardUrl =
+      await SharedUtil.instance.getString(Keys.lastClipBoardUrl);
+
+      if (lastClipBoardUrl == null) {
+        await SharedUtil.instance.saveString(Keys.lastClipBoardUrl, lastUrl);
+      } else {
+        lastUrl = lastClipBoardUrl;
       }
 
       String url = RegExp(
@@ -263,25 +274,31 @@ class Utils {
           .stringMatch(_name);
 
       if (url != null && url != "" && lastUrl != url) {
-        Application.sp.setString('last_url', url);
+        await SharedUtil.instance.saveString(Keys.lastClipBoardUrl, url);
 
         showDoubleChoiceDialog(
           context,
-          title: '检测到链接',
+          title: '发现链接',
           body: url,
           leftText: '取消',
-          rightText: '分享',
+          rightText: '创建资源',
           leftFunc: () {
             Navigator.of(context).pop();
           },
           rightFunc: () {
-            EditModel editModel = Provider.of<EditModel>(context);
-            if (url != _name) {
-              editModel.setBody(_name);
+            final model = Provider.of<ResourceCreationPageModel>(context);
+            if (model.globalModel == null) {
+              final globalModel = Provider.of<GlobalModel>(context);
+              model.setContext(context, globalModel: globalModel);
             }
-            editModel.setUrl(url);
+
+            model.uriEditingController.text = url;
+            model.logic.onSubmit();
+
             Navigator.of(context).pop();
-            NavigatorUtil.goEditPage(context);
+            Navigator.of(context).push(new CupertinoPageRoute(builder: (ctx) {
+              return ResourceCreationPage();
+            }));
           },
         );
       }
@@ -420,7 +437,23 @@ class Utils {
     for (int i = 0; i < domains.length; i++) {
       if (domains[i].id == res.id) {
         domains.removeAt(i);
-        break;
+      }
+    }
+  }
+
+  static containResource(List<ResourceBean> resources, ResourceBean resource) {
+    for (final element in resources) {
+      if (element.id == resource.id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  static removeResource(List<ResourceBean> resources, ResourceBean res) {
+    for (int i = 0; i < resources.length; i++) {
+      if (resources[i].id == res.id) {
+        resources.removeAt(i);
       }
     }
   }

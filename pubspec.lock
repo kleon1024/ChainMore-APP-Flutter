@@ -500,6 +500,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.9.6+3"
+  need_resume:
+    dependency: "direct main"
+    description:
+      name: need_resume
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.4"
   node_interop:
     dependency: transitive
     description:

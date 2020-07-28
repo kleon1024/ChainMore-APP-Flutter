@@ -53,7 +53,9 @@ class ResourceCard extends StatelessWidget {
                     children: [
                       Text(
                         bean.title,
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: Theme.of(context).textTheme.bodyText1.merge(
+                          TextStyle(fontWeight: FontWeight.w600)
+                        ),
                         softWrap: false,
                         overflow: TextOverflow.ellipsis,
                       ),

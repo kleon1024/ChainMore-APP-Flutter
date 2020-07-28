@@ -53,7 +53,7 @@ class _OldMainPageState extends State<OldMainPage> with TickerProviderStateMixin
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // OnResumed
     if (state == AppLifecycleState.resumed) {
-      Utils.checkClipBoard(context: context);
+      Utils.checkClipBoard(context);
     }
   }
 

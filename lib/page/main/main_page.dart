@@ -6,12 +6,28 @@ import 'package:chainmore/model/domain_detail_page_model.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/model/main_page_model.dart';
 import 'package:chainmore/model/models.dart';
+import 'package:chainmore/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:need_resume/need_resume.dart';
 import 'package:provider/provider.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => MainPageState();
+}
+
+class MainPageState extends ResumableState<MainPage> {
+  @override
+  void onResume() {
+    final model = Provider.of<MainPageModel>(context);
+
+    Future.wait([
+      model.logic.initTextOrUrlIntent(),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final globalModel = Provider.of<GlobalModel>(context)..setContext(context);
@@ -52,12 +68,14 @@ class MainPage extends StatelessWidget {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.center_focus_weak),
-              activeIcon: Icon(Icons.center_focus_strong, color: Theme.of(context).textTheme.bodyText1.color),
+              activeIcon: Icon(Icons.center_focus_strong,
+                  color: Theme.of(context).textTheme.bodyText1.color),
               title: Container(),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.explore),
-              activeIcon: Icon(Icons.adjust, color: Theme.of(context).textTheme.bodyText1.color),
+              activeIcon: Icon(Icons.adjust,
+                  color: Theme.of(context).textTheme.bodyText1.color),
               title: Container(),
             ),
           ],

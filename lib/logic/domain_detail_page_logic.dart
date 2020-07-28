@@ -1,8 +1,13 @@
 import 'package:chainmore/config/api_service.dart';
 import 'package:chainmore/json/collection_bean.dart';
+import 'package:chainmore/json/domain_bean.dart';
+import 'package:chainmore/model/domain_creation_page_model.dart';
 import 'package:chainmore/model/domain_detail_page_model.dart';
+import 'package:chainmore/page/main/domain_creation_page.dart';
 import 'package:chainmore/page/main/search_page.dart';
+import 'package:chainmore/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 class DomainDetailPageLogic {
   final DomainDetailPageModel _model;
@@ -68,11 +73,50 @@ class DomainDetailPageLogic {
         });
   }
 
+  Future getDomainRelations() async {
+    final options = await _model.globalModel.userDao.buildOptions();
+
+    ApiService.instance.getDomainAggregators(
+      options: options,
+      params: {'id': _model.domain.id},
+      success: (List<DomainBean> beans) {
+        Utils.removeDomain(beans, _model.domain);
+        _model.aggDomains.clear();
+        _model.aggDomains.addAll(beans);
+      }
+    );
+
+    ApiService.instance.getDomainDependeds(
+        options: options,
+        params: {'id': _model.domain.id},
+        success: (List<DomainBean> beans) {
+          Utils.removeDomain(beans, _model.domain);
+          _model.depDomains.clear();
+          _model.depDomains.addAll(beans);
+        }
+    );
+  }
+
   onExit() {
     _model.offset = 1;
     _model.domain = null;
     _model.noMoreLoad = false;
     _model.elements.clear();
+  }
+
+  editDomain() {
+    final domainModel = Provider.of<DomainCreationPageModel>(_model.context);
+    domainModel.mode = DomainState.modify;
+    domainModel.setDomain(_model.domain);
+    domainModel.depDomains.clear();
+    domainModel.depDomains.addAll(_model.depDomains);
+    domainModel.aggDomains.clear();
+    domainModel.aggDomains.addAll(_model.aggDomains);
+
+    Navigator.of(_model.context).pop();
+    Navigator.of(_model.context).push(new CupertinoPageRoute(builder: (ctx) {
+      return DomainCreationPage();
+    }));
   }
 
 }

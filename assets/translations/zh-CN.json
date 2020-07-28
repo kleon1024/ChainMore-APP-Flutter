@@ -62,5 +62,17 @@
   "ordered_by": "排序",
   "time_desc": "最新",
   "time_asc": "最早",
-  "collect_count": "最多收藏"
+  "collect_count": "最多收藏",
+  "collection_detail": "集合详情",
+  "domain_detail": "领域详情",
+  "resource_detail": "资源详情",
+  "modify_collection": "修改集合",
+  "modify_domain": "修改领域",
+  "modify_resource": "修改资源",
+  "collection_modified": "成功修改集合",
+  "domain_modified": "成功修改领域",
+  "resource_modified": "成功修改资源",
+  "domain_selection": "选择领域",
+  "resource_selection": "选择资源",
+  "read_more": "阅读更多"
 }

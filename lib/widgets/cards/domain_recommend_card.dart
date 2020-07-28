@@ -1,10 +1,11 @@
 import 'package:chainmore/config/provider_config.dart';
 import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DomainCard extends StatelessWidget {
+class DomainRecommendCard extends StatelessWidget {
   final DomainBean bean;
   final double verticalPadding;
   final double horizontalPadding;
@@ -13,7 +14,7 @@ class DomainCard extends StatelessWidget {
   final Color color;
   final CrossAxisAlignment crossAxisAlignment;
 
-  DomainCard({
+  DomainRecommendCard({
     Key key,
     this.elevation,
     this.bean,
@@ -44,13 +45,15 @@ class DomainCard extends StatelessWidget {
               horizontal: horizontalPadding,
             ),
             child: Column(
-              crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.start,
+              crossAxisAlignment:
+                  crossAxisAlignment ?? CrossAxisAlignment.start,
               children: [
                 Text(
                   bean.title,
-                  style: Theme.of(context).textTheme.bodyText1.merge(
-                    TextStyle(fontWeight: FontWeight.w600),
-                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline5
+                      .merge(TextStyle(fontWeight: FontWeight.w600)),
                   overflow: TextOverflow.ellipsis,
                 ),
                 VEmptyView(15),
@@ -62,6 +65,14 @@ class DomainCard extends StatelessWidget {
                   maxLines: 3,
                   textAlign: TextAlign.justify,
                 ),
+                VEmptyView(15),
+                Text(
+                  tr("read_more"),
+                  style: Theme.of(context).textTheme.bodyText2.merge(TextStyle(
+                        color: Theme.of(context).accentColor,
+                        fontWeight: FontWeight.w600,
+                      )),
+                )
               ],
             ),
           ),

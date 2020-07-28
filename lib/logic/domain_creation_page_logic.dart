@@ -15,30 +15,59 @@ class DomainCreationPageLogic {
   DomainCreationPageLogic(this._model);
 
   onSubmit() async {
-    final params = {
-      "title": _model.titleEditingController.text.trim(),
-      "intro": _model.introEditingController.text.trim(),
-      "dependeds": _model.depDomains.map((e) => e.id).toList(),
-      "aggregators": _model.aggDomains.map((e) => e.id).toList(),
-    };
 
-    final options = await _model.globalModel.userDao.buildOptions();
-    ApiService.instance.createDomain(
-        options: options,
-        params: params,
-        success: (DomainBean domain) {
-          ApiService.instance.markDomain(
-              options: options,
-              params: {'id': domain.id},
-              success: (DomainBean remote) {
-                remote.marked = true;
-                remote.dirty_mark = false;
-                DBProvider.db.createDomain(remote);
-                onPostProcess();
-                _model.refresh();
-                Utils.showToast(_model.context, tr("domain_created"));
-              });
-        });
+    if (_model.mode == DomainState.create) {
+      final params = {
+        "title": _model.titleEditingController.text.trim(),
+        "intro": _model.introEditingController.text.trim(),
+        "dependeds": _model.depDomains.map((e) => e.id).toList(),
+        "aggregators": _model.aggDomains.map((e) => e.id).toList(),
+      };
+
+      final options = await _model.globalModel.userDao.buildOptions();
+      ApiService.instance.createDomain(
+          options: options,
+          params: params,
+          success: (DomainBean domain) {
+            ApiService.instance.markDomain(
+                options: options,
+                params: {'id': domain.id},
+                success: (DomainBean remote) {
+                  remote.marked = true;
+                  remote.dirty_mark = false;
+                  DBProvider.db.createDomain(remote);
+                  onPostProcess();
+                  _model.refresh();
+                  Utils.showToast(_model.context, tr("domain_created"));
+                });
+          });
+    } else if (_model.mode == DomainState.modify) {
+      final params = {
+        "id": _model.domain.id,
+        "title": _model.titleEditingController.text.trim(),
+        "intro": _model.introEditingController.text.trim(),
+        "dependeds": _model.depDomains.map((e) => e.id).toList(),
+        "aggregators": _model.aggDomains.map((e) => e.id).toList(),
+      };
+
+      final options = await _model.globalModel.userDao.buildOptions();
+      ApiService.instance.updateDomain(
+          options: options,
+          params: params,
+          success: (DomainBean domain) {
+            ApiService.instance.markDomain(
+                options: options,
+                params: {'id': domain.id},
+                success: (DomainBean remote) {
+                  remote.marked = true;
+                  remote.dirty_mark = false;
+                  DBProvider.db.updateDomain(remote);
+                  onPostProcess();
+                  _model.refresh();
+                  Utils.showToast(_model.context, tr("domain_modified"));
+                });
+          });
+    }
   }
 
   onPostProcess() {
@@ -47,6 +76,7 @@ class DomainCreationPageLogic {
     _model.titleEditingController.clear();
     _model.aggDomains.clear();
     _model.depDomains.clear();
+    _model.mode = DomainState.create;
 
     Navigator.of(_model.context).pop();
   }
@@ -117,7 +147,6 @@ class DomainCreationPageLogic {
         _model.aggDomains.length <= _model.aggDomainLimit &&
         _model.depDomains.length > 0 &&
         _model.depDomains.length <= _model.depDomainLimit &&
-        _model.titleEditingController.text.trim() != "" &&
-        _model.introEditingController.text.trim() != "";
+        _model.titleEditingController.text.trim() != "";
   }
 }

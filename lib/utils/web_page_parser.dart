@@ -8,6 +8,9 @@ import 'package:html/dom.dart' hide Text;
 class WebPageParser {
   static Future<Map> getData(String url) async {
       var response = await NetUtils.get(url);
+      if (response.statusCode == 403) {
+
+      }
       return getDataFromResponse(response, url);
   }
 

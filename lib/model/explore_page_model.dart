@@ -11,7 +11,7 @@ class ExplorePageModel extends ChangeNotifier {
 
   CancelToken cancelToken = CancelToken();
 
-  GlobalModel _globalModel;
+  GlobalModel globalModel;
 
   List cards = [];
 
@@ -22,9 +22,13 @@ class ExplorePageModel extends ChangeNotifier {
   void setContext(BuildContext context, {GlobalModel globalModel}) {
     if (this.context == null) {
       this.context = context;
-      this._globalModel = globalModel;
+      this.globalModel = globalModel;
 
-//      refresh();
+      Future.wait([
+        logic.getRecommendations(),
+      ]).then((value) {
+        refresh();
+      });
     }
   }
 
@@ -33,7 +37,7 @@ class ExplorePageModel extends ChangeNotifier {
     super.dispose();
     scaffoldKey?.currentState?.dispose();
     if(!cancelToken.isCancelled) cancelToken.cancel();
-    _globalModel.explorePageModel = null;
+    globalModel.explorePageModel = null;
     debugPrint("Explore Page Model Destroyed");
   }
 

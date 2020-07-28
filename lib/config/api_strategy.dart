@@ -196,7 +196,7 @@ class ApiStrategy {
         if (params != null && params.isNotEmpty) {
           response = await _client.put(
             url,
-            data: formData ?? FormData.fromMap(params),
+            data: formData ?? params,
             onSendProgress: progressCallBack,
             cancelToken: token,
             options: options,

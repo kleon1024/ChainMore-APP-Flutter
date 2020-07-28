@@ -1,5 +1,6 @@
 import 'package:chainmore/model/collection_creation_page_model.dart';
 import 'package:chainmore/utils/params.dart';
+import 'package:chainmore/utils/utils.dart';
 import 'package:chainmore/widgets/cards/resource_card.dart';
 import 'package:chainmore/widgets/form/labeled_checkbox.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -28,7 +29,7 @@ class ResourceSelectionPageState extends State<ResourceSelectionPage> {
     final resources = widget.model.logic.getResources();
 
     resources.forEach((element) {
-      if (widget.model.resources.contains(element)) {
+      if (Utils.containResource(widget.model.resources, element)) {
         values.add(true);
       } else {
         values.add(false);

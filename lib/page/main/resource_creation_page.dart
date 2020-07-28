@@ -174,9 +174,10 @@ class ResourceCreationPage extends StatelessWidget {
                                 splashColor: Colors.transparent,
                                 color: Theme.of(context).cardColor,
                                 textColor: Theme.of(context).accentColor,
-                                onPressed: model.isUrlChecked && model.urlExists == ""
-                                    ? model.logic.createResource
-                                    : null,
+                                onPressed:
+                                    model.isUrlChecked && model.urlExists == ""
+                                        ? model.logic.createResource
+                                        : null,
                                 child: Text(tr("create")),
                               ),
                             ),
@@ -192,6 +193,7 @@ class ResourceCreationPage extends StatelessWidget {
                                 child: Text(tr("recheck")),
                               ),
                             ),
+                            VEmptyView(120),
                           ]),
                     ),
                   ]),

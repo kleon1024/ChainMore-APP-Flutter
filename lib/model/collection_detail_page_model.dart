@@ -1,13 +1,15 @@
 import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/json/domain_bean.dart';
+import 'package:chainmore/json/resource_bean.dart';
+import 'package:chainmore/logic/collection_detail_page_logic.dart';
 import 'package:chainmore/logic/domain_detail_page_logic.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
-class DomainDetailPageModel extends ChangeNotifier {
-  DomainDetailPageLogic logic;
+class CollectionDetailPageModel extends ChangeNotifier {
+  CollectionDetailPageLogic logic;
   BuildContext context;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -18,10 +20,7 @@ class DomainDetailPageModel extends ChangeNotifier {
 
   GlobalModel globalModel;
 
-  List<CollectionBean> elements = [];
-
-  final List<DomainBean> depDomains = [];
-  final List<DomainBean> aggDomains = [];
+  List<ResourceBean> resources = [];
 
   int limit = 10;
   int offset = 1;
@@ -29,10 +28,12 @@ class DomainDetailPageModel extends ChangeNotifier {
 
   bool noMoreLoad = false;
 
+  CollectionBean collection;
+
   DomainBean domain;
 
-  DomainDetailPageModel(this.domain) {
-    logic = DomainDetailPageLogic(this);
+  CollectionDetailPageModel(this.collection) {
+    logic = CollectionDetailPageLogic(this);
   }
 
   void setContext(BuildContext context, {GlobalModel globalModel}) {
@@ -41,8 +42,8 @@ class DomainDetailPageModel extends ChangeNotifier {
       this.globalModel = globalModel;
 
       Future.wait([
-        logic.refreshCollections(),
-        logic.getDomainRelations()
+        logic.getResources(),
+        logic.getDomain(),
       ]).then((value) {
         refresh();
       });

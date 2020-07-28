@@ -53,6 +53,7 @@ dependencies:
   flutter_picker: ^1.1.5
   easy_localization: ^2.3.2
   receive_sharing_intent: ^1.4.0+2
+  need_resume: ^1.0.4
 
 dev_dependencies:
   flutter_test:

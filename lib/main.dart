@@ -5,7 +5,7 @@ import 'package:chainmore/utils/colors.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:easy_localization/easy_localization.dart' as ez;
 import 'package:flutter/material.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:need_resume/need_resume.dart';
 
 void main() {
   runApp(
@@ -31,21 +31,10 @@ class MyApp extends StatefulWidget {
   State<StatefulWidget> createState() => MyAppState();
 }
 
-class MyAppState extends State<MyApp> with WidgetsBindingObserver {
+class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    debugPrint("****************Resume*******************");
-    debugPrint(state.toString());
-
-    // OnResumed
-    if (state == AppLifecycleState.resumed) {
-      Utils.checkClipBoard(context: context);
-    }
   }
 
   // This widget is the root of your application.

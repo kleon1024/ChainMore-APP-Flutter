@@ -37,18 +37,37 @@ class NetUtils {
       ..interceptors.add(ErrorInterceptors(_dio))
       ..interceptors
           .add(CustomLogInterceptor(responseBody: true, requestBody: true));
-    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate  = (client) {
-      client.badCertificateCallback=(X509Certificate cert, String host, int port){
+    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) {
         return true;
       };
     };
   }
 
   static Future<Response> get(String url) async {
+    debugPrint("--------------------------------------------------");
     Response response;
     try {
-      response =
-          await _dio.request(url, options: Options(followRedirects: true));
+      final headers = {
+        'Host': url.split('/')[2],
+        'Connection': 'keep-alive',
+        'Access-Control-Request-Method': 'GET',
+        'Origin': url.split('/').getRange(0, 3).join('/'),
+        'User-Agent':
+            'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50',
+        'Access-Control-Request-Headers': 'range',
+        'Accept': '*/*',
+        'Sec-Fetch-Site': 'cross-site',
+        'Sec-Fetch-Mode': 'cors',
+        'Referer': url,
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Language': 'zh-CN,zh;q=0.9'
+      };
+      debugPrint(headers.toString());
+      response = await _dio.request(url,
+          options: Options(followRedirects: true, headers: headers));
     } on DioError catch (e) {
       debugPrint(e.toString());
     }

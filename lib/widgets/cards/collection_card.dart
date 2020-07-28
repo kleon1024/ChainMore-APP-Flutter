@@ -1,3 +1,4 @@
+import 'package:chainmore/config/provider_config.dart';
 import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/utils/params.dart';
 import 'package:chainmore/utils/utils.dart';
@@ -31,7 +32,9 @@ class CollectionCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        /// Go collection detail
+        Navigator.of(context).push(new CupertinoPageRoute(builder: (ctx) {
+          return ProviderConfig.getInstance().getCollectionDetailPage(bean);
+        }));
       },
       onLongPress: onLongPress,
       child: Container(
@@ -51,7 +54,7 @@ class CollectionCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       bean.domain_title,
-                      style: Theme.of(context).textTheme.bodyText2,
+                      style: Theme.of(context).textTheme.bodyText2
                     ),
                     Row(
                       children: [
@@ -76,7 +79,9 @@ class CollectionCard extends StatelessWidget {
                         children: [
                           Text(
                             bean.title,
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: Theme.of(context).textTheme.bodyText1.merge(
+                              TextStyle(fontWeight: FontWeight.w600),
+                            ),
                             softWrap: false,
                             overflow: TextOverflow.ellipsis,
                           ),

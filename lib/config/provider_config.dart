@@ -2,11 +2,14 @@ import 'package:chainmore/dao/collection_dao.dart';
 import 'package:chainmore/dao/domain_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/dao/user_dao.dart';
+import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/model/collection_creation_page_model.dart';
+import 'package:chainmore/model/collection_detail_page_model.dart';
 import 'package:chainmore/model/domain_creation_page_model.dart';
 import 'package:chainmore/model/domain_detail_page_model.dart';
 import 'package:chainmore/model/resource_creation_page_model.dart';
+import 'package:chainmore/page/main/collection_detail_page.dart';
 import 'package:chainmore/page/main/domain_detail_page.dart';
 import 'package:chainmore/page/pages.dart';
 import 'package:chainmore/model/models.dart';
@@ -38,9 +41,9 @@ class ProviderConfig {
         ChangeNotifierProvider<ResourceCreationPageModel>.value(
             value: ResourceCreationPageModel()),
         ChangeNotifierProvider<CollectionCreationPageModel>.value(
-          value: CollectionCreationPageModel()),
+            value: CollectionCreationPageModel()),
         ChangeNotifierProvider<DomainCreationPageModel>.value(
-          value: DomainCreationPageModel()),
+            value: DomainCreationPageModel()),
       ],
       child: child,
     );
@@ -67,10 +70,19 @@ class ProviderConfig {
     );
   }
 
-  ChangeNotifierProvider<DomainDetailPageModel> getDomainDetailPage(DomainBean bean) {
+  ChangeNotifierProvider<DomainDetailPageModel> getDomainDetailPage(
+      DomainBean bean) {
     return ChangeNotifierProvider<DomainDetailPageModel>(
       create: (context) => DomainDetailPageModel(bean),
       child: DomainDetailPage(),
+    );
+  }
+
+  ChangeNotifierProvider<CollectionDetailPageModel> getCollectionDetailPage(
+      CollectionBean bean) {
+    return ChangeNotifierProvider<CollectionDetailPageModel>(
+      create: (context) => CollectionDetailPageModel(bean),
+      child: CollectionDetailPage(),
     );
   }
 }

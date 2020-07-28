@@ -1,8 +1,14 @@
+import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/model/explore_page_model.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/model/home_page_model.dart';
 import 'package:chainmore/utils/params.dart';
+import 'package:chainmore/utils/slivers.dart';
+import 'package:chainmore/widgets/cards/domain_recommend_card.dart';
+import 'package:chainmore/widgets/widget_load_header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -31,14 +37,100 @@ class ExplorePage extends StatelessWidget {
               ),
               onPressed: model.logic.onSearchTap,
             ),
-            IconButton(
-              icon: Icon(
-                Icons.search,
-                size: Theme.of(context).iconTheme.size,
-              ),
-              onPressed: model.logic.onSearchTap,
-            )
           ],
+        ),
+      ),
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        onVerticalDragDown: (drag) {
+          FocusScope.of(context).unfocus();
+        },
+        child: EasyRefresh(
+          header: LoadHeader(),
+          onRefresh: () async {
+            model.logic.getRecommendations();
+          },
+          child: CustomScrollView(
+            physics:
+                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            slivers: <Widget>[
+              SliverPersistentHeader(
+                delegate: SliverHeaderDelegate(
+                  minHeight: GlobalParams.appBarHeight,
+                  maxHeight: GlobalParams.appBarHeight * 3,
+                  child: Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.symmetric(
+                      vertical: ScreenUtil().setHeight(0),
+                      horizontal: ScreenUtil().setWidth(10),
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: ScreenUtil().setHeight(30),
+                        horizontal: ScreenUtil().setWidth(10),
+                      ),
+                      child: Column(
+                        children: [
+                          TextField(
+                            minLines: 1,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              isCollapsed: true,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: ScreenUtil().setWidth(30),
+                                  horizontal: ScreenUtil().setWidth(30)),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                  const Radius.circular(15.0),
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                  const Radius.circular(15.0),
+                                ),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                  const Radius.circular(15.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final card = model.cards[index];
+                    if (card is DomainBean) {
+                      return Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: ScreenUtil().setHeight(15),
+                            horizontal: ScreenUtil().setWidth(10),
+                          ),
+                          child: DomainRecommendCard(
+                            bean: card,
+                            horizontalPadding: ScreenUtil().setWidth(30),
+                            verticalPadding: ScreenUtil().setHeight(30),
+                          ));
+                    } else {
+                      return Container();
+                    }
+                  },
+                  childCount: model.cards.length,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

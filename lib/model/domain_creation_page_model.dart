@@ -7,6 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+enum DomainState {
+  create,
+  modify
+}
+
 class DomainCreationPageModel extends ChangeNotifier {
   DomainCreationPageLogic logic;
   BuildContext context;
@@ -25,14 +30,18 @@ class DomainCreationPageModel extends ChangeNotifier {
   final FocusNode introFocusNode = FocusNode();
   double padding;
 
+  DomainState mode = DomainState.create;
+
+  DomainBean domain;
+
   final List<DomainBean> depDomains = [];
   final List<DomainBean> aggDomains = [];
 
   final int depDomainLimit = 8;
   final int aggDomainLimit = 1;
 
-  final int maxTitleLength = 24;
-  final int maxIntroLength = 56;
+  final int maxTitleLength = 16;
+  final int maxIntroLength = 128;
 
   void setContext(BuildContext context, {GlobalModel globalModel}) {
     if (this.context == null) {
@@ -52,6 +61,12 @@ class DomainCreationPageModel extends ChangeNotifier {
     scaffoldKey?.currentState?.dispose();
     globalModel.homePageModel = null;
     debugPrint("Domain Creation Page Model Destroyed");
+  }
+
+  void setDomain(DomainBean domain) {
+    this.domain = domain;
+    this.titleEditingController.text = domain.title;
+    this.introEditingController.text = domain.intro;
   }
 
   void refresh() {

@@ -112,6 +112,7 @@ class DomainCreationPage extends StatelessWidget {
                             ),
                             ListView.separated(
                               shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
                               separatorBuilder: (context, index) {
                                 return Separator();
                               },
@@ -150,6 +151,7 @@ class DomainCreationPage extends StatelessWidget {
                             ),
                             ListView.separated(
                               shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
                               separatorBuilder: (context, index) {
                                 return Separator();
                               },
@@ -184,6 +186,7 @@ class DomainCreationPage extends StatelessWidget {
                                 child: Text(tr("divide")),
                               ),
                             ),
+                            VEmptyView(120),
                           ]),
                     ),
                   ]),

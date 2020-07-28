@@ -1,3 +1,4 @@
+import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/logic/collection_creation_page_logic.dart';
@@ -5,6 +6,11 @@ import 'package:chainmore/model/global_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+enum CollectionMode {
+  create,
+  modify,
+}
 
 class CollectionCreationPageModel extends ChangeNotifier {
   CollectionCreationPageLogic logic;
@@ -24,8 +30,11 @@ class CollectionCreationPageModel extends ChangeNotifier {
   final FocusNode descFocusNode = FocusNode();
   double padding;
 
-  final int maxDescLength = 256;
-  final int maxTitleLength = 30;
+  CollectionBean collection;
+  CollectionMode mode = CollectionMode.create;
+
+  final int maxDescLength = 1024;
+  final int maxTitleLength = 32;
 
   final List<ResourceBean> resources = [];
   final int resourceLimit = 16;
@@ -37,9 +46,6 @@ class CollectionCreationPageModel extends ChangeNotifier {
 
   String lastUrl = "";
 
-  int selectedMediaTypeId = 1;
-  int selectedCollectionTypeId = 1;
-
   void setContext(BuildContext context, {GlobalModel globalModel}) {
     if (this.context == null) {
       this.context = context;
@@ -50,6 +56,12 @@ class CollectionCreationPageModel extends ChangeNotifier {
         refresh();
       });
     }
+  }
+
+  void setCollection(CollectionBean collection) {
+    this.collection = collection;
+    this.titleEditingController.text = collection.title;
+    this.descEditingController.text = collection.description;
   }
 
   @override

@@ -265,11 +265,104 @@ class ApiService {
 
     ApiStrategy.getInstance().get(
       '/domain',
-      (data) {
+          (data) {
         final List items = data["items"];
         final List<DomainBean> beans =
-            items.map((e) => DomainBean.fromJson(e)).toList();
+        items.map((e) => DomainBean.fromJson(e)).toList();
         success(beans[0]);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+  void getAllDomains({
+    Function(List<DomainBean>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getDomainBeans(1).then((value) {
+        success(value);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/domain/all',
+          (data) {
+        final List items = data["items"];
+        final List<DomainBean> beans =
+        items.map((e) => DomainBean.fromJson(e)).toList();
+        success(beans);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+  void getDomainAggregators({
+    Function(List<DomainBean>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getDomainBeans(1).then((value) {
+        success(value[0]);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/domain/i/aggregators',
+          (data) {
+        final List items = data["items"];
+        final List<DomainBean> beans =
+        items.map((e) => DomainBean.fromJson(e)).toList();
+        success(beans);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+  void getDomainDependeds({
+    Function(List<DomainBean>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getDomainBeans(1).then((value) {
+        success(value[0]);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/domain/i/dependeds',
+          (data) {
+        final List items = data["items"];
+        final List<DomainBean> beans =
+        items.map((e) => DomainBean.fromJson(e)).toList();
+        success(beans);
       },
       params: params,
       errorCallBack: error,
@@ -535,7 +628,7 @@ class ApiService {
     Options options,
   }) {
     if (Utils.isMocking) {
-      Mock.getResourceBeans(1).then((value) {
+      Mock.getCollectionBeans(1).then((value) {
         success(value[0]);
       });
 
@@ -548,6 +641,37 @@ class ApiService {
         final List items = data["items"];
         final List<CollectionBean> beans =
             items.map((e) => CollectionBean.fromJson(e)).toList();
+        success(beans[0]);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+  void updateCollection({
+    Function(CollectionBean) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getCollectionBeans(1).then((value) {
+        success(value[0]);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().put(
+      '/collection',
+          (data) {
+        final List items = data["items"];
+        final List<CollectionBean> beans =
+        items.map((e) => CollectionBean.fromJson(e)).toList();
         success(beans[0]);
       },
       params: params,
@@ -746,6 +870,43 @@ class ApiService {
     );
   }
 
+  void updateDomain({
+    Function(DomainBean) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getDomainBeans(1).then((value) {
+        success(value);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().put(
+      '/domain',
+          (data) {
+        final List items = data["items"];
+        final List<DomainBean> beans =
+        items.map((e) => DomainBean.fromJson(e)).toList();
+        if (beans.length == 1) {
+          success(beans[0]);
+        } else {
+          if (failed != null) {
+            failed(beans);
+          }
+        }
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
   void getDomainCollections({
     Function(List<CollectionBean>) success,
     Function failed,
@@ -768,6 +929,37 @@ class ApiService {
         final List items = data["items"];
         final List<CollectionBean> beans =
             items.map((e) => CollectionBean.fromJson(e)).toList();
+        success(beans);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
+  void getCollectionResources({
+    Function(List<ResourceBean>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getResourceBeans(1).then((value) {
+        success(value);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/collection/referenceds',
+          (data) {
+        final List items = data["items"];
+        final List<ResourceBean> beans =
+        items.map((e) => ResourceBean.fromJson(e)).toList();
         success(beans);
       },
       params: params,

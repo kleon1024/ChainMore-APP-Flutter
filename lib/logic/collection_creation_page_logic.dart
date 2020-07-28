@@ -27,31 +27,61 @@ class CollectionCreationPageLogic {
   }
 
   onSubmit() async {
-    final options = await _model.globalModel.userDao.buildOptions();
-    final params = {
-      "title": _model.titleEditingController.text.trim(),
-      "description": _model.descEditingController.text.trim(),
-      "domain_id": _model.domains.map((e) => e.id).toList()[0],
-      "resources": _model.resources.map((e) => e.id).toList(),
-    };
+    if (_model.mode == CollectionMode.create) {
+      final options = await _model.globalModel.userDao.buildOptions();
+      final params = {
+        "title": _model.titleEditingController.text.trim(),
+        "description": _model.descEditingController.text.trim(),
+        "domain_id": _model.domains.map((e) => e.id).toList()[0],
+        "resources": _model.resources.map((e) => e.id).toList(),
+      };
 
-    ApiService.instance.createCollection(
-        options: options,
-        params: params,
-        success: (CollectionBean bean) {
-          ApiService.instance.collectCollection(
-              options: options,
-              params: {'id': bean.id},
-              success: (CollectionBean remote) {
-                remote.collected = true;
-                remote.dirty_collect = false;
-                remote.dirty_modify = false;
-                DBProvider.db.createCollection(remote);
-                _model.refresh();
-                onPostProcess();
-                Utils.showToast(_model.context, tr("collection_created"));
-              });
-        });
+      ApiService.instance.createCollection(
+          options: options,
+          params: params,
+          success: (CollectionBean bean) {
+            ApiService.instance.collectCollection(
+                options: options,
+                params: {'id': bean.id},
+                success: (CollectionBean remote) {
+                  remote.collected = true;
+                  remote.dirty_collect = false;
+                  remote.dirty_modify = false;
+                  DBProvider.db.createCollection(remote);
+                  _model.refresh();
+                  onPostProcess();
+                  Utils.showToast(_model.context, tr("collection_created"));
+                });
+          });
+    } else if (_model.mode == CollectionMode.modify) {
+      final options = await _model.globalModel.userDao.buildOptions();
+      final params = {
+        "id": _model.collection.id,
+        "title": _model.titleEditingController.text.trim(),
+        "description": _model.descEditingController.text.trim(),
+        "domain_id": _model.domains.map((e) => e.id).toList()[0],
+        "resources": _model.resources.map((e) => e.id).toList(),
+      };
+
+      ApiService.instance.updateCollection(
+          options: options,
+          params: params,
+          success: (CollectionBean bean) {
+            ApiService.instance.collectCollection(
+                options: options,
+                params: {'id': bean.id},
+                success: (CollectionBean remote) {
+                  remote.collected = true;
+                  remote.dirty_collect = false;
+                  remote.dirty_modify = false;
+                  DBProvider.db.updateCollection(remote);
+                  _model.refresh();
+                  onPostProcess();
+                  Utils.showToast(_model.context, tr("collection_modified"));
+                });
+          });
+
+    }
   }
 
   onPostProcess() {
@@ -60,6 +90,7 @@ class CollectionCreationPageLogic {
     _model.titleEditingController.clear();
     _model.domains.clear();
     _model.resources.clear();
+    _model.mode = CollectionMode.create;
 
     Navigator.of(_model.context).pop();
   }

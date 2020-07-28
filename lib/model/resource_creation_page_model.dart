@@ -28,6 +28,8 @@ class ResourceCreationPageModel extends ChangeNotifier {
   final int maxUriLength = 512;
   final int maxTitleLength = 64;
 
+  String mode = "create";
+
   final cancelToken = CancelToken();
 
   Widget topResource = VEmptyView(0);

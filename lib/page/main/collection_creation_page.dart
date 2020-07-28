@@ -25,7 +25,10 @@ class CollectionCreationPage extends StatelessWidget {
         preferredSize: Size.fromHeight(GlobalParams.appBarHeight),
         child: AppBar(
           elevation: 0,
-          title: Text(tr("create_collection"),
+          title: Text(
+              model.mode == CollectionMode.create
+                  ? tr("create_collection")
+                  : tr("modify_collection"),
               style: Theme.of(context).textTheme.subtitle1),
           centerTitle: true,
           key: model.scaffoldKey,
@@ -108,12 +111,14 @@ class CollectionCreationPage extends StatelessWidget {
                         ),
                         ListView.separated(
                           shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
                           separatorBuilder: (context, index) {
                             return Separator();
                           },
                           itemBuilder: (context, index) {
                             return Dismissible(
-                              background: Container(color: Theme.of(context).accentColor),
+                              background: Container(
+                                  color: Theme.of(context).accentColor),
                               key: Key(model.domains[index].id.toString()),
                               onDismissed: (direction) {
                                 model.logic.removeDomainAt(index);
@@ -145,12 +150,14 @@ class CollectionCreationPage extends StatelessWidget {
                         ),
                         ListView.separated(
                           shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
                           separatorBuilder: (context, index) {
                             return Separator();
                           },
                           itemBuilder: (context, index) {
                             return Dismissible(
-                              background: Container(color: Theme.of(context).accentColor),
+                              background: Container(
+                                  color: Theme.of(context).accentColor),
                               key: Key(model.resources[index].id.toString()),
                               onDismissed: (direction) {
                                 model.logic.removeRefResourceAt(index);
@@ -175,10 +182,13 @@ class CollectionCreationPage extends StatelessWidget {
                             splashColor: Colors.transparent,
                             color: Theme.of(context).cardColor,
                             textColor: Theme.of(context).accentColor,
-                            onPressed: model.logic.validateForm() ? model.logic.onSubmit : null,
+                            onPressed: model.logic.validateForm()
+                                ? model.logic.onSubmit
+                                : null,
                             child: Text(tr("post")),
                           ),
                         ),
+                        VEmptyView(120),
                       ]),
                     ),
                   ]),
