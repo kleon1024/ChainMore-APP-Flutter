@@ -18,6 +18,9 @@ class DomainBean {
   bool    marked;
   bool    certified;
 
+  /// Search
+  int count = 0;
+
   DomainBean({
     this.id,
     this.title,
@@ -30,6 +33,7 @@ class DomainBean {
     this.dirty_mark = false,
     this.marked = false,
     this.certified = false,
+    this.count = 0,
   });
 
   factory DomainBean.fromJson(Map<String, dynamic> json) => _$DomainBeanFromJson(json);

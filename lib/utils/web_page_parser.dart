@@ -8,10 +8,11 @@ import 'package:html/dom.dart' hide Text;
 class WebPageParser {
   static Future<Map> getData(String url) async {
       var response = await NetUtils.get(url);
-      if (response.statusCode == 403) {
-
+      Map ret = getDataFromResponse(response, url);
+      if (response.request.headers.containsKey('referer')) {
+        ret['url'] = response.request.headers['referer'];
       }
-      return getDataFromResponse(response, url);
+      return ret;
   }
 
   static Map<dynamic, dynamic> getDataFromResponse(

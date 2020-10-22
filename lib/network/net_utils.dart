@@ -34,9 +34,7 @@ class NetUtils {
     CookieJar cj = PersistCookieJar(dir: tempPath);
     _dio = Dio(BaseOptions(baseUrl: '$baseUrl', followRedirects: false))
       ..interceptors.add(ResponseInterceptors())
-      ..interceptors.add(ErrorInterceptors(_dio))
-      ..interceptors
-          .add(CustomLogInterceptor(responseBody: true, requestBody: true));
+      ..interceptors.add(ErrorInterceptors(_dio));
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (client) {
       client.badCertificateCallback =
@@ -47,18 +45,20 @@ class NetUtils {
   }
 
   static Future<Response> get(String url) async {
-    debugPrint("--------------------------------------------------");
     Response response;
     try {
       final headers = {
         'Host': url.split('/')[2],
+        'Content-Type': 'text/html; charset=utf-8',
         'Connection': 'keep-alive',
+        'Transfer-Encoding': 'chunked',
+        'gear': 1,
         'Access-Control-Request-Method': 'GET',
         'Origin': url.split('/').getRange(0, 3).join('/'),
         'User-Agent':
             'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50',
         'Access-Control-Request-Headers': 'range',
-        'Accept': '*/*',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
         'Sec-Fetch-Site': 'cross-site',
         'Sec-Fetch-Mode': 'cors',
         'Referer': url,
@@ -67,8 +67,18 @@ class NetUtils {
       };
       debugPrint(headers.toString());
       response = await _dio.request(url,
-          options: Options(followRedirects: true, headers: headers));
-    } on DioError catch (e) {
+          options: Options(followRedirects: false, headers: headers, validateStatus: (status) { return status < 500; }));
+
+      debugPrint(response.statusCode.toString());
+      if (response.statusCode == 302 || response.statusCode == 301) {
+        String newUrl = response.headers['Location'][0];
+        debugPrint('Redirect to ' + newUrl);
+        if (newUrl.startsWith('http')) {
+          return get(newUrl);
+        }
+      }
+    } catch (e) {
+      debugPrint("fuck");
       debugPrint(e.toString());
     }
     return response;

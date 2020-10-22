@@ -107,7 +107,6 @@ class CurvePainter extends CustomPainter {
     final gradient = new SweepGradient(
       startAngle: degreeToRadians(268),
       endAngle: degreeToRadians(270.0 + 360),
-      tileMode: TileMode.repeated,
       colors: colorsList,
     );
     final paint = new Paint()

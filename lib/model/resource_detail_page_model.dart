@@ -3,13 +3,14 @@ import 'package:chainmore/json/domain_bean.dart';
 import 'package:chainmore/json/resource_bean.dart';
 import 'package:chainmore/logic/collection_detail_page_logic.dart';
 import 'package:chainmore/logic/domain_detail_page_logic.dart';
+import 'package:chainmore/logic/resource_detail_page_logic.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
-class CollectionDetailPageModel extends ChangeNotifier {
-  CollectionDetailPageLogic logic;
+class ResourceDetailPageModel extends ChangeNotifier {
+  ResourceDetailPageLogic logic;
   BuildContext context;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -18,16 +19,19 @@ class CollectionDetailPageModel extends ChangeNotifier {
 
   CancelToken cancelToken = CancelToken();
 
+  int limit = 10;
+  int offset = 1;
+  String order = "time_desc";
+  bool noMoreLoad = false;
+
   GlobalModel globalModel;
 
-  List<ResourceBean> resources = [];
+  ResourceBean resource;
 
-  CollectionBean collection;
+  List<CollectionBean> collections = [];
 
-  DomainBean domain;
-
-  CollectionDetailPageModel(this.collection) {
-    logic = CollectionDetailPageLogic(this);
+  ResourceDetailPageModel(this.resource) {
+    logic = ResourceDetailPageLogic(this);
   }
 
   void setContext(BuildContext context, {GlobalModel globalModel}) {
@@ -36,8 +40,7 @@ class CollectionDetailPageModel extends ChangeNotifier {
       this.globalModel = globalModel;
 
       Future.wait([
-        logic.getResources(),
-        logic.getDomain(),
+        logic.refreshCollections(),
       ]).then((value) {
         refresh();
       });

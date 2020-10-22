@@ -1,8 +1,12 @@
 import 'package:chainmore/config/provider_config.dart';
 import 'package:chainmore/json/domain_bean.dart';
+import 'package:chainmore/model/domain_detail_page_model.dart';
+import 'package:chainmore/page/main/domain_detail_page.dart';
+import 'package:chainmore/widgets/h_empty_view.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DomainCard extends StatelessWidget {
   final DomainBean bean;
@@ -12,6 +16,7 @@ class DomainCard extends StatelessWidget {
   final void Function() onLongPress;
   final Color color;
   final CrossAxisAlignment crossAxisAlignment;
+  final int order;
 
   DomainCard({
     Key key,
@@ -22,6 +27,7 @@ class DomainCard extends StatelessWidget {
     this.onLongPress,
     this.color,
     this.crossAxisAlignment,
+    this.order,
   })  : assert(bean != null),
         super(key: key);
 
@@ -29,8 +35,10 @@ class DomainCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        final detailModel = Provider.of<DomainDetailPageModel>(context);
+        detailModel.push(bean);
         Navigator.of(context).push(new CupertinoPageRoute(builder: (ctx) {
-          return ProviderConfig.getInstance().getDomainDetailPage(bean);
+          return DomainDetailPage();
         }));
       },
       child: Container(
@@ -43,27 +51,43 @@ class DomainCard extends StatelessWidget {
               vertical: verticalPadding,
               horizontal: horizontalPadding,
             ),
-            child: Column(
-              crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.start,
-              children: [
-                Text(
-                  bean.title,
-                  style: Theme.of(context).textTheme.bodyText1.merge(
-                    TextStyle(fontWeight: FontWeight.w600),
+            child: Row(children: [
+              order != null
+                  ? Row(children: [
+                      Text(
+                        order.toString(),
+                        style: Theme.of(context).textTheme.headline4.merge(
+                              TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                  fontWeight: FontWeight.w900),
+                            ),
+                      ),
+                      HEmptyView(10),
+                    ])
+                  : HEmptyView(0),
+              Column(
+                crossAxisAlignment:
+                    crossAxisAlignment ?? CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    bean.title,
+                    style: Theme.of(context).textTheme.bodyText1.merge(
+                          TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                VEmptyView(15),
-                Text(
-                  bean.intro ?? "",
-                  style: Theme.of(context).textTheme.bodyText2,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: true,
-                  maxLines: 3,
-                  textAlign: TextAlign.justify,
-                ),
-              ],
-            ),
+                  VEmptyView(15),
+                  Text(
+                    bean.intro ?? "",
+                    style: Theme.of(context).textTheme.bodyText2,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                    maxLines: 3,
+                    textAlign: TextAlign.justify,
+                  ),
+                ],
+              ),
+            ]),
           ),
         ),
       ),

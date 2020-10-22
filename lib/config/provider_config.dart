@@ -4,13 +4,17 @@ import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/dao/user_dao.dart';
 import 'package:chainmore/json/collection_bean.dart';
 import 'package:chainmore/json/domain_bean.dart';
+import 'package:chainmore/json/resource_bean.dart';
+import 'package:chainmore/model/auth_page_model.dart';
 import 'package:chainmore/model/collection_creation_page_model.dart';
 import 'package:chainmore/model/collection_detail_page_model.dart';
 import 'package:chainmore/model/domain_creation_page_model.dart';
 import 'package:chainmore/model/domain_detail_page_model.dart';
 import 'package:chainmore/model/resource_creation_page_model.dart';
+import 'package:chainmore/model/resource_detail_page_model.dart';
 import 'package:chainmore/page/main/collection_detail_page.dart';
 import 'package:chainmore/page/main/domain_detail_page.dart';
+import 'package:chainmore/page/main/resource_detail_page.dart';
 import 'package:chainmore/page/pages.dart';
 import 'package:chainmore/model/models.dart';
 import 'package:chainmore/pages/domain/domain_detail_page.dart';
@@ -44,6 +48,9 @@ class ProviderConfig {
             value: CollectionCreationPageModel()),
         ChangeNotifierProvider<DomainCreationPageModel>.value(
             value: DomainCreationPageModel()),
+        ChangeNotifierProvider<DomainDetailPageModel>.value(
+            value: DomainDetailPageModel()),
+        ChangeNotifierProvider<AuthPageModel>.value(value: AuthPageModel()),
       ],
       child: child,
     );
@@ -70,19 +77,21 @@ class ProviderConfig {
     );
   }
 
-  ChangeNotifierProvider<DomainDetailPageModel> getDomainDetailPage(
-      DomainBean bean) {
-    return ChangeNotifierProvider<DomainDetailPageModel>(
-      create: (context) => DomainDetailPageModel(bean),
-      child: DomainDetailPage(),
-    );
-  }
-
+  // TODO: recycle
   ChangeNotifierProvider<CollectionDetailPageModel> getCollectionDetailPage(
       CollectionBean bean) {
     return ChangeNotifierProvider<CollectionDetailPageModel>(
       create: (context) => CollectionDetailPageModel(bean),
       child: CollectionDetailPage(),
+    );
+  }
+
+  // TODO: recycle
+  ChangeNotifierProvider<ResourceDetailPageModel> getResourceDetailPage(
+      ResourceBean bean) {
+    return ChangeNotifierProvider<ResourceDetailPageModel>(
+      create: (context) => ResourceDetailPageModel(bean),
+      child: ResourceDetailPage(),
     );
   }
 }

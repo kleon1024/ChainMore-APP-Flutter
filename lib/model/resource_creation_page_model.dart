@@ -8,6 +8,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+enum ResourceMode {
+  CREATE,
+  MODIFY,
+}
+
+enum ResourceCheckStatus {
+  NOT_EXIST,
+  EXISTED,
+  NET_ERR,
+  UNCHECK,
+  CHECKED,
+  URL_ILLEGAL,
+}
+
 class ResourceCreationPageModel extends ChangeNotifier {
   ResourceCreationPageLogic logic;
   BuildContext context;
@@ -27,22 +41,37 @@ class ResourceCreationPageModel extends ChangeNotifier {
   double padding;
   final int maxUriLength = 512;
   final int maxTitleLength = 64;
+  final Map<ResourceCheckStatus, String> checkStatusStrMap = {
+    ResourceCheckStatus.UNCHECK : 'url_uncheck',
+    ResourceCheckStatus.EXISTED : 'url_existed',
+    ResourceCheckStatus.NET_ERR : 'net_err',
+    ResourceCheckStatus.NOT_EXIST: 'url_checked',
+    ResourceCheckStatus.CHECKED: '',
+    ResourceCheckStatus.URL_ILLEGAL: 'url_illegal',
+  };
 
-  String mode = "create";
+  ResourceMode mode = ResourceMode.CREATE;
 
   final cancelToken = CancelToken();
 
   Widget topResource = VEmptyView(0);
 
-  ResourceBean bean;
+  // Check Duplication
+  ResourceBean existedResource;
+  // Resource
+  ResourceBean resource;
 
   bool isPaid = false;
+
   bool isLoading = false;
   bool isChecking = false;
-  bool isUrlChecked = false;
+  bool isSubmitting = false;
+  bool isCollecting = false;
 
-  String urlExists = "";
-  String lastUrl = "";
+  ResourceCheckStatus checkStatus = ResourceCheckStatus.UNCHECK;
+
+  String lastCheckedUrl = "";
+  String lastDetectedUrl = "";
 
   int selectedMediaTypeId = 1;
   int selectedResourceTypeId = 1;
@@ -51,13 +80,31 @@ class ResourceCreationPageModel extends ChangeNotifier {
     if (this.context == null) {
       this.context = context;
       this.globalModel = globalModel;
-      this.uriFocusNode.addListener(logic.onSubmit);
+      this.uriFocusNode.addListener(logic.onUriFocusNodeChanged);
+      this.uriEditingController.addListener(logic.onUriValueChanged);
       this.padding = ScreenUtil().setWidth(15);
 
       Future.wait([]).then((value) {
         refresh();
       });
     }
+  }
+
+  void setResource(ResourceBean resource) {
+    this.resource = resource;
+    this.mode = ResourceMode.MODIFY;
+    this.uriEditingController.text = resource.url;
+    this.titleEditingController.text = resource.title;
+    this.selectedResourceTypeId = resource.resource_type_id;
+    this.selectedMediaTypeId = resource.media_type_id;
+    this.checkStatus = ResourceCheckStatus.CHECKED;
+    this.lastCheckedUrl = resource.url;
+    this.lastDetectedUrl = resource.url;
+    this.isPaid = !resource.free;
+    this.isCollecting = false;
+    this.isSubmitting = false;
+    this.isChecking = false;
+    this.isLoading = false;
   }
 
   @override

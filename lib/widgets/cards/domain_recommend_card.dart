@@ -1,9 +1,12 @@
 import 'package:chainmore/config/provider_config.dart';
 import 'package:chainmore/json/domain_bean.dart';
+import 'package:chainmore/model/domain_detail_page_model.dart';
+import 'package:chainmore/page/main/domain_detail_page.dart';
 import 'package:chainmore/widgets/v_empty_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DomainRecommendCard extends StatelessWidget {
   final DomainBean bean;
@@ -30,8 +33,10 @@ class DomainRecommendCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        final detailModel = Provider.of<DomainDetailPageModel>(context);
+        detailModel.push(bean);
         Navigator.of(context).push(new CupertinoPageRoute(builder: (ctx) {
-          return ProviderConfig.getInstance().getDomainDetailPage(bean);
+          return DomainDetailPage();
         }));
       },
       child: Container(

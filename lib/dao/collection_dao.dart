@@ -52,11 +52,16 @@ class CollectionDao extends ChangeNotifier {
       rawCollections = await DBProvider.db.getCollectedCollections();
     }
 
+    rawCollections.sort((CollectionBean a, CollectionBean b) {
+      return -(Utils.toDateTime(a.modify_time).millisecondsSinceEpoch -
+          Utils.toDateTime(b.modify_time).millisecondsSinceEpoch);
+    });
+
     /// Fake Data
     if (rawCollections == null) return;
     collections.clear();
     collections.addAll(rawCollections);
-    
+
     refresh();
     debugPrint("Collection Bean Inited");
   }
@@ -175,7 +180,6 @@ class CollectionDao extends ChangeNotifier {
                 });
           });
         });
-
   }
 
   getAllCollections() {

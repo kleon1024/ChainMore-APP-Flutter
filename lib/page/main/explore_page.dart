@@ -58,50 +58,73 @@ class ExplorePage extends StatelessWidget {
             slivers: <Widget>[
               SliverPersistentHeader(
                 delegate: SliverHeaderDelegate(
-                  minHeight: GlobalParams.appBarHeight,
-                  maxHeight: GlobalParams.appBarHeight * 3,
-                  child: Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.symmetric(
-                      vertical: ScreenUtil().setHeight(0),
-                      horizontal: ScreenUtil().setWidth(10),
-                    ),
+                  minHeight: GlobalParams.searchBarHeight,
+                  maxHeight: GlobalParams.searchBarHeight,
+                  child: GestureDetector(
+                    onTap: model.logic.onSearchTap,
                     child: Container(
+                      color: Theme.of(context).primaryColor,
                       padding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setHeight(30),
+                        vertical: ScreenUtil().setHeight(0),
                         horizontal: ScreenUtil().setWidth(10),
                       ),
-                      child: Column(
-                        children: [
-                          TextField(
-                            minLines: 1,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              isCollapsed: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: ScreenUtil().setWidth(30),
-                                  horizontal: ScreenUtil().setWidth(30)),
-                              focusedBorder: OutlineInputBorder(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: ScreenUtil().setHeight(30),
+                          horizontal: ScreenUtil().setWidth(10),
+                        ),
+                        child: TextField(
+                          enabled: false,
+                          onTap: model.logic.onSearchTap,
+                          minLines: 1,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            isCollapsed: true,
+                            hintText: tr("search_hint"),
+                            prefixIcon: Icon(Icons.search,
+                                size: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    .fontSize),
+                            prefixIconConstraints:
+                                BoxConstraints.tight(Size.fromWidth(28)),
+                            hintStyle:
+                                Theme.of(context).textTheme.bodyText1.merge(
+                                      TextStyle(
+                                        color: Theme.of(context).disabledColor,
+                                      ),
+                                    ),
+                            fillColor: Theme.of(context).highlightColor,
+                            filled: true,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: ScreenUtil().setWidth(15),
+                                horizontal: ScreenUtil().setWidth(30)),
+                            focusedBorder: OutlineInputBorder(
                                 borderRadius: const BorderRadius.all(
-                                  const Radius.circular(15.0),
+                                  const Radius.circular(10),
                                 ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent)),
+                            disabledBorder: OutlineInputBorder(
                                 borderRadius: const BorderRadius.all(
-                                  const Radius.circular(15.0),
+                                  const Radius.circular(10),
                                 ),
-                              ),
-                              border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent)),
+                            enabledBorder: OutlineInputBorder(
                                 borderRadius: const BorderRadius.all(
-                                  const Radius.circular(15.0),
+                                  const Radius.circular(10),
                                 ),
-                              ),
-                            ),
+                                borderSide:
+                                    BorderSide(color: Colors.transparent)),
+                            border: OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                  const Radius.circular(10),
+                                ),
+                                borderSide:
+                                    BorderSide(color: Colors.transparent)),
                           ),
-                          Expanded(
-                            child: Container(),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),

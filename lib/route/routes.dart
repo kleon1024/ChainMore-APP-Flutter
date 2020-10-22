@@ -35,7 +35,7 @@ class Routes {
 
   static String newResource = "/resource/new";
 
-  static void configureRoutes(Router router) {
+  static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = new Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
       print("ROUTE WAS NOT FOUND !!!");
@@ -45,7 +45,6 @@ class Routes {
 //    router.define(web, handler: webHandler);
     router.define(login, handler: loginHandler);
     router.define(main, handler: mainHandler);
-    router.define(home, handler: homeHandler);
     router.define(search, handler: searchHandler);
     router.define(post, handler: postHandler);
     router.define(domain, handler: domainHandler);

@@ -293,7 +293,8 @@ class Utils {
             }
 
             model.uriEditingController.text = url;
-            model.logic.onSubmit();
+            model.logic.onCheckUrl();
+            model.logic.detectTitle();
 
             Navigator.of(context).pop();
             Navigator.of(context).push(new CupertinoPageRoute(builder: (ctx) {
@@ -436,7 +437,7 @@ class Utils {
   static removeDomain(List<DomainBean> domains, DomainBean res) {
     for (int i = 0; i < domains.length; i++) {
       if (domains[i].id == res.id) {
-        domains.removeAt(i);
+        return domains.removeAt(i);
       }
     }
   }

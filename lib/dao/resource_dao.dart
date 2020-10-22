@@ -56,6 +56,11 @@ class ResourceDao extends ChangeNotifier {
       rawResources = await DBProvider.db.getCollectedResources();
     }
 
+    rawResources.sort((ResourceBean a, ResourceBean b) {
+      return -(Utils.toDateTime(a.modify_time).millisecondsSinceEpoch -
+          Utils.toDateTime(b.modify_time).millisecondsSinceEpoch);
+    });
+
     /// Fake Data
     if (rawResources == null) return;
     resources.clear();

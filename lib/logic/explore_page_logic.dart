@@ -11,6 +11,8 @@ class ExplorePageLogic {
   ExplorePageLogic(this._model);
 
   void onSearchTap() {
+    FocusScope.of(_model.context).unfocus();
+
     Navigator.of(_model.context).push(new CupertinoPageRoute(builder: (ctx) {
       return SearchPage();
     }));

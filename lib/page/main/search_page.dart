@@ -17,62 +17,92 @@ class SearchPage extends StatelessWidget {
         return !model.isSearching;
       },
       child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            elevation: 0,
-            flexibleSpace: SafeArea(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: ScreenUtil().setHeight(15),
-                          horizontal: ScreenUtil().setWidth(15)),
-                      child: TextField(
-                        autofocus: true,
-                        focusNode: model.searchFocusNode,
-                        controller: model.searchController,
-                        cursorColor: Theme.of(context).accentColor,
-                        onChanged: model.logic.onSearchFieldChanged,
-                        textAlignVertical: TextAlignVertical.center,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: ScreenUtil().setWidth(0),
-                              horizontal: ScreenUtil().setWidth(30)),
-                          border: new OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(GlobalParams.appBarHeight),
+            child: AppBar(
+              automaticallyImplyLeading: false,
+              elevation: 0,
+              flexibleSpace: SafeArea(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: ScreenUtil().setHeight(15),
+                            horizontal: ScreenUtil().setWidth(15)),
+                        child: TextField(
+                          autofocus: true,
+                          focusNode: model.searchFocusNode,
+                          controller: model.searchController,
+                          cursorColor: Theme.of(context).accentColor,
+                          onChanged: model.logic.onSearchFieldChanged,
+                          textAlignVertical: TextAlignVertical.center,
+                          decoration: InputDecoration(
+                            isCollapsed: true,
+                            isDense: true,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: ScreenUtil().setWidth(0),
+                                horizontal: ScreenUtil().setWidth(30)),
+                            fillColor: Theme.of(context).highlightColor,
+                            filled: true,
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: const BorderRadius.all(
+                                const Radius.circular(10),
+                              ),
+                              borderSide: BorderSide(color: Colors.transparent),
                             ),
-                          ),
-                          hintText: tr("search"),
-                          hintStyle:
-                              Theme.of(context).textTheme.bodyText1.merge(
-                                    TextStyle(
-                                      color: Theme.of(context).highlightColor,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: const BorderRadius.all(
+                                const Radius.circular(10),
+                              ),
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: const BorderRadius.all(
+                                const Radius.circular(10),
+                              ),
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            hintText: tr("search_hint"),
+                            hintStyle:
+                                Theme.of(context).textTheme.bodyText1.merge(
+                                      TextStyle(
+                                        color: Theme.of(context).disabledColor,
+                                      ),
                                     ),
-                                  ),
-                          suffixIcon: IconButton(
-                            onPressed: () {},
-                            padding: EdgeInsets.zero,
-                            iconSize: GlobalParams.smallIconSize,
-                            color: Theme.of(context).highlightColor,
-                            icon: Icon(Icons.cancel),
+                            prefixIcon: Icon(
+                              Icons.search,
+                              size: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  .fontSize,
+                              color: Theme.of(context).disabledColor,
+                            ),
+                            prefixIconConstraints:
+                                BoxConstraints.tight(Size.fromWidth(28)),
+                            suffixIcon: IconButton(
+                              onPressed: model.logic.onClearSearchText,
+                              padding: EdgeInsets.zero,
+                              iconSize: GlobalParams.smallIconSize,
+                              color: Theme.of(context).highlightColor,
+                              icon: Icon(Icons.cancel),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Text(
-                      tr("cancel"),
-                      style: Theme.of(context).textTheme.subtitle2,
-                      softWrap: false,
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Text(
+                        tr("cancel"),
+                        style: Theme.of(context).textTheme.subtitle2,
+                        softWrap: false,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

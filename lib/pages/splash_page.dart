@@ -1,4 +1,3 @@
-import 'file:///D:/project/ChainMore/ChainMore-APP-Flutter/lib/pages/old_main_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:chainmore/application.dart';
@@ -20,9 +19,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     super.initState();
     NetUtils.init();
     goPage();
-//    Navigator.of(context).push(CupertinoPageRoute(builder: (ctx) {
-//      return MainPage();
-//    }));
   }
 
   void goPage() async {

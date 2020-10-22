@@ -41,4 +41,8 @@ class Keys{
   static final String everyDayPicRefreshTime = "every_day_pic_refresh_time";
   static final String resourceTypeMap = "resource_type_map";
   static final String lastClipBoardUrl = "last_clip_board_url";
+
+  static final String accessToken = "access_token";
+  static final String refreshToken = "refresh_token";
+  static final String isLoggedIn = "is_logged_in";
 }

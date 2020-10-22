@@ -21,6 +21,7 @@ class ResourceSelectionPage extends StatefulWidget {
 
 class ResourceSelectionPageState extends State<ResourceSelectionPage> {
   final List<bool> values = [];
+  bool searching = false;
 
   @override
   Widget build(BuildContext context) {

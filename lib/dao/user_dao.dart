@@ -1,13 +1,13 @@
 import 'dart:math';
 
 import 'package:chainmore/config/api_service.dart';
-import 'package:chainmore/database/database.dart';
-import 'package:chainmore/json/resource_bean.dart';
-import 'package:chainmore/mock.dart';
+import 'package:chainmore/config/keys.dart';
+import 'package:chainmore/config/provider_config.dart';
 import 'package:chainmore/model/global_model.dart';
-import 'package:chainmore/utils/types.dart';
-import 'package:chainmore/utils/utils.dart';
+import 'package:chainmore/page/main/auth_page.dart';
+import 'package:chainmore/utils/shared_util.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 
@@ -18,20 +18,23 @@ class UserDao extends ChangeNotifier {
 
   CancelToken cancelToken = CancelToken();
 
-  String accessToken =
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUyNDQ4NjIsIm5iZiI6MTU5NTI0NDg2MiwianRpIjoiYWI1YTU5MjEtMDA2ZC00MmM0LTllNjEtOTcyNmZlYjRhN2ZkIiwiZXhwIjoxNjA1NjEyODYyLCJpZGVudGl0eSI6ImtsZW9uIiwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.NnBHekj3SHQgUmoJr5EbM8hxGDdjTzoKY2RqBWTS9fU";
-  String refreshToken =
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTUxOTc0MjYsIm5iZiI6MTU5NTE5NzQyNiwianRpIjoiNDcyZTA1YjYtMzMyYS00NDliLTgzNTEtNzJjOWVmNDQwMmEzIiwiZXhwIjoxNTk3Nzg5NDI2LCJpZGVudGl0eSI6ImtsZW9uIiwidHlwZSI6InJlZnJlc2gifQ.6TzZYLWPn4LQm5ITERVrNH4k9b0xSdkFCpNm2FmLHio";
+  String accessToken = "";
+  String refreshToken = "";
 
   bool isLoggedIn = false;
   int id = 1;
 
-  void setContext(BuildContext context, {GlobalModel globalModel}) {
+  void setContext(BuildContext context, {GlobalModel globalModel}) async {
     if (this.context == null) {
-      this.isLoggedIn = false;
       this.context = context;
       this._globalModel = globalModel;
-      this.isLoggedIn = true;
+
+      this.isLoggedIn = await SharedUtil.instance.getBoolean(Keys.isLoggedIn);
+      this.accessToken = await SharedUtil.instance.getString(Keys.accessToken);
+      this.refreshToken =
+          await SharedUtil.instance.getString(Keys.refreshToken);
+      this.refreshAccessToken();
+
       Future.wait([]).then((value) {
         syncAll();
         refresh();
@@ -40,6 +43,9 @@ class UserDao extends ChangeNotifier {
   }
 
   void refreshAccessToken() {
+    print("Refresh Access Token");
+    print(this.isLoggedIn);
+
     if (this.isLoggedIn) {
       Options options =
           Options(headers: {"Authorization": "Bearer " + refreshToken});
@@ -50,10 +56,20 @@ class UserDao extends ChangeNotifier {
             this.accessToken = data["access_token"];
             this.refreshToken = data["refresh_token"];
           },
-          error: (err) {},
+          error: (err) {
+            int statusCode = int.tryParse(err) ?? 0;
+            if (statusCode == 401) {
+              Navigator.of(this.context)
+                  .push(new CupertinoPageRoute(builder: (ctx) {
+                return AuthPage();
+              }));
+            }
+          },
           failed: () {});
     } else {
-      /// TODO: push to login page
+      Navigator.of(this.context).push(new CupertinoPageRoute(builder: (ctx) {
+        return AuthPage();
+      }));
     }
   }
 

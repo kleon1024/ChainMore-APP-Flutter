@@ -1,9 +1,14 @@
+import 'package:chainmore/config/provider_config.dart';
 import 'package:chainmore/json/resource_bean.dart';
+import 'package:chainmore/model/domain_detail_page_model.dart';
+import 'package:chainmore/model/resource_detail_page_model.dart';
+import 'package:chainmore/page/main/resource_detail_page.dart';
 import 'package:chainmore/pages/webview/web_view_page.dart';
 import 'package:chainmore/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class ResourceCard extends StatelessWidget {
   final void Function() onTap;
@@ -31,6 +36,9 @@ class ResourceCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap ??
           () {
+            Navigator.of(context).push(new CupertinoPageRoute(builder: (ctx) {
+              return ProviderConfig.getInstance().getResourceDetailPage(bean);
+            }));
           },
       onLongPress: onLongPress,
       child: Container(

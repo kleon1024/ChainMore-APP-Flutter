@@ -25,12 +25,9 @@ class MainPageLogic {
     _model.intentDataStreamSubscription = ReceiveSharingIntent.getTextStream()
         .listen((String value) async {
       ReceiveSharingIntent.reset();
-      debugPrint("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-      debugPrint(value);
       if (value != null && value != "" && value.startsWith('http')) {
         await SharedUtil.instance.saveString(Keys.lastClipBoardUrl, value);
         model.logic.setInitUrl(value);
-        model.logic.onSubmit();
         Navigator.of(_model.context).push(CupertinoPageRoute(builder: (ctx) {
           return ResourceCreationPage();
         }));
@@ -43,12 +40,9 @@ class MainPageLogic {
 
     await ReceiveSharingIntent.getInitialText().then((String value) async {
       ReceiveSharingIntent.reset();
-      debugPrint("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-      debugPrint(value);
       if (value != null && value != "" && value.startsWith('http')) {
         await SharedUtil.instance.saveString(Keys.lastClipBoardUrl, value);
         model.logic.setInitUrl(value);
-        model.logic.onSubmit();
         Navigator.of(_model.context).push(CupertinoPageRoute(builder: (ctx) {
           return ResourceCreationPage();
         }));

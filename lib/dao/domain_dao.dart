@@ -54,6 +54,27 @@ class DomainDao extends ChangeNotifier {
       rawDomains = await DBProvider.db.getMarkedDomains();
     }
 
+    DomainBean rootDomain;
+    for (DomainBean domain in rawDomains) {
+      if (domain.id == 1) {
+        rootDomain = domain;
+        break;
+      }
+    }
+
+    if (rootDomain != null) {
+      Utils.removeDomain(rawDomains, rootDomain);
+    }
+
+    rawDomains.sort((DomainBean a, DomainBean b) {
+      return -(Utils.toDateTime(a.modify_time).millisecondsSinceEpoch -
+          Utils.toDateTime(b.modify_time).millisecondsSinceEpoch);
+    });
+
+    if (rootDomain != null) {
+      rawDomains.insert(0, rootDomain);
+    }
+
     /// Fake Data
     if (rawDomains == null) return;
     domains.clear();
@@ -76,6 +97,7 @@ class DomainDao extends ChangeNotifier {
 
     ApiService.instance.getMarkedDomains(
         options: options,
+        params: { 'limit': 999 },
         success: (List<DomainBean> beans) async {
           final locals = await DBProvider.db.getAllDomains();
           Map<int, DomainBean> domainMap = {};

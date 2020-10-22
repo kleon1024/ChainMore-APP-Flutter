@@ -5,6 +5,7 @@ import 'package:chainmore/dao/domain_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/dao/user_dao.dart';
 import 'package:chainmore/logic/global_logic.dart';
+import 'package:chainmore/model/auth_page_model.dart';
 import 'package:chainmore/model/explore_page_model.dart';
 
 import 'package:chainmore/model/models.dart';
@@ -26,6 +27,7 @@ class GlobalModel extends ChangeNotifier {
   HomePageModel homePageModel;
   ExplorePageModel explorePageModel;
   SearchPageModel searchPageModel;
+  AuthPageModel authPageModel;
 
   ResourceDao resourceDao;
   CollectionDao collectionDao;
@@ -120,6 +122,13 @@ class GlobalModel extends ChangeNotifier {
     if (this.searchPageModel == null) {
       this.searchPageModel = searchPageModel;
       debugPrint("Set Search Page Model [Global Model]");
+    }
+  }
+
+  void setAuthPageModel(AuthPageModel authPageModel) {
+    if (this.authPageModel == null) {
+      this.authPageModel = authPageModel;
+      debugPrint("Set Auth Page Model [Global Model]");
     }
   }
 

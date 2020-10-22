@@ -19,103 +19,122 @@ class DomainDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final globalModel = Provider.of<GlobalModel>(context);
-    final model = Provider.of<DomainDetailPageModel>(context)
-      ..setContext(context, globalModel: globalModel);
+    final model = Provider.of<DomainDetailPageModel>(context);
     final domain = model.domain;
     final List<CollectionBean> collections = model.elements;
 
-    return SafeArea(
-      child: Scaffold(
-        key: model.scaffoldKey,
-        body: EasyRefresh(
-          header: LoadHeader(),
-          footer: LoadFooter(),
-          controller: model.controller,
-          onRefresh: model.logic.refreshCollections,
-          onLoad: model.logic.loadCollections,
-          child: CustomScrollView(
-            physics:
-                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-            slivers: <Widget>[
-              SliverAppBar(
-                toolbarHeight: GlobalParams.appBarHeight - 1,
-                collapsedHeight: GlobalParams.appBarHeight,
-                expandedHeight: GlobalParams.appBarHeight * 2,
-                centerTitle: true,
-                pinned: true,
-                elevation: 0,
-                title: Text(
-                  domain.title,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-                floating: false,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(30)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: GlobalParams.appBarHeight,
-                        ),
-                        Text(domain.intro)
-                      ],
-                    ),
+    return WillPopScope(
+      onWillPop: () async {
+        model.pop();
+        return true;
+      },
+      child: SafeArea(
+        child: Scaffold(
+          body: EasyRefresh(
+            header: LoadHeader(),
+            footer: LoadFooter(),
+            controller: model.controller,
+            onRefresh: model.logic.refreshCollections,
+            onLoad: model.logic.loadCollections,
+            child: CustomScrollView(
+              physics: BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              slivers: <Widget>[
+                SliverAppBar(
+                  toolbarHeight: GlobalParams.appBarHeight - 1,
+                  collapsedHeight: GlobalParams.appBarHeight,
+                  expandedHeight: GlobalParams.appBarHeight * 3,
+                  centerTitle: true,
+                  pinned: true,
+                  elevation: 0,
+                  title: Text(
+                    domain.title,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
-                ),
-                actions: [
-                  IconButton(
-                    visualDensity: VisualDensity.compact,
-                    icon: Icon(
-                      Icons.more_horiz,
-                      size: Theme.of(context).iconTheme.size,
-                    ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return buildMorePanel(context, model);
-                          });
-                    },
-                  ),
-                ],
-              ),
-              SliverPersistentHeader(
-                delegate: SliverHeaderDelegate(
-                    minHeight: GlobalParams.appBarHeight,
-                    maxHeight: GlobalParams.appBarHeight,
-                    child: FlatButton(
-                      visualDensity: VisualDensity.compact,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          children: [
-                            Text(tr("ordered_by")),
-                            Text(":"),
-                            Text(tr(model.order)),
-                          ],
-                        ),
+                  floating: false,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(30)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: GlobalParams.appBarHeight,
+                          ),
+                          Text(domain.intro ?? ""),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.bookmark_border,
+                                    size: Theme.of(context).iconTheme.size),
+                                onPressed: model.logic.onMarkDomain,
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.school,
+                                    size: Theme.of(context).iconTheme.size),
+                                onPressed: model.logic.onLearnDomain,
+                              ),
+                            ],
+                          )
+                        ],
                       ),
-                      onPressed: () {},
-                    )),
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setHeight(10),
-                        horizontal: ScreenUtil().setWidth(15)),
-                    child: CollectionCard(
-                      bean: collections[index],
-                      horizontalPadding: ScreenUtil().setWidth(30),
-                      verticalPadding: ScreenUtil().setHeight(15),
                     ),
-                  );
-                }, childCount: collections.length),
-              ),
-            ],
+                  ),
+                  actions: [
+                    IconButton(
+                      visualDensity: VisualDensity.compact,
+                      icon: Icon(
+                        Icons.more_horiz,
+                        size: Theme.of(context).iconTheme.size,
+                      ),
+                      onPressed: () {
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return buildMorePanel(context, model);
+                            });
+                      },
+                    ),
+                  ],
+                ),
+                SliverPersistentHeader(
+                  delegate: SliverHeaderDelegate(
+                      minHeight: GlobalParams.appBarHeight,
+                      maxHeight: GlobalParams.appBarHeight,
+                      child: FlatButton(
+                        visualDensity: VisualDensity.compact,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: [
+                              Text(tr("ordered_by")),
+                              Text(":"),
+                              Text(tr(model.order)),
+                            ],
+                          ),
+                        ),
+                        onPressed: () {},
+                      )),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    return Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: ScreenUtil().setHeight(10),
+                          horizontal: ScreenUtil().setWidth(15)),
+                      child: CollectionCard(
+                        bean: collections[index],
+                        horizontalPadding: ScreenUtil().setWidth(30),
+                        verticalPadding: ScreenUtil().setHeight(15),
+                      ),
+                    );
+                  }, childCount: collections.length),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -142,9 +161,7 @@ class DomainDetailPage extends StatelessWidget {
       }
     }
 
-    widgets.add(
-      VEmptyView(60)
-    );
+    widgets.add(VEmptyView(60));
 
     return Container(
       height: GlobalParams.appBarHeight * widgets.length,

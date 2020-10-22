@@ -185,6 +185,37 @@ class ApiService {
     );
   }
 
+  void getResourceCollections({
+    Function(List<CollectionBean>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) {
+    if (Utils.isMocking) {
+      Mock.getCollectionBeans(1).then((value) {
+        success(value);
+      });
+
+      return;
+    }
+
+    ApiStrategy.getInstance().get(
+      '/resource/collections',
+          (data) {
+        final List items = data["items"];
+        final List<CollectionBean> beans =
+        items.map((e) => CollectionBean.fromJson(e)).toList();
+        success(beans);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
   void getCreatedDomains({
     Function(List<DomainBean>) success,
     Function failed,

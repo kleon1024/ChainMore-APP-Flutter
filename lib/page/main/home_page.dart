@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import 'package:flutter_easyrefresh/bezier_hour_glass_header.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -62,12 +63,16 @@ class HomePage extends StatelessWidget {
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           slivers: <Widget>[
-            SliverAnimatedList(
-              key: model.sliverAnimatedListKey,
-              initialItemCount: model.elements.length,
-              itemBuilder: (context, index, animation) {
-                return model.elements[index];
-              },
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: ScreenUtil().setHeight(10)),
+                      child: model.elements[index]);
+                },
+                childCount: model.elements.length,
+              ),
             ),
           ],
         ),

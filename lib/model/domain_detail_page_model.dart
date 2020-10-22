@@ -10,7 +10,9 @@ class DomainDetailPageModel extends ChangeNotifier {
   DomainDetailPageLogic logic;
   BuildContext context;
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final map = {};
+  final stack = [];
+
   final sliverAnimatedListKey = GlobalKey<SliverAnimatedListState>();
   final EasyRefreshController controller = EasyRefreshController();
 
@@ -22,6 +24,9 @@ class DomainDetailPageModel extends ChangeNotifier {
 
   final List<DomainBean> depDomains = [];
   final List<DomainBean> aggDomains = [];
+  final List<DomainBean> learnDomains = [];
+
+  bool loadLearnDomains = false;
 
   int limit = 10;
   int offset = 1;
@@ -31,7 +36,7 @@ class DomainDetailPageModel extends ChangeNotifier {
 
   DomainBean domain;
 
-  DomainDetailPageModel(this.domain) {
+  DomainDetailPageModel() {
     logic = DomainDetailPageLogic(this);
   }
 
@@ -39,20 +44,12 @@ class DomainDetailPageModel extends ChangeNotifier {
     if (this.context == null) {
       this.context = context;
       this.globalModel = globalModel;
-
-      Future.wait([
-        logic.refreshCollections(),
-        logic.getDomainRelations()
-      ]).then((value) {
-        refresh();
-      });
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    scaffoldKey?.currentState?.dispose();
     if (!cancelToken.isCancelled) cancelToken.cancel();
     debugPrint("Domain Detail Page Model Destroyed");
   }
@@ -60,5 +57,87 @@ class DomainDetailPageModel extends ChangeNotifier {
   void refresh() {
     debugPrint("refresh");
     notifyListeners();
+  }
+
+  void reset() {
+    this.domain = null;
+    this.elements.clear();
+    this.depDomains.clear();
+    this.aggDomains.clear();
+    this.learnDomains.clear();
+    this.loadLearnDomains = false;
+    this.limit = 10;
+    this.offset = 1;
+    this.order = "time_desc";
+    this.noMoreLoad = false;
+  }
+
+  void set(snapshot) {
+    this.domain = DomainBean.fromJson(snapshot["domain"]);
+    this.elements.addAll(List<CollectionBean>.from(
+        snapshot["elements"].map((e) => CollectionBean.fromJson(e)).toList()));
+    this.depDomains.addAll(List<DomainBean>.from(
+        snapshot["depDomains"].map((e) => DomainBean.fromJson(e)).toList()));
+    this.aggDomains.addAll(List<DomainBean>.from(
+        snapshot["aggDomains"].map((e) => DomainBean.fromJson(e)).toList()));
+    this.learnDomains.addAll(List<DomainBean>.from(
+        snapshot["learnDomains"].map((e) => DomainBean.fromJson(e)).toList()));
+    this.loadLearnDomains = snapshot["loadLearnDomains"];
+    this.limit = snapshot["limit"];
+    this.offset = snapshot["offset"];
+    this.order = snapshot["order"];
+    this.noMoreLoad = snapshot["noMoreLoad"];
+  }
+
+  void push(DomainBean bean) {
+    if (this.domain != null) {
+      this.stack.add(this.domain.id);
+      debugPrint(this.stack.toString());
+      if (this.map.containsKey(bean.id)) {
+        debugPrint("set id: " + bean.id.toString());
+        this.set(this.map[bean.id]);
+      } else {
+        debugPrint("not found id: " + bean.id.toString());
+        debugPrint("reset and set to: " + bean.id.toString());
+        this.map[this.domain.id] = {
+          "domain": this.domain.toJson(),
+          "elements": this.elements.map((e) => e.toJson()).toList(),
+          "depDomains": this.depDomains.map((e) => e.toJson()).toList(),
+          "aggDomains": this.aggDomains.map((e) => e.toJson()).toList(),
+          "learnDomains": this.learnDomains.map((e) => e.toJson()).toList(),
+          "loadLearnDomains": this.loadLearnDomains,
+          "limit": this.limit,
+          "offset": this.offset,
+          "order": this.order,
+          "noMoreLoad": this.noMoreLoad,
+        };
+        this.reset();
+        this.domain = bean;
+        this.logic.refreshCollections();
+        this.logic.getDomainRelations();
+      }
+    } else {
+      this.reset();
+      this.domain = bean;
+      this.logic.refreshCollections();
+      this.logic.getDomainRelations();
+    }
+  }
+
+  void pop() {
+    if (this.stack.isNotEmpty) {
+      final lastId = this.stack.removeLast();
+      debugPrint("stack not empty:" + lastId.toString());
+      if (this.map.containsKey(lastId)) {
+        final snapshot = this.map[lastId];
+        this.reset();
+        debugPrint("reset to: " + lastId.toString());
+        this.set(snapshot);
+        this.refresh();
+      }
+    } else {
+      this.reset();
+      this.map.clear();
+    }
   }
 }

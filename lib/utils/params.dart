@@ -6,8 +6,11 @@ class GlobalParams {
   static double resourceCardHeight = ScreenUtil().setHeight(300);
 
   static double appBarHeight = ScreenUtil().setHeight(120);
+  static double searchBarHeight = ScreenUtil().setHeight(150);
 
   static double collectionTopBarIconSize = 15;
 
   static double smallIconSize = 18;
+
+  static int COUNT_DOWN_MAX = 60;
 }

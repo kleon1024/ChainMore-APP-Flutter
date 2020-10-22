@@ -2,6 +2,7 @@ import 'package:chainmore/dao/collection_dao.dart';
 import 'package:chainmore/dao/domain_dao.dart';
 import 'package:chainmore/dao/resource_dao.dart';
 import 'package:chainmore/dao/user_dao.dart';
+import 'package:chainmore/model/auth_page_model.dart';
 import 'package:chainmore/model/domain_detail_page_model.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/model/main_page_model.dart';
@@ -31,17 +32,21 @@ class MainPageState extends ResumableState<MainPage> {
   @override
   Widget build(BuildContext context) {
     final globalModel = Provider.of<GlobalModel>(context)..setContext(context);
+    final authPageModel = Provider.of<AuthPageModel>(context)
+      ..setContext(context, globalModel: globalModel);
+    final userDao = Provider.of<UserDao>(context)
+      ..setContext(context, globalModel: globalModel);
     final resourceDao = Provider.of<ResourceDao>(context)
       ..setContext(context, globalModel: globalModel);
     final collectionDao = Provider.of<CollectionDao>(context)
       ..setContext(context, globalModel: globalModel);
     final domainDao = Provider.of<DomainDao>(context)
       ..setContext(context, globalModel: globalModel);
-    final userDao = Provider.of<UserDao>(context)
-      ..setContext(context, globalModel: globalModel);
     final model = Provider.of<MainPageModel>(context)
       ..setContext(context, globalModel: globalModel);
     final searchPageModel = Provider.of<SearchPageModel>(context)
+      ..setContext(context, globalModel: globalModel);
+    final domainDetailPageModel = Provider.of<DomainDetailPageModel>(context)
       ..setContext(context, globalModel: globalModel);
 
     globalModel.setMainPageModel(model);
@@ -50,6 +55,7 @@ class MainPageState extends ResumableState<MainPage> {
     globalModel.setDomainDao(domainDao);
     globalModel.setUserDao(userDao);
     globalModel.setSearchPageModel(searchPageModel);
+    globalModel.setAuthPageModel(authPageModel);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(

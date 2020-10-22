@@ -24,40 +24,38 @@ class ResourceCreationPageLogic {
 
   ResourceCreationPageLogic(this._model);
 
-  onSubmit() {
-    if (_model.uriFocusNode.hasFocus) return;
-
+  onCheckUrl() {
+    if (_model.checkStatus != ResourceCheckStatus.UNCHECK) return;
     String value = _model.uriEditingController.text.trim();
-
-    if (value.isNotEmpty && value.startsWith('http')) {
-      if (value != _model.lastUrl) {
-        if (!_model.isLoading && !_model.isChecking) {
-          _model.lastUrl = value;
-          detectTitle();
-          checkUrl();
-        }
-      } else if (_model.urlExists == tr("error_network")) {
-        _model.lastUrl = value;
-        detectTitle();
+    if (value.isEmpty) return;
+    if (value != _model.lastCheckedUrl) {
+      _model.lastCheckedUrl = value;
+      if (value.startsWith('http')) {
         checkUrl();
+      } else {
+        _model.checkStatus = ResourceCheckStatus.URL_ILLEGAL;
+        _model.refresh();
       }
-    } else {
-      _model.isUrlChecked = false;
-      if (value.isNotEmpty) {
-        _model.urlExists = tr("url_illegal");
-      }
-      _model.refresh();
     }
   }
 
   detectTitle() async {
+    String value = _model.uriEditingController.text.trim();
+    if (value.isEmpty) return;
+    if (!value.startsWith('http')) return;
+    if (value == _model.lastDetectedUrl) return;
+
     if (!_model.isLoading) {
       _model.isLoading = true;
+      _model.lastDetectedUrl = value;
       _model.refresh();
-      WebPageParser.getData(_model.lastUrl).then((Map data) {
+      WebPageParser.getData(_model.lastDetectedUrl).then((Map data) {
         if (data != null) {
           if (data.containsKey('title')) {
             _model.titleEditingController.text = data['title'];
+          }
+          if (data.containsKey('url')) {
+            _model.uriEditingController.text = data['url'];
           }
         }
         _model.isLoading = false;
@@ -72,12 +70,11 @@ class ResourceCreationPageLogic {
 
   checkUrl() async {
     if (!_model.isChecking) {
-      _model.isUrlChecked = false;
       _model.isChecking = true;
-      _model.bean = null;
+      _model.existedResource = null;
       _model.refresh();
       ApiService().checkResourceUrlExists(
-        params: {'url': _model.lastUrl},
+        params: {'url': _model.lastCheckedUrl},
         success: onCheckResourceUrlSuccess,
         error: onCheckResourceUrlError,
         token: _model.cancelToken,
@@ -86,50 +83,37 @@ class ResourceCreationPageLogic {
   }
 
   onCheckResourceUrlSuccess(List<ResourceBean> beans) async {
-    if (_model.uriEditingController.text.trim() != _model.lastUrl) {
-      _model.isUrlChecked = false;
-      _model.isChecking = false;
-      _model.urlExists = tr("url_not_checked");
-      _model.refresh();
-      return;
-    }
-
     final options = await _model.globalModel.userDao.buildOptions();
 
     if (beans.isNotEmpty) {
       final bean = beans[0];
       bean.collected = false;
-      _model.bean = bean;
-      _model.urlExists = tr("url_exists");
-      _model.isUrlChecked = true;
+      _model.existedResource = bean;
+      _model.checkStatus = ResourceCheckStatus.EXISTED;
+      _model.isChecking = false;
 
       ApiService.instance.checkCollectResource(
-        options: options,
-        params: {'id':_model.bean.id},
-        success: (items) {
-          if (items.isEmpty) {
-            _model.bean.collected = false;
-          } else {
-            _model.bean.collected = true;
-          }
-
-          _model.refresh();
-        }
-      );
+          options: options,
+          params: {'id': _model.existedResource.id},
+          success: (items) {
+            if (items.isEmpty) {
+              _model.existedResource.collected = false;
+            } else {
+              _model.existedResource.collected = true;
+            }
+            _model.refresh();
+          });
     } else {
-      _model.isUrlChecked = true;
-      _model.urlExists = "";
+      _model.isChecking = false;
+      _model.checkStatus = ResourceCheckStatus.NOT_EXIST;
     }
 
-    _model.isChecking = false;
     _model.refresh();
   }
 
   onCheckResourceUrlError(err) {
-    print("Cheking Resource Url Error");
-    _model.urlExists = tr("error_network");
+    _model.checkStatus = ResourceCheckStatus.NET_ERR;
     _model.isChecking = false;
-    _model.isUrlChecked = false;
     _model.refresh();
   }
 
@@ -158,62 +142,83 @@ class ResourceCreationPageLogic {
     );
   }
 
-  createResource() async {
-    /// TODO: Make it more clear
-    if (!_model.isUrlChecked) {
-      if (_model.urlExists == tr("url_not_checked")) {
-        onSubmit();
-      }
+  onClickCreateButton() async {
+    if (_model.checkStatus == ResourceCheckStatus.NOT_EXIST) {
+      submitResource();
     }
-
-    await submitResource();
   }
 
   Future submitResource() async {
-    final userId = _model.globalModel.userDao.id;
+    if (!_model.isSubmitting) {
+      _model.isSubmitting = true;
+      _model.refresh();
+      if (_model.mode == ResourceMode.CREATE) {
+        final resource = ResourceBean(
+            title: _model.titleEditingController.text.trim(),
+            url: _model.uriEditingController.text.trim(),
+            external: true,
+            free: !_model.isPaid,
+            resource_type_id: _model.selectedResourceTypeId,
+            media_type_id: _model.selectedMediaTypeId);
 
-    final resource = ResourceBean(
-        title: _model.titleEditingController.text.trim(),
-        url: _model.uriEditingController.text.trim(),
-        author_id: userId,
-        external: true,
-        free: !_model.isPaid,
-        resource_type_id: _model.selectedResourceTypeId,
-        media_type_id: _model.selectedMediaTypeId);
+        final options = await _model.globalModel.userDao.buildOptions();
 
-    final options = await _model.globalModel.userDao.buildOptions();
+        ApiService.instance.createResource(
+            token: _model.cancelToken,
+            options: options,
+            params: resource.toJson(),
+            success: (ResourceBean remote) {
+              ApiService.instance.collectResource(
+                  options: options,
+                  params: {'id': remote.id},
+                  success: (ResourceBean bean) {
+                    bean.collected = true;
+                    DBProvider.db.createResource(bean);
+                    onPostProcess();
+                    Utils.showToast(_model.context, tr("resource_created"));
+                  },
+                  error: (err) {
+                    Utils.showToast(_model.context, tr("err_network"));
+                  });
+            },
+            error: (err) {
+              Utils.showToast(_model.context, tr("err_network"));
+            });
+      } else if (_model.mode == ResourceMode.MODIFY) {
+        final resource = ResourceBean(
+            id: _model.resource.id,
+            title: _model.titleEditingController.text.trim(),
+            url: _model.uriEditingController.text.trim(),
+            external: true,
+            free: !_model.isPaid,
+            resource_type_id: _model.selectedResourceTypeId,
+            media_type_id: _model.selectedMediaTypeId);
 
-    ApiService.instance.createResource(
-        token: _model.cancelToken,
-        options: options,
-        params: resource.toJson(),
-        success: (ResourceBean remote) {
-          ApiService.instance.collectResource(
-              options: options,
-              params: {'id': remote.id},
-              success: (ResourceBean bean) {
-                bean.collected = true;
-                DBProvider.db.createResource(bean);
-                onPostProcess();
-                Utils.showToast(_model.context, tr("resource_created"));
-              },
-              error: (err) {
-                remote.collected = true;
-                remote.dirty_collect = true;
-                DBProvider.db.createResource(remote);
-                onPostProcess();
-                Utils.showToast(
-                    _model.context, tr("resource_created_but_not_collected"));
-              });
-        },
-        error: (err) {
-          resource.dirty_modify = true;
-          resource.dirty_collect = true;
-          resource.collected = true;
-          DBProvider.db.createResource(resource);
-          onPostProcess();
-          Utils.showToast(_model.context, tr("resource_not_created"));
-        });
+        final options = await _model.globalModel.userDao.buildOptions();
+
+        ApiService.instance.updateResource(
+            token: _model.cancelToken,
+            options: options,
+            params: resource.toJson(),
+            success: (ResourceBean remote) {
+              ApiService.instance.collectResource(
+                  options: options,
+                  params: resource.toJson(),
+                  success: (ResourceBean bean) {
+                    bean.collected = true;
+                    DBProvider.db.updateResource(bean);
+                    onPostProcess();
+                    Utils.showToast(_model.context, tr("resource_modified"));
+                  },
+                  error: (err) {
+                    Utils.showToast(_model.context, tr("err_network"));
+                  });
+            },
+            error: (err) {
+              Utils.showToast(_model.context, tr("err_network"));
+            });
+      }
+    }
   }
 
   onPostProcess() {
@@ -221,56 +226,105 @@ class ResourceCreationPageLogic {
     _model.uriEditingController.clear();
     _model.titleEditingController.clear();
     _model.isPaid = false;
+
     _model.isLoading = false;
     _model.isChecking = false;
-    _model.isUrlChecked = false;
+    _model.isSubmitting = false;
+    _model.isCollecting = false;
 
-    _model.urlExists = "";
-    _model.lastUrl = "";
+    _model.checkStatus = ResourceCheckStatus.UNCHECK;
+
+    _model.lastCheckedUrl = "";
 
     _model.selectedMediaTypeId = 1;
     _model.selectedResourceTypeId = 1;
+
+    _model.mode = ResourceMode.CREATE;
 
     Navigator.of(_model.context).pop();
   }
 
   onPressCollectButton() async {
-    final options = await _model.globalModel.userDao.buildOptions();
+    if (!_model.isCollecting) {
+      _model.isCollecting = true;
+      _model.refresh();
 
-    if (!_model.bean.collected) {
-      ApiService.instance.collectResource(
-          options: options,
-          params: {'id': _model.bean.id},
-          success: (remote) async {
-            remote.collected = true;
-            _model.bean = remote;
-            final locals = await DBProvider.db.getResources(
-                _model.bean.id);
-            if (locals.isEmpty) {
-              await DBProvider.db.createResource(remote);
-            } else {
-              await DBProvider.db.updateResource(remote);
-            }
+      final options = await _model.globalModel.userDao.buildOptions();
 
-            _model.refresh();
-          }
-      );
-    } else {
-      ApiService.instance.unCollectResource(
-          options: options,
-          params: {'id': _model.bean.id},
-          success: (remote) async {
-            remote.collected = false;
-            _model.bean = remote;
-            final locals = await DBProvider.db.getCreatedResources(
-                _model.bean.id);
-            if (locals.isNotEmpty) {
-              await DBProvider.db.updateResource(remote);
-            }
+      if (!_model.existedResource.collected) {
+        ApiService.instance.collectResource(
+            options: options,
+            params: {'id': _model.existedResource.id},
+            success: (remote) async {
+              remote.collected = true;
+              _model.existedResource = remote;
+              final locals =
+                  await DBProvider.db.getResources(_model.existedResource.id);
+              if (locals.isEmpty) {
+                await DBProvider.db.createResource(remote);
+              } else {
+                await DBProvider.db.updateResource(remote);
+              }
 
-            _model.refresh();
-          }
-      );
+              _model.isCollecting = false;
+              _model.refresh();
+            },
+            error: (err) {
+              Utils.showToast(_model.context, tr("err_network"));
+              _model.isCollecting = false;
+              _model.refresh();
+            });
+      } else {
+        ApiService.instance.unCollectResource(
+            options: options,
+            params: {'id': _model.existedResource.id},
+            success: (remote) async {
+              remote.collected = false;
+              _model.existedResource = remote;
+              final locals = await DBProvider.db
+                  .getCreatedResources(_model.existedResource.id);
+              if (locals.isNotEmpty) {
+                await DBProvider.db.updateResource(remote);
+              }
+              _model.isCollecting = false;
+              _model.refresh();
+            },
+            error: (err) {
+              Utils.showToast(_model.context, tr("err_network"));
+              _model.isCollecting = false;
+              _model.refresh();
+            });
+      }
     }
+  }
+
+  onClickRecheckButton() {
+    _model.checkStatus = ResourceCheckStatus.UNCHECK;
+    _model.lastCheckedUrl = '';
+    onCheckUrl();
+  }
+
+  onUriValueChanged() {
+    print("FUCCCCC");
+    String value = _model.uriEditingController.text.trim();
+    if (_model.checkStatus != ResourceCheckStatus.UNCHECK) {
+      print(value);
+      print(_model.lastCheckedUrl);
+      if (value != _model.lastCheckedUrl) {
+        _model.checkStatus = ResourceCheckStatus.UNCHECK;
+        _model.refresh();
+      }
+    }
+  }
+
+  onUriFocusNodeChanged() {
+    if (!_model.uriFocusNode.hasFocus) {
+      onCheckUrl();
+      detectTitle();
+    }
+  }
+
+  urlCheckStatusStr() {
+    return _model.checkStatusStrMap[_model.checkStatus];
   }
 }

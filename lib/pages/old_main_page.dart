@@ -4,7 +4,6 @@ import 'package:chainmore/models/tab_icon_data.dart';
 import 'package:chainmore/network/net_utils.dart';
 import 'package:chainmore/pages/explore_page.dart';
 import 'package:chainmore/pages/login_page.dart';
-import 'package:chainmore/pages/old_home_page.dart';
 import 'package:chainmore/pages/user/mine_page.dart';
 import 'package:chainmore/pages/workbench_page.dart';
 import 'package:chainmore/providers/certify_model.dart';
@@ -34,7 +33,6 @@ class _OldMainPageState extends State<OldMainPage> with TickerProviderStateMixin
   );
 
   final List<Widget> pages = [
-    OldHomePage(),
     WorkbenchPage(),
     ExplorePage(),
   ];

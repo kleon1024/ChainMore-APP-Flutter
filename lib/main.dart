@@ -58,11 +58,19 @@ class MyAppState extends State<MyApp> {
         brightness: Brightness.light,
 //        primaryColor: Colors.white,
         primaryColor: HexColor("#fafafa"),
-        canvasColor: HexColor("#f0f0f0"),
+//        canvasColor: HexColor("#f0f0f0"),
+        canvasColor: HexColor("#fafafa"),
         accentColor: Colors.teal,
         textSelectionColor: Colors.teal,
         textSelectionHandleColor: Colors.teal,
         cursorColor: Colors.teal,
+        iconTheme: IconThemeData(
+          size: 22
+        ),
+        cardTheme: CardTheme(
+          elevation: 5,
+          shadowColor: Colors.black38
+        ),
         tooltipTheme: TooltipThemeData(verticalOffset: -100000),
         pageTransitionsTheme: PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),

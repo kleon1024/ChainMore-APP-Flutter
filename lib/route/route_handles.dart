@@ -19,7 +19,6 @@ import 'package:chainmore/pages/explore/roadmap_page.dart';
 import 'package:chainmore/pages/explore_page.dart';
 import 'package:chainmore/pages/home/sparkle/sparkle_detail_page.dart';
 import 'package:chainmore/pages/login_page.dart';
-import 'package:chainmore/pages/old_home_page.dart';
 import 'package:chainmore/pages/post/post_page.dart';
 import 'package:chainmore/pages/roadmap/roadmap_detail_page.dart';
 import 'package:chainmore/pages/search/domain_search_page.dart';
@@ -30,7 +29,7 @@ import 'package:chainmore/pages/user/user_page.dart';
 import 'package:chainmore/pages/webview/web_view_page.dart';
 import 'package:chainmore/utils/fluro_convert_utils.dart';
 import 'package:fluro/fluro.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Router;
 
 var splashHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
@@ -46,11 +45,6 @@ var loginHandler = Handler(
 var mainHandler = Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
   return MainPage();
-});
-
-var homeHandler = Handler(
-    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
-  return OldHomePage();
 });
 
 var searchHandler = Handler(
