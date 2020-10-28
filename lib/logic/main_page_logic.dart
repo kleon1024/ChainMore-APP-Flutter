@@ -22,12 +22,16 @@ class MainPageLogic {
   Future initTextOrUrlIntent() async {
     final model = Provider.of<ResourceCreationPageModel>(_model.context);
 
-    _model.intentDataStreamSubscription = ReceiveSharingIntent.getTextStream()
-        .listen((String value) async {
-      ReceiveSharingIntent.reset();
+    _model.intentDataStreamSubscription =
+        ReceiveSharingIntent.getTextStream().listen((String value) async {
+      _model.currentStreamCount += 1;
+      if (_model.currentStreamCount <= _model.maxStreamCount) return;
+      _model.maxStreamCount = _model.currentStreamCount;
+      _model.currentStreamCount = 0;
       if (value != null && value != "" && value.startsWith('http')) {
-        await SharedUtil.instance.saveString(Keys.lastClipBoardUrl, value);
         model.logic.setInitUrl(value);
+        model.logic.checkUrl();
+        model.logic.detectTitle();
         Navigator.of(_model.context).push(CupertinoPageRoute(builder: (ctx) {
           return ResourceCreationPage();
         }));
@@ -41,8 +45,9 @@ class MainPageLogic {
     await ReceiveSharingIntent.getInitialText().then((String value) async {
       ReceiveSharingIntent.reset();
       if (value != null && value != "" && value.startsWith('http')) {
-        await SharedUtil.instance.saveString(Keys.lastClipBoardUrl, value);
         model.logic.setInitUrl(value);
+        model.logic.checkUrl();
+        model.logic.detectTitle();
         Navigator.of(_model.context).push(CupertinoPageRoute(builder: (ctx) {
           return ResourceCreationPage();
         }));
@@ -50,6 +55,5 @@ class MainPageLogic {
         Utils.checkClipBoard(_model.context);
       }
     });
-
   }
 }

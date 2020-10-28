@@ -113,11 +113,15 @@
   "phone_number": "Phone Number",
   "warning_phone_number_empty": "Phone number must not be empty",
   "warning_phone_number_illegal": "Phone number is illegal",
-  "sign_in_button_text": "Sign In/Sign Up",
+  "sign_in_button_text": "Sign In",
   "sign_in_title": "Welcome!",
   "hint_fill_validation_code": "Please fill in the validation code",
   "resend_validation_code": "Resend validation code",
   "hint_resend_validation_code": "Haven't received code? You can resend after ",
   "hint_resend_validation_code_1": " seconds",
-  "auth_return": "Return"
+  "auth_return": "Return",
+  "username": "Username",
+  "password": "Password",
+  "warn_sign_in_failed": "Wrong username or password",
+  "success_sign_in": "Successfully sign in"
 }

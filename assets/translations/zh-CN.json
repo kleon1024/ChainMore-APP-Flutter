@@ -113,11 +113,15 @@
   "phone_number": "手机号码",
   "warning_phone_number_empty": "手机号码不能为空",
   "warning_phone_number_illegal": "不像是手机号码",
-  "sign_in_button_text": "登录/注册",
+  "sign_in_button_text": "登录",
   "sign_in_title": "欢迎加入！",
   "hint_fill_validation_code": "请填写验证码",
   "resend_validation_code": "重新发送验证码",
   "hint_resend_validation_code": "没有收到验证码？",
   "hint_resend_validation_code_1": "秒后可以重发",
-  "auth_return": "返回前一步"
+  "auth_return": "返回前一步",
+  "username": "用户名",
+  "password": "密码",
+  "warn_sign_in_failed": "用户名或密码错误",
+  "success_sign_in": "登录成功"
 }

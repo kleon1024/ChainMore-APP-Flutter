@@ -29,7 +29,6 @@ class CollectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(new CupertinoPageRoute(builder: (ctx) {
@@ -52,20 +51,18 @@ class CollectionCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
-                      bean.domain_title,
-                      style: Theme.of(context).textTheme.bodyText2
-                    ),
-                    Row(
-                      children: [
-                        ResourceIndicator(Icons.play_circle_outline),
-                        ResourceIndicator(Icons.font_download),
-                        ResourceIndicator(Icons.text_fields),
-                        ResourceIndicator(Icons.settings_voice),
-                        ResourceIndicator(Icons.music_note),
-                        ResourceIndicator(Icons.image)
-                      ],
-                    )
+                    Text(bean.domain_title,
+                        style: Theme.of(context).textTheme.bodyText2),
+//                    Row(
+//                      children: [
+//                        ResourceIndicator(Icons.play_circle_outline),
+//                        ResourceIndicator(Icons.font_download),
+//                        ResourceIndicator(Icons.text_fields),
+//                        ResourceIndicator(Icons.settings_voice),
+//                        ResourceIndicator(Icons.music_note),
+//                        ResourceIndicator(Icons.image)
+//                      ],
+//                    )
                   ],
                 ),
                 Row(
@@ -80,8 +77,8 @@ class CollectionCard extends StatelessWidget {
                           Text(
                             bean.title,
                             style: Theme.of(context).textTheme.bodyText1.merge(
-                              TextStyle(fontWeight: FontWeight.w600),
-                            ),
+                                  TextStyle(fontWeight: FontWeight.w600),
+                                ),
                             softWrap: false,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -94,18 +91,18 @@ class CollectionCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        child: PercentIndicator([
-                          0.1,
-                          0.4,
-                          0.4,
-                          0.1,
-                        ]),
-                      ),
-                    ),
+//                    Expanded(
+//                      flex: 1,
+//                      child: Container(
+//                        alignment: Alignment.centerRight,
+//                        child: PercentIndicator([
+//                          0.1,
+//                          0.4,
+//                          0.4,
+//                          0.1,
+//                        ]),
+//                      ),
+//                    ),
                   ],
                 )
               ],

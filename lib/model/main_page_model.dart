@@ -25,6 +25,9 @@ class MainPageModel extends ChangeNotifier {
 
   StreamSubscription intentDataStreamSubscription;
 
+  int currentStreamCount = 0;
+  int maxStreamCount = 0;
+
   int currentIndex = 0;
 
   MainPageModel() {

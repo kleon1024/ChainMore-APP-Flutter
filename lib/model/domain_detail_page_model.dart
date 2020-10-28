@@ -15,6 +15,7 @@ class DomainDetailPageModel extends ChangeNotifier {
 
   final sliverAnimatedListKey = GlobalKey<SliverAnimatedListState>();
   final EasyRefreshController controller = EasyRefreshController();
+  final appbarScrollController = ScrollController();
 
   CancelToken cancelToken = CancelToken();
 

@@ -39,19 +39,14 @@ class ResourceDetailPageLogic {
           'order': _model.order
         },
         success: (List<CollectionBean> beans) {
-          if (beans.length < _model.limit && beans.length > 0) {
+          if (beans.length < _model.limit) {
             _model.noMoreLoad = true;
           }
 
-          if (beans.length > 0) {
-            _model.collections.clear();
-            _model.collections.addAll(beans);
-            _model.controller
-                .finishLoad(success: true, noMore: _model.noMoreLoad);
-          } else {
-            _model.controller
-                .finishLoad(success: false, noMore: _model.noMoreLoad);
-          }
+          _model.collections.clear();
+          _model.collections.addAll(beans);
+          _model.controller
+              .finishLoad(success: true, noMore: _model.noMoreLoad);
 
           _model.offset += 1;
           _model.refresh();
@@ -65,18 +60,13 @@ class ResourceDetailPageLogic {
         options: options,
         params: {'id': _model.resource.id},
         success: (List<CollectionBean> beans) {
-          if (beans.length < _model.limit && beans.length > 0) {
+          if (beans.length < _model.limit) {
             _model.noMoreLoad = true;
           }
 
-          if (beans.length > 0) {
-            _model.collections.addAll(beans);
-            _model.controller
-                .finishLoad(success: true, noMore: _model.noMoreLoad);
-          } else {
-            _model.controller
-                .finishLoad(success: false, noMore: _model.noMoreLoad);
-          }
+          _model.collections.addAll(beans);
+          _model.controller
+              .finishLoad(success: true, noMore: _model.noMoreLoad);
 
           _model.offset += 1;
           _model.refresh();

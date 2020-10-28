@@ -5,6 +5,7 @@ import 'package:chainmore/model/collection_detail_page_model.dart';
 import 'package:chainmore/model/domain_detail_page_model.dart';
 import 'package:chainmore/model/global_model.dart';
 import 'package:chainmore/model/resource_detail_page_model.dart';
+import 'package:chainmore/pages/webview/web_view_page.dart';
 import 'package:chainmore/utils/params.dart';
 import 'package:chainmore/utils/slivers.dart';
 import 'package:chainmore/utils/utils.dart';
@@ -17,6 +18,7 @@ import 'package:chainmore/widgets/widget_load_header.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -30,9 +32,37 @@ class ResourceDetailPage extends StatelessWidget {
     final resource = model.resource;
     final List<CollectionBean> collections = model.collections;
 
-    return SafeArea(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
       child: Scaffold(
-        key: model.scaffoldKey,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(GlobalParams.appBarHeight),
+          child: AppBar(
+            elevation: 0,
+            title: Text(tr("resource_detail"),
+                style: Theme.of(context).textTheme.subtitle1),
+            centerTitle: true,
+            key: model.scaffoldKey,
+            actions: [
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                icon: Icon(
+                  Icons.more_horiz,
+                  size: Theme.of(context).iconTheme.size,
+                ),
+                onPressed: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return buildMorePanel(context, model);
+                      });
+                },
+              ),
+            ],
+          ),
+        ),
         body: EasyRefresh(
           header: LoadHeader(),
           footer: LoadFooter(),
@@ -40,39 +70,10 @@ class ResourceDetailPage extends StatelessWidget {
           onRefresh: model.logic.refreshCollections,
           onLoad: model.logic.loadCollections,
           child: CustomScrollView(
+            controller: model.appbarScrollController,
             physics:
                 BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             slivers: <Widget>[
-              SliverAppBar(
-                toolbarHeight: GlobalParams.appBarHeight - 1,
-                collapsedHeight: GlobalParams.appBarHeight,
-                expandedHeight: GlobalParams.appBarHeight,
-                centerTitle: true,
-                pinned: true,
-                elevation: 0,
-                title: Text(
-                  tr("resource_detail"),
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-                floating: false,
-                actions: [
-                  IconButton(
-                    visualDensity: VisualDensity.compact,
-                    icon: Icon(
-                      Icons.more_horiz,
-                      size: Theme.of(context).iconTheme.size,
-                    ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return buildMorePanel(context, model);
-                          });
-                    },
-                  ),
-                ],
-              ),
               SliverList(
                 delegate: SliverChildListDelegate([
                   Container(
@@ -96,9 +97,17 @@ class ResourceDetailPage extends StatelessWidget {
                               Text(Utils.readableTimeStamp(
                                   resource.modify_time)),
                               VEmptyView(10),
-                              Text(
-                                Utils.getShortUrl(resource.url),
-                                style: Theme.of(context).textTheme.bodyText1,
+                              GestureDetector(
+                                child: Text(
+                                  Utils.getShortUrl(resource.url),
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                ),
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                      new CupertinoPageRoute(builder: (ctx) {
+                                    return WebViewPage(url: resource.url);
+                                  }));
+                                },
                               ),
                               VEmptyView(30),
                             ]),
@@ -157,9 +166,6 @@ class ResourceDetailPage extends StatelessWidget {
     ];
 
     final user = Provider.of<UserDao>(context);
-
-    debugPrint(user.id.toString());
-    debugPrint(model.resource.author_id.toString());
 
     if (user.isLoggedIn) {
       if (user.id == model.resource.author_id) {

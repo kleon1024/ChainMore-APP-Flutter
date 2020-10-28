@@ -42,7 +42,7 @@ class ApiStrategy {
     return baseUrl;
   }
 
-  void get(
+  get(
     String url,
     Function callBack, {
     Map<String, dynamic> params,
@@ -50,7 +50,7 @@ class ApiStrategy {
     CancelToken token,
     Options options,
   }) async {
-    _request(
+    await _request(
       url,
       callBack,
       method: GET,
@@ -61,7 +61,7 @@ class ApiStrategy {
     );
   }
 
-  void delete(
+  delete(
     String url,
     Function callBack, {
     Map<String, dynamic> params,
@@ -69,7 +69,7 @@ class ApiStrategy {
     CancelToken token,
     Options options,
   }) async {
-    _request(
+    await _request(
       url,
       callBack,
       method: DELETE,
@@ -80,7 +80,7 @@ class ApiStrategy {
     );
   }
 
-  void post(
+  post(
     String url,
     Function callBack, {
     Map<String, dynamic> params,
@@ -88,7 +88,7 @@ class ApiStrategy {
     CancelToken token,
     Options options,
   }) async {
-    _request(
+    await _request(
       url,
       callBack,
       method: POST,
@@ -99,7 +99,7 @@ class ApiStrategy {
     );
   }
 
-  void put(
+  put(
     String url,
     Function callBack, {
     Map<String, dynamic> params,
@@ -107,7 +107,7 @@ class ApiStrategy {
     CancelToken token,
     Options options,
   }) async {
-    _request(
+    await _request(
       url,
       callBack,
       method: PUT,
@@ -118,7 +118,7 @@ class ApiStrategy {
     );
   }
 
-  void postUpload(
+  postUpload(
     String url,
     Function callBack,
     ProgressCallback progressCallBack, {
@@ -127,7 +127,7 @@ class ApiStrategy {
     CancelToken token,
     Options options,
   }) async {
-    _request(
+    await _request(
       url,
       callBack,
       method: POST,
@@ -139,7 +139,7 @@ class ApiStrategy {
     );
   }
 
-  void _request(
+  _request(
     String url,
     Function callBack, {
     String method,

@@ -79,6 +79,7 @@ class ResourceDao extends ChangeNotifier {
 
     ApiService.instance.getCollectedResources(
         options: options,
+        params: { 'limit': 999 },
         success: (List<ResourceBean> beans) async {
           final locals = await DBProvider.db.getAllResources();
           Map<int, ResourceBean> resourceMap = {};

@@ -96,6 +96,7 @@ class MyAppState extends State<MyApp> {
         ),
         splashFactory: NoSplashFactory(),
       ),
+      themeMode: ThemeMode.dark,
       home: goPage(),
 //      onGenerateRoute: Application.router.generator,
     );

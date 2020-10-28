@@ -76,6 +76,7 @@ class CollectionDao extends ChangeNotifier {
 
     ApiService.instance.getCollectedCollections(
         options: options,
+        params: { 'limit': 999 },
         success: (List<CollectionBean> beans) async {
           final locals = await DBProvider.db.getAllCollections();
           Map<int, CollectionBean> collectionMap = {};

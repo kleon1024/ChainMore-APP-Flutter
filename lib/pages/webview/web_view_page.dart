@@ -41,10 +41,10 @@ class WebViewPageState extends State<WebViewPage> {
                 }
               },
             ),
-            IconButton(
-              icon: Icon(Icons.call_made),
-              onPressed: () {},
-            ),
+//            IconButton(
+//              icon: Icon(Icons.call_made),
+//              onPressed: () {},
+//            ),
           ],
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(1),

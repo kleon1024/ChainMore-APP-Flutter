@@ -73,7 +73,9 @@ class ResourceCreationPageLogic {
       _model.isChecking = true;
       _model.existedResource = null;
       _model.refresh();
+      final options = await _model.globalModel.userDao.buildOptions();
       ApiService().checkResourceUrlExists(
+        options: options,
         params: {'url': _model.lastCheckedUrl},
         success: onCheckResourceUrlSuccess,
         error: onCheckResourceUrlError,
@@ -222,6 +224,7 @@ class ResourceCreationPageLogic {
   }
 
   onPostProcess() {
+    print('post process');
     _model.globalModel.resourceDao.initResources();
     _model.uriEditingController.clear();
     _model.titleEditingController.clear();
@@ -299,13 +302,14 @@ class ResourceCreationPageLogic {
   }
 
   onClickRecheckButton() {
+    print('click recheck button');
     _model.checkStatus = ResourceCheckStatus.UNCHECK;
     _model.lastCheckedUrl = '';
     onCheckUrl();
   }
 
   onUriValueChanged() {
-    print("FUCCCCC");
+    print('url changed');
     String value = _model.uriEditingController.text.trim();
     if (_model.checkStatus != ResourceCheckStatus.UNCHECK) {
       print(value);

@@ -52,16 +52,13 @@ dependencies:
   color_thief_flutter: ^1.0.2
   flutter_picker: ^1.1.5
   easy_localization: ^2.3.2
-  receive_sharing_intent: ^1.4.0+2
+  receive_sharing_intent: ^1.4.1
   need_resume: ^1.0.4
   pin_code_fields: ^6.0.0
   html: ^0.14.0+3
-  mobsms:
 
 dev_dependencies:
   flutter_test:
-    sdk: flutter
-  flutter_driver:
     sdk: flutter
   test: ^1.5.1
   build_runner: ^1.0.0

@@ -16,6 +16,7 @@ class ResourceDetailPageModel extends ChangeNotifier {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final sliverAnimatedListKey = GlobalKey<SliverAnimatedListState>();
   final EasyRefreshController controller = EasyRefreshController();
+  final appbarScrollController = ScrollController();
 
   CancelToken cancelToken = CancelToken();
 

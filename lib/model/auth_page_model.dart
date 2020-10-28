@@ -6,13 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-enum AuthState {
-  MAIN,
-  VALIDATE_PHONE,
-  SIGN_IN,
-  SIGN_UP,
-}
-
 class AuthPageModel extends ChangeNotifier {
   AuthPageLogic logic;
   BuildContext context;
@@ -26,14 +19,19 @@ class AuthPageModel extends ChangeNotifier {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
   final phoneController = TextEditingController();
 
   final usernameFocusNode = FocusNode();
+  final passwordFocusNode = FocusNode();
   final phoneFocusNode = FocusNode();
 
   final formKey = GlobalKey<FormState>();
 
   final period = Duration(seconds: 1);
+
+  bool isSigningIn = false;
+  bool showPassword = false;
 
   int countDown = GlobalParams.COUNT_DOWN_MAX;
   bool countDownFinished = true;
@@ -41,8 +39,6 @@ class AuthPageModel extends ChangeNotifier {
   String lastSendPhoneNumber = '';
 
   double padding;
-
-  AuthState authState = AuthState.MAIN;
 
   DomainBean domain;
 
@@ -59,7 +55,7 @@ class AuthPageModel extends ChangeNotifier {
     if (this.context == null) {
       this.context = context;
       this.globalModel = globalModel;
-      this.padding = ScreenUtil().setWidth(15);
+      this.padding = ScreenUtil().setWidth(30);
 
       Future.wait([]).then((value) {
         refresh();

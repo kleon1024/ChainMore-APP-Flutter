@@ -11,6 +11,7 @@ import 'package:chainmore/widgets/widget_load_header.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +29,39 @@ class DomainDetailPage extends StatelessWidget {
         model.pop();
         return true;
       },
-      child: SafeArea(
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+        ),
         child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(GlobalParams.appBarHeight),
+            child: AppBar(
+              centerTitle: true,
+              elevation: 0,
+              title: Text(
+                domain.title,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+              actions: [
+                IconButton(
+                  visualDensity: VisualDensity.compact,
+                  icon: Icon(
+                    Icons.more_horiz,
+                    size: Theme.of(context).iconTheme.size,
+                  ),
+                  onPressed: () {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return buildMorePanel(context, model);
+                        });
+                  },
+                ),
+              ],
+            ),
+          ),
           body: EasyRefresh(
             header: LoadHeader(),
             footer: LoadFooter(),
@@ -37,69 +69,10 @@ class DomainDetailPage extends StatelessWidget {
             onRefresh: model.logic.refreshCollections,
             onLoad: model.logic.loadCollections,
             child: CustomScrollView(
+              controller: model.appbarScrollController,
               physics: BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics()),
               slivers: <Widget>[
-                SliverAppBar(
-                  toolbarHeight: GlobalParams.appBarHeight - 1,
-                  collapsedHeight: GlobalParams.appBarHeight,
-                  expandedHeight: GlobalParams.appBarHeight * 3,
-                  centerTitle: true,
-                  pinned: true,
-                  elevation: 0,
-                  title: Text(
-                    domain.title,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                  floating: false,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(30)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: GlobalParams.appBarHeight,
-                          ),
-                          Text(domain.intro ?? ""),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              IconButton(
-                                icon: Icon(Icons.bookmark_border,
-                                    size: Theme.of(context).iconTheme.size),
-                                onPressed: model.logic.onMarkDomain,
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.school,
-                                    size: Theme.of(context).iconTheme.size),
-                                onPressed: model.logic.onLearnDomain,
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  actions: [
-                    IconButton(
-                      visualDensity: VisualDensity.compact,
-                      icon: Icon(
-                        Icons.more_horiz,
-                        size: Theme.of(context).iconTheme.size,
-                      ),
-                      onPressed: () {
-                        showModalBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return buildMorePanel(context, model);
-                            });
-                      },
-                    ),
-                  ],
-                ),
                 SliverPersistentHeader(
                   delegate: SliverHeaderDelegate(
                       minHeight: GlobalParams.appBarHeight,

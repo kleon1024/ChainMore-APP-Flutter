@@ -864,6 +864,34 @@ class ApiService {
     );
   }
 
+  signIn({
+    Function(Map<String, dynamic>) success,
+    Function failed,
+    Function error,
+    Map<String, dynamic> params,
+    CancelToken token,
+    Options options,
+  }) async {
+    if (Utils.isMocking) {
+      Mock.getAccessToken().then((data) {
+        success(data);
+      });
+
+      return;
+    }
+
+    await ApiStrategy.getInstance().post(
+      '/auth/signin',
+          (data) {
+        success(data);
+      },
+      params: params,
+      errorCallBack: error,
+      token: token,
+      options: options,
+    );
+  }
+
   void createDomain({
     Function(DomainBean) success,
     Function failed,
